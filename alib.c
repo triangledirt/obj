@@ -13,7 +13,7 @@ void alib_init() {
   if (!initialized) {
     long idx;
     for (idx = 0; idx < OBJECT_CACHE; idx++) {
-      objs[idx] = 0;
+      objs[idx] = random();
     }
   } else {
     initialized = 1;
