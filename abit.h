@@ -1,4 +1,6 @@
-enum abit_t {
-  abit_0,
-  abit_1
-};
+#ifndef abit_h
+#define abit_h
+
+typedef abit_t char;
+
+#endif
