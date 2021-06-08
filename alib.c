@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "abit.h"
+#include "abits.h"
 #include "aobj.h"
 
 #define OBJECT_CACHE 1024
@@ -12,8 +13,8 @@ static void alib_init();
 static void alib_learn();
 
 void alib_init() {
+  long idx;
   if (!initialized) {
-    long idx;
     for (idx = 0; idx < OBJECT_CACHE; idx++) {
       objs[idx] = random();
     }
@@ -22,11 +23,14 @@ void alib_init() {
   }
 }
 
-void alib_learn() {}
+void alib_learn() {
+  abits_learn(objs, OBJECT_CACHE);
+}
 
 void alib_notice(aobj_t obj) {
+  long idx;
   alib_init();
-  long idx = random() % OBJECT_CACHE;
+  idx = random() % OBJECT_CACHE;
   objs[idx] = obj;
   if (0 == (random() % LEARN_FREQ)) {
     alib_learn();
@@ -35,5 +39,6 @@ void alib_notice(aobj_t obj) {
 
 abit_t alib_classify(aobj_t obj) {
   alib_init();
+  return abits_classify(obj);
   return 0;
 }
