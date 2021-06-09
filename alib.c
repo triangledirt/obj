@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include "abit.h"
-#include "abits.h"
+#include "alib.h"
 #include "aobj.h"
+#include "apole.h"
 
 #define OBJECT_CACHE 1024
 #define TYPES_MAX 8
@@ -31,7 +32,7 @@ void alib_init() {
 void alib_learn() {
   long type;
   for (type = 0; type < TYPES_MAX; type++) {
-    abits_learn(objs[type], OBJECT_CACHE);
+    apole_learn(objs[type], OBJECT_CACHE, type);
   }
 }
 
@@ -49,7 +50,7 @@ void alib_notice(aobj_t obj, long type) {
 abit_t alib_classify(aobj_t obj, long type) {
   alib_init();
   alib_uptypes(type);
-  return abits_classify(obj);
+  return apole_classify(obj);
   return 0;
 }
 

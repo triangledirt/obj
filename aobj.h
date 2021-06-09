@@ -1,6 +1,8 @@
 #ifndef aobj_h
 #define aobj_h
 
+#include "aobj.h"
+
 typedef long aobj_t;
 
 #define aobj_getattr(obj, idx) ((obj >> (idx)) & (long) 1)
