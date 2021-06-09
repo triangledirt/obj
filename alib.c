@@ -7,18 +7,25 @@
 #define OBJECT_CACHE 1024
 
 static char initd = 0;
-static aobj_t objs[ALIB_TYPES_MAX][OBJECT_CACHE];
+static aobj_t objs[ALIB_TYPES_COUNT][OBJECT_CACHE];
 static long types = 1;
 
 static void alib_init();
 static void alib_learn();
 static void alib_uptypes(long seentype);
 
+abit_t alib_classify(aobj_t obj, long type) {
+  alib_init();
+  alib_uptypes(type);
+  return aideal_classify(obj);
+  return 0;
+}
+
 void alib_init() {
   long idx;
   long type;
   if (!initd) {
-    for (type = 0; type < ALIB_TYPES_MAX; type++) {
+    for (type = 0; type < ALIB_TYPES_COUNT; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
         objs[type][idx] = random();
       }
@@ -30,12 +37,12 @@ void alib_init() {
 
 void alib_learn() {
   long type;
-  for (type = 0; type < ALIB_TYPES_MAX; type++) {
+  for (type = 0; type < ALIB_TYPES_COUNT; type++) {
     aideal_learn(objs[type], OBJECT_CACHE, type);
   }
 }
 
-void alib_notice(aobj_t obj, long type) {
+void alib_observe(aobj_t obj, long type) {
   long idx;
   alib_init();
   alib_uptypes(type);
@@ -44,13 +51,6 @@ void alib_notice(aobj_t obj, long type) {
   if (0 == (random() % (OBJECT_CACHE / 32))) {
     alib_learn();
   }
-}
-
-abit_t alib_classify(aobj_t obj, long type) {
-  alib_init();
-  alib_uptypes(type);
-  return aideal_classify(obj);
-  return 0;
 }
 
 void alib_uptypes(long seentype) {
