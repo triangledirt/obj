@@ -1,1 +1,1 @@
-rm -f *.o liba.a
+rm -f *.o liba.a atest

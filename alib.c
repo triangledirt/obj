@@ -34,7 +34,7 @@ void alib_observe(aobj_t obj, long type) {
 
 void learn() {
   long type;
-  for (type = 0; type < ALIB_TYPE_COUNT; type++) {
+  for (type = 0; type < types; type++) {
     aideal_learn(objs[type], OBJECT_CACHE, type);
   }
 }

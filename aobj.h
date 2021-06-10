@@ -13,4 +13,6 @@ void aobj_randomize(aobj_t *obj);
   if (val) { *obj |= ((long) 1 << (idx)); } \
   else { *obj &= ~((long) 1 << (idx)); }
 
+void aobj_print(aobj_t obj);
+
 #endif
