@@ -30,26 +30,29 @@ abit_t aideal_classify(aobj_t obj, long type) {
 void aideal_learn(aobj_t objs[], long objs_size, long type) {
   long idx;
   long bit;
-  abit_t bitvalue;
+  abit_t val;
   aobj_t obj;
   long onecounts[32];
   long thresh = objs_size / 2;
-  for (bit = 0; bit < 32; bit++) {
+  for (bit = 1; bit < 32; bit++) {
     onecounts[bit] = 0;
   }
   for (idx = 0; idx < objs_size; idx++) {
     obj = objs[idx];
-    for (bit = 0; bit < 32; bit++) {
-      bitvalue = aobj_getattr(obj, bit);
-      if (bitvalue) {
+    for (bit = 1; bit < 32; bit++) {
+      val = aobj_getattr(obj, bit);
+      if (val) {
         onecounts[bit]++;
       }
     }
   }
-  for (bit = 0; bit < 32; bit++) {
+  for (bit = 1; bit < 32; bit++) {
+    printf("onecounts::%ld,%ld,%ld\n", onecounts[bit], objs_size, thresh);
     if (onecounts[bit] > thresh) {
+      printf("1\n");
       aobj_setattr(&ideal[type], bit, 1);
     } else {
+      printf("0\n");
       aobj_setattr(&ideal[type], bit, 0);
     }
   }
