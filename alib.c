@@ -46,7 +46,7 @@ void init() {
   if (!initd) {
     for (type = 0; type < ALIB_TYPE_COUNT; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
-        objs[type][idx] = random();
+        aobj_randomize(&objs[type][idx]);
       }
     }
     initd = 1;
