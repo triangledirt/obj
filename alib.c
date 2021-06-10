@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "abit.h"
 #include "aideal.h"
@@ -48,7 +49,6 @@ void init() {
         objs[type][idx] = random();
       }
     }
-  } else {
     initd = 1;
   }
 }

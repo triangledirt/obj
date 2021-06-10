@@ -19,7 +19,7 @@ abit_t aideal_classify(aobj_t obj, long type) {
       correct++;
     }
   }
-  if ((correct / 31) > 0.75) {
+  if (((double) correct / 31) > 0.75) {
     class = 1;
   } else {
     class = 0;
@@ -47,12 +47,9 @@ void aideal_learn(aobj_t objs[], long objs_size, long type) {
     }
   }
   for (bit = 1; bit < 32; bit++) {
-    printf("onecounts::%ld,%ld,%ld\n", onecounts[bit], objs_size, thresh);
     if (onecounts[bit] > thresh) {
-      printf("1\n");
       aobj_setattr(&ideal[type], bit, 1);
     } else {
-      printf("0\n");
       aobj_setattr(&ideal[type], bit, 0);
     }
   }
