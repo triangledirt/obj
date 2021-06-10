@@ -34,15 +34,19 @@ void aideal_learn(aobj_t objs[], long objs_size, long type) {
   aobj_t obj;
   long onecounts[32];
   long thresh = objs_size / 2;
+  abit_t class;
   for (bit = 1; bit < 32; bit++) {
     onecounts[bit] = 0;
   }
   for (idx = 0; idx < objs_size; idx++) {
     obj = objs[idx];
-    for (bit = 1; bit < 32; bit++) {
-      val = aobj_getattr(obj, bit);
-      if (val) {
-        onecounts[bit]++;
+    class = aobj_getclass(obj);
+    if (class) {
+      for (bit = 1; bit < 32; bit++) {
+        val = aobj_getattr(obj, bit);
+        if (val) {
+          onecounts[bit]++;
+        }
       }
     }
   }
@@ -53,6 +57,8 @@ void aideal_learn(aobj_t objs[], long objs_size, long type) {
       aobj_setattr(&ideal[type], bit, 0);
     }
   }
-  printf("ideal::");
+#ifdef ALIB_VERBOSE
+  printf("aideal new ideal ");
   aobj_print(ideal[type]);
+#endif
 }

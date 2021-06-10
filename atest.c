@@ -47,13 +47,13 @@ void testline(char *line, long type) {
     } else {
       val = 0;
     }
-    /* printf("%ld %d\n", idx, val); */
     aobj_setattr(&obj, idx, val);
   }
   alib_observe(obj, type);
+  printf("       observing ");
   aobj_print(obj);
   class = alib_classify(obj, type);
-  printf("class::%d\n", class);
+  printf("           class %d\n", class);
 }
 
 int main(int argc, char **argv) {

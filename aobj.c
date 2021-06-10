@@ -8,7 +8,6 @@ void aobj_init(aobj_t *obj) {
 
 void aobj_print(aobj_t obj) {
   long idx;
-  printf("aobj::");
   for (idx = 0; idx < 32; idx++) {
     printf("%lu", aobj_getattr(obj, idx));
   }
