@@ -54,10 +54,11 @@ void testline(char *line, long type) {
   }
   alib_observe(obj, type);
 #if ALIB_VERBOSE
-  printf("type%ld obsrv ", type);
-  aobj_print(obj);
   class = alib_classify(obj, type);
-  printf("type%ld class %d\n", type, class);
+  printf("type%ld obsrv (", type);
+  printf("%d) ", class);
+  aobj_print(obj);
+  printf("\n");
 #endif
 }
 

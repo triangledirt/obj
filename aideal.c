@@ -58,7 +58,8 @@ void aideal_learn(aobj_t objs[], long objs_size, long type) {
     }
   }
 #if ALIB_VERBOSE
-  printf("type%ld ideal ", type);
+  printf("type%ld ideal     ", type);
   aobj_print(ideal[type]);
+  printf("\n");
 #endif
 }

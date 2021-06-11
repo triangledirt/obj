@@ -11,7 +11,6 @@ void aobj_print(aobj_t obj) {
   for (idx = 0; idx < 32; idx++) {
     printf("%lu", aobj_getattr(obj, idx));
   }
-  printf("\n");
 }
 
 void aobj_randomize(aobj_t *obj) {
