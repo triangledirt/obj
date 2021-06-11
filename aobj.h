@@ -13,6 +13,9 @@ void aobj_randomize(aobj_t *obj);
 #define aobj_setattr(obj, idx, val) \
   if (val) { *obj |= ((long) 1 << (idx)); } \
   else { *obj &= ~((long) 1 << (idx)); }
+#define aobj_setclass(obj, val) \
+  if (val) { *obj |= ((long) 1); } \
+  else { *obj &= ~((long) 1); }
 
 void aobj_print(aobj_t obj);
 

@@ -5,7 +5,7 @@
 #include "alib.h"
 #include "aobj.h"
 
-#define OBJECT_CACHE 1024
+#define OBJECT_CACHE 64
 
 static char initd = 0;
 static aobj_t objs[ALIB_TYPE_COUNT][OBJECT_CACHE];
@@ -28,7 +28,7 @@ void alib_observe(aobj_t obj, long type) {
   uptypes(type);
   idx = random() % OBJECT_CACHE;
   objs[type][idx] = obj;
-  if (0 == (random() % (OBJECT_CACHE / 32))) {
+  if (0 == (random() % (OBJECT_CACHE / 16))) {
     learn();
   }
 }
@@ -46,7 +46,7 @@ void init() {
   if (!initd) {
     for (type = 0; type < ALIB_TYPE_COUNT; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
-        aobj_randomize(&objs[type][idx]);
+        aobj_init(&objs[type][idx]);
       }
     }
     initd = 1;

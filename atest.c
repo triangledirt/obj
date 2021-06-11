@@ -20,8 +20,9 @@ void testfile(char *filename, long type) {
     if (first) {
       strcpy(firstline, line);
       first = 0;
+    } else {
+      testline(line, type);
     }
-    testline(line, type);
   }
   fclose(file);
 }
@@ -31,7 +32,9 @@ void testline(char *line, long type) {
   long idx = 0;
   abit_t val;
   char *tok;
+#if ALIB_VERBOSE
   abit_t class;
+#endif
   aobj_init(&obj);
   tok = strtok(line, ",");
   if ('e' == *tok) {
@@ -39,7 +42,7 @@ void testline(char *line, long type) {
   } else {
     val = 0;
   }
-  aobj_setattr(&obj, 0, val);
+  aobj_setclass(&obj, val);
   while ((tok = strtok(NULL, ","))) {
     idx++;
     if (*tok == firstline[idx * 2]) {
@@ -50,10 +53,12 @@ void testline(char *line, long type) {
     aobj_setattr(&obj, idx, val);
   }
   alib_observe(obj, type);
-  printf("       observing ");
+#if ALIB_VERBOSE
+  printf("type%ld obsrv ", type);
   aobj_print(obj);
   class = alib_classify(obj, type);
-  printf("           class %d\n", class);
+  printf("type%ld class %d\n", type, class);
+#endif
 }
 
 int main(int argc, char **argv) {
