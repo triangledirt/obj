@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include "abit.h"
-#include "aideal.h"
 #include "alib.h"
 #include "aobj.h"
+#include "asum.h"
 
 static aobj_t ideal[ALIB_TYPE_COUNT];
 
-abit_t aideal_classify(aobj_t obj, long type) {
+abit_t asum_classify(aobj_t obj, long type) {
   long bit;
   long correct = 0;
   abit_t objbit;
@@ -27,7 +27,7 @@ abit_t aideal_classify(aobj_t obj, long type) {
   return class;
 }
 
-void aideal_learn(aobj_t objs[], long objs_size, long type) {
+void asum_learn(aobj_t objs[], long objs_size, long type) {
   long idx;
   long bit;
   abit_t val;
