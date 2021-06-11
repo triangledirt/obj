@@ -35,7 +35,7 @@ void testline(char *line, long type) {
 #if ALIB_VERBOSE
   abit_t class;
 #endif
-  aobj_init(&obj);
+  aobj_clear(&obj);
   tok = strtok(line, ",");
   if ('e' == *tok) {
     val = 1;

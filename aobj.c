@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "aobj.h"
 
-void aobj_init(aobj_t *obj) {
+void aobj_clear(aobj_t *obj) {
   *obj = 0;
 }
 

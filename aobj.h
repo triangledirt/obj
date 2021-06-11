@@ -5,7 +5,7 @@
 
 typedef long aobj_t;
 
-void aobj_init(aobj_t *obj);
+void aobj_clear(aobj_t *obj);
 void aobj_randomize(aobj_t *obj);
 
 #define aobj_getattr(obj, idx) ((obj >> (idx)) & (long) 1)
