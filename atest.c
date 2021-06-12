@@ -63,6 +63,6 @@ void testline(char *line, long type) {
 }
 
 int main(int argc, char **argv) {
-  testfile("mushroom.d", MUSHROOM);
+  testfile("mushroom.data", MUSHROOM);
   return 0;
 }

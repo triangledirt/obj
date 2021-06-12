@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "abit.h"
+#include "agene.h"
 #include "alib.h"
 #include "aobj.h"
 #include "asum.h"
@@ -16,10 +17,18 @@ static void learn();
 static void uptypes(long seentype);
 
 abit_t alib_classify(aobj_t obj, long type) {
+  abit_t class;
+  long tally = 0;
   init();
   uptypes(type);
-  return asum_classify(obj, type);
-  return 0;
+  tally += agene_classify(obj, type);
+  tally += asum_classify(obj, type);
+  if (tally > 0) {
+    class = 1;
+  } else {
+    class = 0;
+  }
+  return class;
 }
 
 void alib_observe(aobj_t obj, long type) {
@@ -36,6 +45,7 @@ void alib_observe(aobj_t obj, long type) {
 void learn() {
   long type;
   for (type = 0; type < types; type++) {
+    agene_learn(objs[type], OBJECT_CACHE, type);
     asum_learn(objs[type], OBJECT_CACHE, type);
   }
 }
