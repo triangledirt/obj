@@ -94,7 +94,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type) {
   long bit;
   long crossover;
   for (indiv = 0; indiv < POP; indiv++) {
-    if (0 == (random() % 2)) {  /* play with this */
+    if (0 == (random() % 2)) {
       obj = ideal[type];
     } else {
       aobj_randomize(&obj);
@@ -116,6 +116,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type) {
         aobj_mutate(&child);
       }
     }
+    pop[random() % POP] = child;
   }
   ideal[type] = getfittest(pop, objs, objs_size);
 #if ALIB_VERBOSE
