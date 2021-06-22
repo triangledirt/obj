@@ -12,22 +12,21 @@
 #define ANARCHY 4
 #define MUTATE 32
 
+typedef aobj_t pop_t[16][16][16];
+
 static aobj_t ideal[ALIB_TYPE_COUNT];
 static double fits[16][16][16];
 static aobj_t fittest = 0;
 
-static void calcfit(aobj_t pop[16][16][16], acoord_t *c, aobj_t objs[],
+static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
+static void dance(pop_t pop_t, acoord_t *dest, acoord_t *src1, acoord_t *src2);
+static void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
   long objs_size);
-static void dance(aobj_t pop[16][16][16], acoord_t *dest, acoord_t *src1,
-  acoord_t *src2);
-static void findbest(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *best,
+static void findworst(pop_t pop, acoord_t *actor, acoord_t *worst,
   aobj_t objs[], long objs_size);
-static void findworst(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *worst,
-  aobj_t objs[], long objs_size);
-static double getfit(aobj_t pop[16][16][16], acoord_t *c, aobj_t objs[],
-  long objs_size);
+static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void initfits();
-static void initpop(aobj_t pop[16][16][16], long type);
+static void initpop(pop_t pop, long type);
 static void randcoords(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
@@ -48,7 +47,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
   acoord_t best;
   acoord_t worst;
   aobj_t obj;
-  aobj_t pop[16][16][16];
+  pop_t pop;
   initpop(pop, type);
   initfits();
   for (act = 0; act < ACTS; act++) {
@@ -69,7 +68,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
 #endif
 }
 
-void calcfit(aobj_t pop[16][16][16], acoord_t *c, aobj_t objs[], long objs_size)
+void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
 {
   double fit;
   double tot = 0;
@@ -88,8 +87,7 @@ void calcfit(aobj_t pop[16][16][16], acoord_t *c, aobj_t objs[], long objs_size)
   }
 }
 
-void dance(aobj_t pop[16][16][16], acoord_t *dest, acoord_t *src1,
-  acoord_t *src2)
+void dance(pop_t pop, acoord_t *dest, acoord_t *src1, acoord_t *src2)
 {
   aobj_t parent1 = pop[src1->x][src1->y][src1->z];
   aobj_t parent2 = pop[src2->x][src2->y][src2->z];
@@ -109,8 +107,8 @@ void dance(aobj_t pop[16][16][16], acoord_t *dest, acoord_t *src1,
   fits[dest->x][dest->y][dest->z] = -1;
 }
 
-void findbest(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *best,
-  aobj_t objs[], long objs_size)
+void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
+  long objs_size)
 {
   acoord_t t;
   acoord_t c;
@@ -135,8 +133,8 @@ void findbest(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *best,
   }
 }
 
-void findworst(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *worst,
-  aobj_t objs[], long objs_size)
+void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
+  long objs_size)
 {
   acoord_t t;
   acoord_t c;
@@ -158,8 +156,7 @@ void findworst(aobj_t pop[16][16][16], acoord_t *actor, acoord_t *worst,
   }
 }
 
-double getfit(aobj_t pop[16][16][16], acoord_t *c, aobj_t objs[],
-  long objs_size)
+double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
 {
   calcfit(pop, c, objs, objs_size);
   return fits[c->x][c->y][c->z];
@@ -177,7 +174,7 @@ void initfits()
   }
 }
 
-void initpop(aobj_t pop[16][16][16], long type)
+void initpop(pop_t pop, long type)
 {
   struct acoord_t c;
   for (c.x = 0; c.x < 16; c.x++) {
