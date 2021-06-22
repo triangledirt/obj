@@ -11,7 +11,8 @@ char firstline[1024];
 void testfile(char *filename, long type);
 void testline(char *line, long type);
 
-void testfile(char *filename, long type) {
+void testfile(char *filename, long type)
+{
   FILE *file;
   char line[1024];
   char first = 1;
@@ -27,7 +28,8 @@ void testfile(char *filename, long type) {
   fclose(file);
 }
 
-void testline(char *line, long type) {
+void testline(char *line, long type)
+{
   aobj_t obj;
   long idx = 0;
   abit_t val;
@@ -62,7 +64,8 @@ void testline(char *line, long type) {
 #endif
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   testfile("mushroom.data", MUSHROOM);
   return 0;
 }

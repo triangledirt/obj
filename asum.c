@@ -6,11 +6,13 @@
 
 static aobj_t ideal[ALIB_TYPE_COUNT];
 
-abit_t asum_classify(aobj_t obj, long type) {
+abit_t asum_classify(aobj_t obj, long type)
+{
   return (aobj_compare(obj, ideal[type]) > 0.75);
 }
 
-void asum_learn(aobj_t objs[], long objs_size, long type) {
+void asum_learn(aobj_t objs[], long objs_size, long type)
+{
   long idx;
   long bit;
   abit_t val;

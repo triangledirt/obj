@@ -17,8 +17,10 @@ static double getfit(long obj, aobj_t objs[], long objs_size);
 static aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size);
 static aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size);
 static void initfits();
+static void initpop(aobj_t pop[], long type);
 
-abit_t agene_classify(aobj_t obj, long type) {
+abit_t agene_classify(aobj_t obj, long type)
+{
   abit_t class;
   if (aobj_compare(obj, ideal[type]) > 0.75) {
     class = 1;
@@ -28,65 +30,9 @@ abit_t agene_classify(aobj_t obj, long type) {
   return class;
 }
 
-void calcfit(long obj, aobj_t objs[], long objs_size) {
-  long idx;
-  double fit = 0;
-  if (fits[obj] < 0) {
-    for (idx = 0; idx < objs_size; idx++) {
-      fit += aobj_compare(objs[obj], objs[idx]);
-    }
-    fits[obj] = fit / objs_size;
-  }
-}
-
-double getfit(long obj, aobj_t objs[], long objs_size) {
-  calcfit(obj, objs, objs_size);
-  return fits[obj];
-}
-
-aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size) {
-  long idx;
-  long idxfittest = 0;
-  double fitness;
-  double fittest = -1;
-  for (idx = 0; idx < POP; idx++) {
-    fitness = getfit(idx, objs, objs_size);
-    if (fitness > fittest) {
-      fittest = fitness;
-      idxfittest = idx;
-    }
-  }
-  return pop[idxfittest];
-}
-
-aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size) {
-  long tries;
-  double fitness = -1;
-  double newfit;
-  long idx = 0;
-  long newid;
-  for (tries = 0; tries < (POP / 16); tries++) {
-    newid = random() % POP;
-    newfit = getfit(newid, objs, objs_size);
-    if (newfit > fitness) {
-      idx = newid;
-      fitness = newfit;
-    }
-  }
-  return pop[idx];
-}
-
-void initfits() {
-  long idx;
-  for (idx = 0; idx < POP; idx++) {
-    fits[idx] = -1;
-  }
-}
-
-void agene_learn(aobj_t objs[], long objs_size, long type) {
+void agene_learn(aobj_t objs[], long objs_size, long type)
+{
   long mating;
-  long indiv;
-  aobj_t obj;
   aobj_t pop[POP];
   aobj_t parent1;
   aobj_t parent2;
@@ -94,14 +40,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type) {
   long bit;
   long crossover;
   long idx;
-  for (indiv = 0; indiv < POP; indiv++) {
-    if (0 == (random() % 2)) {
-      obj = ideal[type];
-    } else {
-      aobj_randomize(&obj);
-    }
-    pop[indiv] = obj;
-  }
+  initpop(pop, type);
   initfits();
   for (mating = 0; mating < MATINGS; mating++) {
     parent1 = getparent(pop, objs, objs_size);
@@ -127,4 +66,78 @@ void agene_learn(aobj_t objs[], long objs_size, long type) {
   aobj_print(ideal[type]);
   printf("\n");
 #endif
+}
+
+void calcfit(long obj, aobj_t objs[], long objs_size)
+{
+  long idx;
+  double fit = 0;
+  if (fits[obj] < 0) {
+    for (idx = 0; idx < objs_size; idx++) {
+      fit += aobj_compare(objs[obj], objs[idx]);
+    }
+    fits[obj] = fit / objs_size;
+  }
+}
+
+double getfit(long obj, aobj_t objs[], long objs_size)
+{
+  calcfit(obj, objs, objs_size);
+  return fits[obj];
+}
+
+aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
+{
+  long idx;
+  long idxfittest = 0;
+  double fitness;
+  double fittest = -1;
+  for (idx = 0; idx < POP; idx++) {
+    fitness = getfit(idx, objs, objs_size);
+    if (fitness > fittest) {
+      fittest = fitness;
+      idxfittest = idx;
+    }
+  }
+  return pop[idxfittest];
+}
+
+aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
+{
+  long tries;
+  double fitness = -1;
+  double newfit;
+  long idx = 0;
+  long newid;
+  for (tries = 0; tries < (POP / 16); tries++) {
+    newid = random() % POP;
+    newfit = getfit(newid, objs, objs_size);
+    if (newfit > fitness) {
+      idx = newid;
+      fitness = newfit;
+    }
+  }
+  return pop[idx];
+}
+
+void initfits()
+{
+  long idx;
+  for (idx = 0; idx < POP; idx++) {
+    fits[idx] = -1;
+  }
+}
+
+void initpop(aobj_t pop[], long type)
+{
+  long indiv;
+  aobj_t obj;
+  for (indiv = 0; indiv < POP; indiv++) {
+    if (0 == (random() % 2)) {
+      obj = ideal[type];
+    } else {
+      aobj_randomize(&obj);
+    }
+    pop[indiv] = obj;
+  }
 }
