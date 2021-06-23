@@ -28,7 +28,7 @@ static void findworst(pop_t pop, acoord_t *actor, acoord_t *worst,
   aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void init(pop_t pop, long type);
-static void randcoords(acoord_t *c);
+static void randcoord(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
 {
@@ -51,7 +51,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
   pop_t pop;
   init(pop, type);
   for (act = 0; act < ACTS; act++) {
-    randcoords(&actor);
+    randcoord(&actor);
     findbest(pop, &actor, &best, objs, objs_size);
     findworst(pop, &actor, &worst, objs, objs_size);
     if (atoss_die(ANARCHY)) {
@@ -181,7 +181,7 @@ void init(pop_t pop, long type)
   aobj_clear(&fittest);
 }
 
-void randcoords(acoord_t *c)
+void randcoord(acoord_t *c)
 {
   c->x = random() % DIM;
   c->y = random() % DIM;
