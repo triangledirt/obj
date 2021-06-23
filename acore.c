@@ -25,8 +25,7 @@ static void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
 static void findworst(pop_t pop, acoord_t *actor, acoord_t *worst,
   aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
-static void initfits();
-static void initpop(pop_t pop, long type);
+static void init(pop_t pop, long type);
 static void randcoords(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
@@ -48,8 +47,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
   acoord_t worst;
   aobj_t obj;
   pop_t pop;
-  initpop(pop, type);
-  initfits();
+  init(pop, type);
   for (act = 0; act < ACTS; act++) {
     randcoords(&actor);
     findbest(pop, &actor, &best, objs, objs_size);
@@ -162,19 +160,7 @@ double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   return fits[c->x][c->y][c->z];
 }
 
-void initfits()
-{
-  acoord_t c;
-  for (c.x = 0; c.x < 16; c.x++) {
-    for (c.y = 0; c.y < 16; c.y++) {
-      for (c.z = 0; c.z < 16; c.z++) {
-        fits[c.x][c.y][c.z] = -1;
-      }
-    }
-  }
-}
-
-void initpop(pop_t pop, long type)
+void init(pop_t pop, long type)
 {
   struct acoord_t c;
   for (c.x = 0; c.x < 16; c.x++) {
@@ -185,6 +171,7 @@ void initpop(pop_t pop, long type)
         } else {
           pop[c.x][c.y][c.z] = random();
         }
+        fits[c.x][c.y][c.z] = -1;
       }
     }
   }
