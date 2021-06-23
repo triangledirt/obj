@@ -8,9 +8,9 @@
 #include "atool.h"
 #include "atoss.h"
 
-#define ACTS 1024
+#define ACTS 512
 #define ANARCHY 4
-#define DIM 16
+#define DIM 8
 #define MUTATE 32
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
@@ -64,7 +64,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
 #if ALIB_VERBOSE
   printf("type%ld ideal cor ", type);
   aobj_print(ideal[type]);
-  printf("\n");
+  printf(" %0.3f%%\n", fitness);
 #endif
 }
 
