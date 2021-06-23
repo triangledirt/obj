@@ -8,16 +8,17 @@
 #include "atool.h"
 #include "atoss.h"
 
-#define ACTS 512
+#define ACTS 1024
 #define ANARCHY 4
-#define DIM 8
+#define DIM 16
 #define MUTATE 32
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
 
 static aobj_t ideal[ALIB_TYPE_COUNT];
 static double fits[DIM][DIM][DIM];
-static aobj_t fittest = 0;
+static aobj_t fittest;
+static double fitness = 0.0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void dance(pop_t pop_t, acoord_t *dest, acoord_t *src1, acoord_t *src2);
@@ -80,8 +81,9 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
     }
     fit = tot / objs_size;
     fits[c->x][c->y][c->z] = fit;
-    if (fit > fittest) {
-      fittest = fit;
+    if (fit > fitness) {
+      fittest = obj;
+      fitness = fit;
     }
   }
 }
@@ -111,7 +113,7 @@ void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
 {
   acoord_t t;
   acoord_t c;
-  double fitness = 0.0;
+  double fit = 0.0;
   double f;
   for (t.x = -1; t.x < 2; t.x++) {
     for (t.y = -1; t.y < 2; t.y++) {
@@ -123,8 +125,8 @@ void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
           continue;
         }
         f = getfit(pop, &c, objs, objs_size);
-        if (f > fitness) {
-          fitness = f;
+        if (f > fit) {
+          fit = f;
           *best = c;
         }
       }
@@ -137,7 +139,7 @@ void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
 {
   acoord_t t;
   acoord_t c;
-  double fitness = 1.0;
+  double fit = 1.0;
   double f;
   for (t.x = -1; t.x < 2; t.x++) {
     for (t.y = -1; t.y < 2; t.y++) {
@@ -146,8 +148,8 @@ void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
         c.y = atool_wrapidx(actor->y + t.y, DIM);
         c.z = atool_wrapidx(actor->z + t.z, DIM);
         f = getfit(pop, &c, objs, objs_size);
-        if (f < fitness) {
-          fitness = f;
+        if (f < fit) {
+          fit = f;
           *worst = c;
         }
       }
@@ -176,6 +178,7 @@ void init(pop_t pop, long type)
       }
     }
   }
+  aobj_clear(&fittest);
 }
 
 void randcoords(acoord_t *c)
