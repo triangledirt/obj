@@ -6,7 +6,7 @@
 #include "acore.h"
 #include "alib.h"
 #include "aobj.h"
-#include "awrap.h"
+#include "atool.h"
 
 #define ACTS 256
 #define ANARCHY 4
@@ -118,9 +118,9 @@ void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
         if ((actor->x == t.x) && (actor->y == t.y) && (actor->z == t.z)) {
           continue;
         }
-        c.x = awrap_index(actor->x + t.x, 16);
-        c.y = awrap_index(actor->y + t.y, 16);
-        c.z = awrap_index(actor->z + t.z, 16);
+        c.x = atool_wrapidx(actor->x + t.x, 16);
+        c.y = atool_wrapidx(actor->y + t.y, 16);
+        c.z = atool_wrapidx(actor->z + t.z, 16);
         f = getfit(pop, &c, objs, objs_size);
         if (f > fitness) {
           fitness = f;
@@ -141,9 +141,9 @@ void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
   for (t.x = -1; t.x < 2; t.x++) {
     for (t.y = -1; t.y < 2; t.y++) {
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = awrap_index(actor->x + t.x, 16);
-        c.y = awrap_index(actor->y + t.y, 16);
-        c.z = awrap_index(actor->z + t.z, 16);
+        c.x = atool_wrapidx(actor->x + t.x, 16);
+        c.y = atool_wrapidx(actor->y + t.y, 16);
+        c.z = atool_wrapidx(actor->z + t.z, 16);
         f = getfit(pop, &c, objs, objs_size);
         if (f < fitness) {
           fitness = f;
