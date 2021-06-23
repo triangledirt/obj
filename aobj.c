@@ -24,6 +24,18 @@ double aobj_compare(aobj_t obj1, aobj_t obj2)
   return (double) correct / 31;
 }
 
+long aobj_getnum(aobj_t *obj, long startbit, long bits)
+{
+  long place = 1;
+  long bit;
+  long num = 0;
+  for (bit = startbit; bit < bits; bit++) {
+    num += place * aobj_getattr(*obj, bit);
+    place *= 2;
+  }
+  return num;
+}
+
 void aobj_mutate(aobj_t *obj)
 {
   long idx = random() % 32;
@@ -42,4 +54,19 @@ void aobj_print(aobj_t obj)
 void aobj_randomize(aobj_t *obj)
 {
   *obj = random();
+}
+
+void aobj_setnum(aobj_t *obj, long startbit, long bits, long num)
+{
+  long place = 2;
+  long bit = startbit;
+  abit_t val;
+  long rem = num;
+  do {
+    val = rem % place;
+    aobj_setattr(obj, bit, val);
+    rem -= val;
+    place *= 2;
+    bit++;
+  } while (bit < bits);
 }
