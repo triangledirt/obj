@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "abit.h"
+#include "acity.h"
 #include "acore.h"
 #include "agene.h"
 #include "alib.h"
@@ -23,10 +24,11 @@ abit_t alib_classify(aobj_t obj, long type)
   long tally = 0;
   init();
   uptypes(type);
+  tally += acity_classify(obj, type);
   tally += acore_classify(obj, type);
   tally += agene_classify(obj, type);
   tally += asum_classify(obj, type);
-  if (tally > 1) {
+  if (tally > 2) {
     class = 1;
   } else {
     class = 0;
@@ -50,6 +52,7 @@ void learn()
 {
   long type;
   for (type = 0; type < types; type++) {
+    acity_learn(objs[type], OBJECT_CACHE, type);
     acore_learn(objs[type], OBJECT_CACHE, type);
     agene_learn(objs[type], OBJECT_CACHE, type);
     asum_learn(objs[type], OBJECT_CACHE, type);
