@@ -4,6 +4,7 @@
 #include "agene.h"
 #include "alib.h"
 #include "aobj.h"
+#include "atoss.h"
 
 #define MATINGS 64
 #define MUTATE 1024
@@ -52,7 +53,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
       } else {
         aobj_setattr(&child, bit, aobj_getattr(parent2, bit));
       }
-      if (0 == (random() % MUTATE)) {
+      if (atoss_die(MUTATE)) {
         aobj_mutate(&child);
       }
     }
@@ -133,7 +134,7 @@ void initpop(aobj_t pop[], long type)
   long indiv;
   aobj_t obj;
   for (indiv = 0; indiv < POP; indiv++) {
-    if (0 == (random() % 2)) {
+    if (atoss_coin()) {
       obj = ideal[type];
     } else {
       aobj_randomize(&obj);

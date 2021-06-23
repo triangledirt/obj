@@ -2,20 +2,21 @@
 #include <stdlib.h>
 #include "abit.h"
 #include "acoord.h"
-#include "acoin.h"
 #include "acore.h"
 #include "alib.h"
 #include "aobj.h"
 #include "atool.h"
+#include "atoss.h"
 
-#define ACTS 256
+#define ACTS 512
 #define ANARCHY 4
+#define DIM 8
 #define MUTATE 32
 
-typedef aobj_t pop_t[16][16][16];
+typedef aobj_t pop_t[DIM][DIM][DIM];
 
 static aobj_t ideal[ALIB_TYPE_COUNT];
-static double fits[16][16][16];
+static double fits[DIM][DIM][DIM];
 static aobj_t fittest = 0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
@@ -52,7 +53,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
     randcoords(&actor);
     findbest(pop, &actor, &best, objs, objs_size);
     findworst(pop, &actor, &worst, objs, objs_size);
-    if (0 == (random() % ANARCHY)) {
+    if (atoss_die(ANARCHY)) {
       dance(pop, &actor, &best, &worst);
     } else {
       dance(pop, &worst, &actor, &best);
@@ -98,7 +99,7 @@ void dance(pop_t pop, acoord_t *dest, acoord_t *src1, acoord_t *src2)
     } else {
       aobj_setattr(destobj, bit, aobj_getattr(parent2, bit));
     }
-    if (0 == (random() % MUTATE)) {
+    if (atoss_die(MUTATE)) {
       aobj_mutate(destobj);
     }
   }
@@ -115,12 +116,12 @@ void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
   for (t.x = -1; t.x < 2; t.x++) {
     for (t.y = -1; t.y < 2; t.y++) {
       for (t.z = -1; t.z < 2; t.z++) {
-        if ((actor->x == t.x) && (actor->y == t.y) && (actor->z == t.z)) {
+        c.x = atool_wrapidx(actor->x + t.x, DIM);
+        c.y = atool_wrapidx(actor->y + t.y, DIM);
+        c.z = atool_wrapidx(actor->z + t.z, DIM);
+        if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z)) {
           continue;
         }
-        c.x = atool_wrapidx(actor->x + t.x, 16);
-        c.y = atool_wrapidx(actor->y + t.y, 16);
-        c.z = atool_wrapidx(actor->z + t.z, 16);
         f = getfit(pop, &c, objs, objs_size);
         if (f > fitness) {
           fitness = f;
@@ -141,9 +142,9 @@ void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
   for (t.x = -1; t.x < 2; t.x++) {
     for (t.y = -1; t.y < 2; t.y++) {
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = atool_wrapidx(actor->x + t.x, 16);
-        c.y = atool_wrapidx(actor->y + t.y, 16);
-        c.z = atool_wrapidx(actor->z + t.z, 16);
+        c.x = atool_wrapidx(actor->x + t.x, DIM);
+        c.y = atool_wrapidx(actor->y + t.y, DIM);
+        c.z = atool_wrapidx(actor->z + t.z, DIM);
         f = getfit(pop, &c, objs, objs_size);
         if (f < fitness) {
           fitness = f;
@@ -163,13 +164,13 @@ double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
 void init(pop_t pop, long type)
 {
   struct acoord_t c;
-  for (c.x = 0; c.x < 16; c.x++) {
-    for (c.y = 0; c.y < 16; c.y++) {
-      for (c.z = 0; c.z < 16; c.z++) {
-        if (acoin_toss()) {
+  for (c.x = 0; c.x < DIM; c.x++) {
+    for (c.y = 0; c.y < DIM; c.y++) {
+      for (c.z = 0; c.z < DIM; c.z++) {
+        if (atoss_coin()) {
           pop[c.x][c.y][c.z] = ideal[type];
         } else {
-          pop[c.x][c.y][c.z] = random();
+          aobj_randomize(&pop[c.x][c.y][c.z]);
         }
         fits[c.x][c.y][c.z] = -1;
       }
@@ -179,7 +180,7 @@ void init(pop_t pop, long type)
 
 void randcoords(acoord_t *c)
 {
-  c->x = random() % 16;
-  c->y = random() % 16;
-  c->z = random() % 16;
+  c->x = random() % DIM;
+  c->y = random() % DIM;
+  c->z = random() % DIM;
 }

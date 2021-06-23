@@ -7,6 +7,7 @@
 #include "alib.h"
 #include "aobj.h"
 #include "asum.h"
+#include "atoss.h"
 
 #define OBJECT_CACHE 64
 
@@ -43,7 +44,7 @@ void alib_observe(aobj_t obj, long type)
   uptypes(type);
   idx = random() % OBJECT_CACHE;
   objs[type][idx] = obj;
-  if (0 == (random() % (OBJECT_CACHE / 16))) {
+  if (atoss_die(OBJECT_CACHE / 16)) {
     learn();
   }
 }
