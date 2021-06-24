@@ -78,17 +78,17 @@ void calcfit(long obj, aobj_t objs[], long objs_size)
 {
   long idx;
   double fit = 0;
-  if (fits[obj] < 0) {
-    for (idx = 0; idx < objs_size; idx++) {
-      fit += aobj_compare(objs[obj], objs[idx]);
-    }
-    fits[obj] = fit / objs_size;
+  for (idx = 0; idx < objs_size; idx++) {
+    fit += aobj_compare(objs[obj], objs[idx]);
   }
+  fits[obj] = fit / objs_size;
 }
 
 double getfit(long obj, aobj_t objs[], long objs_size)
 {
-  calcfit(obj, objs, objs_size);
+  if (fits[obj] < 0) {
+    calcfit(obj, objs, objs_size);
+  }
   return fits[obj];
 }
 
@@ -96,11 +96,11 @@ aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
 {
   long idx;
   long idxfittest = 0;
-  double fittest = -1;
+  double fit = 0;
   for (idx = 0; idx < POP; idx++) {
-    fitness = getfit(idx, objs, objs_size);
-    if (fitness > fittest) {
-      fittest = fitness;
+    fit = getfit(idx, objs, objs_size);
+    if (fit > fitness) {
+      fitness = fit;
       idxfittest = idx;
     }
   }
@@ -110,11 +110,11 @@ aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
 aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
 {
   long tries;
-  double fit = -1;
+  double fit = 0;
   double newfit;
   long idx = 0;
   long newid;
-  for (tries = 0; tries < (POP / 16); tries++) {
+  for (tries = 0; tries < 6; tries++) {
     newid = random() % POP;
     newfit = getfit(newid, objs, objs_size);
     if (newfit > fit) {

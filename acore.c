@@ -51,6 +51,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
   acoord_t worst;
   aobj_t obj;
   pop_t pop;
+  initonce();
   init(pop, type);
   for (act = 0; act < ACTS; act++) {
     randcoord(&actor);
@@ -76,17 +77,15 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   double tot = 0;
   long idx;
   aobj_t obj;
-  if (fits[c->x][c->y][c->z] < 0) {
-    obj = pop[c->x][c->y][c->z];
-    for (idx = 0; idx < objs_size; idx++) {
-      tot += aobj_compare(obj, objs[idx]);
-    }
-    fit = tot / objs_size;
-    fits[c->x][c->y][c->z] = fit;
-    if (fit > fitness) {
-      fittest = obj;
-      fitness = fit;
-    }
+  obj = pop[c->x][c->y][c->z];
+  for (idx = 0; idx < objs_size; idx++) {
+    tot += aobj_compare(obj, objs[idx]);
+  }
+  fit = tot / objs_size;
+  fits[c->x][c->y][c->z] = fit;
+  if (fit > fitness) {
+    fittest = obj;
+    fitness = fit;
   }
 }
 
@@ -161,7 +160,9 @@ void findworst(pop_t pop, acoord_t *actor, acoord_t *worst, aobj_t objs[],
 
 double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
 {
-  calcfit(pop, c, objs, objs_size);
+  if (fits[c->x][c->y][c->z] < 0) {
+    calcfit(pop, c, objs, objs_size);
+  }
   return fits[c->x][c->y][c->z];
 }
 
