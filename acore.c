@@ -15,10 +15,11 @@
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
 
-static aobj_t ideal[ALIB_TYPE_COUNT];
 static double fits[DIM][DIM][DIM];
 static aobj_t fittest;
-static double fitness = 0.0;
+static double fitness;
+static aobj_t ideal[ALIB_TYPE_COUNT];
+static abit_t once = 0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void dance(pop_t pop_t, acoord_t *dest, acoord_t *src1, acoord_t *src2);
@@ -28,6 +29,7 @@ static void findworst(pop_t pop, acoord_t *actor, acoord_t *worst,
   aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void init(pop_t pop, long type);
+static void initonce();
 static void randcoord(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
@@ -180,6 +182,16 @@ void init(pop_t pop, long type)
   }
   aobj_clear(&fittest);
   fitness = 0.0;
+}
+
+void initonce()
+{
+  long idx;
+  if (!once) {
+    for (idx = 0; idx < ALIB_TYPE_COUNT; idx++) {
+      aobj_randomize(&ideal[idx]);
+    }
+  }
 }
 
 void randcoord(acoord_t *c)

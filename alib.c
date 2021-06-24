@@ -11,11 +11,11 @@
 
 #define OBJECT_CACHE 64
 
-static char initd = 0;
 static aobj_t objs[ALIB_TYPE_COUNT][OBJECT_CACHE];
+static abit_t once = 0;
 static long types = 1;
 
-static void init();
+static void initonce();
 static void learn();
 static void uptypes(long seentype);
 
@@ -23,13 +23,13 @@ abit_t alib_classify(aobj_t obj, long type)
 {
   abit_t class;
   long tally = 0;
-  init();
+  initonce();
   uptypes(type);
   tally += acore_classify(obj, type);
   tally += agene_classify(obj, type);
   tally += ajung_classify(obj, type);
   tally += asum_classify(obj, type);
-  if (tally >= 2) {
+  if (tally >= 1) {
     class = 1;
   } else {
     class = 0;
@@ -40,7 +40,7 @@ abit_t alib_classify(aobj_t obj, long type)
 void alib_observe(aobj_t obj, long type)
 {
   long idx;
-  init();
+  initonce();
   uptypes(type);
   idx = random() % OBJECT_CACHE;
   objs[type][idx] = obj;
@@ -60,17 +60,17 @@ void learn()
   }
 }
 
-void init()
+void initonce()
 {
   long idx;
   long type;
-  if (!initd) {
+  if (!once) {
     for (type = 0; type < ALIB_TYPE_COUNT; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
         aobj_randomize(&objs[type][idx]);
       }
     }
-    initd = 1;
+    once = 1;
   }
 }
 

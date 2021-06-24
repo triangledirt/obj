@@ -10,16 +10,17 @@
 #define MUTATE 1024
 #define POP 256
 
-static aobj_t ideal[ALIB_TYPE_COUNT];
-static double fitness = 0.0;
+static double fitness;
 static double fits[POP];
+static aobj_t ideal[ALIB_TYPE_COUNT];
+static abit_t once = 0;
 
 static void calcfit(long obj, aobj_t objs[], long objs_size);
 static double getfit(long obj, aobj_t objs[], long objs_size);
 static aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size);
 static aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size);
-static void initfits();
-static void initpop(aobj_t pop[], long type);
+static void init(aobj_t pop[], long type);
+static void initonce();
 
 abit_t agene_classify(aobj_t obj, long type)
 {
@@ -45,8 +46,8 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
 #if ALIB_VERBOSE
   double tot = 0;
 #endif
-  initpop(pop, type);
-  initfits();
+  initonce();
+  init(pop, type);
   for (mating = 0; mating < MATINGS; mating++) {
     parent1 = getparent(pop, objs, objs_size);
     parent2 = getparent(pop, objs, objs_size);
@@ -124,24 +125,29 @@ aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
   return pop[idx];
 }
 
-void initfits()
+void init(aobj_t pop[], long type)
 {
   long idx;
-  for (idx = 0; idx < POP; idx++) {
-    fits[idx] = -1;
-  }
-}
-
-void initpop(aobj_t pop[], long type)
-{
-  long indiv;
   aobj_t obj;
-  for (indiv = 0; indiv < POP; indiv++) {
+  for (idx = 0; idx < POP; idx++) {
     if (atoss_coin()) {
       obj = ideal[type];
     } else {
       aobj_randomize(&obj);
     }
-    pop[indiv] = obj;
+    pop[idx] = obj;
+    fits[idx] = -1;
+  }
+  fitness = 0.0;
+}
+
+void initonce()
+{
+  long idx;
+  if (!once) {
+    for (idx = 0; idx < ALIB_TYPE_COUNT; idx++) {
+      aobj_randomize(&ideal[idx]);
+    }
+    once = 1;
   }
 }
