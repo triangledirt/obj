@@ -11,6 +11,7 @@
 #define POP 256
 
 static aobj_t ideal[ALIB_TYPE_COUNT];
+static double fitness = 0.0;
 static double fits[POP];
 
 static void calcfit(long obj, aobj_t objs[], long objs_size);
@@ -41,6 +42,9 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
   long bit;
   long crossover;
   long idx;
+#if ALIB_VERBOSE
+  double tot = 0;
+#endif
   initpop(pop, type);
   initfits();
   for (mating = 0; mating < MATINGS; mating++) {
@@ -65,7 +69,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
 #if ALIB_VERBOSE
   printf("type%ld ideal gen ", type);
   aobj_print(ideal[type]);
-  printf("\n");
+  printf(" %0.3f%%\n", fitness);
 #endif
 }
 
@@ -91,7 +95,6 @@ aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
 {
   long idx;
   long idxfittest = 0;
-  double fitness;
   double fittest = -1;
   for (idx = 0; idx < POP; idx++) {
     fitness = getfit(idx, objs, objs_size);

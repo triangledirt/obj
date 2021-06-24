@@ -20,6 +20,10 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   long onecounts[32];
   long thresh = objs_size / 4;
   abit_t class;
+#if ALIB_VERBOSE
+  double fitness = 0.0;
+  double tot = 0;
+#endif
   for (bit = 1; bit < 32; bit++) {
     onecounts[bit] = 0;
   }
@@ -43,8 +47,12 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
     }
   }
 #if ALIB_VERBOSE
+  for (idx = 0; idx < objs_size; idx++) {
+    tot += aobj_compare(ideal[type], objs[idx]);
+  }
+  fitness = tot / objs_size;
   printf("type%ld ideal sum ", type);
   aobj_print(ideal[type]);
-  printf("\n");
+  printf(" %0.3f%%\n", fitness);
 #endif
 }

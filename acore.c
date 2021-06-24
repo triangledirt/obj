@@ -179,6 +179,7 @@ void init(pop_t pop, long type)
     }
   }
   aobj_clear(&fittest);
+  fitness = 0.0;
 }
 
 void randcoord(acoord_t *c)
