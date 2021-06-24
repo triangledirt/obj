@@ -93,17 +93,17 @@ void dance(pop_t pop, acoord_t *dest, acoord_t *src1, acoord_t *src2)
 {
   aobj_t parent1 = pop[src1->x][src1->y][src1->z];
   aobj_t parent2 = pop[src2->x][src2->y][src2->z];
-  aobj_t *destobj = &pop[dest->x][dest->y][dest->z];
+  aobj_t *child = &pop[dest->x][dest->y][dest->z];
   long bit;
   long crossover = random() % 32;
   for (bit = 0; bit < 32; bit++) {
     if (bit >= crossover) {
-      aobj_setattr(destobj, bit, aobj_getattr(parent1, bit));
+      aobj_setattr(child, bit, aobj_getattr(parent1, bit));
     } else {
-      aobj_setattr(destobj, bit, aobj_getattr(parent2, bit));
+      aobj_setattr(child, bit, aobj_getattr(parent2, bit));
     }
     if (atoss_die(MUTATE)) {
-      aobj_mutate(destobj);
+      aobj_mutate(child);
     }
   }
   fits[dest->x][dest->y][dest->z] = -1;
