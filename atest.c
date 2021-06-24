@@ -7,6 +7,8 @@
 #define MUSHROOM 0
 
 char firstline[1024];
+long correct = 0;
+long total = 0;
 
 void testfile(char *filename, long type);
 void testline(char *line, long type);
@@ -26,6 +28,7 @@ void testfile(char *filename, long type)
     }
   }
   fclose(file);
+  printf("%0.3f%%\n", (double) correct / total);
 }
 
 void testline(char *line, long type)
@@ -57,6 +60,10 @@ void testline(char *line, long type)
   alib_observe(obj, type);
 #if ALIB_VERBOSE
   class = alib_classify(obj, type);
+  if (class == aobj_getclass(obj)) {
+    correct++;
+  }
+  total++;
   printf("type%ld obsrv (", type);
   printf("%d) ", class);
   aobj_print(obj);

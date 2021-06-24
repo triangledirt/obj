@@ -29,7 +29,7 @@ abit_t alib_classify(aobj_t obj, long type)
   tally += agene_classify(obj, type);
   tally += ajung_classify(obj, type);
   tally += asum_classify(obj, type);
-  if (tally >= 1) {
+  if (tally >= 2) {
     class = 1;
   } else {
     class = 0;

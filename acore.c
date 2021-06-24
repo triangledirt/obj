@@ -181,7 +181,7 @@ void init(pop_t pop, long type)
       }
     }
   }
-  aobj_clear(&fittest);
+  aobj_randomize(&fittest);
   fitness = 0.0;
 }
 
