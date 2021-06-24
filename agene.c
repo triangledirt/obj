@@ -110,16 +110,16 @@ aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
 aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
 {
   long tries;
-  double fitness = -1;
+  double fit = -1;
   double newfit;
   long idx = 0;
   long newid;
   for (tries = 0; tries < (POP / 16); tries++) {
     newid = random() % POP;
     newfit = getfit(newid, objs, objs_size);
-    if (newfit > fitness) {
+    if (newfit > fit) {
       idx = newid;
-      fitness = newfit;
+      fit = newfit;
     }
   }
   return pop[idx];
