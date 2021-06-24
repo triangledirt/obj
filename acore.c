@@ -10,7 +10,7 @@
 
 #define ACTS 512
 #define ANARCHY 4
-#define DIM 8
+#define DIM 4
 #define MUTATE 32
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
