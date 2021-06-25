@@ -89,7 +89,7 @@ long countwithnotboth(long type, aobj_t typ1, aobj_t typ2)
     obj = objs[type][idx];
     has1 = aobj_hastype(obj, typ1);
     has2 = aobj_hastype(obj, typ2);
-    if (1 == (has1 + has2)) {
+    if (2 != (has1 + has2)) {
       count++;
     }
   }
