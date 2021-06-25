@@ -42,6 +42,116 @@ abit_t alib_classify(aobj_t obj, long type)
   return class;
 }
 
+double alib_frequencyi(aobj_t indicator, aobj_t target, long type)
+{
+  long targcount = countwith(target, type);
+  long indicount = countwith(indicator, type);
+  return (long) targcount / indicount;
+}
+
+double alib_frequencyt(aobj_t indicator, aobj_t target, long type)
+{
+  long targcount = countwith(target, type);
+  long indicount = countwith(indicator, type);
+  return (long) targcount / indicount;
+}
+
+double alib_impertinencei(aobj_t indicator, aobj_t target, long type)
+{
+  long indisubcount = countwithsub(indicator, target, type);
+  long targcount = countwith(target, type);
+  return (long) indisubcount / targcount;
+}
+
+double alib_impertinencet(aobj_t indicator, aobj_t target, long type)
+{
+  long targsubcount = countwithsub(target, indicator, type);
+  long indicount = countwith(indicator, type);
+  return (long) targsubcount / indicount;
+}
+
+double alib_mismatchi(aobj_t indicator, aobj_t target, long type)
+{
+  long indisubcount = countwithsub(indicator, target, type);
+  long targsubcount = countwithsub(target, indicator, type);
+  return (long) indisubcount / targsubcount;
+}
+
+double alib_mismatcht(aobj_t indicator, aobj_t target, long type)
+{
+  long targsubcount = countwithsub(target, indicator, type);
+  long indisubcount = countwithsub(indicator, target, type);
+  return (long) targsubcount / indisubcount;
+}
+
+void alib_observe(aobj_t obj, long type)
+{
+  long idx;
+  initonce();
+  uptypes(type);
+  idx = random() % OBJECT_CACHE;
+  objs[type][idx] = obj;
+  if (atoss_die(OBJECT_CACHE / 16)) {
+    learn();
+  }
+}
+
+double alib_opacityi(aobj_t indicator, aobj_t target, long type)
+{
+  long indisubcount = countwithsub(indicator, target, type);
+  long bothcount = countwithboth(indicator, target, type);
+  return (long) indisubcount / bothcount;
+}
+
+double alib_opacityt(aobj_t indicator, aobj_t target, long type)
+{
+  long targsubcount = countwithsub(target, indicator, type);
+  long bothcount = countwithboth(indicator, target, type);
+  return (long) targsubcount / bothcount;
+}
+
+double alib_overlap(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long eithercount = countwitheither(indicator, target, type);
+  return (long) bothcount / eithercount;
+}
+
+double alib_overlapi(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long indicount = countwith(indicator, type);
+  return (long) bothcount / indicount;
+}
+
+double alib_overlapt(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long targcount = countwithsub(indicator, target, type);
+  return (long) bothcount / targcount;
+}
+
+double alib_transparency(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long notbothcount = countwithnotboth(indicator, target, type);
+  return (long) bothcount / notbothcount;
+}
+
+double alib_transparencyi(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long indisubcount = countwithsub(indicator, target, type);
+  return (long) bothcount / indisubcount;
+}
+
+double alib_transparencyt(aobj_t indicator, aobj_t target, long type)
+{
+  long bothcount = countwithboth(indicator, target, type);
+  long targsubcount = countwithsub(target, indicator, type);
+  return (long) bothcount / targsubcount;
+}
+
 long countwith(long type, aobj_t typ)
 {
   long count = 0;
@@ -108,127 +218,6 @@ long countwithsub(long type, aobj_t typ1, aobj_t typ2)
   return count;
 }
 
-double alib_indifrequency(aobj_t indicator, aobj_t target, long type)
-{
-  long targcount = countwith(target, type);
-  long indicount = countwith(indicator, type);
-  return (long) targcount / indicount;
-}
-
-double alib_indioverlap(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long indicount = countwith(indicator, type);
-  return (long) bothcount / indicount;
-}
-
-double alib_indimismatch(aobj_t indicator, aobj_t target, long type)
-{
-  long indisubcount = countwithsub(indicator, target, type);
-  long targsubcount = countwithsub(target, indicator, type);
-  return (long) indisubcount / targsubcount;
-}
-
-double alib_indiimpertinence(aobj_t indicator, aobj_t target, long type)
-{
-  long indisubcount = countwithsub(indicator, target, type);
-  long targcount = countwith(target, type);
-  return (long) indisubcount / targcount;
-}
-
-double alib_indiopacity(aobj_t indicator, aobj_t target, long type)
-{
-  long indisubcount = countwithsub(indicator, target, type);
-  long bothcount = countwithboth(indicator, target, type);
-  return (long) indisubcount / bothcount;
-}
-
-double alib_inditransparency(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long indisubcount = countwithsub(indicator, target, type);
-  return (long) bothcount / indisubcount;
-}
-
-void alib_observe(aobj_t obj, long type)
-{
-  long idx;
-  initonce();
-  uptypes(type);
-  idx = random() % OBJECT_CACHE;
-  objs[type][idx] = obj;
-  if (atoss_die(OBJECT_CACHE / 16)) {
-    learn();
-  }
-}
-
-double alib_overlap(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long eithercount = countwitheither(indicator, target, type);
-  return (long) bothcount / eithercount;
-}
-
-double alib_targfrequency(aobj_t indicator, aobj_t target, long type)
-{
-  long targcount = countwith(target, type);
-  long indicount = countwith(indicator, type);
-  return (long) targcount / indicount;
-}
-
-double alib_targimpertinence(aobj_t indicator, aobj_t target, long type)
-{
-  long targsubcount = countwithsub(target, indicator, type);
-  long indicount = countwith(indicator, type);
-  return (long) targsubcount / indicount;
-}
-
-double alib_targmismatch(aobj_t indicator, aobj_t target, long type)
-{
-  long targsubcount = countwithsub(target, indicator, type);
-  long indisubcount = countwithsub(indicator, target, type);
-  return (long) targsubcount / indisubcount;
-}
-
-double alib_targoverlap(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long targcount = countwithsub(indicator, target, type);
-  return (long) bothcount / targcount;
-}
-
-double alib_targopacity(aobj_t indicator, aobj_t target, long type)
-{
-  long targsubcount = countwithsub(target, indicator, type);
-  long bothcount = countwithboth(indicator, target, type);
-  return (long) targsubcount / bothcount;
-}
-
-double alib_targtransparency(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long targsubcount = countwithsub(target, indicator, type);
-  return (long) bothcount / targsubcount;
-}
-
-double alib_transparency(aobj_t indicator, aobj_t target, long type)
-{
-  long bothcount = countwithboth(indicator, target, type);
-  long notbothcount = countwithnotboth(indicator, target, type);
-  return (long) bothcount / notbothcount;
-}
-
-void learn()
-{
-  long type;
-  for (type = 0; type < types; type++) {
-    acore_learn(objs[type], OBJECT_CACHE, type);
-    agene_learn(objs[type], OBJECT_CACHE, type);
-    ajung_learn(objs[type], OBJECT_CACHE, type);
-    asum_learn(objs[type], OBJECT_CACHE, type);
-  }
-}
-
 void initonce()
 {
   long idx;
@@ -240,6 +229,17 @@ void initonce()
       }
     }
     once = 1;
+  }
+}
+
+void learn()
+{
+  long type;
+  for (type = 0; type < types; type++) {
+    acore_learn(objs[type], OBJECT_CACHE, type);
+    agene_learn(objs[type], OBJECT_CACHE, type);
+    ajung_learn(objs[type], OBJECT_CACHE, type);
+    asum_learn(objs[type], OBJECT_CACHE, type);
   }
 }
 
