@@ -36,6 +36,21 @@ long aobj_getnum(aobj_t *obj, long startbit, long bits)
   return num;
 }
 
+abit_t aobj_hastype(aobj_t obj, aobj_t type)
+{
+  abit_t has = 1;
+  long idx;
+  for (idx = 0; idx < 32; idx++) {
+    if (aobj_getattr(type, idx)) {
+      if (!aobj_getattr(obj, idx)) {
+        has = 0;
+        break;
+      }
+    }
+  }
+  return has;
+}
+
 void aobj_mutate(aobj_t *obj)
 {
   long idx = random() % 32;
