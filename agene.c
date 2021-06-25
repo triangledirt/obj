@@ -7,7 +7,7 @@
 #include "atoss.h"
 
 #define MATINGS 64
-#define MUTATE 1024
+#define MUTATE 32
 #define POP 256
 
 static double fitness;
@@ -130,11 +130,8 @@ void init(aobj_t pop[], long type)
   long idx;
   aobj_t obj;
   for (idx = 0; idx < POP; idx++) {
-    if (atoss_coin()) {
-      obj = ideal[type];
-    } else {
-      aobj_randomize(&obj);
-    }
+    obj = ideal[type];
+    aobj_mutate(&obj);
     pop[idx] = obj;
     fits[idx] = -1;
   }

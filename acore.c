@@ -172,11 +172,8 @@ void init(pop_t pop, long type)
   for (c.x = 0; c.x < DIM; c.x++) {
     for (c.y = 0; c.y < DIM; c.y++) {
       for (c.z = 0; c.z < DIM; c.z++) {
-        if (atoss_coin()) {
-          pop[c.x][c.y][c.z] = ideal[type];
-        } else {
-          aobj_randomize(&pop[c.x][c.y][c.z]);
-        }
+        pop[c.x][c.y][c.z] = ideal[type];
+        aobj_mutate(&pop[c.x][c.y][c.z]);
         fits[c.x][c.y][c.z] = -1;
       }
     }
