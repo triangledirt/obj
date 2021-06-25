@@ -15,11 +15,11 @@ static aobj_t objs[ALIB_TYPE_COUNT][OBJECT_CACHE];
 static abit_t once = 0;
 static long types = 1;
 
-static long cntwith(long type, aobj_t typ);
-static long cntwithboth(long type, aobj_t typ1, aobj_t typ2);
-static long cntwitheither(long type, aobj_t typ1, aobj_t typ2);
-static long cntwithnotboth(long type, aobj_t typ1, aobj_t typ2);
-static long cntwithsub(long type, aobj_t typ1, aobj_t typ2);
+static long countwith(long type, aobj_t typ);
+static long countwithboth(long type, aobj_t typ1, aobj_t typ2);
+static long countwitheither(long type, aobj_t typ1, aobj_t typ2);
+static long countwithnotboth(long type, aobj_t typ1, aobj_t typ2);
+static long countwithsub(long type, aobj_t typ1, aobj_t typ2);
 static void initonce();
 static void learn();
 static void uptypes(long seentype);
@@ -42,45 +42,45 @@ abit_t alib_classify(aobj_t obj, long type)
   return class;
 }
 
-long cntwith(long type, aobj_t typ)
+long countwith(long type, aobj_t typ)
 {
-  long cnt = 0;
+  long count = 0;
   aobj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[typ][idx];
-    cnt += aobj_hastype(obj, typ);
+    count += aobj_hastype(obj, typ);
   }
-  return cnt;
+  return count;
 }
 
-long cntwithboth(long type, aobj_t typ1, aobj_t typ2)
+long countwithboth(long type, aobj_t typ1, aobj_t typ2)
 {
-  long cnt = 0;
+  long count = 0;
   aobj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    cnt += (aobj_hastype(obj, typ1) && aobj_hastype(obj, typ2));
+    count += (aobj_hastype(obj, typ1) && aobj_hastype(obj, typ2));
   }
-  return cnt;
+  return count;
 }
 
-long cntwitheither(long type, aobj_t typ1, aobj_t typ2)
+long countwitheither(long type, aobj_t typ1, aobj_t typ2)
 {
-  long cnt = 0;
+  long count = 0;
   aobj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    cnt += (aobj_hastype(obj, typ1) || aobj_hastype(obj, typ2));
+    count += (aobj_hastype(obj, typ1) || aobj_hastype(obj, typ2));
   }
-  return cnt;
+  return count;
 }
 
-long cntwithnotboth(long type, aobj_t typ1, aobj_t typ2)
+long countwithnotboth(long type, aobj_t typ1, aobj_t typ2)
 {
-  long cnt = 0;
+  long count = 0;
   aobj_t obj;
   long idx;
   abit_t has1;
@@ -90,64 +90,64 @@ long cntwithnotboth(long type, aobj_t typ1, aobj_t typ2)
     has1 = aobj_hastype(obj, typ1);
     has2 = aobj_hastype(obj, typ2);
     if (1 == (has1 + has2)) {
-      cnt++;
+      count++;
     }
   }
-  return cnt;
+  return count;
 }
 
-long cntwithsub(long type, aobj_t typ1, aobj_t typ2)
+long countwithsub(long type, aobj_t typ1, aobj_t typ2)
 {
-  long cnt = 0;
+  long count = 0;
   aobj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    cnt += (aobj_hastype(obj, typ1) && !aobj_hastype(obj, typ2));
+    count += (aobj_hastype(obj, typ1) && !aobj_hastype(obj, typ2));
   }
-  return cnt;
+  return count;
 }
 
 double alib_indifrequency(aobj_t indicator, aobj_t target, long type)
 {
-  long targcnt = cntwith(target, type);
-  long indicnt = cntwith(indicator, type);
-  return (long) targcnt / indicnt;
+  long targcount = countwith(target, type);
+  long indicount = countwith(indicator, type);
+  return (long) targcount / indicount;
 }
 
 double alib_indioverlap(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long indicnt = cntwith(indicator, type);
-  return (long) bothcnt / indicnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long indicount = countwith(indicator, type);
+  return (long) bothcount / indicount;
 }
 
 double alib_indimismatch(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcnt = cntwithsub(indicator, target, type);
-  long targsubcnt = cntwithsub(target, indicator, type);
-  return (long) indisubcnt / targsubcnt;
+  long indisubcount = countwithsub(indicator, target, type);
+  long targsubcount = countwithsub(target, indicator, type);
+  return (long) indisubcount / targsubcount;
 }
 
 double alib_indiimpertinence(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcnt = cntwithsub(indicator, target, type);
-  long targcnt = cntwith(target, type);
-  return (long) indisubcnt / targcnt;
+  long indisubcount = countwithsub(indicator, target, type);
+  long targcount = countwith(target, type);
+  return (long) indisubcount / targcount;
 }
 
 double alib_indiopacity(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcnt = cntwithsub(indicator, target, type);
-  long bothcnt = cntwithboth(indicator, target, type);
-  return (long) indisubcnt / bothcnt;
+  long indisubcount = countwithsub(indicator, target, type);
+  long bothcount = countwithboth(indicator, target, type);
+  return (long) indisubcount / bothcount;
 }
 
 double alib_inditransparency(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long indisubcnt = cntwithsub(indicator, target, type);
-  return (long) bothcnt / indisubcnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long indisubcount = countwithsub(indicator, target, type);
+  return (long) bothcount / indisubcount;
 }
 
 void alib_observe(aobj_t obj, long type)
@@ -164,58 +164,58 @@ void alib_observe(aobj_t obj, long type)
 
 double alib_overlap(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long eithercnt = cntwitheither(indicator, target, type);
-  return (long) bothcnt / eithercnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long eithercount = countwitheither(indicator, target, type);
+  return (long) bothcount / eithercount;
 }
 
 double alib_targfrequency(aobj_t indicator, aobj_t target, long type)
 {
-  long targcnt = cntwith(target, type);
-  long indicnt = cntwith(indicator, type);
-  return (long) targcnt / indicnt;
+  long targcount = countwith(target, type);
+  long indicount = countwith(indicator, type);
+  return (long) targcount / indicount;
 }
 
 double alib_targimpertinence(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcnt = cntwithsub(target, indicator, type);
-  long indicnt = cntwith(indicator, type);
-  return (long) targsubcnt / indicnt;
+  long targsubcount = countwithsub(target, indicator, type);
+  long indicount = countwith(indicator, type);
+  return (long) targsubcount / indicount;
 }
 
 double alib_targmismatch(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcnt = cntwithsub(target, indicator, type);
-  long indisubcnt = cntwithsub(indicator, target, type);
-  return (long) targsubcnt / indisubcnt;
+  long targsubcount = countwithsub(target, indicator, type);
+  long indisubcount = countwithsub(indicator, target, type);
+  return (long) targsubcount / indisubcount;
 }
 
 double alib_targoverlap(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long targcnt = cntwithsub(indicator, target, type);
-  return (long) bothcnt / targcnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long targcount = countwithsub(indicator, target, type);
+  return (long) bothcount / targcount;
 }
 
 double alib_targopacity(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcnt = cntwithsub(target, indicator, type);
-  long bothcnt = cntwithboth(indicator, target, type);
-  return (long) targsubcnt / bothcnt;
+  long targsubcount = countwithsub(target, indicator, type);
+  long bothcount = countwithboth(indicator, target, type);
+  return (long) targsubcount / bothcount;
 }
 
 double alib_targtransparency(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long targsubcnt = cntwithsub(target, indicator, type);
-  return (long) bothcnt / targsubcnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long targsubcount = countwithsub(target, indicator, type);
+  return (long) bothcount / targsubcount;
 }
 
 double alib_transparency(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcnt = cntwithboth(indicator, target, type);
-  long notbothcnt = cntwithnotboth(indicator, target, type);
-  return (long) bothcnt / notbothcnt;
+  long bothcount = countwithboth(indicator, target, type);
+  long notbothcount = countwithnotboth(indicator, target, type);
+  return (long) bothcount / notbothcount;
 }
 
 void learn()
