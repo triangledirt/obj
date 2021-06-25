@@ -28,7 +28,7 @@ void testfile(char *filename, long type)
     }
   }
   fclose(file);
-  printf("=%0.3f%%!\n", (double) correct / total);
+  printf("                                                =%0.3f%%!\n", (double) correct / total);
 }
 
 void testline(char *line, long type)
