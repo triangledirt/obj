@@ -20,8 +20,8 @@ static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
-static void meet(pop_t pop, acoord_t a, acoord_t b);
-static void move(pop_t pop, acoord_t a, acoord_t b);
+static void meet(pop_t pop, acoord_t *a, acoord_t *b);
+static void move(pop_t pop, acoord_t *a, acoord_t *b);
 static void randcoord(acoord_t *c);
 
 abit_t ajung_classify(aobj_t obj, long type)
@@ -49,11 +49,11 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
     fita = getfit(pop, &a, objs, objs_size);
     fitb = getfit(pop, &b, objs, objs_size);
     if (fita > fitb) {
-      meet(pop, a, b);
-      move(pop, a, b);
+      meet(pop, &a, &b);
+      move(pop, &a, &b);
     } else {
-      meet(pop, b, a);
-      move(pop, b, a);
+      meet(pop, &b, &a);
+      move(pop, &b, &a);
     }
   }
 #if ALIB_VERBOSE
@@ -114,37 +114,24 @@ void initonce()
   }
 }
 
-void meet(pop_t pop, acoord_t a, acoord_t b)
+void meet(pop_t pop, acoord_t *a, acoord_t *b)
 {
-  long copy1;
-  long copy2;
-  aobj_t obj1;
-  aobj_t obj2;
   long bit;
-  abit_t val;
-  long temp;
-  obj1 = pop[a.x][a.y];
-  obj2 = pop[b.x][b.y];
-  copy1 = aobj_getnum(obj1, 0, 5);
-  copy2 = aobj_getnum(obj1, 5, 5);
-  if (copy1 > copy2) {
-    temp = copy1;
-    copy1 = copy2;
-    copy2 = temp;
-  }
-  printf("%lu,%lu\n", copy1, copy2);
-  for (bit = copy1; bit <= copy2; bit++) {
-    val = aobj_getattr(obj1, bit);
-    aobj_setattr(&obj2, bit, val);
+  abit_t val1;
+  abit_t val2;
+  for (bit = 0; bit <= 32; bit++) {
+    val1 = aobj_getattr(pop[a->x][a->y], bit);
+    val2 = aobj_getattr(pop[b->x][b->y], bit);
+    aobj_setattr(&pop[b->x][b->y], bit, val1 ^ val2);
   }
 }
 
-void move(pop_t pop, acoord_t a, acoord_t b)
+void move(pop_t pop, acoord_t *a, acoord_t *b)
 {
   aobj_t tmp;
-  tmp = pop[b.x][b.y];
-  pop[b.x][b.y] = pop[a.x][a.y];
-  pop[a.x][a.y] = tmp;
+  tmp = pop[b->x][b->y];
+  pop[b->x][b->y] = pop[a->x][a->y];
+  pop[a->x][a->y] = tmp;
 }
 
 void randcoord(acoord_t *c)
