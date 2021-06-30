@@ -59,7 +59,7 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
 #if ALIB_VERBOSE
   printf("type%ld ideal jng ", type);
   aobj_print(ideal[type]);
-  printf("\n");
+  printf(" %0.3f%%\n", fitness);
 #endif
 }
 
