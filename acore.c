@@ -189,6 +189,7 @@ void initonce()
     for (idx = 0; idx < ALIB_TYPE_COUNT; idx++) {
       aobj_randomize(&ideal[idx]);
     }
+    once = 1;
   }
 }
 

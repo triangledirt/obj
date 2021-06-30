@@ -74,5 +74,15 @@ void testline(char *line, long type)
 int main(int argc, char **argv)
 {
   testfile("mushroom.data", MUSHROOM);
+/*
+  aobj_t obj;
+  long num;
+  aobj_clear(&obj);
+  aobj_print(obj); printf("\n");
+  aobj_setnum(&obj, 0, 5, 16);
+  aobj_print(obj); printf("\n");
+  num = aobj_getnum(obj, 0, 5);
+  printf("=%lu\n", num);
   return 0;
+*/
 }

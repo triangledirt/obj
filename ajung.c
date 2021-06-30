@@ -110,6 +110,7 @@ void initonce()
     for (idx = 0; idx < ALIB_TYPE_COUNT; idx++) {
       aobj_randomize(&ideal[idx]);
     }
+    once = 1;
   }
 }
 
@@ -121,10 +122,17 @@ void meet(pop_t pop, acoord_t a, acoord_t b)
   aobj_t obj2;
   long bit;
   abit_t val;
+  long temp;
   obj1 = pop[a.x][a.y];
   obj2 = pop[b.x][b.y];
   copy1 = aobj_getnum(obj1, 0, 5);
   copy2 = aobj_getnum(obj1, 5, 5);
+  if (copy1 > copy2) {
+    temp = copy1;
+    copy1 = copy2;
+    copy2 = temp;
+  }
+  printf("%lu,%lu\n", copy1, copy2);
   for (bit = copy1; bit <= copy2; bit++) {
     val = aobj_getattr(obj1, bit);
     aobj_setattr(&obj2, bit, val);
