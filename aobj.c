@@ -24,13 +24,13 @@ double aobj_compare(aobj_t obj1, aobj_t obj2)
   return (double) correct / 31;
 }
 
-long aobj_getnum(aobj_t *obj, long startbit, long bits)
+long aobj_getnum(aobj_t obj, long startbit, long bits)
 {
   long place = 1;
   long bit;
   long num = 0;
   for (bit = startbit; bit < bits; bit++) {
-    num += place * aobj_getattr(*obj, bit);
+    num += place * aobj_getattr(obj, bit);
     place *= 2;
   }
   return num;

@@ -26,6 +26,6 @@ void aobj_print(aobj_t obj);
 abit_t aobj_hastype(aobj_t obj, aobj_t type);
 
 void aobj_setnum(aobj_t *obj, long startbit, long bits, long num);
-long aobj_getnum(aobj_t *obj, long startbit, long bits);
+long aobj_getnum(aobj_t obj, long startbit, long bits);
 
 #endif
