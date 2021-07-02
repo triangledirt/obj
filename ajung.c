@@ -4,9 +4,10 @@
 #include "ajung.h"
 #include "alib.h"
 #include "aobj.h"
+#include "atoss.h"
 
-#define DIM 16
-#define ITER 128
+#define DIM 8
+#define ITER 8
 
 typedef aobj_t pop_t[DIM][DIM];
 
@@ -56,6 +57,7 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
       move(pop, &b, &a);
     }
   }
+  ideal[type] = fittest;
 #if ALIB_VERBOSE
   printf("type%ld ideal jng ", type);
   aobj_print(ideal[type]);
@@ -117,12 +119,15 @@ void initonce()
 void meet(pop_t pop, acoord_t *a, acoord_t *b)
 {
   long bit;
-  abit_t val1;
-  abit_t val2;
+  abit_t val;
   for (bit = 0; bit <= 32; bit++) {
-    val1 = aobj_getattr(pop[a->x][a->y], bit);
-    val2 = aobj_getattr(pop[b->x][b->y], bit);
-    aobj_setattr(&pop[b->x][b->y], bit, val1 ^ val2);
+    if (atoss_coin()) {
+      val = aobj_getattr(pop[a->x][a->y], bit);
+      aobj_setattr(&pop[a->x][a->y], bit, val);
+    } else {
+      val = aobj_getattr(pop[b->x][b->y], bit);
+      aobj_setattr(&pop[b->x][b->y], bit, val);
+    }
   }
 }
 
