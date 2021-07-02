@@ -6,9 +6,8 @@
 #include "aobj.h"
 #include "atoss.h"
 
-#define MATINGS 64
-#define MUTATE 32
-#define POP 256
+#define MATINGS 16
+#define POP 32
 
 static double fitness;
 static double fits[POP];
@@ -58,9 +57,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
       } else {
         aobj_setattr(&child, bit, aobj_getattr(parent2, bit));
       }
-      if (atoss_die(MUTATE)) {
-        aobj_mutate(&child);
-      }
+      aobj_mutate(&child);
     }
     idx = random() % POP;
     pop[idx] = child;
