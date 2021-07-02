@@ -123,10 +123,10 @@ void meet(pop_t pop, acoord_t *a, acoord_t *b)
   for (bit = 0; bit <= 32; bit++) {
     if (atoss_coin()) {
       val = aobj_getattr(pop[a->x][a->y], bit);
-      aobj_setattr(&pop[a->x][a->y], bit, val);
+      aobj_setattr(&pop[b->x][b->y], bit, val);
     } else {
       val = aobj_getattr(pop[b->x][b->y], bit);
-      aobj_setattr(&pop[b->x][b->y], bit, val);
+      aobj_setattr(&pop[a->x][a->y], bit, val);
     }
   }
 }

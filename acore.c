@@ -8,10 +8,9 @@
 #include "atool.h"
 #include "atoss.h"
 
-#define ACTS 512
+#define ACTS 32
 #define ANARCHY 4
 #define DIM 4
-#define MUTATE 32
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
 
@@ -102,9 +101,7 @@ void dance(pop_t pop, acoord_t *dest, acoord_t *src1, acoord_t *src2)
     } else {
       aobj_setattr(child, bit, aobj_getattr(parent2, bit));
     }
-    if (atoss_die(MUTATE)) {
-      aobj_mutate(child);
-    }
+    aobj_mutate(child);
   }
   fits[dest->x][dest->y][dest->z] = -1;
 }
