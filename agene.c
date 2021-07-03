@@ -42,6 +42,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
   long bit;
   long crossover;
   long idx;
+  abit_t val;
 #if ALIB_VERBOSE
   double tot = 0;
 #endif
@@ -53,10 +54,11 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
     crossover = random() % 32;
     for (bit = 0; bit < 32; bit++) {
       if (bit >= crossover) {
-        aobj_setattr(&child, bit, aobj_getattr(parent1, bit));
+        val = aobj_getattr(parent2, bit);
       } else {
-        aobj_setattr(&child, bit, aobj_getattr(parent2, bit));
+        val = aobj_getattr(parent1, bit);
       }
+      aobj_setattr(&child, bit, val);
       aobj_mutate(&child);
     }
     idx = random() % POP;

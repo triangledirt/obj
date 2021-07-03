@@ -7,12 +7,14 @@ typedef long aobj_t;
 
 void aobj_clear(aobj_t *obj);
 void aobj_randomize(aobj_t *obj);
-void aobj_mutate(aobj_t *obj);
 
 #define aobj_setattr(obj, idx, val) \
   if (val) { *obj |= ((long) 1 << (idx)); } \
   else { *obj &= ~((long) 1 << (idx)); }
 #define aobj_getattr(obj, idx) ((obj >> (idx)) & (long) 1)
+
+void aobj_mutate(aobj_t *obj);
+void aobj_rotate(aobj_t *obj, long inc);
 
 #define aobj_setclass(obj, val) \
   if (val) { *obj |= ((long) 1); } \

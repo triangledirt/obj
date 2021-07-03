@@ -71,6 +71,20 @@ void aobj_randomize(aobj_t *obj)
   *obj = random();
 }
 
+void aobj_rotate(aobj_t *obj, long inc)
+{
+  aobj_t obj2;
+  long idx;
+  long newidx;
+  abit_t bit;
+  for (idx = 0; idx < 32; idx++) {
+    bit = aobj_getattr(*obj, idx);
+    newidx = atool_wrapidx(idx + inc, 32);
+    aobj_setattr(&obj2, newidx, bit);
+  }
+  *obj = obj2;
+}
+
 void aobj_setnum(aobj_t *obj, long startbit, long bits, long num)
 {
   long place = 2;
