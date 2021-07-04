@@ -44,7 +44,7 @@ aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.
     aobj_setattr(obj, idx, val);
     val = aobj_getattr(obj, idx);
 
-:to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
+:to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
 
     aobj_randomize(obj);
 
