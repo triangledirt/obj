@@ -4,7 +4,7 @@ alib lets you classify objects in real time. You supply a series of objects each
 
 alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you are providing, of a given indicator set having a specific relationship with a given target set. For example indicator overlap, which is the same as conditional implication. These 14 properties are a fingerprint of the inference landscape. Their meanings are explained later.
 
-alib doesn't use much memory or processing time. So it is real time. It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no parameters for you to mess with. No threads, disk access, network or database connections: just a small C library. alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
+alib doesn't use much memory or processing time. So it is real time. It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no parameters for you to mess with. No threads, disk access, network or database connections: just a small library. alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
 
 ## building and using alib
 
