@@ -30,6 +30,11 @@ Call alib_observe() on an aobj_t when you see it. Pass the type, which is a long
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
+You can do object observation on ALIB_TYPE_COUNT types simultaneously.
+
+    alib_observe(obj1, MUSHROOM);
+    alib_observe(obj2, GAME_MAP);
+
 So you can do object classification on ALIB_TYPE_COUNT types simultaneously. If I'm observing a MUSHROOM-type aobj_t, I specify that when observing it. But your app can then alib_observe() an aobj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter.
 
     c = alib_classify(obj1, MUSHROOM);
