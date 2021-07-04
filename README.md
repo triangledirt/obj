@@ -4,6 +4,14 @@ alib is an intelligence written in C that lets you classify objects in real time
 
 alib also provides access to some statistical inference properties which you can use to calculate the liklihood, given the stream of objects you are providing, of a given indicator set inferring a given target set. These functions return a liklihood in the form of *a fractional number of reasons* to believe that..
 
+## building and using alib
+
+To build, get the source code, change to its directory and execute:
+
+    ./make
+
+That builds object files and a library. Include "alib.h" in your project and see alib.h for the syntax of observation/classification functions and set-to-set inference functions.
+
 ## observe and classify objects
 
 ## infer from set to set
