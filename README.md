@@ -51,13 +51,13 @@ aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.
     aobj_setattr(obj, idx, val);
     val = aobj_getattr(obj, idx);
 
-:to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 1 to represent whether the cap has spots on it. This says that the cap does:
+:to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
 
-    aobj_setattr(obj, 1, 1);
+    aobj_setattr(obj, 6, 1);
 
 This says the cap doesn't:
 
-    aobj_setattr(obj, 1, 0);
+    aobj_setattr(obj, 6, 0);
 
 This sets attribute 7 to 0 in the object:
 
