@@ -9,15 +9,17 @@
 #define MATINGS 16
 #define POP 32
 
+typedef aobj_t pop_t[POP];
+
 static double fitness;
+static aobj_t fittest;
 static double fits[POP];
 static aobj_t ideal[ALIB_TYPE_COUNT];
 static abit_t once = 0;
 
-static void calcfit(long obj, aobj_t objs[], long objs_size);
-static double getfit(long obj, aobj_t objs[], long objs_size);
-static aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size);
-static aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size);
+static void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size);
+static double getfit(pop_t pop, long obj, aobj_t objs[], long objs_size);
+static aobj_t getparent(pop_t pop, aobj_t objs[], long objs_size);
 static void init(aobj_t pop[], long type);
 static void initonce();
 
@@ -35,7 +37,7 @@ abit_t agene_classify(aobj_t obj, long type)
 void agene_learn(aobj_t objs[], long objs_size, long type)
 {
   long mating;
-  aobj_t pop[POP];
+  pop_t pop;
   aobj_t parent1;
   aobj_t parent2;
   aobj_t child;
@@ -65,7 +67,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
     pop[idx] = child;
     fits[idx] = -1;
   }
-  ideal[type] = getfittest(pop, objs, objs_size);
+  ideal[type] = fittest;
 #if ALIB_VERBOSE
   printf("type%ld ideal gen ", type);
   aobj_print(ideal[type]);
@@ -73,37 +75,30 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
 #endif
 }
 
-void calcfit(long obj, aobj_t objs[], long objs_size)
+void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size)
 {
   long idx;
-  double fit = 0;
+  double fit;
+  double tot = 0;
+  aobj_t calcobj;
+  calcobj = pop[obj];
   for (idx = 0; idx < objs_size; idx++) {
-    fit += aobj_compare(objs[obj], objs[idx]);
+    tot += aobj_compare(calcobj, objs[idx]);
   }
-  fits[obj] = fit / objs_size;
+  fit = tot / objs_size;
+  fits[obj] = fit;
+  if (fit > fitness) {
+    fittest = calcobj;
+    fitness = fit;
+  }
 }
 
-double getfit(long obj, aobj_t objs[], long objs_size)
+double getfit(pop_t pop, long obj, aobj_t objs[], long objs_size)
 {
   if (fits[obj] < 0) {
-    calcfit(obj, objs, objs_size);
+    calcfit(pop, obj, objs, objs_size);
   }
   return fits[obj];
-}
-
-aobj_t getfittest(aobj_t pop[], aobj_t objs[], long objs_size)
-{
-  long idx;
-  long idxfittest = 0;
-  double fit = 0;
-  for (idx = 0; idx < POP; idx++) {
-    fit = getfit(idx, objs, objs_size);
-    if (fit > fitness) {
-      fitness = fit;
-      idxfittest = idx;
-    }
-  }
-  return pop[idxfittest];
 }
 
 aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
@@ -115,7 +110,7 @@ aobj_t getparent(aobj_t pop[], aobj_t objs[], long objs_size)
   long newid;
   for (tries = 0; tries < 6; tries++) {
     newid = random() % POP;
-    newfit = getfit(newid, objs, objs_size);
+    newfit = getfit(pop, newid, objs, objs_size);
     if (newfit > fit) {
       idx = newid;
       fit = newfit;
@@ -134,6 +129,7 @@ void init(aobj_t pop[], long type)
     pop[idx] = obj;
     fits[idx] = -1;
   }
+  aobj_randomize(&fittest);
   fitness = 0.0;
 }
 
