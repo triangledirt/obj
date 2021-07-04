@@ -2,7 +2,7 @@
 
 alib lets you classify objects in real time. You supply a series of objects each with binary properties and a binary classification. You know the classes of these objects and you supply them to alib when you observe them. Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
 
-alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you are providing, of a given indicator set having a specific relationship with a given target set. For example indicator overlap, which is the same as conditional implication. These twelve properties let you.. [TODO: write]
+alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you are providing, of a given indicator set having a specific relationship with a given target set. For example indicator overlap, which is the same as conditional implication. These 14 properties let you.. [TODO: write]
 
 alib doesn't use much memory or processing time. So it is real time. It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no parameters for you to mess with. No threads, disk access, network or database connections: just a small C library. alib does not profess to be perfect for any one task. It is generalized object classification based on whatever methods we've chosen to implement at this time.
 
@@ -68,7 +68,7 @@ See [atest.c](https://github.com/triangledirt/alib/blob/main/atest.c) for exampl
 
 ## infer from set to set
 
-These 12 functions return inference properties of the set of objects alib is managing at this time.
+These 14 functions return inference properties of the set of objects alib is managing at this time.
 
     double alib_frequencyi(aobj_t indicator, aobj_t target, long type);
     double alib_frequencyt(aobj_t indicator, aobj_t target, long type);
