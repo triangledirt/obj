@@ -35,6 +35,8 @@ So you can do object classification on ALIB_TYPE_COUNT types simultaneously. If 
     c = alib_classify(obj1, MUSHROOM);
     d = alib_classify(obj2, GAME_MAP);
 
+call alib_observe() and alib_classify() as often and in any order you like.
+
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
     aobj_clear(obj);
