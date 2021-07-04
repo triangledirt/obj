@@ -12,7 +12,7 @@ To build, get the source code, change to its directory and execute:
 
     ./make
 
-That builds object files and a library. Include "[alib.h](https://github.com/triangledirt/alib/blob/main/alib.h]" in your project and see that file and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions.
+That builds object files and a library. Include "[alib.h](https://github.com/triangledirt/alib/blob/main/alib.h)" in your project and see that file and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions.
 
 alib.h contains a #define called ALIB_VERBOSE. Set it to 1 to make noise when operating, 0 to be quiet.
 
@@ -35,7 +35,7 @@ So you can do object classification on ALIB_TYPE_COUNT types simultaneously. If 
     c = alib_classify(obj1, MUSHROOM);
     d = alib_classify(obj2, GAME_MAP);
 
-aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h] defines some ways to manipulate them. At base, you'll do this:
+aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
     aobj_clear(obj);
 
@@ -49,6 +49,8 @@ aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.
     aobj_randomize(obj);
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
+
+See [atest.c](https://github.com/triangledirt/alib/blob/main/atest.c) for examples.
 
 ## infer from set to set
 
