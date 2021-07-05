@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../alib/abit.h"
-#include "../alib/alib.h"
+#include "abit.h"
+#include "alib.h"
 
 #define MUSHROOM 0
 
@@ -28,7 +28,10 @@ void testfile(char *filename, long type)
     }
   }
   fclose(file);
-  printf("                                                =%0.3f%%!\n", (double) correct / total);
+#if ALIB_VERBOSE
+  printf("                                                "
+    "=%0.3f%%!\n", (double) correct / total);
+#endif
 }
 
 void testline(char *line, long type)
