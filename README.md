@@ -73,7 +73,7 @@ See [atest.c](https://github.com/triangledirt/alib/blob/main/atest.c) for exampl
 
 ## infer from set to set
 
-These 14 functions return inference properties of the set of objects alib is managing at this time.
+These 14 functions return inference properties of the set of objects alib is managing at this time. Call them once you've alib_observe()d at least one object.
 
     double alib_frequencyi(aobj_t indicator, aobj_t target, long type);
     double alib_frequencyt(aobj_t indicator, aobj_t target, long type);
