@@ -13,7 +13,7 @@
 
 static aobj_t objs[ALIB_TYPE_COUNT][OBJECT_CACHE];
 static abit_t once = 0;
-static long types = 1;
+static aobj_t types;
 
 static long count(long type, aobj_t typ);
 static long countboth(long type, aobj_t typ1, aobj_t typ2);
@@ -34,7 +34,7 @@ abit_t alib_classify(aobj_t obj, long type)
   tally += agene_classify(obj, type);
   tally += ajung_classify(obj, type);
   tally += asum_classify(obj, type);
-  if (tally >= 3) {
+  if (tally > 0) {
     class = 1;
   } else {
     class = 0;
@@ -222,6 +222,7 @@ void initonce()
 {
   long idx;
   long type;
+  aobj_clear(&types);
   if (!once) {
     for (type = 0; type < ALIB_TYPE_COUNT; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
@@ -236,16 +237,16 @@ void learn()
 {
   long type;
   for (type = 0; type < types; type++) {
-    acore_learn(objs[type], OBJECT_CACHE, type);
-    agene_learn(objs[type], OBJECT_CACHE, type);
-    ajung_learn(objs[type], OBJECT_CACHE, type);
-    asum_learn(objs[type], OBJECT_CACHE, type);
+    if (aobj_getattr(types, type)) {
+      acore_learn(objs[type], OBJECT_CACHE, type);
+      agene_learn(objs[type], OBJECT_CACHE, type);
+      ajung_learn(objs[type], OBJECT_CACHE, type);
+      asum_learn(objs[type], OBJECT_CACHE, type);
+    }
   }
 }
 
 void uptypes(long seentype)
 {
-  if ((seentype + 1) > types) {
-    types = seentype;
-  }
+  aobj_setattr(&types, seentype, 1);
 }

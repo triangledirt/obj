@@ -66,12 +66,8 @@ void testfile(char *filename, long type)
       testline(line, type);
     }
   }
-  freefirst();
   fclose(file);
-#if ALIB_VERBOSE
-  printf("                                                "
-    "=%0.3f%%!\n", (double) correct / total);
-#endif
+  freefirst();
 }
 
 void testline(char *line, long type)
@@ -93,8 +89,7 @@ void testline(char *line, long type)
   aobj_setclass(&obj, val);
   while ((tok = strtok(NULL, ",\n"))) {
     idx++;
-    /* if (0 == strcmp(tok, firstline[idx])) { */
-    if (0 == strcmp(tok, "g")) {
+    if (0 == strcmp(tok, firstline[idx])) {
       val = 1;
     } else {
       val = 0;
@@ -104,9 +99,6 @@ void testline(char *line, long type)
   alib_observe(obj, type);
 #if ALIB_VERBOSE
   class = alib_classify(obj, type);
-  if (class == aobj_getclass(obj)) {
-    correct++;
-  }
   total++;
   printf("type%ld obsrv ", type);
   printf("(%d) ", class);
@@ -117,6 +109,6 @@ void testline(char *line, long type)
 
 int main(int argc, char **argv)
 {
-  if (0) { testfile("data/diabetes.data", DIABETES); }
+  if (1) { testfile("data/diabetes.data", DIABETES); }
   if (1) { testfile("data/mushroom.data", MUSHROOM); }
 }
