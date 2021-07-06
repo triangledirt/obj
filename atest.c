@@ -4,29 +4,69 @@
 #include "abit.h"
 #include "alib.h"
 
-#define MUSHROOM 0
+#define DIABETES 0
+#define MUSHROOM 1
+#define BUFF 1024
+#define MAX_FIELDS 32
 
-char firstline[1024];
+long fields;
+char *firstline[MAX_FIELDS];
 long correct = 0;
 long total = 0;
 
-void testfile(char *filename, long type);
-void testline(char *line, long type);
+static void freefirst();
+static void initfirst();
+static void savefirst(char line[MAX_FIELDS]);
+static void testfile(char *filename, long type);
+static void testline(char *line, long type);
+
+void freefirst()
+{
+  long idx;
+  for (idx = 0; idx < fields; idx++) {
+    if (firstline[idx]) {
+      free(firstline[idx]);
+    }
+  }
+}
+
+void initfirst()
+{
+  long idx;
+  for (idx = 0; idx < fields; idx++) {
+    firstline[idx] = 0;
+  }
+}
+
+void savefirst(char line[BUFF])
+{
+  char *tok;
+  long idx = 0;
+  tok = strtok(line, ",");
+  firstline[idx] = strdup(tok);
+  while ((tok = strtok(NULL, ",\n"))) {
+    idx++;
+    firstline[idx] = strdup(tok);
+  }
+  fields = idx + 1;
+}
 
 void testfile(char *filename, long type)
 {
   FILE *file;
-  char line[1024];
+  char line[BUFF];
   char first = 1;
+  initfirst();
   file = fopen(filename, "r");
-  while (fgets(line, 1024, file)) {
+  while (fgets(line, BUFF, file)) {
     if (first) {
-      strcpy(firstline, line);
+      savefirst(line);
       first = 0;
     } else {
       testline(line, type);
     }
   }
+  freefirst();
   fclose(file);
 #if ALIB_VERBOSE
   printf("                                                "
@@ -45,15 +85,16 @@ void testline(char *line, long type)
 #endif
   aobj_clear(&obj);
   tok = strtok(line, ",");
-  if ('e' == *tok) {
+  if (0 == strcmp(tok, firstline[idx])) {
     val = 1;
   } else {
     val = 0;
   }
   aobj_setclass(&obj, val);
-  while ((tok = strtok(NULL, ","))) {
+  while ((tok = strtok(NULL, ",\n"))) {
     idx++;
-    if (*tok == firstline[idx * 2]) {
+    /* if (0 == strcmp(tok, firstline[idx])) { */
+    if (0 == strcmp(tok, "g")) {
       val = 1;
     } else {
       val = 0;
@@ -67,8 +108,8 @@ void testline(char *line, long type)
     correct++;
   }
   total++;
-  printf("type%ld obsrv (", type);
-  printf("%d) ", class);
+  printf("type%ld obsrv ", type);
+  printf("(%d) ", class);
   aobj_print(obj);
   printf("\n");
 #endif
@@ -76,16 +117,6 @@ void testline(char *line, long type)
 
 int main(int argc, char **argv)
 {
-  testfile("mushroom.data", MUSHROOM);
-/*
-  aobj_t obj;
-  long num;
-  aobj_clear(&obj);
-  aobj_print(obj); printf("\n");
-  aobj_setnum(&obj, 0, 5, 16);
-  aobj_print(obj); printf("\n");
-  num = aobj_getnum(obj, 0, 5);
-  printf("=%lu\n", num);
-  return 0;
-*/
+  if (0) { testfile("data/diabetes.data", DIABETES); }
+  if (1) { testfile("data/mushroom.data", MUSHROOM); }
 }

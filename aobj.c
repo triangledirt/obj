@@ -14,7 +14,7 @@ double aobj_compare(aobj_t obj1, aobj_t obj2)
   long correct = 0;
   abit_t bit1;
   abit_t bit2;
-  for (bit = 1; bit < 31; bit++) {
+  for (bit = 1; bit < 32; bit++) {
     bit1 = aobj_getattr(obj1, bit);
     bit2 = aobj_getattr(obj2, bit);
     if (bit1 == bit2) {
