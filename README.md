@@ -44,28 +44,28 @@ Call alib_observe() and alib_classify() as often and in any order you like.
 
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
-    aobj_clear(obj);
+    aobj_clear(&obj);
 
 :to initialize. And:
 
-    aobj_setattr(obj, idx, val);
+    aobj_setattr(&obj, idx, val);
     val = aobj_getattr(obj, idx);
 
 :to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
 
-    aobj_setattr(obj, 6, 1);
+    aobj_setattr(&obj, 6, 1);
 
 This says the cap doesn't:
 
-    aobj_setattr(obj, 6, 0);
+    aobj_setattr(&obj, 6, 0);
 
 This sets attribute 7 to 0 in the object:
 
-    aobj_setattr(obj, 7, 0);
+    aobj_setattr(&obj, 7, 0);
 
 You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
 
-    aobj_randomize(obj);
+    aobj_randomize(&obj);
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
 
