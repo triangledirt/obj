@@ -11,7 +11,7 @@
 
 #define OBJECT_CACHE 64
 
-static aobj_t objs[ALIB_TYPE_COUNT][OBJECT_CACHE];
+static aobj_t objs[32][OBJECT_CACHE];
 static abit_t once = 0;
 static aobj_t types;
 
@@ -224,7 +224,7 @@ void initonce()
   long type;
   aobj_clear(&types);
   if (!once) {
-    for (type = 0; type < ALIB_TYPE_COUNT; type++) {
+    for (type = 0; type < 32; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
         aobj_randomize(&objs[type][idx]);
       }

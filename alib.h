@@ -4,7 +4,6 @@
 #include "abit.h"
 #include "aobj.h"
 
-#define ALIB_TYPE_COUNT 8
 #define ALIB_VERBOSE 1
 
 void alib_observe(aobj_t obj, long type);

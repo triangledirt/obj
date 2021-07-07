@@ -14,7 +14,7 @@ typedef aobj_t pop_t[DIM][DIM];
 static double fitness;
 static double fits[DIM][DIM];
 static aobj_t fittest;
-static aobj_t ideal[ALIB_TYPE_COUNT];
+static aobj_t ideal[32];
 static abit_t once = 0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
@@ -109,7 +109,7 @@ void initonce()
 {
   long idx;
   if (!once) {
-    for (idx = 0; idx < ALIB_TYPE_COUNT; idx++) {
+    for (idx = 0; idx < 32; idx++) {
       aobj_randomize(&ideal[idx]);
     }
     once = 1;

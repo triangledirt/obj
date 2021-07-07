@@ -4,7 +4,7 @@
 #include "aobj.h"
 #include "asum.h"
 
-static aobj_t ideal[ALIB_TYPE_COUNT];
+static aobj_t ideal[32];
 
 abit_t asum_classify(aobj_t obj, long type)
 {
