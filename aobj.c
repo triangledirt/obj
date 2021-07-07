@@ -11,17 +11,28 @@ void aobj_clear(aobj_t *obj)
 double aobj_compare(aobj_t obj1, aobj_t obj2)
 {
   long bit;
+  long endbit;
   long correct = 0;
+  long total;
   abit_t bit1;
   abit_t bit2;
-  for (bit = 1; bit < 32; bit++) {
+  endbit = 31;
+  bit1 = aobj_getattr(obj1, endbit);
+  bit2 = aobj_getattr(obj2, endbit);
+  while ((endbit > 0) && !bit1 && !bit2) {
+    endbit--;
+    bit1 = aobj_getattr(obj1, endbit);
+    bit2 = aobj_getattr(obj2, endbit);
+  }
+  total = endbit + 1;
+  for (bit = 1; bit <= endbit; bit++) {
     bit1 = aobj_getattr(obj1, bit);
     bit2 = aobj_getattr(obj2, bit);
     if (bit1 == bit2) {
       correct++;
     }
   }
-  return (double) correct / 31;
+  return (double) correct / total;
 }
 
 long aobj_getnum(aobj_t obj, long startbit, long bits)
