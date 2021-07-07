@@ -2,7 +2,7 @@
 
 alib lets you classify objects in real time. You supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them. Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
 
-alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set. For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator oberlap* with respect to the target set: the degree to which the indicator set implies the target set. These 14 properties are a fingerprint of the inference landscape. Their meanings are explained later.
+alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set. For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set. These 14 properties are a fingerprint of the inference landscape. Their meanings are explained later.
 
 alib doesn't use much memory or processing time. So it is real time. It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library. alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
 
@@ -44,28 +44,28 @@ Call alib_observe() and alib_classify() as often and in any order you like.
 
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
-    aobj_clear(obj);
+    aobj_clear(&obj);
 
 :to initialize. And:
 
-    aobj_setattr(obj, idx, val);
+    aobj_setattr(&obj, idx, val);
     val = aobj_getattr(obj, idx);
 
 :to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
 
-    aobj_setattr(obj, 6, 1);
+    aobj_setattr(&obj, 6, 1);
 
 This says the cap doesn't:
 
-    aobj_setattr(obj, 6, 0);
+    aobj_setattr(&obj, 6, 0);
 
 This sets attribute 7 to 0 in the object:
 
-    aobj_setattr(obj, 7, 0);
+    aobj_setattr(&obj, 7, 0);
 
 You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
 
-    aobj_randomize(obj);
+    aobj_randomize(&obj);
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
 
