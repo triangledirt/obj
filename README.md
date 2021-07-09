@@ -58,7 +58,7 @@ So you can do object classification on 32 types in any order. If I'm observing a
 
 Call alib_observe() and alib_classify() as often and in any order you like.
 
-[If you want to re-use types, de-commission types..]
+[TODO: If you want to re-use types, de-commission types..]
 
 ## aobj_t
 
