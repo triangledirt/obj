@@ -44,6 +44,8 @@ Call alib_observe() and alib_classify() as often and in any order you like.
 
 [If you want to re-use types, de-commission types..]
 
+## aobj_t
+
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
     aobj_clear(&obj);
