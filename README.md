@@ -120,6 +120,8 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 ### indicator frequency
 
+This shows the rate at which the indicator set grows with respect to the growth of the target set.
+
 ### target frequency
 
 ### indicator overlap
