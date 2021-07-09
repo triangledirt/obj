@@ -4,7 +4,7 @@
 
 alib is a library of C functions used to classify objects in real time.
 
-First, you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them.
+First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them.
 
 Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
 
