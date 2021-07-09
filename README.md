@@ -120,7 +120,7 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 ### indicator frequency
 
-This shows the rate at which the indicator set grows with respect to the growth of the target set.
+This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
 
 ### target frequency
 
