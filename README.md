@@ -60,6 +60,8 @@ So you can do object classification on 32 types in any order. If I'm observing a
 
 Call alib_observe() and alib_classify() as often and in any order you like.
 
+If you want to re-use a type to mean another type, go ahead and do so. If you need to discontinue use of a type, do so.
+
 ## aobj_t
 
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
