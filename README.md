@@ -122,7 +122,13 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
 
+[TODO: show example uses]
+
 ### target frequency
+
+This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
+
+[TODO: show example uses]
 
 ### indicator overlap
 
