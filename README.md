@@ -22,7 +22,7 @@ It doesn't guarantee to produce the same result twice. It doesn't store its stat
 
 alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
 
-## building and using alib
+## build and use alib
 
 To build, get the source code, change to its directory and execute:
 
