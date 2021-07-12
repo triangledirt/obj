@@ -14,7 +14,7 @@ alib also provides access to some statistical inference properties which you can
 
 For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set.
 
-These 14 properties are a fingerprint of the inference landscape. Their meanings are explained later.
+These 14 properties are a fingerprint of the inference landscape. Their meanings are [explained](https://github.com/triangledirt/alib#infer-from-set-to-set) later.
 
 ## real time
 
