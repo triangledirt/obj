@@ -1,12 +1,30 @@
-# alib: classify objects in real time
+# alib
 
-alib lets you classify objects in real time. You supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them. Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
+## classify objects in real time
 
-alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set. For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set. These 14 properties are a fingerprint of the inference landscape. Their meanings are explained later.
+alib is a library of C functions used to classify objects in real time.
 
-alib doesn't use much memory or processing time. So it is real time. It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library. alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
+First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them.
 
-## building and using alib
+Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
+
+## statistical inference properties
+
+alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set.
+
+For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set.
+
+These 14 properties are a fingerprint of the inference landscape. Their meanings are [explained](#infer-from-set-to-set) later.
+
+## real time
+
+alib doesn't use much memory or processing time. So it is real time.
+
+It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process.
+
+alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on whatever methods we've chosen to implement at this time.
+
+## build and use alib
 
 To build, get the source code, change to its directory and execute:
 
@@ -41,6 +59,10 @@ So you can do object classification on 32 types in any order. If I'm observing a
     d = alib_classify(obj2, GAME_MAP);
 
 Call alib_observe() and alib_classify() as often and in any order you like.
+
+If you want to re-use a type to mean another type, go ahead and do so. If you need to discontinue use of a type, do so.
+
+## aobj_t
 
 aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
 
@@ -98,7 +120,15 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 ### indicator frequency
 
+This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
+
+[TODO: show example uses]
+
 ### target frequency
+
+This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
+
+[TODO: show example uses]
 
 ### indicator overlap
 
