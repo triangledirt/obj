@@ -8,7 +8,7 @@ static aobj_t ideal[32];
 
 abit_t asum_classify(aobj_t obj, long type)
 {
-  return aobj_comparex(obj, ideal[type]) > 0.75;
+  return aobj_compareq(obj, ideal[type]) > 0.75;
 }
 
 void asum_learn(aobj_t objs[], long objs_size, long type)
@@ -48,7 +48,7 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   }
 #if ALIB_VERBOSE
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_comparex(ideal[type], objs[idx]);
+    tot += aobj_compareq(ideal[type], objs[idx]);
   }
   fitness = tot / objs_size;
   printf("type%ld ideal sum ", type);
