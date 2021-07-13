@@ -34,7 +34,7 @@ abit_t alib_classify(aobj_t obj, long type)
   tally += agene_classify(obj, type);
   tally += ajung_classify(obj, type);
   tally += asum_classify(obj, type);
-  if (tally < 3) {
+  if (tally >= 3) {
     class = 1;
   } else {
     class = 0;
@@ -236,7 +236,7 @@ void initonce()
 void learn()
 {
   long type;
-  for (type = 0; type < types; type++) {
+  for (type = 0; type < 32; type++) {
     if (aobj_getattr(types, type)) {
       acore_learn(objs[type], OBJECT_CACHE, type);
       agene_learn(objs[type], OBJECT_CACHE, type);

@@ -27,7 +27,7 @@ static void randcoord(acoord_t *c);
 
 abit_t ajung_classify(aobj_t obj, long type)
 {
-  return (aobj_compare(obj, ideal[type]) > 0.75);
+  return aobj_comparex(obj, ideal[type]) > 0.75;
 }
 
 void ajung_learn(aobj_t objs[], long objs_size, long type)
@@ -73,7 +73,7 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   aobj_t obj;
   obj = pop[c->x][c->y];
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_compare(obj, objs[idx]);
+    tot += aobj_comparex(obj, objs[idx]);
   }
   fit = tot / objs_size;
   fits[c->x][c->y] = fit;

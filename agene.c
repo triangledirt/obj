@@ -25,13 +25,7 @@ static void initonce();
 
 abit_t agene_classify(aobj_t obj, long type)
 {
-  abit_t class;
-  if (aobj_compare(obj, ideal[type]) > 0.75) {
-    class = 1;
-  } else {
-    class = 0;
-  }
-  return class;
+  return aobj_comparex(obj, ideal[type]) > 0.75;
 }
 
 void agene_learn(aobj_t objs[], long objs_size, long type)
@@ -83,7 +77,7 @@ void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size)
   aobj_t calcobj;
   calcobj = pop[obj];
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_compare(calcobj, objs[idx]);
+    tot += aobj_comparex(calcobj, objs[idx]);
   }
   fit = tot / objs_size;
   fits[obj] = fit;
