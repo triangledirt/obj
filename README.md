@@ -85,6 +85,8 @@ This sets attribute 7 to 0 in the object:
 
     aobj_setattr(&obj, 7, 0);
 
+[TODO: add a section on class attribute, attribute 0, setclass()]
+
 You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
 
     aobj_randomize(&obj);
