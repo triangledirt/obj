@@ -7,6 +7,7 @@ typedef long aobj_t;
 
 void aobj_clear(aobj_t *obj);
 void aobj_randomize(aobj_t *obj);
+void aobj_setfromstr(aobj_t *obj, char *str);
 
 #define aobj_setattr(obj, idx, val) \
   if (val) { *obj |= ((long) 1 << (idx)); } \

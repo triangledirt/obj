@@ -112,6 +112,20 @@ void aobj_rotate(aobj_t *obj, long inc)
   *obj = obj2;
 }
 
+void aobj_setfromstr(aobj_t *obj, char *str)
+{
+  long idx;
+  abit_t val;
+  for (idx = 0; idx < 32; idx++) {
+    if ('0' == str[idx]) {
+      val = 0;
+    } else {
+      val = 1;
+    }
+    aobj_setattr(obj, idx, val);
+  }
+}
+
 void aobj_setnum(aobj_t *obj, long startbit, long bits, long num)
 {
   long place = 2;
