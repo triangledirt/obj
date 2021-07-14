@@ -146,26 +146,50 @@ This is the target set as a part of the indicator set. The number of objects def
 
 ### indicator overlap
 
-    target &plus; indicator / indicator
+    intersection(target, indicator) / indicator
 
 ### target overlap
 
+    intersection(target, indicator) / target
+
 ### overlap
+
+    intersection(target, indicator) / union(target, indicator)
 
 ### indicator mismatch
 
+    (indicator - target) / (target - indicator)
+
 ### target mismatch
+
+    (target - indicator) / (indicator - target)
 
 ### indicator impertinence
 
+    (indicator - target) / target
+
 ### target impertinence
+
+    (target - indicator) / indicator
 
 ### indicator opacity
 
+    (indicator - target) / intersection(indicator, target)
+
 ### target opacity
+
+    (target - indicator) / intersection(indicator, target)
 
 ### indicator transparency
 
+    intersection(indicator, target) / (indicator - target)
+
 ### target transparency
 
+    intersection(indicator, target) / (target - indicator)
+
 ### transparency
+
+    intersection(indicator, target) / xor(indicator, target)
+
+..
