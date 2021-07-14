@@ -146,7 +146,7 @@ This is the target set as a part of the indicator set. The number of objects def
 
 ### indicator overlap
 
-    target \2229 indicator / indicator
+    target &plus; indicator / indicator
 
 ### target overlap
 
