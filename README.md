@@ -146,15 +146,15 @@ This is the target set as a part of the indicator set. The number of objects def
 
 ### indicator overlap
 
-    intersection(target, indicator) / indicator
+    intersection(indicator, target) / indicator
 
 ### target overlap
 
-    intersection(target, indicator) / target
+    intersection(indicator, target) / target
 
 ### overlap
 
-    intersection(target, indicator) / union(target, indicator)
+    intersection(indicator, target) / union(target, indicator)
 
 ### indicator mismatch
 
