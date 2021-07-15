@@ -146,19 +146,31 @@ This is the target set as a part of the indicator set. The number of objects def
 
 ### indicator overlap
 
+Calculated:
+
     intersection(indicator, target) / indicator
+
+:indicator overlap is the same as conditional probability. indicator overlap is the degree to which *indicator* implies *target*.
 
 ### target overlap
 
+Calculated:
+
     intersection(indicator, target) / target
+
+:target overlap is the..
 
 ### overlap
 
-    intersection(indicator, target) / union(target, indicator)
+    intersection(indicator, target) / union(indicator, target)
+
+overlap is..
 
 ### indicator mismatch
 
     (indicator - target) / (target - indicator)
+
+indicator mismatch is..
 
 ### target mismatch
 
