@@ -126,23 +126,17 @@ Some of the names end with *i* or *t*. Those mean *indicator* or *target*. So fr
 
 Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are aobj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type.
 
-[TODO: write the meanings of these functions]
-
 ### indicator frequency
 
 This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
 
     indicator / target
 
-[TODO: show example uses]
-
 ### target frequency
 
 This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
 
     target / indicator
-
-[TODO: show example uses]
 
 ### indicator overlap
 
@@ -158,7 +152,7 @@ Calculated:
 
     intersection(indicator, target) / target
 
-:target overlap is the..
+:target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set.
 
 ### overlap
 
@@ -196,12 +190,16 @@ indicator mismatch is..
 
     intersection(indicator, target) / (indicator - target)
 
+This can be thought of as an extent to which, or a thoroughness with which, the target set invades the indicator set. It can be thought of as a degree to which the target set disects the indicator set.
+
 ### target transparency
 
     intersection(indicator, target) / (target - indicator)
+
+This can be thought of as an extent to which, or a thoroughness with which, the indicator set invades the target set. It can be thought of as a degree to which the indicator set disects the target set.
 
 ### transparency
 
     intersection(indicator, target) / xor(indicator, target)
 
-..
+The degree to which the intersection of the sets causes a transparency between..
