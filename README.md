@@ -128,27 +128,23 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 ### indicator frequency
 
-This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
-
     indicator / target
+
+This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
 
 ### target frequency
 
-This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
-
     target / indicator
 
-### indicator overlap
+This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
 
-Calculated:
+### indicator overlap
 
     intersection(indicator, target) / indicator
 
 :indicator overlap is the same as conditional probability. indicator overlap is the degree to which *indicator* implies *target*.
 
 ### target overlap
-
-Calculated:
 
     intersection(indicator, target) / target
 
