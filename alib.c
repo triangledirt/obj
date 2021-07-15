@@ -44,43 +44,73 @@ abit_t alib_classify(aobj_t obj, long type)
 
 double alib_frequencyi(aobj_t indicator, aobj_t target, long type)
 {
-  long indicount = count(indicator, type);
-  long targcount = count(target, type);
+  long indicount;
+  long targcount;
+  indicount = count(indicator, type);
+  targcount = count(target, type);
+  if (0 == targcount) {
+    targcount = 1;
+  }
   return (long) indicount / targcount;
 }
 
 double alib_frequencyt(aobj_t indicator, aobj_t target, long type)
 {
-  long targcount = count(target, type);
-  long indicount = count(indicator, type);
+  long targcount;
+  long indicount;
+  targcount = count(target, type);
+  indicount = count(indicator, type);
+  if (0 == indicount) {
+    indicount = 1;
+  }
   return (long) targcount / indicount;
 }
 
 double alib_impertinencei(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcount = countsub(indicator, target, type);
-  long targcount = count(target, type);
+  long indisubcount;
+  long targcount;
+  indisubcount = countsub(indicator, target, type);
+  targcount = count(target, type);
+  if (0 == targcount) {
+    targcount = 1;
+  }
   return (long) indisubcount / targcount;
 }
 
 double alib_impertinencet(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcount = countsub(target, indicator, type);
-  long indicount = count(indicator, type);
+  long targsubcount;
+  long indicount;
+  targsubcount = countsub(target, indicator, type);
+  indicount = count(indicator, type);
+  if (0 == indicount) {
+    indicount = 1;
+  }
   return (long) targsubcount / indicount;
 }
 
 double alib_mismatchi(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcount = countsub(indicator, target, type);
-  long targsubcount = countsub(target, indicator, type);
+  long indisubcount;
+  long targsubcount;
+  indisubcount = countsub(indicator, target, type);
+  targsubcount = countsub(target, indicator, type);
+  if (0 == targsubcount) {
+    targsubcount = 1;
+  }
   return (long) indisubcount / targsubcount;
 }
 
 double alib_mismatcht(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcount = countsub(target, indicator, type);
-  long indisubcount = countsub(indicator, target, type);
+  long targsubcount;
+  long indisubcount;
+  targsubcount = countsub(target, indicator, type);
+  indisubcount = countsub(indicator, target, type);
+  if (0 == indisubcount) {
+    indisubcount = 1;
+  }
   return (long) targsubcount / indisubcount;
 }
 
@@ -98,57 +128,97 @@ void alib_observe(aobj_t obj, long type)
 
 double alib_opacityi(aobj_t indicator, aobj_t target, long type)
 {
-  long indisubcount = countsub(indicator, target, type);
-  long bothcount = countboth(indicator, target, type);
+  long indisubcount;
+  long bothcount;
+  indisubcount = countsub(indicator, target, type);
+  bothcount = countboth(indicator, target, type);
+  if (0 == bothcount) {
+    bothcount = 1;
+  }
   return (long) indisubcount / bothcount;
 }
 
 double alib_opacityt(aobj_t indicator, aobj_t target, long type)
 {
-  long targsubcount = countsub(target, indicator, type);
-  long bothcount = countboth(indicator, target, type);
+  long targsubcount;
+  long bothcount;
+  targsubcount = countsub(target, indicator, type);
+  bothcount = countboth(indicator, target, type);
+  if (0 == bothcount) {
+    bothcount = 1;
+  }
   return (long) targsubcount / bothcount;
 }
 
 double alib_overlap(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long eithercount = counteither(indicator, target, type);
+  long bothcount;
+  long eithercount;
+  bothcount = countboth(indicator, target, type);
+  eithercount = counteither(indicator, target, type);
+  if (0 == eithercount) {
+    eithercount = 1;
+  }
   return (long) bothcount / eithercount;
 }
 
 double alib_overlapi(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long indicount = count(indicator, type);
+  long bothcount;
+  long indicount;
+  bothcount = countboth(indicator, target, type);
+  indicount = count(indicator, type);
+  if (0 == indicount) {
+    indicount = 1;
+  }
   return (long) bothcount / indicount;
 }
 
 double alib_overlapt(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long targcount = count(target, type);
+  long bothcount;
+  long targcount;
+  bothcount = countboth(indicator, target, type);
+  targcount = count(target, type);
+  if (0 == targcount) {
+    targcount = 1;
+  }
   return (long) bothcount / targcount;
 }
 
 double alib_transparency(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long xorcount = countxor(indicator, target, type);
+  long bothcount;
+  long xorcount;
+  bothcount = countboth(indicator, target, type);
+  xorcount = countxor(indicator, target, type);
+  if (0 == xorcount) {
+    xorcount = 1;
+  }
   return (long) bothcount / xorcount;
 }
 
 double alib_transparencyi(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long indisubcount = countsub(indicator, target, type);
+  long bothcount;
+  long indisubcount;
+  bothcount = countboth(indicator, target, type);
+  indisubcount = countsub(indicator, target, type);
+  if (0 == indisubcount) {
+    indisubcount = 1;
+  }
   return (long) bothcount / indisubcount;
 }
 
 double alib_transparencyt(aobj_t indicator, aobj_t target, long type)
 {
-  long bothcount = countboth(indicator, target, type);
-  long targsubcount = countsub(target, indicator, type);
+  long bothcount;
+  long targsubcount;
+  bothcount = countboth(indicator, target, type);
+  targsubcount = countsub(target, indicator, type);
+  if (0 == targsubcount) {
+    targsubcount = 1;
+  }
   return (long) bothcount / targsubcount;
 }
 
