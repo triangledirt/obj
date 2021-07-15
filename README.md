@@ -146,13 +146,13 @@ When this is below 1, there are many indicator objects per target object.
 
     intersection(indicator, target) / indicator
 
-:indicator overlap is the same as conditional probability. indicator overlap is the degree to which *indicator* implies *target*.
+Indicator overlap is the same as conditional probability. indicator overlap is the degree to which *indicator* implies *target*.
 
 ### target overlap
 
     intersection(indicator, target) / target
 
-:target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set. You can use this to construct sets that resist counterinference (by modifying your indicator set to minimize the value of this calculation).
+Target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set. You can use this to construct sets that resist counterinference (by modifying your indicator set to minimize the value of this calculation).
 
 ### overlap
 
