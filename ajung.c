@@ -4,6 +4,7 @@
 #include "ajung.h"
 #include "alib.h"
 #include "aobj.h"
+#include "atool.h"
 #include "atoss.h"
 
 #define DIM 8

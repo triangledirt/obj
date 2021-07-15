@@ -9,10 +9,10 @@
 #define BUFF 1024
 #define MAX_FIELDS 32
 
-long fields;
-char *firstline[MAX_FIELDS];
-long correct = 0;
-long total = 0;
+static long fields;
+static char *firstline[MAX_FIELDS];
+static long correct = 0;
+static long total = 0;
 
 static void freefirst();
 static void initfirst();

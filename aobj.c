@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "abit.h"
 #include "aobj.h"
+#include "atool.h"
 
 void aobj_clear(aobj_t *obj)
 {
