@@ -132,11 +132,15 @@ Each tages an indicator and a target, as well as the usual type parameter where 
 
 This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*.
 
+If *indicator* and *target* grow at the same rate, indicator frequency will be 1. If *indicator* grows (or occurs) at twice the rate of *target*, indicator frequency will be 2. If *indicator* occurs at half the rate of *target*, indicator frequency will be 1/2. So this is the frequency with which the indicator occurs with respect to the target. When it is high, there are a lot of indicator objects for every target object. When it is low, there are a lot of target objects for every indicator object. This provides one aspect of the inference fingerprint for this set of objects.
+
 ### target frequency
 
     target / indicator
 
 This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*.
+
+When this is below 1, there are many indicator objects per target object.
 
 ### indicator overlap
 
@@ -148,39 +152,49 @@ This is the target set as a part of the indicator set. The number of objects def
 
     intersection(indicator, target) / target
 
-:target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set.
+:target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set. You can use this to construct sets that resist counterinference (by modifying your indicator set to minimize the value of this calculation).
 
 ### overlap
 
     intersection(indicator, target) / union(indicator, target)
 
-overlap is..
+When overlap is close to 0, the overlap between indicator and target is small. When overlap is close to 1, the overlap between indicator and target set is large. When close to 0, this means not much inference is possible but the quality of inferences will be high. When close to 1, this means lots of inference is possible but the quality of inferences will be low.
 
 ### indicator mismatch
 
     (indicator - target) / (target - indicator)
 
-indicator mismatch is..
+:is the degree to which the indicator set is unsuitable for inferring the target set.
 
 ### target mismatch
 
     (target - indicator) / (indicator - target)
 
+:is the degree to which the target set is unsuitable for targeting the indicator set.
+
 ### indicator impertinence
 
     (indicator - target) / target
+
+:the degree to which the indicator set is irrelevant or impertinent to the target set. A high number here means that almost all the indicator set is useless inferring the target set.
 
 ### target impertinence
 
     (target - indicator) / indicator
 
+:the degree to which the target set is impertinent to the indicator set. A high number here means that almost all the target set is useless targeting the indicator set.
+
 ### indicator opacity
 
     (indicator - target) / intersection(indicator, target)
 
+The greater the indicator opacity, the more opaque the indicator set. This means it doesn't reveal capacity for inference. The smaller the indicator opacity, the greater the capacity for inference.
+
 ### target opacity
 
     (target - indicator) / intersection(indicator, target)
+
+The greater the target opacity, the more opaque the target set. This means it doesn't reveal capacity for targeting. The smaller the target opacity, the greater the capacity for targeting.
 
 ### indicator transparency
 
@@ -198,4 +212,4 @@ This can be thought of as an extent to which, or a thoroughness with which, the 
 
     intersection(indicator, target) / xor(indicator, target)
 
-The degree to which the intersection of the sets causes a transparency between..
+Transparency is the ratio between the overlap and the xor of the indicator and target sets. As this approaches 0, the indicator and target sets are less and less related in terms of inference. As this approaches infinity, the indicator set and the target set are more and more related in terms of inference. As it approaches infinity, though, the indicator set and the target set are identical and inference between them is meaningless.
