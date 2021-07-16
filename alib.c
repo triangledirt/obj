@@ -46,7 +46,7 @@ abit_t alib_classify(aobj_t obj, long type)
   } else {
     class = 0;
   }
-#if SHOW_DETAILS
+#if ALIB_VERBOSE && SHOW_DETAILS
   printf("type%ld class     core=%d gene=%d jung=%d sum=%d\n", type, coreclass,
     geneclass, jungclass, sumclass);
 #endif
@@ -344,7 +344,7 @@ void learn()
       asum_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
-#if SHOW_DETAILS
+#if ALIB_VERBOSE && SHOW_DETAILS
       printf("type%d times     core=%lld gene=%lld jung=%lld sum=%lld\n", type,
         coretime, genetime, jungtime, sumtime);
 #endif
