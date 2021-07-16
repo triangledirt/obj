@@ -41,7 +41,7 @@ abit_t alib_classify(aobj_t obj, long type)
   jungclass = ajung_classify(obj, type);
   sumclass = asum_classify(obj, type);
   tally = coreclass + geneclass + jungclass + sumclass;
-  if (tally >= 3) {
+  if (4 == tally) {
     class = 1;
   } else {
     class = 0;

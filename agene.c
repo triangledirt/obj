@@ -18,6 +18,7 @@ static aobj_t ideal[32];
 static abit_t once = 0;
 
 static void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size);
+static void forcecalc(pop_t pop, aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, long obj, aobj_t objs[], long objs_size);
 static aobj_t getparent(pop_t pop, aobj_t objs[], long objs_size);
 static void init(aobj_t pop[], long type);
@@ -39,9 +40,6 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
   long crossover;
   long idx;
   abit_t val;
-#if ALIB_VERBOSE
-  double tot = 0;
-#endif
   initonce();
   init(pop, type);
   for (mating = 0; mating < MATINGS; mating++) {
@@ -61,6 +59,7 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
     pop[idx] = child;
     fits[idx] = -1;
   }
+  forcecalc(pop, objs, objs_size);
   ideal[type] = fittest;
 #if ALIB_VERBOSE
   printf("type%ld ideal gen ", type);
@@ -84,6 +83,16 @@ void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size)
   if (fit > fitness) {
     fittest = calcobj;
     fitness = fit;
+  }
+}
+
+void forcecalc(pop_t pop, aobj_t objs[], long objs_size)
+{
+  long obj;
+  for (obj = 0; obj < objs_size; obj++) {
+    if (fits[obj] < 0) {
+      calcfit(pop, obj, objs, objs_size);
+    }
   }
 }
 

@@ -19,6 +19,7 @@ static aobj_t ideal[32];
 static abit_t once = 0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
+static void forcecalc(pop_t pop, aobj_t objs[], long objs_size);
 static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
@@ -58,6 +59,7 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
       move(pop, &b, &a);
     }
   }
+  forcecalc(pop, objs, objs_size);
   ideal[type] = fittest;
 #if ALIB_VERBOSE
   printf("type%ld ideal jng ", type);
@@ -81,6 +83,18 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   if (fit > fitness) {
     fittest = obj;
     fitness = fit;
+  }
+}
+
+void forcecalc(pop_t pop, aobj_t objs[], long objs_size)
+{
+  acoord_t c;
+  for (c.x = 0; c.x < DIM; c.x++) {
+    for (c.y = 0; c.y < DIM; c.y++) {
+      if (fits[c.x][c.y] < 0) {
+        calcfit(pop, &c, objs, objs_size);
+      }
+    }
   }
 }
 

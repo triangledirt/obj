@@ -21,6 +21,7 @@ static aobj_t ideal[32];
 static abit_t once = 0;
 
 static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
+static void forcecalc(pop_t pop, aobj_t objs[], long objs_size);
 static void dance(pop_t pop_t, acoord_t *dest, acoord_t *src1, acoord_t *src2);
 static void findbest(pop_t pop, acoord_t *actor, acoord_t *best, aobj_t objs[],
   long objs_size);
@@ -56,6 +57,7 @@ void acore_learn(aobj_t objs[], long objs_size, long type)
       dance(pop, &worst, &actor, &best);
     }
   }
+  forcecalc(pop, objs, objs_size);
   ideal[type] = fittest;
 #if ALIB_VERBOSE
   printf("type%ld ideal cor ", type);
@@ -79,6 +81,20 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   if (fit > fitness) {
     fittest = obj;
     fitness = fit;
+  }
+}
+
+void forcecalc(pop_t pop, aobj_t objs[], long objs_size)
+{
+  acoord_t c;
+  for (c.x = 0; c.x < DIM; c.x++) {
+    for (c.y = 0; c.y < DIM; c.y++) {
+      for (c.z = 0; c.z < DIM; c.z++) {
+        if (fits[c.x][c.y][c.z] < 0) {
+          calcfit(pop, &c, objs, objs_size);
+        }
+      }
+    }
   }
 }
 
