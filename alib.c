@@ -3,6 +3,7 @@
 #include <time.h>
 #include "abit.h"
 #include "acore.h"
+#include "afold.h"
 #include "agene.h"
 #include "ajung.h"
 #include "alib.h"
@@ -31,24 +32,26 @@ abit_t alib_classify(aobj_t obj, long type)
   abit_t class;
   long tally;
   abit_t coreclass;
+  abit_t foldclass;
   abit_t geneclass;
   abit_t jungclass;
   abit_t sumclass;
   initonce();
   uptypes(type);
   coreclass = acore_classify(obj, type);
+  foldclass = afold_classify(obj, type);
   geneclass = agene_classify(obj, type);
   jungclass = ajung_classify(obj, type);
   sumclass = asum_classify(obj, type);
-  tally = coreclass + geneclass + jungclass + sumclass;
+  tally = coreclass + foldclass + geneclass + jungclass + sumclass;
   if (tally >= 3) {
     class = 1;
   } else {
     class = 0;
   }
 #if ALIB_VERBOSE && SHOW_DETAILS
-  printf("type%ld class     core=%d gene=%d jung=%d sum=%d\n", type, coreclass,
-    geneclass, jungclass, sumclass);
+  printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type,
+    coreclass, foldclass, geneclass, jungclass, sumclass);
 #endif
   return class;
 }
@@ -320,6 +323,7 @@ void learn()
   struct timeval tv1;
   struct timeval tv2;
   long long coretime;
+  long long foldtime;
   long long genetime;
   long long jungtime;
   long long sumtime;
@@ -329,6 +333,11 @@ void learn()
       acore_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
+
+      gettimeofday(&tv1, NULL);
+      afold_learn(objs[type], OBJECT_CACHE, type);
+      gettimeofday(&tv2, NULL);
+      foldtime = tv2.tv_usec - tv1.tv_usec;
 
       gettimeofday(&tv1, NULL);
       agene_learn(objs[type], OBJECT_CACHE, type);
@@ -345,8 +354,8 @@ void learn()
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if ALIB_VERBOSE && SHOW_DETAILS
-      printf("type%d times     core=%lld gene=%lld jung=%lld sum=%lld\n", type,
-        coretime, genetime, jungtime, sumtime);
+      printf("type%d times     core=%lld fold=%lld gene=%lld jung=%lld "
+        "sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
 #endif
     }
   }
