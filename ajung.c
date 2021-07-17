@@ -29,7 +29,7 @@ static void randcoord(acoord_t *c);
 
 abit_t ajung_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.75;
+  return aobj_compareq(obj, ideal[type]) > 0.9;
 }
 
 void ajung_learn(aobj_t objs[], long objs_size, long type)
@@ -135,7 +135,7 @@ void meet(pop_t pop, acoord_t *a, acoord_t *b)
 {
   long bit;
   abit_t val;
-  for (bit = 0; bit <= 32; bit++) {
+  for (bit = 1; bit <= 32; bit++) {
     if (atoss_coin()) {
       val = aobj_getattr(pop[a->x][a->y], bit);
       aobj_setattr(&pop[b->x][b->y], bit, val);

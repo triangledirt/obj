@@ -46,15 +46,15 @@ void agene_learn(aobj_t objs[], long objs_size, long type)
     parent1 = getparent(pop, objs, objs_size);
     parent2 = getparent(pop, objs, objs_size);
     crossover = random() % 32;
-    for (bit = 0; bit < 32; bit++) {
-      if (bit >= crossover) {
-        val = aobj_getattr(parent2, bit);
-      } else {
-        val = aobj_getattr(parent1, bit);
-      }
+    for (bit = 0; bit < crossover; bit++) {
+      val = aobj_getattr(parent1, bit);
       aobj_setattr(&child, bit, val);
-      aobj_mutate(&child);
     }
+    for (bit = crossover; bit < 32; bit++) {
+      val = aobj_getattr(parent2, bit);
+      aobj_setattr(&child, bit, val);
+    }
+    aobj_mutate(&child);
     idx = random() % POP;
     pop[idx] = child;
     fits[idx] = -1;

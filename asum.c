@@ -8,7 +8,7 @@ static aobj_t ideal[32];
 
 abit_t asum_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.75;
+  return aobj_compareq(obj, ideal[type]) > 0.9;
 }
 
 void asum_learn(aobj_t objs[], long objs_size, long type)
@@ -18,7 +18,7 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   abit_t val;
   aobj_t obj;
   long onecounts[32];
-  long thresh = objs_size / 4;
+  long thresh = objs_size / 8;
   abit_t class;
 #if ALIB_VERBOSE
   double fitness = 0.0;

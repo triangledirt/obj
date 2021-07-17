@@ -34,7 +34,7 @@ static void randcoord(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.75;
+  return aobj_compareq(obj, ideal[type]) > 0.9;
 }
 
 void acore_learn(aobj_t objs[], long objs_size, long type)
