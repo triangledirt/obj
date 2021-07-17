@@ -12,7 +12,7 @@
 
 typedef aobj_t pop_t[DIM][DIM];
 
-static double fitness;
+static double fitness = 0.0;
 static double fits[DIM][DIM];
 static aobj_t fittest;
 static aobj_t ideal[32];
@@ -29,7 +29,7 @@ static void randcoord(acoord_t *c);
 
 abit_t ajung_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.9;
+  return aobj_compareq(obj, ideal[type]) < fitness;
 }
 
 void ajung_learn(aobj_t objs[], long objs_size, long type)

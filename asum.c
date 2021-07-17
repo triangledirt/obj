@@ -4,11 +4,12 @@
 #include "aobj.h"
 #include "asum.h"
 
+static double fitness = 0.0;
 static aobj_t ideal[32];
 
 abit_t asum_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.9;
+  return aobj_compareq(obj, ideal[type]) > fitness;
 }
 
 void asum_learn(aobj_t objs[], long objs_size, long type)
@@ -21,7 +22,6 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   long thresh = objs_size / 8;
   abit_t class;
 #if ALIB_VERBOSE
-  double fitness = 0.0;
   double tot = 0;
 #endif
   for (bit = 1; bit < 32; bit++) {

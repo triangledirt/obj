@@ -11,7 +11,7 @@
 
 typedef aobj_t pop_t[POP];
 
-static double fitness;
+static double fitness = 0.0;
 static aobj_t fittest;
 static double fits[POP];
 static aobj_t ideal[32];
@@ -26,7 +26,7 @@ static void initonce();
 
 abit_t agene_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.75;
+  return aobj_compareq(obj, ideal[type]) < fitness;
 }
 
 void agene_learn(aobj_t objs[], long objs_size, long type)

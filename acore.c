@@ -14,9 +14,9 @@
 
 typedef aobj_t pop_t[DIM][DIM][DIM];
 
+static double fitness = 0.0;
 static double fits[DIM][DIM][DIM];
 static aobj_t fittest;
-static double fitness;
 static aobj_t ideal[32];
 static abit_t once = 0;
 
@@ -34,7 +34,7 @@ static void randcoord(acoord_t *c);
 
 abit_t acore_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) > 0.9;
+  return aobj_compareq(obj, ideal[type]) < fitness;
 }
 
 void acore_learn(aobj_t objs[], long objs_size, long type)
