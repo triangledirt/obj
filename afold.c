@@ -37,7 +37,6 @@ void afold_learn(aobj_t objs[], long objs_size, long type)
   long obj;
   abit_t val;
   long len;
-  long count;
   initonce();
   init(pop, type);
   obj = random() % POP;
