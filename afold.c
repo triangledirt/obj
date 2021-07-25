@@ -8,6 +8,7 @@
 #include "atoss.h"
 
 #define POP 32
+#define FOLDS 8
 
 typedef aobj_t pop_t[POP];
 
@@ -37,21 +38,24 @@ void afold_learn(aobj_t objs[], long objs_size, long type)
   long obj;
   abit_t val;
   long len;
+  long each;
   initonce();
   init(pop, type);
-  obj = random() % POP;
-  start = random() % 32;
-  val = random() % 2;
-  len = random() % 3;
-  if (atoss_coin()) {
-    dir = 1;
-  } else {
-    dir = -1;
+  for (each = 0; each <= FOLDS; each++) {
+    obj = random() % POP;
+    start = random() % 32;
+    val = random() % 2;
+    len = random() % 3;
+    if (atoss_coin()) {
+      dir = 1;
+    } else {
+      dir = -1;
+    }
+    for (idx = start; labs(start - idx) <= len; idx += dir) {
+      aobj_setattr(&pop[obj], atool_wrapidx(idx, 32), val);
+    }
+    fits[obj] = -1;
   }
-  for (idx = start; labs(start - idx) <= len; idx += dir) {
-    aobj_setattr(&pop[obj], atool_wrapidx(idx, 32), val);
-  }
-  fits[obj] = -1;
   forcecalc(pop, objs, objs_size);
   ideal[type] = fittest;
 #if ALIB_VERBOSE
