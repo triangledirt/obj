@@ -22,7 +22,7 @@ alib doesn't use much memory or processing time. So it is real time.
 
 It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process.
 
-alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification based on statistical, genetic, and other methods.
+alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification with statistical, genetic, and other methods under the hood.
 
 ## build and use alib
 
