@@ -9,6 +9,26 @@ void aobj_clear(aobj_t *obj)
   *obj = 0;
 }
 
+double aobj_comparet(aobj_t obj1, aobj_t obj2)
+{
+  long bit;
+  long correct = 0;
+  long total = 1;
+  abit_t bit1;
+  abit_t bit2;
+  for (bit = 1; bit < 32; bit++) {
+    bit1 = aobj_getattr(obj1, bit);
+    bit2 = aobj_getattr(obj2, bit);
+    if ((1 == bit1) || (1 == bit2)) {
+      total++;
+      if ((1 == bit1) && (1 == bit2)) {
+        correct++;
+      }
+    }
+  }
+  return (double) correct / total;
+}
+
 double aobj_compareq(aobj_t obj1, aobj_t obj2)
 {
   long bit;

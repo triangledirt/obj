@@ -22,6 +22,7 @@ void aobj_rotate(aobj_t *obj, long inc);
   else { *obj &= ~((long) 1); }
 #define aobj_getclass(obj) (obj & (long) 1)
 
+double aobj_comparet(aobj_t obj1, aobj_t obj2);
 double aobj_compareq(aobj_t obj1, aobj_t obj2);
 double aobj_comparex(aobj_t obj1, aobj_t obj2);
 

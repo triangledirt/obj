@@ -26,7 +26,7 @@ static void initonce();
 
 abit_t afold_classify(aobj_t obj, long type)
 {
-  return aobj_compareq(obj, ideal[type]) < fitness;
+  return aobj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
 void afold_learn(aobj_t objs[], long objs_size, long type)
@@ -73,7 +73,7 @@ void calcfit(pop_t pop, long obj, aobj_t objs[], long objs_size)
   aobj_t calcobj;
   calcobj = pop[obj];
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_compareq(calcobj, objs[idx]);
+    tot += aobj_comparet(calcobj, objs[idx]);
   }
   fit = tot / objs_size;
   fits[obj] = fit;

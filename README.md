@@ -1,5 +1,9 @@
 # alib
 
+## in development
+
+alib is currently in development. Please check back in 2022.
+
 ## classify objects in real time
 
 alib is a library of C functions used to classify objects in real time.
