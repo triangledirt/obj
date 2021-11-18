@@ -64,7 +64,7 @@ If you want to re-use a type to mean another type, go ahead and do so. If you ne
 
 ## case_object_t
 
-case_object_ts are longs. [case_object.h](https://github.com/triangledirt/case/blob/main/case_object.h) defines some ways to manipulate them. At base, you'll do this:
+case_object_ts are longs. [object.h](https://github.com/triangledirt/case/blob/main/object.h) defines some ways to manipulate them. At base, you'll do this:
 
     case_object_clear(&obj);
 
