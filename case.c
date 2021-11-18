@@ -368,7 +368,7 @@ void learn()
       sum_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
-#if ALIB_VERBOSE && SHOW_DETAILS
+#if CASE_VERBOSE && SHOW_DETAILS
       printf("type%ld times     core=%lld fold=%lld gene=%lld jung=%lld "
         "sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
 #endif

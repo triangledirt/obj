@@ -63,9 +63,9 @@ void gene_learn(case_object_t objs[], long objs_size, long type)
   }
   forcecalc(pop, objs, objs_size);
   ideal[type] = fittest;
-#if ALIB_VERBOSE
+#if CASE_VERBOSE
   printf("type%ld ideal gen ", type);
-  aobj_print(ideal[type]);
+  case_object_print(ideal[type]);
   printf(" %0.3f%%\n", fitness);
 #endif
 }

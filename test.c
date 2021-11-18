@@ -76,8 +76,8 @@ void testline(char *line, long type)
   long idx = 0;
   case_bit_t val;
   char *tok;
-#if ALIB_VERBOSE
-  bit_t class;
+#if CASE_VERBOSE
+  case_bit_t class;
 #endif
   case_object_clear(&obj);
   tok = strtok(line, ",");
@@ -97,12 +97,12 @@ void testline(char *line, long type)
     case_object_setattr(&obj, idx, val);
   }
   case_observe(obj, type);
-#if ALIB_VERBOSE
+#if CASE_VERBOSE
   class = case_classify(obj, type);
   total++;
   printf("type%ld obsrv ", type);
   printf("(%d) ", class);
-  aobj_print(obj);
+  case_object_print(obj);
   printf("\n");
 #endif
 }
