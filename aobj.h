@@ -1,8 +1,6 @@
 #ifndef aobj_h
 #define aobj_h
 
-#include "aobj.h"
-
 typedef long aobj_t;
 
 void aobj_clear(aobj_t *obj);

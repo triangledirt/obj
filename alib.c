@@ -105,6 +105,10 @@ double alib_impertinencet(aobj_t indicator, aobj_t target, long type)
   return (long) targsubcount / indicount;
 }
 
+void alib_lens(char *obj, long type)
+{
+}
+
 double alib_mismatchi(aobj_t indicator, aobj_t target, long type)
 {
   long indisubcount;

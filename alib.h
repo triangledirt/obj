@@ -9,6 +9,8 @@
 void alib_observe(aobj_t obj, long type);
 abit_t alib_classify(aobj_t obj, long type);
 
+void alib_lens(char *obj, long type);
+
 double alib_frequencyi(aobj_t indicator, aobj_t target, long type);
 double alib_frequencyt(aobj_t indicator, aobj_t target, long type);
 double alib_overlapi(aobj_t indicator, aobj_t target, long type);
