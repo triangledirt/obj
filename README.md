@@ -2,11 +2,11 @@
 
 ## classify objects in real time
 
-case is a library of C functions used to classify objects in real time.
+case is a library of C functions used to classify objects in real time
 
-First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to case when you observe them.
+First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to case when you observe them
 
-Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1: a bit to let you know whether case thinks the object is a member of the target set.
+Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1: a bit to let you know whether case thinks the object is a member of the target set
 
 ## statistical inference properties
 
