@@ -1,20 +1,16 @@
-# alib
-
-## in development
-
-alib is currently in development. Please check back in 2022.
+# case
 
 ## classify objects in real time
 
-alib is a library of C functions used to classify objects in real time.
+case is a library of C functions used to classify objects in real time.
 
-First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to alib when you observe them.
+First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to case when you observe them.
 
-Then with new objects whose classes you do not know, you ask alib to classify the objects, which it does with a 0 or a 1: a bit to let you know whether alib thinks the object is a member of the target set.
+Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1: a bit to let you know whether case thinks the object is a member of the target set.
 
 ## statistical inference properties
 
-alib also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set.
+case also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set.
 
 For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set.
 
@@ -22,30 +18,30 @@ These 14 properties are a fingerprint of the inference landscape. Their meanings
 
 ## real time
 
-alib doesn't use much memory or processing time. So it is real time.
+case doesn't use much memory or processing time. So it is real time.
 
 It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process.
 
-alib does not profess to be perfect for any one task. It is not for critical tasks. alib is generalized object classification with statistical, genetic, and other methods under the hood.
+case does not profess to be perfect for any one task. It is not for critical tasks. case is generalized object classification with statistical, genetic, and other methods under the hood.
 
-## build and use alib
+## build and use case
 
 To build, get the source code, change to its directory and execute:
 
     ./make
 
-That builds object files and a library. Include "[alib.h](https://github.com/triangledirt/alib/blob/main/alib.h)" in your project and see that file and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions.
+That builds object files and a library. Include "[case.h](https://github.com/triangledirt/case/blob/main/case.h)" in your project and see that file and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions.
 
-alib.h contains a #define called ALIB_VERBOSE. Set it to 1 to make noise when operating, 0 to be quiet.
+case.h contains a #define called CASE_VERBOSE. Set it to 1 to make noise when operating, 0 to be quiet.
 
 ## observe and classify objects
 
 These two functions are used to observe and classify objects:
 
-    void alib_observe(aobj_t obj, long type);
-    abit_t alib_classify(aobj_t obj, long type);
+    void case_observe(case_object_t obj, long type);
+    case_bit_t case_classify(case_object_t obj, long type);
 
-Call alib_observe() on an aobj_t when you see it. Pass the type, which is a long you define to be one of 32 types.
+Call case_observe() on a case_object_t when you see it. Pass the type, which is a long you define to be one of 32 types.
 
     #define MUSHROOM 0
     #define GAME_MAP 1
@@ -54,81 +50,85 @@ Call alib_observe() on an aobj_t when you see it. Pass the type, which is a long
 
 You can do object observation on 32 types in any order.
 
-    alib_observe(obj1, MUSHROOM);
-    alib_observe(obj2, GAME_MAP);
+    case_observe(obj1, MUSHROOM);
+    case_observe(obj2, GAME_MAP);
 
-So you can do object classification on 32 types in any order. If I'm observing a MUSHROOM-type aobj_t, I specify that when observing it. But your app can then alib_observe() an aobj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter.
+So you can do object classification on 32 types in any order. If I'm observing a MUSHROOM-type case_object_t, I specify that when observing it. But your app can then case_observe() a case_object_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter.
 
-    c = alib_classify(obj1, MUSHROOM);
-    d = alib_classify(obj2, GAME_MAP);
+    c = case_classify(obj1, MUSHROOM);
+    d = case_classify(obj2, GAME_MAP);
 
-Call alib_observe() and alib_classify() as often and in any order you like.
+Call case_observe() and case_classify() as often and in any order you like.
 
 If you want to re-use a type to mean another type, go ahead and do so. If you need to discontinue use of a type, do so.
 
-## aobj_t
+## case_object_t
 
-aobj_ts are longs. [aobj.h](https://github.com/triangledirt/alib/blob/main/aobj.h) defines some ways to manipulate them. At base, you'll do this:
+case_object_ts are longs. [case_object.h](https://github.com/triangledirt/case/blob/main/case_object.h) defines some ways to manipulate them. At base, you'll do this:
 
-    aobj_clear(&obj);
+    case_object_clear(&obj);
 
 :to initialize. And:
 
-    aobj_setattr(&obj, idx, val);
-    val = aobj_getattr(obj, idx);
+    case_object_setattr(&obj, idx, val);
+    val = case_object_getattr(obj, idx);
 
 :to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
 
-    aobj_setattr(&obj, 6, 1);
+    case_object_setattr(&obj, 6, 1);
 
 This says the cap doesn't:
 
-    aobj_setattr(&obj, 6, 0);
+    case_object_setattr(&obj, 6, 0);
 
 This sets attribute 7 to 0 in the object:
 
-    aobj_setattr(&obj, 7, 0);
+    case_object_setattr(&obj, 7, 0);
 
 The 0-indexed attribute is the class attribute. You can set it in two ways:
 
-    aobj_setattr(&obj, 0, class);
-    aobj_setclass(&obj, class);
+    case_object_setattr(&obj, 0, class);
+    case_object_setclass(&obj, class);
 
 :and get it similarly:
 
-    class = aobj_getattr(obj, 0);
-    class = aobj_getclass(obj);
+    class = case_object_getattr(obj, 0);
+    class = case_object_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an aobj_t with aobj_clear(), do this:
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_object_t with case_object_clear(), do this:
 
-    aobj_randomize(&obj);
+    case_object_randomize(&obj);
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
 
-See [atest.c](https://github.com/triangledirt/alib/blob/main/atest.c) for examples.
+See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples.
 
 ## infer from set to set
 
 These 14 functions return inference properties of the set of objects alib is managing at this time. Call them once you've alib_observe()d at least one object.
 
-    double alib_frequencyi(aobj_t indicator, aobj_t target, long type);
-    double alib_frequencyt(aobj_t indicator, aobj_t target, long type);
-    double alib_overlapi(aobj_t indicator, aobj_t target, long type);
-    double alib_overlapt(aobj_t indicator, aobj_t target, long type);
-    double alib_overlap(aobj_t indicator, aobj_t target, long type);
-    double alib_mismatchi(aobj_t indicator, aobj_t target, long type);
-    double alib_mismatcht(aobj_t indicator, aobj_t target, long type);
-    double alib_impertinencei(aobj_t indicator, aobj_t target, long type);
-    double alib_impertinencet(aobj_t indicator, aobj_t target, long type);
-    double alib_opacityi(aobj_t indicator, aobj_t target, long type);
-    double alib_opacityt(aobj_t indicator, aobj_t target, long type);
-    double alib_transparencyi(aobj_t indicator, aobj_t target, long type);
-    double alib_transparencyt(aobj_t indicator, aobj_t target, long type);
-    double alib_transparency(aobj_t indicator, aobj_t target, long type);
+    double case_frequencyi(case_object_t indicator, case_object_t target,
+      long type);
+
+*The following 13 functions use the same parameters as above.*
+
+    double case_frequencyt(..);
+    double case_overlapi(..);
+    double case_overlapt(..);
+    double case_overlap(..);
+    double case_mismatchi(..);
+    double case_mismatcht(..);
+    double case_impertinencei(..);
+    double case_impertinencet(..);
+    double case_opacityi(..);
+    double case_opacityt(..);
+    double case_transparencyi(..);
+    double case_transparencyt(..);
+    double case_transparency(..);
 
 Some of the names end with *i* or *t*. Those mean *indicator* or *target*. So frequencyi() returns the indicator frequency. frequencyt() returns the target frequency.
 
-Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are aobj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type.
+Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_object_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type.
 
 ### indicator frequency
 
