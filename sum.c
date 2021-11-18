@@ -1,27 +1,27 @@
 #include <stdio.h>
-#include "abit.h"
-#include "alib.h"
-#include "aobj.h"
-#include "asum.h"
+#include "bit.h"
+#include "case.h"
+#include "object.h"
+#include "sum.h"
 
 static double fitness = 0.0;
-static aobj_t ideal[32];
+static case_object_t ideal[32];
 
-abit_t asum_classify(aobj_t obj, long type)
+case_bit_t sum_classify(case_object_t obj, long type)
 {
-  return aobj_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_object_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void asum_learn(aobj_t objs[], long objs_size, long type)
+void sum_learn(case_object_t objs[], long objs_size, long type)
 {
   long idx;
   long bit;
-  abit_t val;
-  aobj_t obj;
+  case_bit_t val;
+  case_object_t obj;
   long onecounts[32];
   long thresh = objs_size / 8;
-  abit_t class;
-#if ALIB_VERBOSE
+  case_bit_t class;
+#if CASE_VERBOSE
   double tot = 0;
 #endif
   for (bit = 1; bit < 32; bit++) {
@@ -29,10 +29,10 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   }
   for (idx = 0; idx < objs_size; idx++) {
     obj = objs[idx];
-    class = aobj_getclass(obj);
+    class = case_object_getclass(obj);
     if (class) {
       for (bit = 1; bit < 32; bit++) {
-        val = aobj_getattr(obj, bit);
+        val = case_object_getattr(obj, bit);
         if (val) {
           onecounts[bit]++;
         }
@@ -41,18 +41,18 @@ void asum_learn(aobj_t objs[], long objs_size, long type)
   }
   for (bit = 1; bit < 32; bit++) {
     if (onecounts[bit] > thresh) {
-      aobj_setattr(&ideal[type], bit, 1);
+      case_object_setattr(&ideal[type], bit, 1);
     } else {
-      aobj_setattr(&ideal[type], bit, 0);
+      case_object_setattr(&ideal[type], bit, 0);
     }
   }
-#if ALIB_VERBOSE
+#if CASE_VERBOSE
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_comparet(ideal[type], objs[idx]);
+    tot += case_object_comparet(ideal[type], objs[idx]);
   }
   fitness = tot / objs_size;
   printf("type%ld ideal sum ", type);
-  aobj_print(ideal[type]);
+  case_object_print(ideal[type]);
   printf(" %0.3f%%\n", fitness);
 #endif
 }

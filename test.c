@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "abit.h"
-#include "alib.h"
+#include "bit.h"
+#include "case.h"
 
 #define DIABETES 0
 #define MUSHROOM 1
@@ -72,21 +72,21 @@ void testfile(char *filename, long type)
 
 void testline(char *line, long type)
 {
-  aobj_t obj;
+  case_object_t obj;
   long idx = 0;
-  abit_t val;
+  case_bit_t val;
   char *tok;
 #if ALIB_VERBOSE
-  abit_t class;
+  bit_t class;
 #endif
-  aobj_clear(&obj);
+  case_object_clear(&obj);
   tok = strtok(line, ",");
   if (0 == strcmp(tok, firstline[idx])) {
     val = 1;
   } else {
     val = 0;
   }
-  aobj_setclass(&obj, val);
+  case_object_setclass(&obj, val);
   while ((tok = strtok(NULL, ",\n"))) {
     idx++;
     if (0 == strcmp(tok, firstline[idx])) {
@@ -94,11 +94,11 @@ void testline(char *line, long type)
     } else {
       val = 0;
     }
-    aobj_setattr(&obj, idx, val);
+    case_object_setattr(&obj, idx, val);
   }
-  alib_observe(obj, type);
+  case_observe(obj, type);
 #if ALIB_VERBOSE
-  class = alib_classify(obj, type);
+  class = case_classify(obj, type);
   total++;
   printf("type%ld obsrv ", type);
   printf("(%d) ", class);

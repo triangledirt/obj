@@ -1,6 +1,6 @@
-#include "atool.h"
+#include "tool.h"
 
-unsigned long atool_wrapidx(long idx, unsigned long range)
+unsigned long tool_wrapidx(long idx, unsigned long range)
 {
   unsigned long wrap;
   if (idx >= (long) range) {

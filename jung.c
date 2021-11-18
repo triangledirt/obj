@@ -1,43 +1,45 @@
 #include <stdio.h>
-#include "abit.h"
-#include "acoord.h"
-#include "ajung.h"
-#include "alib.h"
-#include "aobj.h"
-#include "atool.h"
-#include "atoss.h"
+#include "bit.h"
+#include "case.h"
+#include "coord.h"
+#include "jung.h"
+#include "object.h"
+#include "tool.h"
+#include "toss.h"
 
 #define DIM 8
 #define ITER 8
 
-typedef aobj_t pop_t[DIM][DIM];
+typedef case_object_t pop_t[DIM][DIM];
 
 static double fitness = 0.0;
 static double fits[DIM][DIM];
-static aobj_t fittest;
-static aobj_t ideal[32];
-static abit_t once = 0;
+static case_object_t fittest;
+static case_object_t ideal[32];
+static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
-static void forcecalc(pop_t pop, aobj_t objs[], long objs_size);
-static double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size);
+static void calcfit(pop_t pop, coord_t *c, case_object_t objs[],
+  long objs_size);
+static void forcecalc(pop_t pop, case_object_t objs[], long objs_size);
+static double getfit(pop_t pop, coord_t *c, case_object_t objs[],
+  long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
-static void meet(pop_t pop, acoord_t *a, acoord_t *b);
-static void move(pop_t pop, acoord_t *a, acoord_t *b);
-static void randcoord(acoord_t *c);
+static void meet(pop_t pop, coord_t *a, coord_t *b);
+static void move(pop_t pop, coord_t *a, coord_t *b);
+static void randcoord(coord_t *c);
 
-abit_t ajung_classify(aobj_t obj, long type)
+case_bit_t jung_classify(case_object_t obj, long type)
 {
-  return aobj_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_object_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void ajung_learn(aobj_t objs[], long objs_size, long type)
+void jung_learn(case_object_t objs[], long objs_size, long type)
 {
   long iter;
-  acoord_t a;
-  acoord_t b;
-  acoord_t i;
+  coord_t a;
+  coord_t b;
+  coord_t i;
   double fita;
   double fitb;
   pop_t pop;
@@ -47,8 +49,8 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
     randcoord(&a);
     i.x = (random() % 3) - 1;
     i.y = (random() % 3) - 1;
-    b.x = atool_wrapidx(a.x + i.x, DIM);
-    b.y = atool_wrapidx(a.y + i.y, DIM);
+    b.x = tool_wrapidx(a.x + i.x, DIM);
+    b.y = tool_wrapidx(a.y + i.y, DIM);
     fita = getfit(pop, &a, objs, objs_size);
     fitb = getfit(pop, &b, objs, objs_size);
     if (fita > fitb) {
@@ -68,15 +70,15 @@ void ajung_learn(aobj_t objs[], long objs_size, long type)
 #endif
 }
 
-void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
+void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size)
 {
   double fit;
   double tot = 0;
   long idx;
-  aobj_t obj;
+  case_object_t obj;
   obj = pop[c->x][c->y];
   for (idx = 0; idx < objs_size; idx++) {
-    tot += aobj_comparet(obj, objs[idx]);
+    tot += case_object_comparet(obj, objs[idx]);
   }
   fit = tot / objs_size;
   fits[c->x][c->y] = fit;
@@ -86,9 +88,9 @@ void calcfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
   }
 }
 
-void forcecalc(pop_t pop, aobj_t objs[], long objs_size)
+void forcecalc(pop_t pop, case_object_t objs[], long objs_size)
 {
-  acoord_t c;
+  coord_t c;
   for (c.x = 0; c.x < DIM; c.x++) {
     for (c.y = 0; c.y < DIM; c.y++) {
       if (fits[c.x][c.y] < 0) {
@@ -98,7 +100,7 @@ void forcecalc(pop_t pop, aobj_t objs[], long objs_size)
   }
 }
 
-double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
+double getfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size)
 {
   if (fits[c->x][c->y] < 0) {
     calcfit(pop, c, objs, objs_size);
@@ -108,15 +110,15 @@ double getfit(pop_t pop, acoord_t *c, aobj_t objs[], long objs_size)
 
 void init(pop_t pop, long type)
 {
-  acoord_t c;
+  coord_t c;
   for (c.x = 0; c.x < DIM; c.x++) {
     for (c.y = 0; c.y < DIM; c.y++) {
       pop[c.x][c.y] = ideal[type];
-      aobj_mutate(&pop[c.x][c.y]);
+      case_object_mutate(&pop[c.x][c.y]);
       fits[c.x][c.y] = -1;
     }
   }
-  aobj_randomize(&fittest);
+  case_object_randomize(&fittest);
   fitness = 0.0;
 }
 
@@ -125,36 +127,36 @@ void initonce()
   long idx;
   if (!once) {
     for (idx = 0; idx < 32; idx++) {
-      aobj_randomize(&ideal[idx]);
+      case_object_randomize(&ideal[idx]);
     }
     once = 1;
   }
 }
 
-void meet(pop_t pop, acoord_t *a, acoord_t *b)
+void meet(pop_t pop, coord_t *a, coord_t *b)
 {
   long bit;
-  abit_t val;
+  case_bit_t val;
   for (bit = 1; bit <= 32; bit++) {
-    if (atoss_coin()) {
-      val = aobj_getattr(pop[a->x][a->y], bit);
-      aobj_setattr(&pop[b->x][b->y], bit, val);
+    if (toss_coin()) {
+      val = case_object_getattr(pop[a->x][a->y], bit);
+      case_object_setattr(&pop[b->x][b->y], bit, val);
     } else {
-      val = aobj_getattr(pop[b->x][b->y], bit);
-      aobj_setattr(&pop[a->x][a->y], bit, val);
+      val = case_object_getattr(pop[b->x][b->y], bit);
+      case_object_setattr(&pop[a->x][a->y], bit, val);
     }
   }
 }
 
-void move(pop_t pop, acoord_t *a, acoord_t *b)
+void move(pop_t pop, coord_t *a, coord_t *b)
 {
-  aobj_t tmp;
+  case_object_t tmp;
   tmp = pop[b->x][b->y];
   pop[b->x][b->y] = pop[a->x][a->y];
   pop[a->x][a->y] = tmp;
 }
 
-void randcoord(acoord_t *c)
+void randcoord(coord_t *c)
 {
   c->x = random() % DIM;
   c->y = random() % DIM;

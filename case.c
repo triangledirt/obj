@@ -2,62 +2,63 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include "abit.h"
-#include "acore.h"
-#include "afold.h"
-#include "agene.h"
-#include "ajung.h"
-#include "alib.h"
-#include "aobj.h"
-#include "asum.h"
-#include "atoss.h"
+#include "bit.h"
+#include "case.h"
+#include "core.h"
+#include "fold.h"
+#include "gene.h"
+#include "jung.h"
+#include "object.h"
+#include "sum.h"
+#include "toss.h"
 
 #define OBJECT_CACHE 64
 #define SHOW_DETAILS 1
 
-static aobj_t objs[32][OBJECT_CACHE];
-static abit_t once = 0;
-static aobj_t types;
+static case_object_t objs[32][OBJECT_CACHE];
+static case_bit_t once = 0;
+static case_object_t types;
 
-static long count(long type, aobj_t typ);
-static long countboth(long type, aobj_t typ1, aobj_t typ2);
-static long counteither(long type, aobj_t typ1, aobj_t typ2);
-static long countsub(long type, aobj_t typ1, aobj_t typ2);
-static long countxor(long type, aobj_t typ1, aobj_t typ2);
+static long count(long type, case_object_t typ);
+static long countboth(long type, case_object_t typ1, case_object_t typ2);
+static long counteither(long type, case_object_t typ1, case_object_t typ2);
+static long countsub(long type, case_object_t typ1, case_object_t typ2);
+static long countxor(long type, case_object_t typ1, case_object_t typ2);
 static void initonce();
 static void learn();
 static void uptypes(long seentype);
 
-abit_t alib_classify(aobj_t obj, long type)
+case_bit_t case_classify(case_object_t obj, long type)
 {
-  abit_t class;
+  case_bit_t class;
   long tally;
-  abit_t coreclass;
-  abit_t foldclass;
-  abit_t geneclass;
-  abit_t jungclass;
-  abit_t sumclass;
+  case_bit_t coreclass;
+  case_bit_t foldclass;
+  case_bit_t geneclass;
+  case_bit_t jungclass;
+  case_bit_t sumclass;
   initonce();
   uptypes(type);
-  coreclass = acore_classify(obj, type);
-  foldclass = afold_classify(obj, type);
-  geneclass = agene_classify(obj, type);
-  jungclass = ajung_classify(obj, type);
-  sumclass = asum_classify(obj, type);
+  coreclass = core_classify(obj, type);
+  foldclass = fold_classify(obj, type);
+  geneclass = gene_classify(obj, type);
+  jungclass = jung_classify(obj, type);
+  sumclass = sum_classify(obj, type);
   tally = coreclass + foldclass + geneclass + jungclass + sumclass;
   if (tally >= 3) {
     class = 1;
   } else {
     class = 0;
   }
-#if ALIB_VERBOSE && SHOW_DETAILS
+#if CASE_VERBOSE && SHOW_DETAILS
   printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type,
     coreclass, foldclass, geneclass, jungclass, sumclass);
 #endif
   return class;
 }
 
-double alib_frequencyi(aobj_t indicator, aobj_t target, long type)
+double case_frequencyi(case_object_t indicator, case_object_t target,
+  long type)
 {
   long indicount;
   long targcount;
@@ -69,7 +70,8 @@ double alib_frequencyi(aobj_t indicator, aobj_t target, long type)
   return (long) indicount / targcount;
 }
 
-double alib_frequencyt(aobj_t indicator, aobj_t target, long type)
+double case_frequencyt(case_object_t indicator, case_object_t target,
+  long type)
 {
   long targcount;
   long indicount;
@@ -81,7 +83,8 @@ double alib_frequencyt(aobj_t indicator, aobj_t target, long type)
   return (long) targcount / indicount;
 }
 
-double alib_impertinencei(aobj_t indicator, aobj_t target, long type)
+double case_impertinencei(case_object_t indicator, case_object_t target,
+  long type)
 {
   long indisubcount;
   long targcount;
@@ -93,7 +96,8 @@ double alib_impertinencei(aobj_t indicator, aobj_t target, long type)
   return (long) indisubcount / targcount;
 }
 
-double alib_impertinencet(aobj_t indicator, aobj_t target, long type)
+double case_impertinencet(case_object_t indicator, case_object_t target,
+  long type)
 {
   long targsubcount;
   long indicount;
@@ -105,11 +109,11 @@ double alib_impertinencet(aobj_t indicator, aobj_t target, long type)
   return (long) targsubcount / indicount;
 }
 
-void alib_lens(char *obj, long type)
+void case_lens(char *obj, long type)
 {
 }
 
-double alib_mismatchi(aobj_t indicator, aobj_t target, long type)
+double case_mismatchi(case_object_t indicator, case_object_t target, long type)
 {
   long indisubcount;
   long targsubcount;
@@ -121,7 +125,7 @@ double alib_mismatchi(aobj_t indicator, aobj_t target, long type)
   return (long) indisubcount / targsubcount;
 }
 
-double alib_mismatcht(aobj_t indicator, aobj_t target, long type)
+double case_mismatcht(case_object_t indicator, case_object_t target, long type)
 {
   long targsubcount;
   long indisubcount;
@@ -133,19 +137,19 @@ double alib_mismatcht(aobj_t indicator, aobj_t target, long type)
   return (long) targsubcount / indisubcount;
 }
 
-void alib_observe(aobj_t obj, long type)
+void case_observe(case_object_t obj, long type)
 {
   long idx;
   initonce();
   uptypes(type);
   idx = random() % OBJECT_CACHE;
   objs[type][idx] = obj;
-  if (atoss_die(OBJECT_CACHE / 16)) {
+  if (toss_die(OBJECT_CACHE / 16)) {
     learn();
   }
 }
 
-double alib_opacityi(aobj_t indicator, aobj_t target, long type)
+double case_opacityi(case_object_t indicator, case_object_t target, long type)
 {
   long indisubcount;
   long bothcount;
@@ -157,7 +161,7 @@ double alib_opacityi(aobj_t indicator, aobj_t target, long type)
   return (long) indisubcount / bothcount;
 }
 
-double alib_opacityt(aobj_t indicator, aobj_t target, long type)
+double case_opacityt(case_object_t indicator, case_object_t target, long type)
 {
   long targsubcount;
   long bothcount;
@@ -169,7 +173,7 @@ double alib_opacityt(aobj_t indicator, aobj_t target, long type)
   return (long) targsubcount / bothcount;
 }
 
-double alib_overlap(aobj_t indicator, aobj_t target, long type)
+double case_overlap(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long eithercount;
@@ -181,7 +185,7 @@ double alib_overlap(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / eithercount;
 }
 
-double alib_overlapi(aobj_t indicator, aobj_t target, long type)
+double case_overlapi(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long indicount;
@@ -193,7 +197,7 @@ double alib_overlapi(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / indicount;
 }
 
-double alib_overlapt(aobj_t indicator, aobj_t target, long type)
+double case_overlapt(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long targcount;
@@ -205,7 +209,8 @@ double alib_overlapt(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / targcount;
 }
 
-double alib_transparency(aobj_t indicator, aobj_t target, long type)
+double case_transparency(case_object_t indicator, case_object_t target,
+  long type)
 {
   long bothcount;
   long xorcount;
@@ -217,7 +222,8 @@ double alib_transparency(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / xorcount;
 }
 
-double alib_transparencyi(aobj_t indicator, aobj_t target, long type)
+double case_transparencyi(case_object_t indicator, case_object_t target,
+  long type)
 {
   long bothcount;
   long indisubcount;
@@ -229,7 +235,8 @@ double alib_transparencyi(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / indisubcount;
 }
 
-double alib_transparencyt(aobj_t indicator, aobj_t target, long type)
+double case_transparencyt(case_object_t indicator, case_object_t target,
+  long type)
 {
   long bothcount;
   long targsubcount;
@@ -241,65 +248,68 @@ double alib_transparencyt(aobj_t indicator, aobj_t target, long type)
   return (long) bothcount / targsubcount;
 }
 
-long count(long type, aobj_t typ)
+long count(long type, case_object_t typ)
 {
   long count = 0;
-  aobj_t obj;
+  case_object_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[typ][idx];
-    count += aobj_hastype(obj, typ);
+    obj = objs[type][idx];
+    count += case_object_hastype(obj, typ);
   }
   return count;
 }
 
-long countboth(long type, aobj_t typ1, aobj_t typ2)
+long countboth(long type, case_object_t typ1, case_object_t typ2)
 {
   long count = 0;
-  aobj_t obj;
+  case_object_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (aobj_hastype(obj, typ1) && aobj_hastype(obj, typ2));
+    count += (case_object_hastype(obj, typ1)
+      && case_object_hastype(obj, typ2));
   }
   return count;
 }
 
-long counteither(long type, aobj_t typ1, aobj_t typ2)
+long counteither(long type, case_object_t typ1, case_object_t typ2)
 {
   long count = 0;
-  aobj_t obj;
+  case_object_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (aobj_hastype(obj, typ1) || aobj_hastype(obj, typ2));
+    count += (case_object_hastype(obj, typ1)
+      || case_object_hastype(obj, typ2));
   }
   return count;
 }
 
-long countsub(long type, aobj_t typ1, aobj_t typ2)
+long countsub(long type, case_object_t typ1, case_object_t typ2)
 {
   long count = 0;
-  aobj_t obj;
+  case_object_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (aobj_hastype(obj, typ1) && !aobj_hastype(obj, typ2));
+    count += (case_object_hastype(obj, typ1)
+      && !case_object_hastype(obj, typ2));
   }
   return count;
 }
 
-long countxor(long type, aobj_t typ1, aobj_t typ2)
+long countxor(long type, case_object_t typ1, case_object_t typ2)
 {
   long count = 0;
-  aobj_t obj;
+  case_object_t obj;
   long idx;
-  abit_t has1;
-  abit_t has2;
+  case_bit_t has1;
+  case_bit_t has2;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    has1 = aobj_hastype(obj, typ1);
-    has2 = aobj_hastype(obj, typ2);
+    has1 = case_object_hastype(obj, typ1);
+    has2 = case_object_hastype(obj, typ2);
     if (has1 ^ has2) {
       count++;
     }
@@ -311,11 +321,11 @@ void initonce()
 {
   long idx;
   long type;
-  aobj_clear(&types);
+  case_object_clear(&types);
   if (!once) {
     for (type = 0; type < 32; type++) {
       for (idx = 0; idx < OBJECT_CACHE; idx++) {
-        aobj_randomize(&objs[type][idx]);
+        case_object_randomize(&objs[type][idx]);
       }
     }
     once = 1;
@@ -333,29 +343,29 @@ void learn()
   long long jungtime;
   long long sumtime;
   for (type = 0; type < 32; type++) {
-    if (aobj_getattr(types, type)) {
+    if (case_object_getattr(types, type)) {
       gettimeofday(&tv1, NULL);
-      acore_learn(objs[type], OBJECT_CACHE, type);
+      core_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
 
       gettimeofday(&tv1, NULL);
-      afold_learn(objs[type], OBJECT_CACHE, type);
+      fold_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
 
       gettimeofday(&tv1, NULL);
-      agene_learn(objs[type], OBJECT_CACHE, type);
+      gene_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
 
       gettimeofday(&tv1, NULL);
-      ajung_learn(objs[type], OBJECT_CACHE, type);
+      jung_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
 
       gettimeofday(&tv1, NULL);
-      asum_learn(objs[type], OBJECT_CACHE, type);
+      sum_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if ALIB_VERBOSE && SHOW_DETAILS
@@ -368,5 +378,5 @@ void learn()
 
 void uptypes(long seentype)
 {
-  aobj_setattr(&types, seentype, 1);
+  case_object_setattr(&types, seentype, 1);
 }

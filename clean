@@ -1,1 +1,1 @@
-rm -f *.o liba.a atest
+rm -f *.o libcase.a test
