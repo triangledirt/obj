@@ -1,5 +1,5 @@
-#ifndef case_object_h
-#define case_object_h
+#ifndef object_h
+#define object_h
 
 #include "bit.h"
 

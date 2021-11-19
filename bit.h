@@ -1,5 +1,5 @@
-#ifndef case_bit_h
-#define case_bit_h
+#ifndef bit_h
+#define bit_h
 
 #include <stdlib.h>
 
