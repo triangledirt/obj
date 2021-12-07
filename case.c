@@ -51,14 +51,12 @@ case_bit_t case_classify(case_object_t obj, long type)
     class = 0;
   }
 #if CASE_VERBOSE && SHOW_DETAILS
-  printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type,
-    coreclass, foldclass, geneclass, jungclass, sumclass);
+  printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type, coreclass, foldclass, geneclass, jungclass, sumclass);
 #endif
   return class;
 }
 
-double case_frequencyi(case_object_t indicator, case_object_t target,
-  long type)
+double case_frequencyi(case_object_t indicator, case_object_t target, long type)
 {
   long indicount;
   long targcount;
@@ -70,8 +68,7 @@ double case_frequencyi(case_object_t indicator, case_object_t target,
   return (long) indicount / targcount;
 }
 
-double case_frequencyt(case_object_t indicator, case_object_t target,
-  long type)
+double case_frequencyt(case_object_t indicator, case_object_t target, long type)
 {
   long targcount;
   long indicount;
@@ -83,8 +80,7 @@ double case_frequencyt(case_object_t indicator, case_object_t target,
   return (long) targcount / indicount;
 }
 
-double case_impertinencei(case_object_t indicator, case_object_t target,
-  long type)
+double case_impertinencei(case_object_t indicator, case_object_t target, long type)
 {
   long indisubcount;
   long targcount;
@@ -96,8 +92,7 @@ double case_impertinencei(case_object_t indicator, case_object_t target,
   return (long) indisubcount / targcount;
 }
 
-double case_impertinencet(case_object_t indicator, case_object_t target,
-  long type)
+double case_impertinencet(case_object_t indicator, case_object_t target, long type)
 {
   long targsubcount;
   long indicount;
@@ -209,8 +204,7 @@ double case_overlapt(case_object_t indicator, case_object_t target, long type)
   return (long) bothcount / targcount;
 }
 
-double case_transparency(case_object_t indicator, case_object_t target,
-  long type)
+double case_transparency(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long xorcount;
@@ -222,8 +216,7 @@ double case_transparency(case_object_t indicator, case_object_t target,
   return (long) bothcount / xorcount;
 }
 
-double case_transparencyi(case_object_t indicator, case_object_t target,
-  long type)
+double case_transparencyi(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long indisubcount;
@@ -235,8 +228,7 @@ double case_transparencyi(case_object_t indicator, case_object_t target,
   return (long) bothcount / indisubcount;
 }
 
-double case_transparencyt(case_object_t indicator, case_object_t target,
-  long type)
+double case_transparencyt(case_object_t indicator, case_object_t target, long type)
 {
   long bothcount;
   long targsubcount;
@@ -369,8 +361,7 @@ void learn()
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && SHOW_DETAILS
-      printf("type%ld times     core=%lld fold=%lld gene=%lld jung=%lld "
-        "sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
+      printf("type%ld times     core=%lld fold=%lld gene=%lld jung=%lld sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
 #endif
     }
   }

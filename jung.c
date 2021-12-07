@@ -18,11 +18,9 @@ static case_object_t fittest;
 static case_object_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, coord_t *c, case_object_t objs[],
-  long objs_size);
+static void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
 static void forcecalc(pop_t pop, case_object_t objs[], long objs_size);
-static double getfit(pop_t pop, coord_t *c, case_object_t objs[],
-  long objs_size);
+static double getfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
 static void meet(pop_t pop, coord_t *a, coord_t *b);

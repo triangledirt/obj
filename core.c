@@ -20,16 +20,12 @@ static case_object_t fittest;
 static case_object_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, coord_t *c, case_object_t objs[],
-  long objs_size);
+static void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
 static void forcecalc(pop_t pop, case_object_t objs[], long objs_size);
 static void dance(pop_t pop_t, coord_t *dest, coord_t *src1, coord_t *src2);
-static void findbest(pop_t pop, coord_t *actor, coord_t *best,
-  case_object_t objs[], long objs_size);
-static void findworst(pop_t pop, coord_t *actor, coord_t *worst,
-  case_object_t objs[], long objs_size);
-static double getfit(pop_t pop, coord_t *c, case_object_t objs[],
-  long objs_size);
+static void findbest(pop_t pop, coord_t *actor, coord_t *best, case_object_t objs[], long objs_size);
+static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_object_t objs[], long objs_size);
+static double getfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
 static void randcoord(coord_t *c);
@@ -118,8 +114,7 @@ void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2)
   fits[dest->x][dest->y][dest->z] = -1;
 }
 
-void findbest(pop_t pop, coord_t *actor, coord_t *best, case_object_t objs[],
-  long objs_size)
+void findbest(pop_t pop, coord_t *actor, coord_t *best, case_object_t objs[], long objs_size)
 {
   coord_t t;
   coord_t c;
@@ -144,8 +139,7 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_object_t objs[],
   }
 }
 
-void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_object_t objs[],
-  long objs_size)
+void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_object_t objs[], long objs_size)
 {
   coord_t t;
   coord_t c;

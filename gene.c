@@ -19,10 +19,8 @@ static case_bit_t once = 0;
 
 static void calcfit(pop_t pop, long obj, case_object_t objs[], long objs_size);
 static void forcecalc(pop_t pop, case_object_t objs[], long objs_size);
-static double getfit(pop_t pop, long obj, case_object_t objs[],
-  long objs_size);
-static case_object_t getparent(pop_t pop, case_object_t objs[],
-  long objs_size);
+static double getfit(pop_t pop, long obj, case_object_t objs[], long objs_size);
+static case_object_t getparent(pop_t pop, case_object_t objs[], long objs_size);
 static void init(case_object_t pop[], long type);
 static void initonce();
 
@@ -106,8 +104,7 @@ double getfit(pop_t pop, long obj, case_object_t objs[], long objs_size)
   return fits[obj];
 }
 
-case_object_t getparent(case_object_t pop[], case_object_t objs[],
-  long objs_size)
+case_object_t getparent(case_object_t pop[], case_object_t objs[], long objs_size)
 {
   long tries;
   double fit = 0;
