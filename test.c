@@ -11,7 +11,6 @@
 
 static long fields;
 static char *firstline[MAX_FIELDS];
-static long correct = 0;
 static long total = 0;
 
 static void freefirst();
@@ -72,21 +71,21 @@ void testfile(char *filename, long type)
 
 void testline(char *line, long type)
 {
-  case_object_t obj;
+  case_obj_t obj;
   long idx = 0;
   case_bit_t val;
   char *tok;
 #if CASE_VERBOSE
   case_bit_t class;
 #endif
-  case_object_clear(&obj);
+  case_obj_clear(&obj);
   tok = strtok(line, ",");
   if (0 == strcmp(tok, firstline[idx])) {
     val = 1;
   } else {
     val = 0;
   }
-  case_object_setclass(&obj, val);
+  case_obj_setclass(&obj, val);
   while ((tok = strtok(NULL, ",\n"))) {
     idx++;
     if (0 == strcmp(tok, firstline[idx])) {
@@ -94,7 +93,7 @@ void testline(char *line, long type)
     } else {
       val = 0;
     }
-    case_object_setattr(&obj, idx, val);
+    case_obj_setattr(&obj, idx, val);
   }
   case_observe(obj, type);
 #if CASE_VERBOSE
@@ -102,7 +101,7 @@ void testline(char *line, long type)
   total++;
   printf("type%ld obsrv ", type);
   printf("(%d) ", class);
-  case_object_print(obj);
+  case_obj_print(obj);
   printf("\n");
 #endif
 }

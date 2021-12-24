@@ -8,27 +8,27 @@
 #include "fold.h"
 #include "gene.h"
 #include "jung.h"
-#include "object.h"
+#include "obj.h"
 #include "sum.h"
 #include "toss.h"
 
 #define OBJECT_CACHE 64
 #define SHOW_DETAILS 1
 
-static case_object_t objs[32][OBJECT_CACHE];
+static case_obj_t objs[32][OBJECT_CACHE];
 static case_bit_t once = 0;
-static case_object_t types;
+static case_obj_t types;
 
-static long count(long type, case_object_t typ);
-static long countboth(long type, case_object_t typ1, case_object_t typ2);
-static long counteither(long type, case_object_t typ1, case_object_t typ2);
-static long countsub(long type, case_object_t typ1, case_object_t typ2);
-static long countxor(long type, case_object_t typ1, case_object_t typ2);
+static long count(long type, case_obj_t typ);
+static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
+static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
+static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
+static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static void learn();
 static void uptypes(long seentype);
 
-case_bit_t case_classify(case_object_t obj, long type)
+case_bit_t case_classify(case_obj_t obj, long type)
 {
   case_bit_t class;
   long tally;
@@ -56,255 +56,236 @@ case_bit_t case_classify(case_object_t obj, long type)
   return class;
 }
 
-double case_frequencyi(case_object_t indicator, case_object_t target, long type)
+double case_frequencyi(case_obj_t indicator, case_obj_t target, long type)
 {
-  long indicount;
-  long targcount;
-  indicount = count(indicator, type);
-  targcount = count(target, type);
-  if (0 == targcount) {
-    targcount = 1;
-  }
-  return (long) indicount / targcount;
+  long indicnt;
+  long targcnt;
+  indicnt = count(indicator, type);
+  targcnt = count(target, type);
+  if (0 == targcnt)
+    targcnt = 1;
+  return (long) indicnt / targcnt;
 }
 
-double case_frequencyt(case_object_t indicator, case_object_t target, long type)
+double case_frequencyt(case_obj_t indicator, case_obj_t target, long type)
 {
-  long targcount;
-  long indicount;
-  targcount = count(target, type);
-  indicount = count(indicator, type);
-  if (0 == indicount) {
-    indicount = 1;
-  }
-  return (long) targcount / indicount;
+  long targcnt;
+  long indicnt;
+  targcnt = count(target, type);
+  indicnt = count(indicator, type);
+  if (0 == indicnt)
+    indicnt = 1;
+  return (long) targcnt / indicnt;
 }
 
-double case_impertinencei(case_object_t indicator, case_object_t target, long type)
+double case_impertinencei(case_obj_t indicator, case_obj_t target, long type)
 {
-  long indisubcount;
-  long targcount;
-  indisubcount = countsub(indicator, target, type);
-  targcount = count(target, type);
-  if (0 == targcount) {
-    targcount = 1;
-  }
-  return (long) indisubcount / targcount;
+  long indisubcnt;
+  long targcnt;
+  indisubcnt = countsub(indicator, target, type);
+  targcnt = count(target, type);
+  if (0 == targcnt)
+    targcnt = 1;
+  return (long) indisubcnt / targcnt;
 }
 
-double case_impertinencet(case_object_t indicator, case_object_t target, long type)
+double case_impertinencet(case_obj_t indicator, case_obj_t target, long type)
 {
-  long targsubcount;
-  long indicount;
-  targsubcount = countsub(target, indicator, type);
-  indicount = count(indicator, type);
-  if (0 == indicount) {
-    indicount = 1;
-  }
-  return (long) targsubcount / indicount;
+  long targsubcnt;
+  long indicnt;
+  targsubcnt = countsub(target, indicator, type);
+  indicnt = count(indicator, type);
+  if (0 == indicnt)
+    indicnt = 1;
+  return (long) targsubcnt / indicnt;
 }
 
 void case_lens(char *obj, long type)
 {
 }
 
-double case_mismatchi(case_object_t indicator, case_object_t target, long type)
+double case_mismatchi(case_obj_t indicator, case_obj_t target, long type)
 {
-  long indisubcount;
-  long targsubcount;
-  indisubcount = countsub(indicator, target, type);
-  targsubcount = countsub(target, indicator, type);
-  if (0 == targsubcount) {
-    targsubcount = 1;
-  }
-  return (long) indisubcount / targsubcount;
+  long indisubcnt;
+  long targsubcnt;
+  indisubcnt = countsub(indicator, target, type);
+  targsubcnt = countsub(target, indicator, type);
+  if (0 == targsubcnt)
+    targsubcnt = 1;
+  return (long) indisubcnt / targsubcnt;
 }
 
-double case_mismatcht(case_object_t indicator, case_object_t target, long type)
+double case_mismatcht(case_obj_t indicator, case_obj_t target, long type)
 {
-  long targsubcount;
-  long indisubcount;
-  targsubcount = countsub(target, indicator, type);
-  indisubcount = countsub(indicator, target, type);
-  if (0 == indisubcount) {
-    indisubcount = 1;
-  }
-  return (long) targsubcount / indisubcount;
+  long targsubcnt;
+  long indisubcnt;
+  targsubcnt = countsub(target, indicator, type);
+  indisubcnt = countsub(indicator, target, type);
+  if (0 == indisubcnt)
+    indisubcnt = 1;
+  return (long) targsubcnt / indisubcnt;
 }
 
-void case_observe(case_object_t obj, long type)
+void case_observe(case_obj_t obj, long type)
 {
   long idx;
   initonce();
   uptypes(type);
   idx = random() % OBJECT_CACHE;
   objs[type][idx] = obj;
-  if (toss_die(OBJECT_CACHE / 16)) {
+  if (toss_die(OBJECT_CACHE / 16))
     learn();
-  }
 }
 
-double case_opacityi(case_object_t indicator, case_object_t target, long type)
+double case_opacityi(case_obj_t indicator, case_obj_t target, long type)
 {
-  long indisubcount;
-  long bothcount;
-  indisubcount = countsub(indicator, target, type);
-  bothcount = countboth(indicator, target, type);
-  if (0 == bothcount) {
-    bothcount = 1;
-  }
-  return (long) indisubcount / bothcount;
+  long indisubcnt;
+  long bothcnt;
+  indisubcnt = countsub(indicator, target, type);
+  bothcnt = countboth(indicator, target, type);
+  if (0 == bothcnt)
+    bothcnt = 1;
+  return (long) indisubcnt / bothcnt;
 }
 
-double case_opacityt(case_object_t indicator, case_object_t target, long type)
+double case_opacityt(case_obj_t indicator, case_obj_t target, long type)
 {
-  long targsubcount;
-  long bothcount;
-  targsubcount = countsub(target, indicator, type);
-  bothcount = countboth(indicator, target, type);
-  if (0 == bothcount) {
-    bothcount = 1;
-  }
-  return (long) targsubcount / bothcount;
+  long targsubcnt;
+  long bothcnt;
+  targsubcnt = countsub(target, indicator, type);
+  bothcnt = countboth(indicator, target, type);
+  if (0 == bothcnt)
+    bothcnt = 1;
+  return (long) targsubcnt / bothcnt;
 }
 
-double case_overlap(case_object_t indicator, case_object_t target, long type)
+double case_overlap(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long eithercount;
-  bothcount = countboth(indicator, target, type);
-  eithercount = counteither(indicator, target, type);
-  if (0 == eithercount) {
-    eithercount = 1;
-  }
-  return (long) bothcount / eithercount;
+  long bothcnt;
+  long eithercnt;
+  bothcnt = countboth(indicator, target, type);
+  eithercnt = counteither(indicator, target, type);
+  if (0 == eithercnt)
+    eithercnt = 1;
+  return (long) bothcnt / eithercnt;
 }
 
-double case_overlapi(case_object_t indicator, case_object_t target, long type)
+double case_overlapi(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long indicount;
-  bothcount = countboth(indicator, target, type);
-  indicount = count(indicator, type);
-  if (0 == indicount) {
-    indicount = 1;
-  }
-  return (long) bothcount / indicount;
+  long bothcnt;
+  long indicnt;
+  bothcnt = countboth(indicator, target, type);
+  indicnt = count(indicator, type);
+  if (0 == indicnt)
+    indicnt = 1;
+  return (long) bothcnt / indicnt;
 }
 
-double case_overlapt(case_object_t indicator, case_object_t target, long type)
+double case_overlapt(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long targcount;
-  bothcount = countboth(indicator, target, type);
-  targcount = count(target, type);
-  if (0 == targcount) {
-    targcount = 1;
-  }
-  return (long) bothcount / targcount;
+  long bothcnt;
+  long targcnt;
+  bothcnt = countboth(indicator, target, type);
+  targcnt = count(target, type);
+  if (0 == targcnt)
+    targcnt = 1;
+  return (long) bothcnt / targcnt;
 }
 
-double case_transparency(case_object_t indicator, case_object_t target, long type)
+double case_transparency(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long xorcount;
-  bothcount = countboth(indicator, target, type);
-  xorcount = countxor(indicator, target, type);
-  if (0 == xorcount) {
-    xorcount = 1;
-  }
-  return (long) bothcount / xorcount;
+  long bothcnt;
+  long xorcnt;
+  bothcnt = countboth(indicator, target, type);
+  xorcnt = countxor(indicator, target, type);
+  if (0 == xorcnt)
+    xorcnt = 1;
+  return (long) bothcnt / xorcnt;
 }
 
-double case_transparencyi(case_object_t indicator, case_object_t target, long type)
+double case_transparencyi(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long indisubcount;
-  bothcount = countboth(indicator, target, type);
-  indisubcount = countsub(indicator, target, type);
-  if (0 == indisubcount) {
-    indisubcount = 1;
-  }
-  return (long) bothcount / indisubcount;
+  long bothcnt;
+  long indisubcnt;
+  bothcnt = countboth(indicator, target, type);
+  indisubcnt = countsub(indicator, target, type);
+  if (0 == indisubcnt)
+    indisubcnt = 1;
+  return (long) bothcnt / indisubcnt;
 }
 
-double case_transparencyt(case_object_t indicator, case_object_t target, long type)
+double case_transparencyt(case_obj_t indicator, case_obj_t target, long type)
 {
-  long bothcount;
-  long targsubcount;
-  bothcount = countboth(indicator, target, type);
-  targsubcount = countsub(target, indicator, type);
-  if (0 == targsubcount) {
-    targsubcount = 1;
-  }
-  return (long) bothcount / targsubcount;
+  long bothcnt;
+  long targsubcnt;
+  bothcnt = countboth(indicator, target, type);
+  targsubcnt = countsub(target, indicator, type);
+  if (0 == targsubcnt)
+    targsubcnt = 1;
+  return (long) bothcnt / targsubcnt;
 }
 
-long count(long type, case_object_t typ)
+long count(long type, case_obj_t typ)
 {
   long count = 0;
-  case_object_t obj;
+  case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += case_object_hastype(obj, typ);
+    count += case_obj_hastype(obj, typ);
   }
   return count;
 }
 
-long countboth(long type, case_object_t typ1, case_object_t typ2)
+long countboth(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
-  case_object_t obj;
+  case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (case_object_hastype(obj, typ1)
-      && case_object_hastype(obj, typ2));
+    count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
   }
   return count;
 }
 
-long counteither(long type, case_object_t typ1, case_object_t typ2)
+long counteither(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
-  case_object_t obj;
+  case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (case_object_hastype(obj, typ1)
-      || case_object_hastype(obj, typ2));
+    count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
   }
   return count;
 }
 
-long countsub(long type, case_object_t typ1, case_object_t typ2)
+long countsub(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
-  case_object_t obj;
+  case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    count += (case_object_hastype(obj, typ1)
-      && !case_object_hastype(obj, typ2));
+    count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
   }
   return count;
 }
 
-long countxor(long type, case_object_t typ1, case_object_t typ2)
+long countxor(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
-  case_object_t obj;
+  case_obj_t obj;
   long idx;
   case_bit_t has1;
   case_bit_t has2;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
     obj = objs[type][idx];
-    has1 = case_object_hastype(obj, typ1);
-    has2 = case_object_hastype(obj, typ2);
-    if (has1 ^ has2) {
+    has1 = case_obj_hastype(obj, typ1);
+    has2 = case_obj_hastype(obj, typ2);
+    if (has1 ^ has2)
       count++;
-    }
   }
   return count;
 }
@@ -313,12 +294,11 @@ void initonce()
 {
   long idx;
   long type;
-  case_object_clear(&types);
+  case_obj_clear(&types);
   if (!once) {
     for (type = 0; type < 32; type++) {
-      for (idx = 0; idx < OBJECT_CACHE; idx++) {
-        case_object_randomize(&objs[type][idx]);
-      }
+      for (idx = 0; idx < OBJECT_CACHE; idx++)
+        case_obj_randomize(&objs[type][idx]);
     }
     once = 1;
   }
@@ -335,7 +315,7 @@ void learn()
   long long jungtime;
   long long sumtime;
   for (type = 0; type < 32; type++) {
-    if (case_object_getattr(types, type)) {
+    if (case_obj_getattr(types, type)) {
       gettimeofday(&tv1, NULL);
       core_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
@@ -369,5 +349,5 @@ void learn()
 
 void uptypes(long seentype)
 {
-  case_object_setattr(&types, seentype, 1);
+  case_obj_setattr(&types, seentype, 1);
 }

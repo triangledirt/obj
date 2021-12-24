@@ -3,36 +3,36 @@
 #include "case.h"
 #include "coord.h"
 #include "jung.h"
-#include "object.h"
+#include "obj.h"
 #include "tool.h"
 #include "toss.h"
 
 #define DIM 8
 #define ITER 8
 
-typedef case_object_t pop_t[DIM][DIM];
+typedef case_obj_t pop_t[DIM][DIM];
 
 static double fitness = 0.0;
 static double fits[DIM][DIM];
-static case_object_t fittest;
-static case_object_t ideal[32];
+static case_obj_t fittest;
+static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
-static void forcecalc(pop_t pop, case_object_t objs[], long objs_size);
-static double getfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size);
+static void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size);
+static void forcecalc(pop_t pop, case_obj_t objs[], long objs_size);
+static double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size);
 static void init(pop_t pop, long type);
 static void initonce();
 static void meet(pop_t pop, coord_t *a, coord_t *b);
 static void move(pop_t pop, coord_t *a, coord_t *b);
 static void randcoord(coord_t *c);
 
-case_bit_t jung_classify(case_object_t obj, long type)
+case_bit_t jung_classify(case_obj_t obj, long type)
 {
-  return case_object_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void jung_learn(case_object_t objs[], long objs_size, long type)
+void jung_learn(case_obj_t objs[], long objs_size, long type)
 {
   long iter;
   coord_t a;
@@ -63,20 +63,20 @@ void jung_learn(case_object_t objs[], long objs_size, long type)
   ideal[type] = fittest;
 #if CASE_VERBOSE
   printf("type%ld ideal jng ", type);
-  case_object_print(ideal[type]);
+  case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness);
 #endif
 }
 
-void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size)
+void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 {
   double fit;
   double tot = 0;
   long idx;
-  case_object_t obj;
+  case_obj_t obj;
   obj = pop[c->x][c->y];
   for (idx = 0; idx < objs_size; idx++) {
-    tot += case_object_comparet(obj, objs[idx]);
+    tot += case_obj_comparet(obj, objs[idx]);
   }
   fit = tot / objs_size;
   fits[c->x][c->y] = fit;
@@ -86,7 +86,7 @@ void calcfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size)
   }
 }
 
-void forcecalc(pop_t pop, case_object_t objs[], long objs_size)
+void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
 {
   coord_t c;
   for (c.x = 0; c.x < DIM; c.x++) {
@@ -98,7 +98,7 @@ void forcecalc(pop_t pop, case_object_t objs[], long objs_size)
   }
 }
 
-double getfit(pop_t pop, coord_t *c, case_object_t objs[], long objs_size)
+double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 {
   if (fits[c->x][c->y] < 0) {
     calcfit(pop, c, objs, objs_size);
@@ -112,11 +112,11 @@ void init(pop_t pop, long type)
   for (c.x = 0; c.x < DIM; c.x++) {
     for (c.y = 0; c.y < DIM; c.y++) {
       pop[c.x][c.y] = ideal[type];
-      case_object_mutate(&pop[c.x][c.y]);
+      case_obj_mutate(&pop[c.x][c.y]);
       fits[c.x][c.y] = -1;
     }
   }
-  case_object_randomize(&fittest);
+  case_obj_randomize(&fittest);
   fitness = 0.0;
 }
 
@@ -125,7 +125,7 @@ void initonce()
   long idx;
   if (!once) {
     for (idx = 0; idx < 32; idx++) {
-      case_object_randomize(&ideal[idx]);
+      case_obj_randomize(&ideal[idx]);
     }
     once = 1;
   }
@@ -137,18 +137,18 @@ void meet(pop_t pop, coord_t *a, coord_t *b)
   case_bit_t val;
   for (bit = 1; bit <= 32; bit++) {
     if (toss_coin()) {
-      val = case_object_getattr(pop[a->x][a->y], bit);
-      case_object_setattr(&pop[b->x][b->y], bit, val);
+      val = case_obj_getattr(pop[a->x][a->y], bit);
+      case_obj_setattr(&pop[b->x][b->y], bit, val);
     } else {
-      val = case_object_getattr(pop[b->x][b->y], bit);
-      case_object_setattr(&pop[a->x][a->y], bit, val);
+      val = case_obj_getattr(pop[b->x][b->y], bit);
+      case_obj_setattr(&pop[a->x][a->y], bit, val);
     }
   }
 }
 
 void move(pop_t pop, coord_t *a, coord_t *b)
 {
-  case_object_t tmp;
+  case_obj_t tmp;
   tmp = pop[b->x][b->y];
   pop[b->x][b->y] = pop[a->x][a->y];
   pop[a->x][a->y] = tmp;
