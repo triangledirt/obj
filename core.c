@@ -71,9 +71,8 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
   long idx;
   case_obj_t obj;
   obj = pop[c->x][c->y][c->z];
-  for (idx = 0; idx < objs_size; idx++) {
+  for (idx = 0; idx < objs_size; idx++)
     tot += case_obj_comparet(obj, objs[idx]);
-  }
   fit = tot / objs_size;
   fits[c->x][c->y][c->z] = fit;
   if (fit > fitness) {
@@ -85,15 +84,11 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
 {
   coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++) {
-    for (c.y = 0; c.y < DIM; c.y++) {
-      for (c.z = 0; c.z < DIM; c.z++) {
-        if (fits[c.x][c.y][c.z] < 0) {
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
+      for (c.z = 0; c.z < DIM; c.z++)
+        if (fits[c.x][c.y][c.z] < 0)
           calcfit(pop, &c, objs, objs_size);
-        }
-      }
-    }
-  }
 }
 
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2)
@@ -126,9 +121,8 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t objs[], long 
         c.x = tool_wrapidx(actor->x + t.x, DIM);
         c.y = tool_wrapidx(actor->y + t.y, DIM);
         c.z = tool_wrapidx(actor->z + t.z, DIM);
-        if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z)) {
+        if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z))
           continue;
-        }
         f = getfit(pop, &c, objs, objs_size);
         if (f > fit) {
           fit = f;
@@ -163,9 +157,8 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t objs[], lon
 
 double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 {
-  if (fits[c->x][c->y][c->z] < 0) {
+  if (fits[c->x][c->y][c->z] < 0)
     calcfit(pop, c, objs, objs_size);
-  }
   return fits[c->x][c->y][c->z];
 }
 
@@ -189,9 +182,8 @@ void initonce()
 {
   long idx;
   if (!once) {
-    for (idx = 0; idx < 32; idx++) {
+    for (idx = 0; idx < 32; idx++)
       case_obj_randomize(&ideal[idx]);
-    }
     once = 1;
   }
 }
