@@ -29,21 +29,19 @@ void sum_learn(case_obj_t objs[], long objssze, long type)
   for (idx = 0; idx < objssze; idx++) {
     obj = objs[idx];
     class = case_obj_getclass(obj);
-    if (class) {
+    if (class)
       for (bit = 1; bit < 32; bit++) {
         val = case_obj_getattr(obj, bit);
         if (val)
           onecounts[bit]++;
       }
-    }
   }
-  for (bit = 1; bit < 32; bit++) {
+  for (bit = 1; bit < 32; bit++)
     if (onecounts[bit] > thresh) {
       case_obj_setattr(&ideal[type], bit, 1);
     } else {
       case_obj_setattr(&ideal[type], bit, 0);
     }
-  }
 #if CASE_VERBOSE
   for (idx = 0; idx < objssze; idx++)
     tot += case_obj_comparet(ideal[type], objs[idx]);
