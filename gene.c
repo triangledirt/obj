@@ -17,10 +17,10 @@ static double fits[POP];
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssze);
-static void forcecalc(pop_t pop, case_obj_t objs[], long objssze);
-static double getfit(pop_t pop, long obj, case_obj_t objs[], long objssze);
-static case_obj_t getparent(pop_t pop, case_obj_t objs[], long objssze);
+static void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssz);
+static void forcecalc(pop_t pop, case_obj_t objs[], long objssz);
+static double getfit(pop_t pop, long obj, case_obj_t objs[], long objssz);
+static case_obj_t getparent(pop_t pop, case_obj_t objs[], long objssz);
 static void init(case_obj_t pop[], long type);
 static void initonce();
 
@@ -29,7 +29,7 @@ case_bit_t gene_classify(case_obj_t obj, long type)
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void gene_learn(case_obj_t objs[], long objssze, long type)
+void gene_learn(case_obj_t objs[], long objssz, long type)
 {
   long mating;
   pop_t pop;
@@ -43,8 +43,8 @@ void gene_learn(case_obj_t objs[], long objssze, long type)
   initonce();
   init(pop, type);
   for (mating = 0; mating < MATINGS; mating++) {
-    parent1 = getparent(pop, objs, objssze);
-    parent2 = getparent(pop, objs, objssze);
+    parent1 = getparent(pop, objs, objssz);
+    parent2 = getparent(pop, objs, objssz);
     crossover = random() % 32;
     for (bit = 0; bit < crossover; bit++) {
       val = case_obj_getattr(parent1, bit);
@@ -59,7 +59,7 @@ void gene_learn(case_obj_t objs[], long objssze, long type)
     pop[idx] = child;
     fits[idx] = -1;
   }
-  forcecalc(pop, objs, objssze);
+  forcecalc(pop, objs, objssz);
   ideal[type] = fittest;
 #if CASE_VERBOSE
   printf("type%ld ideal gen ", type);
@@ -68,16 +68,16 @@ void gene_learn(case_obj_t objs[], long objssze, long type)
 #endif
 }
 
-void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssze)
+void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssz)
 {
   long idx;
   double fit;
   double tot = 0;
   case_obj_t calcobj;
   calcobj = pop[obj];
-  for (idx = 0; idx < objssze; idx++)
+  for (idx = 0; idx < objssz; idx++)
     tot += case_obj_comparet(calcobj, objs[idx]);
-  fit = tot / objssze;
+  fit = tot / objssz;
   fits[obj] = fit;
   if (fit > fitness) {
     fittest = calcobj;
@@ -85,22 +85,22 @@ void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssze)
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t objs[], long objssze)
+void forcecalc(pop_t pop, case_obj_t objs[], long objssz)
 {
   long obj;
-  for (obj = 0; obj < objssze; obj++)
+  for (obj = 0; obj < objssz; obj++)
     if (fits[obj] < 0)
-      calcfit(pop, obj, objs, objssze);
+      calcfit(pop, obj, objs, objssz);
 }
 
-double getfit(pop_t pop, long obj, case_obj_t objs[], long objssze)
+double getfit(pop_t pop, long obj, case_obj_t objs[], long objssz)
 {
   if (fits[obj] < 0)
-    calcfit(pop, obj, objs, objssze);
+    calcfit(pop, obj, objs, objssz);
   return fits[obj];
 }
 
-case_obj_t getparent(case_obj_t pop[], case_obj_t objs[], long objssze)
+case_obj_t getparent(case_obj_t pop[], case_obj_t objs[], long objssz)
 {
   long tries;
   double fit = 0;
@@ -109,7 +109,7 @@ case_obj_t getparent(case_obj_t pop[], case_obj_t objs[], long objssze)
   long newid;
   for (tries = 0; tries < 6; tries++) {
     newid = random() % POP;
-    newfit = getfit(pop, newid, objs, objssze);
+    newfit = getfit(pop, newid, objs, objssz);
     if (newfit > fit) {
       idx = newid;
       fit = newfit;

@@ -12,21 +12,21 @@ case_bit_t sum_classify(case_obj_t obj, long type)
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void sum_learn(case_obj_t objs[], long objssze, long type)
+void sum_learn(case_obj_t objs[], long objssz, long type)
 {
   long idx;
   long bit;
   case_bit_t val;
   case_obj_t obj;
   long onecounts[32];
-  long thresh = objssze / 8;
+  long thresh = objssz / 8;
   case_bit_t class;
 #if CASE_VERBOSE
   double tot = 0;
 #endif
   for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
-  for (idx = 0; idx < objssze; idx++) {
+  for (idx = 0; idx < objssz; idx++) {
     obj = objs[idx];
     class = case_obj_getclass(obj);
     if (class)
@@ -43,9 +43,9 @@ void sum_learn(case_obj_t objs[], long objssze, long type)
       case_obj_setattr(&ideal[type], bit, 0);
     }
 #if CASE_VERBOSE
-  for (idx = 0; idx < objssze; idx++)
+  for (idx = 0; idx < objssz; idx++)
     tot += case_obj_comparet(ideal[type], objs[idx]);
-  fitness = tot / objssze;
+  fitness = tot / objssz;
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness);
