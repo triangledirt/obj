@@ -18,9 +18,9 @@ static double fits[POP];
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, long obj, case_obj_t objs[], long objs_size);
-static void forcecalc(pop_t pop, case_obj_t objs[], long objs_size);
-static double getfit(pop_t pop, long obj, case_obj_t objs[], long objs_size);
+static void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssze);
+static void forcecalc(pop_t pop, case_obj_t objs[], long objssze);
+static double getfit(pop_t pop, long obj, case_obj_t objs[], long objssze);
 static void init(case_obj_t pop[], long type);
 static void initonce();
 
@@ -29,7 +29,7 @@ case_bit_t fold_classify(case_obj_t obj, long type)
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void fold_learn(case_obj_t objs[], long objs_size, long type)
+void fold_learn(case_obj_t objs[], long objssze, long type)
 {
   pop_t pop;
   long start;
@@ -51,7 +51,7 @@ void fold_learn(case_obj_t objs[], long objs_size, long type)
       case_obj_setattr(&pop[obj], tool_wrapidx(idx, 32), val);
     fits[obj] = -1;
   }
-  forcecalc(pop, objs, objs_size);
+  forcecalc(pop, objs, objssze);
   ideal[type] = fittest;
 #if CASE_VERBOSE
   printf("type%ld ideal fld ", type);
@@ -60,16 +60,16 @@ void fold_learn(case_obj_t objs[], long objs_size, long type)
 #endif
 }
 
-void calcfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)
+void calcfit(pop_t pop, long obj, case_obj_t objs[], long objssze)
 {
   long idx;
   double fit;
   double tot = 0;
   case_obj_t calcobj;
   calcobj = pop[obj];
-  for (idx = 0; idx < objs_size; idx++)
+  for (idx = 0; idx < objssze; idx++)
     tot += case_obj_comparet(calcobj, objs[idx]);
-  fit = tot / objs_size;
+  fit = tot / objssze;
   fits[obj] = fit;
   if (fit > fitness) {
     fittest = calcobj;
@@ -77,18 +77,18 @@ void calcfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
+void forcecalc(pop_t pop, case_obj_t objs[], long objssze)
 {
   long obj;
-  for (obj = 0; obj < objs_size; obj++)
+  for (obj = 0; obj < objssze; obj++)
     if (fits[obj] < 0)
-      calcfit(pop, obj, objs, objs_size);
+      calcfit(pop, obj, objs, objssze);
 }
 
-double getfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)
+double getfit(pop_t pop, long obj, case_obj_t objs[], long objssze)
 {
   if (fits[obj] < 0)
-    calcfit(pop, obj, objs, objs_size);
+    calcfit(pop, obj, objs, objssze);
   return fits[obj];
 }
 

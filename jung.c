@@ -18,9 +18,9 @@ static case_obj_t fittest;
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size);
-static void forcecalc(pop_t pop, case_obj_t objs[], long objs_size);
-static double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size);
+static void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objssze);
+static void forcecalc(pop_t pop, case_obj_t objs[], long objssze);
+static double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objssze);
 static void init(pop_t pop, long type);
 static void initonce();
 static void meet(pop_t pop, coord_t *a, coord_t *b);
@@ -32,7 +32,7 @@ case_bit_t jung_classify(case_obj_t obj, long type)
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
 }
 
-void jung_learn(case_obj_t objs[], long objs_size, long type)
+void jung_learn(case_obj_t objs[], long objssze, long type)
 {
   long iter;
   coord_t a;
@@ -49,8 +49,8 @@ void jung_learn(case_obj_t objs[], long objs_size, long type)
     i.y = (random() % 3) - 1;
     b.x = tool_wrapidx(a.x + i.x, DIM);
     b.y = tool_wrapidx(a.y + i.y, DIM);
-    fita = getfit(pop, &a, objs, objs_size);
-    fitb = getfit(pop, &b, objs, objs_size);
+    fita = getfit(pop, &a, objs, objssze);
+    fitb = getfit(pop, &b, objs, objssze);
     if (fita > fitb) {
       meet(pop, &a, &b);
       move(pop, &a, &b);
@@ -59,7 +59,7 @@ void jung_learn(case_obj_t objs[], long objs_size, long type)
       move(pop, &b, &a);
     }
   }
-  forcecalc(pop, objs, objs_size);
+  forcecalc(pop, objs, objssze);
   ideal[type] = fittest;
 #if CASE_VERBOSE
   printf("type%ld ideal jng ", type);
@@ -68,16 +68,16 @@ void jung_learn(case_obj_t objs[], long objs_size, long type)
 #endif
 }
 
-void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
+void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objssze)
 {
   double fit;
   double tot = 0;
   long idx;
   case_obj_t obj;
   obj = pop[c->x][c->y];
-  for (idx = 0; idx < objs_size; idx++)
+  for (idx = 0; idx < objssze; idx++)
     tot += case_obj_comparet(obj, objs[idx]);
-  fit = tot / objs_size;
+  fit = tot / objssze;
   fits[c->x][c->y] = fit;
   if (fit > fitness) {
     fittest = obj;
@@ -85,19 +85,19 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
+void forcecalc(pop_t pop, case_obj_t objs[], long objssze)
 {
   coord_t c;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       if (fits[c.x][c.y] < 0)
-        calcfit(pop, &c, objs, objs_size);
+        calcfit(pop, &c, objs, objssze);
 }
 
-double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
+double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objssze)
 {
   if (fits[c->x][c->y] < 0)
-    calcfit(pop, c, objs, objs_size);
+    calcfit(pop, c, objs, objssze);
   return fits[c->x][c->y];
 }
 
