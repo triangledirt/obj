@@ -45,11 +45,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   jungclass = jung_classify(obj, type);
   sumclass = sum_classify(obj, type);
   tally = coreclass + foldclass + geneclass + jungclass + sumclass;
-  if (tally >= 3) {
-    class = 1;
-  } else {
-    class = 0;
-  }
+  class = (tally >= 3) ? 1 : 0;
 #if CASE_VERBOSE && SHOW_DETAILS
   printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type, coreclass, foldclass, geneclass, jungclass, sumclass);
 #endif

@@ -24,18 +24,16 @@ void sum_learn(case_obj_t objs[], long objs_size, long type)
 #if CASE_VERBOSE
   double tot = 0;
 #endif
-  for (bit = 1; bit < 32; bit++) {
+  for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
-  }
   for (idx = 0; idx < objs_size; idx++) {
     obj = objs[idx];
     class = case_obj_getclass(obj);
     if (class) {
       for (bit = 1; bit < 32; bit++) {
         val = case_obj_getattr(obj, bit);
-        if (val) {
+        if (val)
           onecounts[bit]++;
-        }
       }
     }
   }
@@ -47,9 +45,8 @@ void sum_learn(case_obj_t objs[], long objs_size, long type)
     }
   }
 #if CASE_VERBOSE
-  for (idx = 0; idx < objs_size; idx++) {
+  for (idx = 0; idx < objs_size; idx++)
     tot += case_obj_comparet(ideal[type], objs[idx]);
-  }
   fitness = tot / objs_size;
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);

@@ -165,15 +165,13 @@ double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 void init(pop_t pop, long type)
 {
   struct coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++) {
-    for (c.y = 0; c.y < DIM; c.y++) {
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++) {
         pop[c.x][c.y][c.z] = ideal[type];
         case_obj_mutate(&pop[c.x][c.y][c.z]);
         fits[c.x][c.y][c.z] = -1;
       }
-    }
-  }
   case_obj_randomize(&fittest);
   fitness = 0.0;
 }

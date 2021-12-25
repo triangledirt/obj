@@ -75,9 +75,8 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
   long idx;
   case_obj_t obj;
   obj = pop[c->x][c->y];
-  for (idx = 0; idx < objs_size; idx++) {
+  for (idx = 0; idx < objs_size; idx++)
     tot += case_obj_comparet(obj, objs[idx]);
-  }
   fit = tot / objs_size;
   fits[c->x][c->y] = fit;
   if (fit > fitness) {
@@ -89,33 +88,28 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
 {
   coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++) {
-    for (c.y = 0; c.y < DIM; c.y++) {
-      if (fits[c.x][c.y] < 0) {
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
+      if (fits[c.x][c.y] < 0)
         calcfit(pop, &c, objs, objs_size);
-      }
-    }
-  }
 }
 
 double getfit(pop_t pop, coord_t *c, case_obj_t objs[], long objs_size)
 {
-  if (fits[c->x][c->y] < 0) {
+  if (fits[c->x][c->y] < 0)
     calcfit(pop, c, objs, objs_size);
-  }
   return fits[c->x][c->y];
 }
 
 void init(pop_t pop, long type)
 {
   coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++) {
+  for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++) {
       pop[c.x][c.y] = ideal[type];
       case_obj_mutate(&pop[c.x][c.y]);
       fits[c.x][c.y] = -1;
     }
-  }
   case_obj_randomize(&fittest);
   fitness = 0.0;
 }
@@ -124,9 +118,8 @@ void initonce()
 {
   long idx;
   if (!once) {
-    for (idx = 0; idx < 32; idx++) {
+    for (idx = 0; idx < 32; idx++)
       case_obj_randomize(&ideal[idx]);
-    }
     once = 1;
   }
 }

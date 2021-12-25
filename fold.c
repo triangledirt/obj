@@ -67,9 +67,8 @@ void calcfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)
   double tot = 0;
   case_obj_t calcobj;
   calcobj = pop[obj];
-  for (idx = 0; idx < objs_size; idx++) {
+  for (idx = 0; idx < objs_size; idx++)
     tot += case_obj_comparet(calcobj, objs[idx]);
-  }
   fit = tot / objs_size;
   fits[obj] = fit;
   if (fit > fitness) {
@@ -81,10 +80,9 @@ void calcfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)
 void forcecalc(pop_t pop, case_obj_t objs[], long objs_size)
 {
   long obj;
-  for (obj = 0; obj < objs_size; obj++) {
+  for (obj = 0; obj < objs_size; obj++)
     if (fits[obj] < 0)
       calcfit(pop, obj, objs, objs_size);
-  }
 }
 
 double getfit(pop_t pop, long obj, case_obj_t objs[], long objs_size)

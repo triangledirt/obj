@@ -22,19 +22,16 @@ static void testline(char *line, long type);
 void freefirst()
 {
   long idx;
-  for (idx = 0; idx < fields; idx++) {
-    if (firstline[idx]) {
+  for (idx = 0; idx < fields; idx++)
+    if (firstline[idx])
       free(firstline[idx]);
-    }
-  }
 }
 
 void initfirst()
 {
   long idx;
-  for (idx = 0; idx < fields; idx++) {
+  for (idx = 0; idx < fields; idx++)
     firstline[idx] = 0;
-  }
 }
 
 void savefirst(char line[BUFF])
@@ -80,19 +77,11 @@ void testline(char *line, long type)
 #endif
   case_obj_clear(&obj);
   tok = strtok(line, ",");
-  if (0 == strcmp(tok, firstline[idx])) {
-    val = 1;
-  } else {
-    val = 0;
-  }
+  val = (0 == strcmp(tok, firstline[idx])) ? 1 : 0;
   case_obj_setclass(&obj, val);
   while ((tok = strtok(NULL, ",\n"))) {
     idx++;
-    if (0 == strcmp(tok, firstline[idx])) {
-      val = 1;
-    } else {
-      val = 0;
-    }
+    val = (0 == strcmp(tok, firstline[idx])) ? 1 : 0;
     case_obj_setattr(&obj, idx, val);
   }
   case_observe(obj, type);
