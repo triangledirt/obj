@@ -76,8 +76,9 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t objs[], long objssz)
   case_obj_t obj;
   obj = pop[c->x][c->y];
   for (idx = 0; idx < objssz; idx++)
-    tot += case_obj_comparet(obj, objs[idx]);
-  fit = tot / objssz;
+    if (toss_coin())
+      tot += case_obj_comparet(obj, objs[idx]);
+  fit = tot / (objssz / 2);
   fits[c->x][c->y] = fit;
   if (fit > fitness) {
     fittest = obj;

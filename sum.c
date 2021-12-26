@@ -3,6 +3,7 @@
 #include "case.h"
 #include "obj.h"
 #include "sum.h"
+#include "toss.h"
 
 static double fitness = 0.0;
 static case_obj_t ideal[32];
@@ -27,6 +28,8 @@ void sum_learn(case_obj_t objs[], long objssz, long type)
   for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
   for (idx = 0; idx < objssz; idx++) {
+    if (toss_coin())
+      continue;
     obj = objs[idx];
     class = case_obj_getclass(obj);
     if (class)
@@ -45,7 +48,7 @@ void sum_learn(case_obj_t objs[], long objssz, long type)
 #if CASE_VERBOSE
   for (idx = 0; idx < objssz; idx++)
     tot += case_obj_comparet(ideal[type], objs[idx]);
-  fitness = tot / objssz;
+  fitness = tot / (objssz / 2);
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness);
