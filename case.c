@@ -15,7 +15,7 @@
 #define OBJECT_CACHE 64
 #define SHOW_DETAILS 1
 
-static case_obj_t objs[32][OBJECT_CACHE];
+static case_obj_t objects[32][OBJECT_CACHE];
 static case_bit_t once = 0;
 static case_obj_t types;
 
@@ -128,7 +128,7 @@ void case_observe(case_obj_t obj, long type)
   initonce();
   uptypes(type);
   idx = random() % OBJECT_CACHE;
-  objs[type][idx] = obj;
+  objects[type][idx] = obj;
   if (toss_die(OBJECT_CACHE / 16))
     learn();
 }
@@ -227,7 +227,7 @@ long count(long type, case_obj_t typ)
   case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[type][idx];
+    obj = objects[type][idx];
     count += case_obj_hastype(obj, typ);
   }
   return count;
@@ -239,7 +239,7 @@ long countboth(long type, case_obj_t typ1, case_obj_t typ2)
   case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[type][idx];
+    obj = objects[type][idx];
     count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
   }
   return count;
@@ -251,7 +251,7 @@ long counteither(long type, case_obj_t typ1, case_obj_t typ2)
   case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[type][idx];
+    obj = objects[type][idx];
     count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
   }
   return count;
@@ -263,7 +263,7 @@ long countsub(long type, case_obj_t typ1, case_obj_t typ2)
   case_obj_t obj;
   long idx;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[type][idx];
+    obj = objects[type][idx];
     count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
   }
   return count;
@@ -277,7 +277,7 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   case_bit_t has1;
   case_bit_t has2;
   for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = objs[type][idx];
+    obj = objects[type][idx];
     has1 = case_obj_hastype(obj, typ1);
     has2 = case_obj_hastype(obj, typ2);
     if (has1 ^ has2)
@@ -294,7 +294,7 @@ void initonce()
   if (!once) {
     for (type = 0; type < 32; type++)
       for (idx = 0; idx < OBJECT_CACHE; idx++)
-        case_obj_randomize(&objs[type][idx]);
+        case_obj_randomize(&objects[type][idx]);
     once = 1;
   }
 }
@@ -312,27 +312,27 @@ void learn()
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
       gettimeofday(&tv1, NULL);
-      core_learn(objs[type], OBJECT_CACHE, type);
+      core_learn(objects[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      fold_learn(objs[type], OBJECT_CACHE, type);
+      fold_learn(objects[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      gene_learn(objs[type], OBJECT_CACHE, type);
+      gene_learn(objects[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      jung_learn(objs[type], OBJECT_CACHE, type);
+      jung_learn(objects[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      sum_learn(objs[type], OBJECT_CACHE, type);
+      sum_learn(objects[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && SHOW_DETAILS
