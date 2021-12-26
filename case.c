@@ -26,7 +26,7 @@ static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static void learn();
-static void notetype(long seentype);
+static void notetype(long type);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
@@ -341,7 +341,7 @@ void learn()
     }
 }
 
-void notetype(long seentype)
+void notetype(long type)
 {
-  case_obj_setattr(&types, seentype, 1);
+  case_obj_setattr(&types, type, 1);
 }
