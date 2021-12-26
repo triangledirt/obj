@@ -26,7 +26,7 @@ static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static void learn();
-static void uptypes(long seentype);
+static void notetype(long seentype);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
@@ -38,7 +38,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t jungclass;
   case_bit_t sumclass;
   initonce();
-  uptypes(type);
+  notetype(type);
   coreclass = core_classify(obj, type);
   foldclass = fold_classify(obj, type);
   geneclass = gene_classify(obj, type);
@@ -126,7 +126,7 @@ void case_observe(case_obj_t obj, long type)
 {
   long idx;
   initonce();
-  uptypes(type);
+  notetype(type);
   idx = random() % OBJECT_CACHE;
   objects[type][idx] = obj;
   if (toss_die(OBJECT_CACHE / 16))
@@ -341,7 +341,7 @@ void learn()
     }
 }
 
-void uptypes(long seentype)
+void notetype(long seentype)
 {
   case_obj_setattr(&types, seentype, 1);
 }
