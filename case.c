@@ -292,10 +292,9 @@ void initonce()
   long type;
   case_obj_clear(&types);
   if (!once) {
-    for (type = 0; type < 32; type++) {
+    for (type = 0; type < 32; type++)
       for (idx = 0; idx < OBJECT_CACHE; idx++)
         case_obj_randomize(&objs[type][idx]);
-    }
     once = 1;
   }
 }
@@ -310,28 +309,28 @@ void learn()
   long long genetime;
   long long jungtime;
   long long sumtime;
-  for (type = 0; type < 32; type++) {
+  for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
       gettimeofday(&tv1, NULL);
       core_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
-
+      ;
       gettimeofday(&tv1, NULL);
       fold_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
-
+      ;
       gettimeofday(&tv1, NULL);
       gene_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
-
+      ;
       gettimeofday(&tv1, NULL);
       jung_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
-
+      ;
       gettimeofday(&tv1, NULL);
       sum_learn(objs[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
@@ -340,7 +339,6 @@ void learn()
       printf("type%ld times     core=%lld fold=%lld gene=%lld jung=%lld sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
 #endif
     }
-  }
 }
 
 void uptypes(long seentype)
