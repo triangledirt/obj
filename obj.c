@@ -85,14 +85,12 @@ case_bit_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 {
   case_bit_t has = 1;
   long idx;
-  for (idx = 0; idx < 32; idx++) {
-    if (case_obj_getattr(type, idx)) {
+  for (idx = 0; idx < 32; idx++)
+    if (case_obj_getattr(type, idx))
       if (!case_obj_getattr(obj, idx)) {
         has = 0;
         break;
       }
-    }
-  }
   return has;
 }
 
