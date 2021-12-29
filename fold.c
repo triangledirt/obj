@@ -12,8 +12,8 @@
 
 typedef case_obj_t pop_t[POP];
 
-static double fitness = 0.0;
-static case_obj_t fittest;
+static double fitness = 0.0; ;; per type??
+static case_obj_t fittest; ;; per type??
 static double fits[POP];
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
