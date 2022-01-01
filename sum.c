@@ -5,12 +5,25 @@
 #include "sum.h"
 #include "toss.h"
 
-static double fitness = 0.0;
+static double fitness[32];
 static case_obj_t ideal[32];
+static case_bit_t once = 0;
+
+static void initonce();
+
+void initonce()
+{
+  long type;
+  if (!once) {
+    for (type = 0; type < 32; type++)
+      fitness[type] = 0.0;
+    once = 1;
+  }
+}
 
 case_bit_t sum_classify(case_obj_t obj, long type)
 {
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
 void sum_learn(case_obj_t obj[], long objsz, long type)
@@ -25,6 +38,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
 #if CASE_VERBOSE
   double tot = 0;
 #endif
+  initonce();
   for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
   for (idx = 0; idx < objsz; idx++) {
@@ -48,9 +62,9 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
 #if CASE_VERBOSE
   for (idx = 0; idx < objsz; idx++)
     tot += case_obj_comparet(ideal[type], obj[idx]);
-  fitness = tot / (objsz / 2);
+  fitness[type] = tot / (objsz / 2);
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);
-  printf(" %0.3f%%\n", fitness);
+  printf(" %0.3f%%\n", fitness[type]);
 #endif
 }

@@ -12,21 +12,21 @@
 
 typedef case_obj_t pop_t[POP];
 
-static double fitness = 0.0; ;; per type??
-static case_obj_t fittest; ;; per type??
-static double fits[POP];
+static double fitness[32];
+static case_obj_t fittest[32];
+static double fits[32][POP];
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz);
-static void forcecalc(pop_t pop, case_obj_t obj[], long objsz);
-static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz);
+static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
+static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
 static void init(case_obj_t pop[], long type);
 static void initonce();
 
 case_bit_t fold_classify(case_obj_t obj, long type)
 {
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
 void fold_learn(case_obj_t obj[], long objsz, long type)
@@ -49,18 +49,18 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
     dir = toss_coin() ? 1 : -1;
     for (idx = start; labs(start - idx) <= len; idx += dir)
       case_obj_setattr(&pop[o], tool_wrapidx(idx, 32), val);
-    fits[o] = -1;
+    fits[type][o] = -1;
   }
-  forcecalc(pop, obj, objsz);
-  ideal[type] = fittest;
+  forcecalc(pop, obj, objsz, type);
+  ideal[type] = fittest[type];
 #if CASE_VERBOSE
   printf("type%ld ideal fld ", type);
   case_obj_print(ideal[type]);
-  printf(" %0.3f%%\n", fitness);
+  printf(" %0.3f%%\n", fitness[type]);
 #endif
 }
 
-void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz)
+void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 {
   long idx;
   double fit;
@@ -71,26 +71,26 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz)
     if (toss_coin())
       tot += case_obj_comparet(calcobj, obj[idx]);
   fit = tot / (objsz / 2);
-  fits[o] = fit;
-  if (fit > fitness) {
-    fittest = calcobj;
-    fitness = fit;
+  fits[type][o] = fit;
+  if (fit > fitness[type]) {
+    fittest[type] = calcobj;
+    fitness[type] = fit;
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t obj[], long objsz)
+void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
 {
   long o;
   for (o = 0; o < objsz; o++)
     if (fits[o] < 0)
-      calcfit(pop, o, obj, objsz);
+      calcfit(pop, o, obj, objsz, type);
 }
 
-double getfit(pop_t pop, long o, case_obj_t obj[], long objsz)
+double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 {
   if (fits[o] < 0)
-    calcfit(pop, o, obj, objsz);
-  return fits[o];
+    calcfit(pop, o, obj, objsz, type);
+  return fits[type][o];
 }
 
 void init(case_obj_t pop[], long type)
@@ -101,10 +101,11 @@ void init(case_obj_t pop[], long type)
     obj = ideal[type];
     case_obj_mutate(&obj);
     pop[idx] = obj;
-    fits[idx] = -1;
+    fits[type][idx] = -1;
   }
-  case_obj_randomize(&fittest);
-  fitness = 0.0;
+  case_obj_randomize(&fittest[type]);
+  for (idx = 0; idx < 32; idx++)
+    fitness[type] = 0.0;
 }
 
 void initonce()

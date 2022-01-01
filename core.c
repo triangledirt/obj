@@ -14,25 +14,25 @@
 
 typedef case_obj_t pop_t[DIM][DIM][DIM];
 
-static double fitness = 0.0;
-static double fits[DIM][DIM][DIM];
-static case_obj_t fittest;
+static double fitness[32];
+static double fits[32][DIM][DIM][DIM];
+static case_obj_t fittest[32];
 static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
-static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz);
-static void forcecalc(pop_t pop, case_obj_t obj[], long objsz);
-static void dance(pop_t pop_t, coord_t *dest, coord_t *src1, coord_t *src2);
-static void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz);
-static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz);
-static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz);
+static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
+static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+static void dance(pop_t pop_t, coord_t *dest, coord_t *src1, coord_t *src2, long type);
+static void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type);
+static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type);
+static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 static void init(pop_t pop, long type);
 static void initonce();
 static void randcoord(coord_t *c);
 
 case_bit_t core_classify(case_obj_t obj, long type)
 {
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness);
+  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
 void core_learn(case_obj_t obj[], long objsz, long type)
@@ -46,24 +46,24 @@ void core_learn(case_obj_t obj[], long objsz, long type)
   init(pop, type);
   for (act = 0; act < ACTS; act++) {
     randcoord(&actor);
-    findbest(pop, &actor, &best, obj, objsz);
-    findworst(pop, &actor, &worst, obj, objsz);
+    findbest(pop, &actor, &best, obj, objsz, type);
+    findworst(pop, &actor, &worst, obj, objsz, type);
     if (toss_die(ANARCHY)) {
-      dance(pop, &actor, &best, &worst);
+      dance(pop, &actor, &best, &worst, type);
     } else {
-      dance(pop, &worst, &actor, &best);
+      dance(pop, &worst, &actor, &best, type);
     }
   }
-  forcecalc(pop, obj, objsz);
-  ideal[type] = fittest;
+  forcecalc(pop, obj, objsz, type);
+  ideal[type] = fittest[type];
 #if CASE_VERBOSE
   printf("type%ld ideal cor ", type);
   case_obj_print(ideal[type]);
-  printf(" %0.3f%%\n", fitness);
+  printf(" %0.3f%%\n", fitness[type]);
 #endif
 }
 
-void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz)
+void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
   double fit;
   double tot = 0;
@@ -74,24 +74,24 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz)
     if (toss_coin())
       tot += case_obj_comparet(o, obj[idx]);
   fit = tot / (objsz / 2);
-  fits[c->x][c->y][c->z] = fit;
-  if (fit > fitness) {
-    fittest = o;
-    fitness = fit;
+  fits[type][c->x][c->y][c->z] = fit;
+  if (fit > fitness[type]) {
+    fittest[type] = o;
+    fitness[type] = fit;
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t obj[], long objsz)
+void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
 {
   coord_t c;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++)
         if (fits[c.x][c.y][c.z] < 0)
-          calcfit(pop, &c, obj, objsz);
+          calcfit(pop, &c, obj, objsz, type);
 }
 
-void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2)
+void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
 {
   case_obj_t parent1 = pop[src1->x][src1->y][src1->z];
   case_obj_t parent2 = pop[src2->x][src2->y][src2->z];
@@ -106,10 +106,10 @@ void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2)
     }
     case_obj_mutate(child);
   }
-  fits[dest->x][dest->y][dest->z] = -1;
+  fits[type][dest->x][dest->y][dest->z] = -1;
 }
 
-void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz)
+void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type)
 {
   coord_t t;
   coord_t c;
@@ -123,7 +123,7 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
         c.z = tool_wrapidx(actor->z + t.z, DIM);
         if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z))
           continue;
-        f = getfit(pop, &c, obj, objsz);
+        f = getfit(pop, &c, obj, objsz, type);
         if (f > fit) {
           fit = f;
           *best = c;
@@ -133,7 +133,7 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
   }
 }
 
-void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz)
+void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type)
 {
   coord_t t;
   coord_t c;
@@ -145,7 +145,7 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
         c.x = tool_wrapidx(actor->x + t.x, DIM);
         c.y = tool_wrapidx(actor->y + t.y, DIM);
         c.z = tool_wrapidx(actor->z + t.z, DIM);
-        f = getfit(pop, &c, obj, objsz);
+        f = getfit(pop, &c, obj, objsz, type);
         if (f < fit) {
           fit = f;
           *worst = c;
@@ -153,33 +153,36 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
       }
 }
 
-double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz)
+double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
   if (fits[c->x][c->y][c->z] < 0)
-    calcfit(pop, c, obj, objsz);
-  return fits[c->x][c->y][c->z];
+    calcfit(pop, c, obj, objsz, type);
+  return fits[type][c->x][c->y][c->z];
 }
 
 void init(pop_t pop, long type)
 {
   struct coord_t c;
+  long idx;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++) {
         pop[c.x][c.y][c.z] = ideal[type];
         case_obj_mutate(&pop[c.x][c.y][c.z]);
-        fits[c.x][c.y][c.z] = -1;
+        fits[type][c.x][c.y][c.z] = -1;
       }
-  case_obj_randomize(&fittest);
-  fitness = 0.0;
+  case_obj_randomize(&fittest[type]);
+  for (idx = 0; idx < 32; idx++)
+    fitness[idx] = 0.0;
 }
 
 void initonce()
 {
   long idx;
   if (!once) {
-    for (idx = 0; idx < 32; idx++)
+    for (idx = 0; idx < 32; idx++) {
       case_obj_randomize(&ideal[idx]);
+    }
     once = 1;
   }
 }
