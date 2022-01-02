@@ -73,12 +73,12 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
   double fit;
   double tot = 0;
-  long idx;
+  long i;
   case_obj_t o;
   o = pop[c->x][c->y][c->z];
-  for (idx = 0; idx < objsz; idx++)
+  for (i = 0; i < objsz; i++)
     if (toss_coin())
-      tot += case_obj_comparet(o, obj[idx]);
+      tot += case_obj_comparet(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y][c->z] = fit;
   if (fit > fitness[type]) {
@@ -99,9 +99,12 @@ void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
 
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
 {
-  case_obj_t parent1 = pop[src1->x][src1->y][src1->z];
-  case_obj_t parent2 = pop[src2->x][src2->y][src2->z];
-  case_obj_t *child = &pop[dest->x][dest->y][dest->z];
+  case_obj_t parent1;
+  case_obj_t parent2;
+  case_obj_t *child;
+  parent1 = pop[src1->x][src1->y][src1->z];
+  parent2 = pop[src2->x][src2->y][src2->z];
+  child = &pop[dest->x][dest->y][dest->z];
   long bit;
   long crossover = random() % 32;
   for (bit = 0; bit < 32; bit++) {
@@ -167,7 +170,7 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 void init(pop_t pop, long type)
 {
   struct coord_t c;
-  long idx;
+  long i;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++) {
@@ -176,16 +179,16 @@ void init(pop_t pop, long type)
         fits[type][c.x][c.y][c.z] = -1;
       }
   case_obj_randomize(&fittest[type]);
-  for (idx = 0; idx < 32; idx++)
-    fitness[idx] = 0.0;
+  for (i = 0; i < 32; i++)
+    fitness[i] = 0.0;
 }
 
 void initonce()
 {
-  long idx;
+  long i;
   if (!once) {
-    for (idx = 0; idx < 32; idx++)
-      case_obj_randomize(&ideal[idx]);
+    for (i = 0; i < 32; i++)
+      case_obj_randomize(&ideal[i]);
     once = 1;
   }
 }
