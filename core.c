@@ -136,6 +136,7 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
         if (f > fit) {
           fit = f;
           *best = c;
+          printf("found best\n");
         }
       }
 }
@@ -156,6 +157,7 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
         if (f < fit) {
           fit = f;
           *worst = c;
+          printf("found worst\n");
         }
       }
 }
