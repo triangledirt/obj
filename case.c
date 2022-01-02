@@ -5,6 +5,7 @@
 #include "bit.h"
 #include "case.h"
 #include "core.h"
+#include "filt.h"
 #include "fold.h"
 #include "gene.h"
 #include "jung.h"
@@ -33,6 +34,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t class;
   long tally;
   case_bit_t coreclass;
+  case_bit_t filtclass;
   case_bit_t foldclass;
   case_bit_t geneclass;
   case_bit_t jungclass;
@@ -40,14 +42,15 @@ case_bit_t case_classify(case_obj_t obj, long type)
   initonce();
   notetype(type);
   coreclass = core_classify(obj, type);
+  filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
   geneclass = gene_classify(obj, type);
   jungclass = jung_classify(obj, type);
   sumclass = sum_classify(obj, type);
-  tally = coreclass + foldclass + geneclass + jungclass + sumclass;
+  tally = coreclass + filtclass + foldclass + geneclass + jungclass + sumclass;
   class = (tally >= 3) ? 1 : 0;
 #if CASE_VERBOSE && SHOW_DETAILS
-  printf("type%ld class     core=%d fold=%d gene=%d jung=%d sum=%d\n", type, coreclass, foldclass, geneclass, jungclass, sumclass);
+  printf("type%ld class     core=%d filt=%d fold=%d gene=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jungclass, sumclass);
 #endif
   return class;
 }
@@ -305,6 +308,7 @@ void learn()
   struct timeval tv1;
   struct timeval tv2;
   long long coretime;
+  long long filttime;
   long long foldtime;
   long long genetime;
   long long jungtime;
@@ -315,6 +319,11 @@ void learn()
       core_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
+      ;
+      gettimeofday(&tv1, NULL);
+      filt_learn(object[type], OBJECT_CACHE, type);
+      gettimeofday(&tv2, NULL);
+      filttime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
       fold_learn(object[type], OBJECT_CACHE, type);
@@ -336,7 +345,7 @@ void learn()
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && SHOW_DETAILS
-      printf("type%ld times     core=%lld fold=%lld gene=%lld jung=%lld sum=%lld\n", type, coretime, foldtime, genetime, jungtime, sumtime);
+      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jungtime, sumtime);
 #endif
     }
 }

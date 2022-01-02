@@ -55,7 +55,7 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
       restore(type);
   }
 #if CASE_VERBOSE
-  printf(" %0.3f%%\n", fitness[type]);
+  printf("            flt                                  %0.3f%%\n", fitness[type]);
 #endif
 }
 
@@ -102,5 +102,5 @@ double score(case_obj_t obj, long type)
     if (case_obj_getattr(zero[type], bit) && !case_obj_getattr(obj, bit))
       zeromatch++;
   }
-  return (onematch + zeromatch) / (onetot + zerotot);
+  return (onematch + zeromatch) / 1 + (onetot + zerotot);
 }
