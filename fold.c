@@ -3,8 +3,8 @@
 #include "bit.h"
 #include "case.h"
 #include "fold.h"
+#include "index.h"
 #include "obj.h"
-#include "tool.h"
 #include "toss.h"
 
 #define POP 32
@@ -19,8 +19,11 @@ static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
+
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+
 static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
+
 static void init(case_obj_t pop[], long type);
 static void initonce();
 
@@ -48,7 +51,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
     len = random() % 3;
     dir = toss_coin() ? 1 : -1;
     for (idx = start; labs(start - idx) <= len; idx += dir)
-      case_obj_setattr(&pop[o], tool_wrapidx(idx, 32), val);
+      case_obj_setattr(&pop[o], index_wrap(idx, 32), val);
     fits[type][o] = -1;
   }
   forcecalc(pop, obj, objsz, type);

@@ -97,6 +97,6 @@ void testline(char *line, long type)
 
 int main(int argc, char **argv)
 {
-  if (0) { testfile("data/diabetes.data", DIABETES); }
-  if (1) { testfile("data/mushroom.data", MUSHROOM); }
+  if (0) testfile("data/diabetes.data", DIABETES);
+  if (1) testfile("data/mushroom.data", MUSHROOM);
 }

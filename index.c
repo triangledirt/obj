@@ -1,6 +1,6 @@
-#include "tool.h"
+#include "index.h"
 
-unsigned long tool_wrapidx(long idx, unsigned long range)
+unsigned long index_wrap(long idx, unsigned long range)
 {
   unsigned long wrap;
   if (idx >= (long) range) {

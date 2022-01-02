@@ -5,6 +5,6 @@
 
 typedef char case_bit_t;
 
-#define case_bit_random() (random() % 2)
+void case_bit_randomize(case_bit_t *bit);
 
 #endif

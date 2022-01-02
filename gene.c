@@ -18,9 +18,13 @@ static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
+
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+
 static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
+
 static case_obj_t getparent(pop_t pop, case_obj_t obj[], long objsz, long type);
+
 static void init(case_obj_t pop[], long type);
 static void initonce();
 

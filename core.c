@@ -4,8 +4,8 @@
 #include "case.h"
 #include "coord.h"
 #include "core.h"
+#include "index.h"
 #include "obj.h"
-#include "tool.h"
 #include "toss.h"
 
 #define ACTS 32
@@ -21,11 +21,17 @@ static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
+
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+
 static void dance(pop_t pop_t, coord_t *dest, coord_t *src1, coord_t *src2, long type);
+
 static void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type);
+
 static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type);
+
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
+
 static void init(pop_t pop, long type);
 static void initonce();
 static void randcoord(coord_t *c);
@@ -115,12 +121,12 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
   coord_t c;
   double fit = 0.0;
   double f;
-  for (t.x = -1; t.x < 2; t.x++) {
-    for (t.y = -1; t.y < 2; t.y++) {
+  for (t.x = -1; t.x < 2; t.x++)
+    for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = tool_wrapidx(actor->x + t.x, DIM);
-        c.y = tool_wrapidx(actor->y + t.y, DIM);
-        c.z = tool_wrapidx(actor->z + t.z, DIM);
+        c.x = index_wrap(actor->x + t.x, DIM);
+        c.y = index_wrap(actor->y + t.y, DIM);
+        c.z = index_wrap(actor->z + t.z, DIM);
         if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z))
           continue;
         f = getfit(pop, &c, obj, objsz, type);
@@ -129,8 +135,6 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
           *best = c;
         }
       }
-    }
-  }
 }
 
 void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type)
@@ -142,9 +146,9 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
   for (t.x = -1; t.x < 2; t.x++)
     for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = tool_wrapidx(actor->x + t.x, DIM);
-        c.y = tool_wrapidx(actor->y + t.y, DIM);
-        c.z = tool_wrapidx(actor->z + t.z, DIM);
+        c.x = index_wrap(actor->x + t.x, DIM);
+        c.y = index_wrap(actor->y + t.y, DIM);
+        c.z = index_wrap(actor->z + t.z, DIM);
         f = getfit(pop, &c, obj, objsz, type);
         if (f < fit) {
           fit = f;
@@ -180,9 +184,8 @@ void initonce()
 {
   long idx;
   if (!once) {
-    for (idx = 0; idx < 32; idx++) {
+    for (idx = 0; idx < 32; idx++)
       case_obj_randomize(&ideal[idx]);
-    }
     once = 1;
   }
 }

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bit.h"
+#include "index.h"
 #include "obj.h"
-#include "tool.h"
 
 void case_obj_clear(case_obj_t *obj)
 {
@@ -97,7 +97,8 @@ case_bit_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 void case_obj_mutate(case_obj_t *obj)
 {
   long idx = random() % 32;
-  case_bit_t val = case_bit_random();
+  case_bit_t val;
+  case_bit_randomize(&val);
   case_obj_setattr(obj, idx, val);
 }
 
@@ -121,7 +122,7 @@ void case_obj_rotate(case_obj_t *obj, long inc)
   case_bit_t bit;
   for (idx = 0; idx < 32; idx++) {
     bit = case_obj_getattr(*obj, idx);
-    newidx = tool_wrapidx(idx + inc, 32);
+    newidx = index_wrap(idx + inc, 32);
     case_obj_setattr(&obj2, newidx, bit);
   }
   *obj = obj2;

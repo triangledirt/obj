@@ -2,9 +2,9 @@
 #include "bit.h"
 #include "case.h"
 #include "coord.h"
+#include "index.h"
 #include "jung.h"
 #include "obj.h"
-#include "tool.h"
 #include "toss.h"
 
 #define DIM 8
@@ -19,8 +19,11 @@ static case_obj_t ideal[32];
 static case_bit_t once = 0;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
+
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
+
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
+
 static void init(pop_t pop, long type);
 static void initonce();
 static void meet(pop_t pop, coord_t *a, coord_t *b);
@@ -47,8 +50,8 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
     randcoord(&a);
     i.x = (random() % 3) - 1;
     i.y = (random() % 3) - 1;
-    b.x = tool_wrapidx(a.x + i.x, DIM);
-    b.y = tool_wrapidx(a.y + i.y, DIM);
+    b.x = index_wrap(a.x + i.x, DIM);
+    b.y = index_wrap(a.y + i.y, DIM);
     fita = getfit(pop, &a, obj, objsz, type);
     fitb = getfit(pop, &b, obj, objsz, type);
     if (fita > fitb) {
