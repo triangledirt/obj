@@ -17,6 +17,7 @@ static case_obj_t zerosv[32];
 
 static void calcfit(case_obj_t obj[], long objsz, long type);
 static void initonce();
+static void mutate(case_obj_t *obj1, case_obj_t *obj2);
 static void restore(long type);
 static void save(long type);
 static double score(case_obj_t obj, long type);
@@ -49,8 +50,7 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
   for (act = 0; act < ACTS; act++) {
     calcfit(obj, objsz, type);
     save(type);
-    case_obj_mutate(&one[type]);
-    case_obj_mutate(&zero[type]);
+    mutate(&one[type], &zero[type]);
     calcfit(obj, objsz, type);
     if (fitnesssv[type] > fitness[type])
       restore(type);
@@ -73,6 +73,27 @@ void initonce()
       case_obj_clear(&zero[type]);
     }
     once = 1;
+  }
+}
+
+void mutate(case_obj_t *obj1, case_obj_t *obj2)
+{
+  case_obj_t *o1;
+  case_obj_t *o2;
+  long bit;
+  case_bit_t val;
+  bit = random() % 32;
+  case_bit_randomize(&val);
+  if (toss_coin()) {
+    o1 = obj1;
+    o2 = obj2;
+  } else {
+    o1 = obj2;
+    o2 = obj1;
+  }
+  case_obj_setattr(o1, bit, val);
+  if (val) {
+    case_obj_setattr(o2, bit, 0);
   }
 }
 
