@@ -23,14 +23,15 @@ static double score(case_obj_t obj, long type);
 
 void calcfit(case_obj_t obj[], long objsz, long type)
 {
-  long idx;
+  long i;
   case_obj_t o;
   double s = 0.0;
-  for (idx = 0; idx < objsz; idx++) {
-    o = obj[idx];
-    s += score(o, type);
-  }
-  fitness[type] = s / objsz;
+  for (i = 0; i < objsz; i++)
+    if (toss_coin()) {
+      o = obj[i];
+      s += score(o, type);
+    }
+  fitness[type] = s / (1 + (objsz / 2));
 }
 
 case_bit_t filt_classify(case_obj_t obj, long type)
@@ -68,8 +69,8 @@ void initonce()
   long type;
   if (!once) {
     for (type = 0; type < 32; type++) {
-      case_obj_randomize(&one[type]);
-      case_obj_randomize(&zero[type]);
+      case_obj_clear(&one[type]);
+      case_obj_clear(&zero[type]);
     }
     once = 1;
   }
@@ -96,15 +97,19 @@ double score(case_obj_t obj, long type)
   long zerotot = 0;
   long onematch = 0;
   long zeromatch = 0;
+  case_bit_t onebit;
+  case_bit_t zerobit;
+  case_bit_t objbit;
   for (bit = 1; bit < 32; bit++) {
-    onetot += case_obj_getattr(one[type], bit);
-    zerotot += case_obj_getattr(zero[type], bit);
-  }
-  for (bit = 1; bit < 32; bit++) {
-    if (case_obj_getattr(one[type], bit) && case_obj_getattr(obj, bit))
+    onebit = case_obj_getattr(one[type], bit);
+    zerobit = case_obj_getattr(zero[type], bit);
+    onetot += onebit;
+    zerotot += zerobit;
+    objbit = case_obj_getattr(obj, bit);
+    if (onebit && objbit)
       onematch++;
-    if (case_obj_getattr(zero[type], bit) && !case_obj_getattr(obj, bit))
+    if (zerobit && !objbit)
       zeromatch++;
   }
-  return (onematch + zeromatch) / 1 + (onetot + zerotot);
+  return (double) (onematch + zeromatch) / (1 + onetot + zerotot);
 }
