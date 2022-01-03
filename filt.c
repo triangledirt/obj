@@ -56,9 +56,9 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
       restore(type);
   }
 #if CASE_VERBOSE
-  printf("type%ld ideal lt1 ", type);
+  printf("type%ld filtr fl1 ", type);
   case_obj_print(one[type]);
-  printf(" %0.3f%%\n      ideal lt0 ", fitness[type]);
+  printf(" %0.3f%%\ntype%ld filtr fl0 ", fitness[type], type);
   case_obj_print(zero[type]);
   printf(" %0.3f%%\n", fitness[type]);
 #endif

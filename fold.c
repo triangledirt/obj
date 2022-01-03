@@ -73,7 +73,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   for (idx = 0; idx < objsz; idx++)
     if (toss_coin())
       tot += case_obj_comparet(calcobj, obj[idx]);
-  fit = tot / (objsz / 2);
+  fit = tot / (1 + (objsz / 2));
   fits[type][o] = fit;
   if (fit > fitness[type]) {
     fittest[type] = calcobj;
