@@ -61,7 +61,8 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
     }
 #if CASE_VERBOSE
   for (idx = 0; idx < objsz; idx++)
-    tot += case_obj_comparet(ideal[type], obj[idx]);
+    if (toss_coin())
+      tot += case_obj_comparet(ideal[type], obj[idx]);
   fitness[type] = tot / (objsz / 2);
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);

@@ -65,15 +65,15 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
 
 void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 {
-  long idx;
+  long i;
   double fit;
   double tot = 0;
   case_obj_t calcobj;
   calcobj = pop[o];
-  for (idx = 0; idx < objsz; idx++)
+  for (i = 0; i < objsz; i++)
     if (toss_coin())
-      tot += case_obj_comparet(calcobj, obj[idx]);
-  fit = tot / (1 + (objsz / 2));
+      tot += case_obj_comparet(calcobj, obj[i]);
+  fit = tot / (objsz / 2);
   fits[type][o] = fit;
   if (fit > fitness[type]) {
     fittest[type] = calcobj;
