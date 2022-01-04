@@ -36,6 +36,24 @@ static void init(pop_t pop, long type);
 static void initonce();
 static void randcoord(coord_t *c);
 
+void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
+{
+  double fit;
+  double tot = 0;
+  long i;
+  case_obj_t o;
+  o = pop[c->x][c->y][c->z];
+  for (i = 0; i < objsz; i++)
+    if (toss_coin())
+      tot += case_obj_comparet(o, obj[i]);
+  fit = tot / (objsz / 2);
+  fits[type][c->x][c->y][c->z] = fit;
+  if (fit > fitness[type]) {
+    fittest[type] = o;
+    fitness[type] = fit;
+  }
+}
+
 case_bit_t core_classify(case_obj_t obj, long type)
 {
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
@@ -69,24 +87,6 @@ void core_learn(case_obj_t obj[], long objsz, long type)
 #endif
 }
 
-void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
-{
-  double fit;
-  double tot = 0;
-  long i;
-  case_obj_t o;
-  o = pop[c->x][c->y][c->z];
-  for (i = 0; i < objsz; i++)
-    if (toss_coin())
-      tot += case_obj_comparet(o, obj[i]);
-  fit = tot / (objsz / 2);
-  fits[type][c->x][c->y][c->z] = fit;
-  if (fit > fitness[type]) {
-    fittest[type] = o;
-    fitness[type] = fit;
-  }
-}
-
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
 {
   case_obj_t parent1;
@@ -106,16 +106,6 @@ void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
     case_obj_mutate(child);
   }
   fits[type][dest->x][dest->y][dest->z] = -1;
-}
-
-void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
-{
-  coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++)
-    for (c.y = 0; c.y < DIM; c.y++)
-      for (c.z = 0; c.z < DIM; c.z++)
-        if (fits[type][c.x][c.y][c.z] < 0)
-          calcfit(pop, &c, obj, objsz, type);
 }
 
 void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type)
@@ -158,6 +148,16 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
           *worst = c;
         }
       }
+}
+
+void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
+{
+  coord_t c;
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
+      for (c.z = 0; c.z < DIM; c.z++)
+        if (fits[type][c.x][c.y][c.z] < 0)
+          calcfit(pop, &c, obj, objsz, type);
 }
 
 double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)

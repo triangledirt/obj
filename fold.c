@@ -27,6 +27,24 @@ static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 static void init(case_obj_t pop[], long type);
 static void initonce();
 
+void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
+{
+  long i;
+  double fit;
+  double tot = 0;
+  case_obj_t calcobj;
+  calcobj = pop[o];
+  for (i = 0; i < objsz; i++)
+    if (toss_coin())
+      tot += case_obj_comparet(calcobj, obj[i]);
+  fit = tot / (objsz / 2);
+  fits[type][o] = fit;
+  if (fit > fitness[type]) {
+    fittest[type] = calcobj;
+    fitness[type] = fit;
+  }
+}
+
 case_bit_t fold_classify(case_obj_t obj, long type)
 {
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
@@ -61,24 +79,6 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness[type]);
 #endif
-}
-
-void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
-{
-  long i;
-  double fit;
-  double tot = 0;
-  case_obj_t calcobj;
-  calcobj = pop[o];
-  for (i = 0; i < objsz; i++)
-    if (toss_coin())
-      tot += case_obj_comparet(calcobj, obj[i]);
-  fit = tot / (objsz / 2);
-  fits[type][o] = fit;
-  if (fit > fitness[type]) {
-    fittest[type] = calcobj;
-    fitness[type] = fit;
-  }
 }
 
 void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)

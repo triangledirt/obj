@@ -46,6 +46,14 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   }
 }
 
+void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
+{
+  long o;
+  for (o = 0; o < objsz; o++)
+    if (fits[type][o] < 0)
+      calcfit(pop, o, obj, objsz, type);
+}
+
 case_bit_t gene_classify(case_obj_t obj, long type)
 {
   return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
@@ -88,14 +96,6 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness[type]);
 #endif
-}
-
-void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
-{
-  long o;
-  for (o = 0; o < objsz; o++)
-    if (fits[type][o] < 0)
-      calcfit(pop, o, obj, objsz, type);
 }
 
 double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)

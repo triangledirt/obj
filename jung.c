@@ -30,47 +30,6 @@ static void meet(pop_t pop, coord_t *a, coord_t *b);
 static void move(pop_t pop, coord_t *a, coord_t *b);
 static void randcoord(coord_t *c);
 
-case_bit_t jung_classify(case_obj_t obj, long type)
-{
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
-}
-
-void jung_learn(case_obj_t obj[], long objsz, long type)
-{
-  long iter;
-  coord_t a;
-  coord_t b;
-  coord_t i;
-  double fita;
-  double fitb;
-  pop_t pop;
-  initonce();
-  init(pop, type);
-  for (iter = 0; iter < ITER; iter++) {
-    randcoord(&a);
-    i.x = (random() % 3) - 1;
-    i.y = (random() % 3) - 1;
-    b.x = index_wrap(a.x + i.x, DIM);
-    b.y = index_wrap(a.y + i.y, DIM);
-    fita = getfit(pop, &a, obj, objsz, type);
-    fitb = getfit(pop, &b, obj, objsz, type);
-    if (fita > fitb) {
-      meet(pop, &a, &b);
-      move(pop, &a, &b);
-    } else {
-      meet(pop, &b, &a);
-      move(pop, &b, &a);
-    }
-  }
-  forcecalc(pop, obj, objsz, type);
-  ideal[type] = fittest[type];
-#if CASE_VERBOSE
-  printf("type%ld ideal jng ", type);
-  case_obj_print(ideal[type]);
-  printf(" %0.3f%%\n", fitness[type]);
-#endif
-}
-
 void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
   double fit;
@@ -126,6 +85,47 @@ void initonce()
       case_obj_randomize(&ideal[type]);
     once = 1;
   }
+}
+
+case_bit_t jung_classify(case_obj_t obj, long type)
+{
+  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
+}
+
+void jung_learn(case_obj_t obj[], long objsz, long type)
+{
+  long iter;
+  coord_t a;
+  coord_t b;
+  coord_t i;
+  double fita;
+  double fitb;
+  pop_t pop;
+  initonce();
+  init(pop, type);
+  for (iter = 0; iter < ITER; iter++) {
+    randcoord(&a);
+    i.x = (random() % 3) - 1;
+    i.y = (random() % 3) - 1;
+    b.x = index_wrap(a.x + i.x, DIM);
+    b.y = index_wrap(a.y + i.y, DIM);
+    fita = getfit(pop, &a, obj, objsz, type);
+    fitb = getfit(pop, &b, obj, objsz, type);
+    if (fita > fitb) {
+      meet(pop, &a, &b);
+      move(pop, &a, &b);
+    } else {
+      meet(pop, &b, &a);
+      move(pop, &b, &a);
+    }
+  }
+  forcecalc(pop, obj, objsz, type);
+  ideal[type] = fittest[type];
+#if CASE_VERBOSE
+  printf("type%ld ideal jng ", type);
+  case_obj_print(ideal[type]);
+  printf(" %0.3f%%\n", fitness[type]);
+#endif
 }
 
 void meet(pop_t pop, coord_t *a, coord_t *b)
