@@ -42,13 +42,12 @@ case_bit_t filt_classify(case_obj_t obj, long type)
 
 void filt_learn(case_obj_t obj[], long objsz, long type)
 {
-  long idx;
   long bit;
   case_obj_t o;
   long act;
   initonce();
   for (act = 0; act < ACTS; act++) {
-    calcfit(obj, objsz, type);
+    calcfit(obj, objsz, type); /* is this called 2x in a row */
     save(type);
     mutate(&one[type], &zero[type]);
     calcfit(obj, objsz, type);
@@ -56,9 +55,9 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
       restore(type);
   }
 #if CASE_VERBOSE
-  printf("type%ld filtr fl1 ", type);
+  printf("type%ld filtr ft1 ", type);
   case_obj_print(one[type]);
-  printf(" %0.3f%%\ntype%ld filtr fl0 ", fitness[type], type);
+  printf(" %0.3f%%\ntype%ld filtr ft0 ", fitness[type], type);
   case_obj_print(zero[type]);
   printf(" %0.3f%%\n", fitness[type]);
 #endif
@@ -92,9 +91,7 @@ void mutate(case_obj_t *obj1, case_obj_t *obj2)
     o2 = obj1;
   }
   case_obj_setattr(o1, bit, val);
-  if (val) {
-    case_obj_setattr(o2, bit, 0);
-  }
+  case_obj_setattr(o2, bit, 0);
 }
 
 void restore(long type)

@@ -30,14 +30,14 @@ static void initonce();
 
 void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 {
-  long idx;
+  long i;
   double fit;
   double tot = 0;
   case_obj_t calcobj;
   calcobj = pop[o];
-  for (idx = 0; idx < objsz; idx++)
+  for (i = 0; i < objsz; i++)
     if (toss_coin())
-      tot += case_obj_comparet(calcobj, obj[idx]);
+      tot += case_obj_comparet(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][o] = fit;
   if (fit > fitness[type]) {
@@ -60,7 +60,7 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
   case_obj_t child;
   long bit;
   long crossover;
-  long idx;
+  long i;
   case_bit_t val;
   initonce();
   init(pop, type);
@@ -77,9 +77,9 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
       case_obj_setattr(&child, bit, val);
     }
     case_obj_mutate(&child);
-    idx = random() % POP;
-    pop[idx] = child;
-    fits[type][idx] = -1;
+    i = random() % POP;
+    pop[i] = child;
+    fits[type][i] = -1;
   }
   forcecalc(pop, obj, objsz, type);
   ideal[type] = fittest[type];
@@ -110,40 +110,39 @@ case_obj_t getparent(case_obj_t pop[], case_obj_t obj[], long objsz, long type)
   long tries;
   double fit = 0;
   double newfit;
-  long idx = 0;
+  long i = 0;
   long newid;
   for (tries = 0; tries < 6; tries++) {
     newid = random() % POP;
     newfit = getfit(pop, newid, obj, objsz, type);
     if (newfit > fit) {
-      idx = newid;
+      i = newid;
       fit = newfit;
     }
   }
-  return pop[idx];
+  return pop[i];
 }
 
 void init(case_obj_t pop[], long type)
 {
-  long idx;
+  long i;
   case_obj_t obj;
-  for (idx = 0; idx < POP; idx++) {
+  for (i = 0; i < POP; i++) {
     obj = ideal[type];
     case_obj_mutate(&obj);
-    pop[idx] = obj;
-    fits[type][idx] = -1;
+    pop[i] = obj;
+    fits[type][i] = -1;
   }
-  for (idx = 0; idx < 32; idx++)
-    fitness[idx] = 0.0;
+  fitness[type] = 0.0;
   case_obj_randomize(&fittest[type]);
 }
 
 void initonce()
 {
-  long idx;
+  long i;
   if (!once) {
-    for (idx = 0; idx < 32; idx++)
-      case_obj_randomize(&ideal[idx]);
+    for (i = 0; i < 32; i++)
+      case_obj_randomize(&ideal[i]);
     once = 1;
   }
 }

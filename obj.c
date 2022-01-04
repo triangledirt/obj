@@ -84,10 +84,10 @@ long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 case_bit_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 {
   case_bit_t has = 1;
-  long idx;
-  for (idx = 0; idx < 32; idx++)
-    if (case_obj_getattr(type, idx))
-      if (!case_obj_getattr(obj, idx)) {
+  long i;
+  for (i = 0; i < 32; i++)
+    if (case_obj_getattr(type, i))
+      if (!case_obj_getattr(obj, i)) {
         has = 0;
         break;
       }
@@ -96,17 +96,17 @@ case_bit_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 
 void case_obj_mutate(case_obj_t *obj)
 {
-  long idx = random() % 32;
+  long i = random() % 32;
   case_bit_t val;
   case_bit_randomize(&val);
-  case_obj_setattr(obj, idx, val);
+  case_obj_setattr(obj, i, val);
 }
 
 void case_obj_print(case_obj_t obj)
 {
-  long idx;
-  for (idx = 0; idx < 32; idx++)
-    printf("%lu", case_obj_getattr(obj, idx));
+  long i;
+  for (i = 0; i < 32; i++)
+    printf("%lu", case_obj_getattr(obj, i));
 }
 
 void case_obj_randomize(case_obj_t *obj)
@@ -117,24 +117,24 @@ void case_obj_randomize(case_obj_t *obj)
 void case_obj_rotate(case_obj_t *obj, long inc)
 {
   case_obj_t obj2;
-  long idx;
-  long newidx;
+  long i;
+  long newi;
   case_bit_t bit;
-  for (idx = 0; idx < 32; idx++) {
-    bit = case_obj_getattr(*obj, idx);
-    newidx = index_wrap(idx + inc, 32);
-    case_obj_setattr(&obj2, newidx, bit);
+  for (i = 0; i < 32; i++) {
+    bit = case_obj_getattr(*obj, i);
+    newi = index_wrap(i + inc, 32);
+    case_obj_setattr(&obj2, newi, bit);
   }
   *obj = obj2;
 }
 
 void case_obj_setfromstr(case_obj_t *obj, char *str)
 {
-  long idx;
+  long i;
   case_bit_t val;
-  for (idx = 0; idx < 32; idx++) {
-    val = ('0' == str[idx]) ? 0 : 1;
-    case_obj_setattr(obj, idx, val);
+  for (i = 0; i < 32; i++) {
+    val = ('0' == str[i]) ? 0 : 1;
+    case_obj_setattr(obj, i, val);
   }
 }
 

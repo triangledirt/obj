@@ -17,6 +17,7 @@ void initonce()
   if (!once) {
     for (type = 0; type < 32; type++)
       fitness[type] = 0.0;
+      case_obj_randomize(&ideal[type]);
     once = 1;
   }
 }
@@ -28,7 +29,7 @@ case_bit_t sum_classify(case_obj_t obj, long type)
 
 void sum_learn(case_obj_t obj[], long objsz, long type)
 {
-  long idx;
+  long i;
   long bit;
   case_bit_t val;
   case_obj_t o;
@@ -41,10 +42,10 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   initonce();
   for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
-  for (idx = 0; idx < objsz; idx++) {
+  for (i = 0; i < objsz; i++) {
     if (toss_coin())
       continue;
-    o = obj[idx];
+    o = obj[i];
     class = case_obj_getclass(o);
     if (class)
       for (bit = 1; bit < 32; bit++) {
@@ -59,11 +60,11 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
     } else {
       case_obj_setattr(&ideal[type], bit, 0);
     }
-#if CASE_VERBOSE
-  for (idx = 0; idx < objsz; idx++)
+  for (i = 0; i < objsz; i++)
     if (toss_coin())
-      tot += case_obj_comparet(ideal[type], obj[idx]);
+      tot += case_obj_comparet(ideal[type], obj[i]);
   fitness[type] = tot / (objsz / 2);
+#if CASE_VERBOSE
   printf("type%ld ideal sum ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f%%\n", fitness[type]);

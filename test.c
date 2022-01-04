@@ -21,30 +21,30 @@ static void testline(char *line, long type);
 
 void freefirst()
 {
-  long idx;
-  for (idx = 0; idx < fields; idx++)
-    if (firstline[idx])
-      free(firstline[idx]);
+  long i;
+  for (i = 0; i < fields; i++)
+    if (firstline[i])
+      free(firstline[i]);
 }
 
 void initfirst()
 {
-  long idx;
-  for (idx = 0; idx < fields; idx++)
-    firstline[idx] = 0;
+  long i;
+  for (i = 0; i < fields; i++)
+    firstline[i] = 0;
 }
 
 void savefirst(char line[BUFF])
 {
   char *tok;
-  long idx = 0;
+  long i = 0;
   tok = strtok(line, ",");
-  firstline[idx] = strdup(tok);
+  firstline[i] = strdup(tok);
   while ((tok = strtok(NULL, ",\n"))) {
-    idx++;
-    firstline[idx] = strdup(tok);
+    i++;
+    firstline[i] = strdup(tok);
   }
-  fields = idx + 1;
+  fields = i + 1;
 }
 
 void testfile(char *filename, long type)
@@ -69,7 +69,7 @@ void testfile(char *filename, long type)
 void testline(char *line, long type)
 {
   case_obj_t obj;
-  long idx = 0;
+  long i = 0;
   case_bit_t val;
   char *tok;
 #if CASE_VERBOSE
@@ -77,12 +77,12 @@ void testline(char *line, long type)
 #endif
   case_obj_clear(&obj);
   tok = strtok(line, ",");
-  val = (0 == strcmp(tok, firstline[idx])) ? 1 : 0;
+  val = (0 == strcmp(tok, firstline[i])) ? 1 : 0;
   case_obj_setclass(&obj, val);
   while ((tok = strtok(NULL, ",\n"))) {
-    idx++;
-    val = (0 == strcmp(tok, firstline[idx])) ? 1 : 0;
-    case_obj_setattr(&obj, idx, val);
+    i++;
+    val = (0 == strcmp(tok, firstline[i])) ? 1 : 0;
+    case_obj_setattr(&obj, i, val);
   }
   case_observe(obj, type);
 #if CASE_VERBOSE

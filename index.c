@@ -1,14 +1,14 @@
 #include "index.h"
 
-unsigned long index_wrap(long idx, unsigned long range)
+unsigned long index_wrap(long i, unsigned long range)
 {
   unsigned long wrap;
-  if (idx >= (long) range) {
-    wrap = idx % range;
-  } else if (idx < 0) {
-    wrap = (1 == range) ? 0 : range - (-idx % range);
+  if (i >= (long) range) {
+    wrap = i % range;
+  } else if (i < 0) {
+    wrap = (1 == range) ? 0 : range - (-i % range);
   } else {
-    wrap = idx;
+    wrap = i;
   }
   return wrap;
 }

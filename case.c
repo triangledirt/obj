@@ -127,11 +127,11 @@ double case_mismatcht(case_obj_t indicator, case_obj_t target, long type)
 
 void case_observe(case_obj_t obj, long type)
 {
-  long idx;
+  long i;
   initonce();
   notetype(type);
-  idx = random() % OBJECT_CACHE;
-  object[type][idx] = obj;
+  i = random() % OBJECT_CACHE;
+  object[type][i] = obj;
   if (toss_die(OBJECT_CACHE / 16))
     learn();
 }
@@ -228,9 +228,9 @@ long count(long type, case_obj_t typ)
 {
   long count = 0;
   case_obj_t obj;
-  long idx;
-  for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = object[type][idx];
+  long i;
+  for (i = 0; i < OBJECT_CACHE; i++) {
+    obj = object[type][i];
     count += case_obj_hastype(obj, typ);
   }
   return count;
@@ -240,9 +240,9 @@ long countboth(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
   case_obj_t obj;
-  long idx;
-  for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = object[type][idx];
+  long i;
+  for (i = 0; i < OBJECT_CACHE; i++) {
+    obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
   }
   return count;
@@ -252,9 +252,9 @@ long counteither(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
   case_obj_t obj;
-  long idx;
-  for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = object[type][idx];
+  long i;
+  for (i = 0; i < OBJECT_CACHE; i++) {
+    obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
   }
   return count;
@@ -264,9 +264,9 @@ long countsub(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
   case_obj_t obj;
-  long idx;
-  for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = object[type][idx];
+  long i;
+  for (i = 0; i < OBJECT_CACHE; i++) {
+    obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
   }
   return count;
@@ -276,11 +276,11 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
 {
   long count = 0;
   case_obj_t obj;
-  long idx;
+  long i;
   case_bit_t has1;
   case_bit_t has2;
-  for (idx = 0; idx < OBJECT_CACHE; idx++) {
-    obj = object[type][idx];
+  for (i = 0; i < OBJECT_CACHE; i++) {
+    obj = object[type][i];
     has1 = case_obj_hastype(obj, typ1);
     has2 = case_obj_hastype(obj, typ2);
     if (has1 ^ has2)
@@ -291,13 +291,13 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
 
 void initonce()
 {
-  long idx;
+  long i;
   long type;
   case_obj_clear(&types);
   if (!once) {
     for (type = 0; type < 32; type++)
-      for (idx = 0; idx < OBJECT_CACHE; idx++)
-        case_obj_randomize(&object[type][idx]);
+      for (i = 0; i < OBJECT_CACHE; i++)
+        case_obj_randomize(&object[type][i]);
     once = 1;
   }
 }

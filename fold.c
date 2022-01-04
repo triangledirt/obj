@@ -36,7 +36,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
 {
   pop_t pop;
   long start;
-  long idx;
+  long i;
   long dir;
   long o;
   case_bit_t val;
@@ -50,8 +50,8 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
     val = random() % 2;
     len = random() % 3;
     dir = toss_coin() ? 1 : -1;
-    for (idx = start; labs(start - idx) <= len; idx += dir)
-      case_obj_setattr(&pop[o], index_wrap(idx, 32), val);
+    for (i = start; labs(start - i) <= len; i += dir)
+      case_obj_setattr(&pop[o], index_wrap(i, 32), val);
     fits[type][o] = -1;
   }
   forcecalc(pop, obj, objsz, type);
@@ -85,7 +85,7 @@ void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
 {
   long o;
   for (o = 0; o < objsz; o++)
-    if (fits[o] < 0)
+    if (fits[type][o] < 0)
       calcfit(pop, o, obj, objsz, type);
 }
 
@@ -98,25 +98,24 @@ double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 
 void init(case_obj_t pop[], long type)
 {
-  long idx;
+  long i;
   case_obj_t obj;
-  for (idx = 0; idx < POP; idx++) {
+  for (i = 0; i < POP; i++) {
     obj = ideal[type];
     case_obj_mutate(&obj);
-    pop[idx] = obj;
-    fits[type][idx] = -1;
+    pop[i] = obj;
+    fits[type][i] = -1;
   }
+  fitness[type] = 0.0;
   case_obj_randomize(&fittest[type]);
-  for (idx = 0; idx < 32; idx++)
-    fitness[type] = 0.0;
 }
 
 void initonce()
 {
-  long idx;
+  long i;
   if (!once) {
-    for (idx = 0; idx < 32; idx++)
-      case_obj_randomize(&ideal[idx]);
+    for (i = 0; i < 32; i++)
+      case_obj_randomize(&ideal[i]);
     once = 1;
   }
 }

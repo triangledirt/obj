@@ -87,16 +87,6 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   }
 }
 
-void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
-{
-  coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++)
-    for (c.y = 0; c.y < DIM; c.y++)
-      for (c.z = 0; c.z < DIM; c.z++)
-        if (fits[c.x][c.y][c.z] < 0)
-          calcfit(pop, &c, obj, objsz, type);
-}
-
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
 {
   case_obj_t parent1;
@@ -116,6 +106,16 @@ void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
     case_obj_mutate(child);
   }
   fits[type][dest->x][dest->y][dest->z] = -1;
+}
+
+void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
+{
+  coord_t c;
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
+      for (c.z = 0; c.z < DIM; c.z++)
+        if (fits[type][c.x][c.y][c.z] < 0)
+          calcfit(pop, &c, obj, objsz, type);
 }
 
 void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type)
@@ -170,7 +170,6 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 void init(pop_t pop, long type)
 {
   struct coord_t c;
-  long i;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++) {
@@ -178,9 +177,8 @@ void init(pop_t pop, long type)
         case_obj_mutate(&pop[c.x][c.y][c.z]);
         fits[type][c.x][c.y][c.z] = -1;
       }
+  fitness[type] = 0.0;
   case_obj_randomize(&fittest[type]);
-  for (i = 0; i < 32; i++)
-    fitness[i] = 0.0;
 }
 
 void initonce()
