@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "fold.h"
 #include "index.h"
 #include "obj.h"
-#include "toss.h"
 
 #define POP 32
 #define FOLDS 8
@@ -35,7 +35,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   case_obj_t calcobj;
   calcobj = pop[o];
   for (i = 0; i < objsz; i++)
-    if (toss_coin())
+    if (coin_toss())
       tot += case_obj_comparet(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][o] = fit;
@@ -67,7 +67,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
     start = random() % 32;
     val = random() % 2;
     len = random() % 3;
-    dir = toss_coin() ? 1 : -1;
+    dir = coin_toss() ? 1 : -1;
     for (i = start; labs(start - i) <= len; i += dir)
       case_obj_setattr(&pop[o], index_wrap(i, 32), val);
     fits[type][o] = -1;

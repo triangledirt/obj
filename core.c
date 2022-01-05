@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "coord.h"
 #include "core.h"
+#include "die.h"
 #include "index.h"
 #include "obj.h"
-#include "toss.h"
 
 #define ACTS 32
 #define ANARCHY 4
@@ -44,7 +45,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   case_obj_t o;
   o = pop[c->x][c->y][c->z];
   for (i = 0; i < objsz; i++)
-    if (toss_coin())
+    if (coin_toss())
       tot += case_obj_comparet(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y][c->z] = fit;
@@ -72,7 +73,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
     randcoord(&actor);
     findbest(pop, &actor, &best, obj, objsz, type);
     findworst(pop, &actor, &worst, obj, objsz, type);
-    if (toss_die(ANARCHY)) {
+    if (die_toss(ANARCHY)) {
       dance(pop, &actor, &best, &worst, type);
     } else {
       dance(pop, &worst, &actor, &best, type);

@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "gene.h"
 #include "obj.h"
-#include "toss.h"
 
 #define MATINGS 16
 #define POP 32
@@ -36,7 +36,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   case_obj_t calcobj;
   calcobj = pop[o];
   for (i = 0; i < objsz; i++)
-    if (toss_coin())
+    if (coin_toss())
       tot += case_obj_comparet(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][o] = fit;

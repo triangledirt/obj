@@ -4,14 +4,15 @@
 #include <time.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "core.h"
+#include "die.h"
 #include "filt.h"
 #include "fold.h"
 #include "gene.h"
 #include "jung.h"
 #include "obj.h"
 #include "sum.h"
-#include "toss.h"
 
 #define OBJECT_CACHE 64
 #define SHOW_DETAILS 1
@@ -132,7 +133,7 @@ void case_observe(case_obj_t obj, long type)
   notetype(type);
   i = random() % OBJECT_CACHE;
   object[type][i] = obj;
-  if (toss_die(OBJECT_CACHE / 16))
+  if (die_toss(OBJECT_CACHE / 16))
     learn();
 }
 

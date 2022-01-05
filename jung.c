@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "coord.h"
 #include "index.h"
 #include "jung.h"
 #include "obj.h"
-#include "toss.h"
 
 #define DIM 8
 #define ITER 8
@@ -38,7 +38,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   case_obj_t o;
   o = pop[c->x][c->y];
   for (i = 0; i < objsz; i++)
-    if (toss_coin())
+    if (coin_toss())
       tot += case_obj_comparet(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y] = fit;
@@ -133,7 +133,7 @@ void meet(pop_t pop, coord_t *a, coord_t *b)
   long bit;
   case_bit_t val;
   for (bit = 1; bit <= 32; bit++) {
-    if (toss_coin()) {
+    if (coin_toss()) {
       val = case_obj_getattr(pop[a->x][a->y], bit);
       case_obj_setattr(&pop[b->x][b->y], bit, val);
     } else {

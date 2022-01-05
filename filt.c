@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "filt.h"
 #include "obj.h"
-#include "toss.h"
 
 #define ACTS 8
 
@@ -28,7 +28,7 @@ void calcfit(case_obj_t obj[], long objsz, long type)
   case_obj_t o;
   double s = 0.0;
   for (i = 0; i < objsz; i++)
-    if (toss_coin()) {
+    if (coin_toss()) {
       o = obj[i];
       s += score(o, type);
     }
@@ -83,7 +83,7 @@ void mutate(case_obj_t *obj1, case_obj_t *obj2)
   case_bit_t val;
   bit = random() % 32;
   case_bit_randomize(&val);
-  if (toss_coin()) {
+  if (coin_toss()) {
     o1 = obj1;
     o2 = obj2;
   } else {

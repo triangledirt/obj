@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "bit.h"
 #include "case.h"
+#include "coin.h"
 #include "obj.h"
 #include "sum.h"
-#include "toss.h"
 
 static double fitness[32];
 static case_obj_t ideal[32];
@@ -43,7 +43,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   for (bit = 1; bit < 32; bit++)
     onecounts[bit] = 0;
   for (i = 0; i < objsz; i++) {
-    if (toss_coin())
+    if (coin_toss())
       continue;
     o = obj[i];
     class = case_obj_getclass(o);
@@ -61,7 +61,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
       case_obj_setattr(&ideal[type], bit, 0);
     }
   for (i = 0; i < objsz; i++)
-    if (toss_coin())
+    if (coin_toss())
       tot += case_obj_comparet(ideal[type], obj[i]);
   fitness[type] = tot / (objsz / 2);
 #if CASE_VERBOSE
