@@ -33,7 +33,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   long bit;
   case_bit_t val;
   case_obj_t o;
-  long onecounts[32];
+  long onecount[32];
   long thresh = objsz / 8;
   case_bit_t class;
 #if CASE_VERBOSE
@@ -41,7 +41,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
 #endif
   initonce();
   for (bit = 1; bit < 32; bit++)
-    onecounts[bit] = 0;
+    onecount[bit] = 0;
   for (i = 0; i < objsz; i++) {
     if (coin_toss())
       continue;
@@ -51,11 +51,11 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
       for (bit = 1; bit < 32; bit++) {
         val = case_obj_getattr(o, bit);
         if (val)
-          onecounts[bit]++;
+          onecount[bit]++;
       }
   }
   for (bit = 1; bit < 32; bit++)
-    if (onecounts[bit] > thresh) {
+    if (onecount[bit] > thresh) {
       case_obj_setattr(&ideal[type], bit, 1);
     } else {
       case_obj_setattr(&ideal[type], bit, 0);
