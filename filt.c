@@ -47,7 +47,7 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
   long act;
   initonce();
   for (act = 0; act < ACTS; act++) {
-    calcfit(obj, objsz, type); /* is this called 2x in a row */
+    calcfit(obj, objsz, type);
     save(type);
     mutate(&one[type], &zero[type]);
     calcfit(obj, objsz, type);
