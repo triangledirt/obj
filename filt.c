@@ -32,7 +32,7 @@ void calcfit(case_obj_t obj[], long objsz, long type)
       o = obj[i];
       s += score(o, type);
     }
-  fitness[type] = s / (1 + (objsz / 2));
+  fitness[type] = s / (objsz / 2);
 }
 
 case_bit_t filt_classify(case_obj_t obj, long type)

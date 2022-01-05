@@ -97,8 +97,9 @@ case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 
 void case_obj_mutate(case_obj_t *obj)
 {
-  long i = random() % 32;
+  long i;
   case_bit_t val;
+  i = random() % 32;
   case_bit_randomize(&val);
   case_obj_setattr(obj, i, val);
 }
