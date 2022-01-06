@@ -101,7 +101,7 @@ You don't have to set any particular bit. You don't have to set the class when y
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
 
-See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples.
+See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
 ## infer from set to set
 
