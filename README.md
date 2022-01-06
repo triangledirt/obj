@@ -38,10 +38,10 @@ case.h contains a #define called CASE_VERBOSE. Set it to 1 to make noise when op
 
 These two functions are used to observe and classify objects:
 
-    void case_observe(case_object_t obj, long type);
-    case_bit_t case_classify(case_object_t obj, long type);
+    void case_observe(case_obj_t obj, long type);
+    case_bit_t case_classify(case_obj_t obj, long type);
 
-Call case_observe() on a case_object_t when you see it. Pass the type, which is a long you define to be one of 32 types
+Call case_observe() on a case_obj_t when you see it. Pass the type, which is a long you define to be one of 32 types
 
     #define MUSHROOM 0
     #define GAME_MAP 1
@@ -53,7 +53,7 @@ You can do object observation on 32 types in any order
     case_observe(obj1, MUSHROOM);
     case_observe(obj2, GAME_MAP);
 
-So you can do object classification on 32 types in any order. If I'm observing a MUSHROOM-type case_object_t, I specify that when observing it. But your app can then case_observe() a case_object_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
+So you can do object classification on 32 types in any order. If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
 
     c = case_classify(obj1, MUSHROOM);
     d = case_classify(obj2, GAME_MAP);
@@ -62,9 +62,9 @@ Call case_observe() and case_classify() as often and in any order you like
 
 If you want to re-use a type to mean another type, go ahead and do so. If you need to discontinue use of a type, do so
 
-## case_object_t
+## case_obj_t
 
-case_object_ts are longs. [object.h](https://github.com/triangledirt/case/blob/main/object.h) defines some ways to manipulate them. At base, you'll do this:
+case_obj_ts are longs. [object.h](https://github.com/triangledirt/case/blob/main/object.h) defines some ways to manipulate them. At base, you'll do this:
 
     case_object_clear(&obj);
 
@@ -95,7 +95,7 @@ The 0-indexed attribute is the class attribute. You can set it in two ways:
     class = case_object_getattr(obj, 0);
     class = case_object_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_object_t with case_object_clear(), do this:
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_object_clear(), do this:
 
     case_object_randomize(&obj);
 
@@ -107,7 +107,7 @@ See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
 These 14 functions return inference properties of the set of objects alib is managing at this time. Call them once you've alib_observe()d at least one object
 
-    double case_frequencyi(case_object_t indicator, case_object_t target,
+    double case_frequencyi(case_obj_t indicator, case_obj_t target,
       long type);
 
 *The following 13 functions use the same parameters as above*
@@ -128,7 +128,7 @@ These 14 functions return inference properties of the set of objects alib is man
 
 Some of the names end with *i* or *t*. Those mean *indicator* or *target*. So frequencyi() returns the indicator frequency. frequencyt() returns the target frequency
 
-Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_object_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
+Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_obj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
 
 ### indicator frequency
 
