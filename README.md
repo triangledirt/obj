@@ -66,38 +66,38 @@ If you want to re-use a type to mean another type, go ahead and do so. If you ne
 
 case_obj_ts are longs. [object.h](https://github.com/triangledirt/case/blob/main/object.h) defines some ways to manipulate them. At base, you'll do this:
 
-    case_object_clear(&obj);
+    case_obj_clear(&obj);
 
 :to initialize. And:
 
-    case_object_setattr(&obj, idx, val);
-    val = case_object_getattr(obj, idx);
+    case_obj_setattr(&obj, idx, val);
+    val = case_obj_getattr(obj, idx);
 
 :to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
 
-    case_object_setattr(&obj, 6, 1);
+    case_obj_setattr(&obj, 6, 1);
 
 This says the cap doesn't:
 
-    case_object_setattr(&obj, 6, 0);
+    case_obj_setattr(&obj, 6, 0);
 
 This sets attribute 7 to 0 in the object:
 
-    case_object_setattr(&obj, 7, 0);
+    case_obj_setattr(&obj, 7, 0);
 
 The 0-indexed attribute is the class attribute. You can set it in two ways:
 
-    case_object_setattr(&obj, 0, class);
-    case_object_setclass(&obj, class);
+    case_obj_setattr(&obj, 0, class);
+    case_obj_setclass(&obj, class);
 
 :and get it similarly:
 
-    class = case_object_getattr(obj, 0);
-    class = case_object_getclass(obj);
+    class = case_obj_getattr(obj, 0);
+    class = case_obj_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_object_clear(), do this:
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_obj_clear(), do this:
 
-    case_object_randomize(&obj);
+    case_obj_randomize(&obj);
 
 Then set only the bits you are certain are a 0 or a 1 in only the attributes you know about, and give us a try!
 
