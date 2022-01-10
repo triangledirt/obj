@@ -95,7 +95,7 @@ The 0-indexed attribute is the class attribute. You can set it in two ways:
     class = case_obj_getattr(obj, 0);
     class = case_obj_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. alib likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_obj_clear(), do this:
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. case likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_obj_clear(), do this:
 
     case_obj_randomize(&obj);
 
@@ -105,7 +105,7 @@ See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
 ## infer from set to set
 
-These 14 functions return inference properties of the set of objects alib is managing at this time. Call them once you've alib_observe()d at least one object
+These 14 functions return inference properties of the set of objects case is managing at this time. Call them once you've case_observe()d at least one object
 
     double case_frequencyi(case_obj_t indicator, case_obj_t target,
       long type);
