@@ -75,6 +75,19 @@ double case_obj_getobliv(case_obj_t obj1, case_obj_t obj2)
   double oblivion;
   long match = 0;
   long opposite = 0;
+  long i;
+  case_bit_t o1bit;
+  case_bit_t o2bit;
+  for (i = 0; i < 32; i++) {
+    o1bit = case_obj_getattr(obj1, i);
+    o2bit = case_obj_getattr(obj2, i);
+    if (o1bit == o2bit) {
+      match++;
+    } else {
+      opposite++;
+    }
+  }
+  oblivion = 1 / ((1 + labs(match - opposite)) / 32);
   return oblivion;
 }
 
