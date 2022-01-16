@@ -139,10 +139,10 @@ void init(case_obj_t pop[], long type)
 
 void initonce()
 {
-  long i;
+  long type;
   if (!once) {
-    for (i = 0; i < 32; i++)
-      case_obj_randomize(&ideal[i]);
+    for (type = 0; type < 32; type++)
+      case_obj_randomize(&ideal[type]);
     once = 1;
   }
 }

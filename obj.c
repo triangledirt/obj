@@ -70,6 +70,14 @@ double case_obj_comparex(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / total;
 }
 
+double case_obj_getobliv(case_obj_t obj1, case_obj_t obj2)
+{
+  double oblivion;
+  long match = 0;
+  long opposite = 0;
+  return oblivion;
+}
+
 long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 {
   long place = 1;

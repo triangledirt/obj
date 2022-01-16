@@ -7,19 +7,21 @@
 
 static case_bit_t once = 0;
 static double fitness[32];
-static case_bit_t matrix[32][32];
+static case_bit_t matrix[32][32][32];
 
 static void initonce();
 static double score(case_obj_t obj, long type);
 
 void initonce()
 {
+  long type;
   long i;
   long j;
   if (!once) {
-    for (i = 0; i < 32; i++)
-      for (j = 0; j < 32; j++)
-        case_bit_randomize(&matrix[i][j]);
+    for (type = 0; type < 32; type++)
+      for (i = 0; i < 32; i++)
+        for (j = 0; j < 32; j++)
+          case_bit_randomize(&matrix[type][i][j]);
     once = 1;
   }
 }
@@ -52,4 +54,5 @@ double score(case_obj_t obj, long type)
         objmatch = (..) ? x : y;
         matrixmatch = (..) ? x : y;
       }
+  ;; derive a second object (matrix axis) from the matrix contents plus the other object ??
 }

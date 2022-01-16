@@ -29,4 +29,6 @@ case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type);
 void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long num);
 long case_obj_getnum(case_obj_t obj, long startbit, long bits);
 
+double case_obj_getobliv(case_obj_t obj1, case_obj_t obj2);
+
 #endif
