@@ -9,8 +9,8 @@ void case_obj_clear(case_obj_t *obj);
 void case_obj_randomize(case_obj_t *obj);
 void case_obj_setfromstr(case_obj_t *obj, char *str);
 
-#define case_obj_setattr(obj, idx, val) if (val) { *obj |= ((long) 1 << (idx)); } else { *obj &= ~((long) 1 << (idx)); }
-#define case_obj_getattr(obj, idx) ((obj >> (idx)) & (long) 1)
+#define case_obj_setattr(obj, indx, val) if (val) { *obj |= ((long) 1 << (indx)); } else { *obj &= ~((long) 1 << (indx)); }
+#define case_obj_getattr(obj, indx) ((obj >> (indx)) & (long) 1)
 
 void case_obj_mutate(case_obj_t *obj);
 void case_obj_rotate(case_obj_t *obj, long inc);
