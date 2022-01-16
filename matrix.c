@@ -48,11 +48,11 @@ double score(case_obj_t obj, long type)
   case_bool_t objmatch;
   case_bool_t matrixmatch;
   double s = 0.0;
-  if (!once) {
+  if (!once)
     for (i = 0; i < 32; i++)
       for (j = 0; j < 32; j++) {
-        objmatch = (..) ? x : y;
-        matrixmatch = (..) ? x : y;
+        /* objmatch = (..) ? x : y; */
+        /* matrixmatch = (..) ? x : y; */
       }
-  ;; derive a second object (matrix axis) from the matrix contents plus the other object ??
+  /* ;; derive a second object (matrix axis) from the matrix contents plus the other object ?? */
 }
