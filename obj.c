@@ -73,7 +73,7 @@ double case_obj_comparex(case_obj_t obj1, case_obj_t obj2)
 double case_obj_getobliv(case_obj_t obj1, case_obj_t obj2)
 {
   double oblivion;
-  long match = 0;
+  long match;
   long opposite = 0;
   long i;
   case_bit_t o1bit;
