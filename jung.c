@@ -3,7 +3,7 @@
 #include "case.h"
 #include "coin.h"
 #include "coord.h"
-#include "index.h"
+#include "indx.h"
 #include "jung.h"
 #include "obj.h"
 
@@ -107,8 +107,8 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
     randcoord(&a);
     i.x = (random() % 3) - 1;
     i.y = (random() % 3) - 1;
-    b.x = index_wrap(a.x + i.x, DIM);
-    b.y = index_wrap(a.y + i.y, DIM);
+    b.x = indx_wrap(a.x + i.x, DIM);
+    b.y = indx_wrap(a.y + i.y, DIM);
     fita = getfit(pop, &a, obj, objsz, type);
     fitb = getfit(pop, &b, obj, objsz, type);
     if (fita > fitb) {

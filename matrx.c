@@ -2,7 +2,7 @@
 #include "bit.h"
 #include "case.h"
 #include "coin.h"
-#include "matrix.h"
+#include "matrx.h"
 #include "obj.h"
 
 static case_bit_t once = 0;
@@ -26,12 +26,12 @@ void initonce()
   }
 }
 
-case_bit_t matrix_classify(case_obj_t obj, long type)
+case_bit_t matrx_classify(case_obj_t obj, long type)
 {
   /* return score(obj, type) > (0.9 * fitness[type]); */
 }
 
-void matrix_learn(case_obj_t obj[], long objsz, long type)
+void matrx_learn(case_obj_t obj[], long objsz, long type)
 {
   initonce();
 #if CASE_VERBOSE

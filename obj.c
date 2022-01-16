@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "bit.h"
 #include "bool.h"
-#include "index.h"
+#include "indx.h"
 #include "obj.h"
 
 void case_obj_clear(case_obj_t *obj)
@@ -143,7 +143,7 @@ void case_obj_rotate(case_obj_t *obj, long inc)
   case_bit_t bit;
   for (i = 0; i < 32; i++) {
     bit = case_obj_getattr(*obj, i);
-    newi = index_wrap(i + inc, 32);
+    newi = indx_wrap(i + inc, 32);
     case_obj_setattr(&obj2, newi, bit);
   }
   *obj = obj2;

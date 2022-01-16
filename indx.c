@@ -1,6 +1,6 @@
-#include "index.h"
+#include "indx.h"
 
-unsigned long index_wrap(long i, unsigned long range)
+unsigned long indx_wrap(long i, unsigned long range)
 {
   unsigned long wrap;
   if (i >= (long) range) {

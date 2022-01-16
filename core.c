@@ -6,7 +6,7 @@
 #include "coord.h"
 #include "core.h"
 #include "die.h"
-#include "index.h"
+#include "indx.h"
 #include "obj.h"
 
 #define ACTS 32
@@ -118,9 +118,9 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
   for (t.x = -1; t.x < 2; t.x++)
     for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = index_wrap(actor->x + t.x, DIM);
-        c.y = index_wrap(actor->y + t.y, DIM);
-        c.z = index_wrap(actor->z + t.z, DIM);
+        c.x = indx_wrap(actor->x + t.x, DIM);
+        c.y = indx_wrap(actor->y + t.y, DIM);
+        c.z = indx_wrap(actor->z + t.z, DIM);
         if ((actor->x == c.x) && (actor->y == c.y) && (actor->z == c.z))
           continue;
         f = getfit(pop, &c, obj, objsz, type);
@@ -140,9 +140,9 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
   for (t.x = -1; t.x < 2; t.x++)
     for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
-        c.x = index_wrap(actor->x + t.x, DIM);
-        c.y = index_wrap(actor->y + t.y, DIM);
-        c.z = index_wrap(actor->z + t.z, DIM);
+        c.x = indx_wrap(actor->x + t.x, DIM);
+        c.y = indx_wrap(actor->y + t.y, DIM);
+        c.z = indx_wrap(actor->z + t.z, DIM);
         f = getfit(pop, &c, obj, objsz, type);
         if (f < fit) {
           fit = f;
