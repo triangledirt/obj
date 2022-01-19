@@ -21,8 +21,9 @@ void initonce()
   if (!once) {
     for (type = 0; type < 32; type++)
       for (i = 0; i < 31; i++)
-        for (j = 0; j < i; j++)
+        for (j = 0; j < (31 - i); j++) {
           op_randomize(&op[type][i][j]);
+        }
     once = 1;
   }
 }
