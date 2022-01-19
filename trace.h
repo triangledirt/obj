@@ -4,6 +4,6 @@
 unsigned char trace_randomize();
 
 unsigned char trace_calc(unsigned char indx);
-unsigned char trace_prog(unsigned char indx, unsigned char val);
+unsigned char trace_program(unsigned char indx, unsigned char val);
 
 #endif

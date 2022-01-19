@@ -103,12 +103,12 @@ long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 
 case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 {
-  case_bool_t has = true;
+  case_bool_t has = case_bool_true;
   long i;
   for (i = 0; i < 32; i++)
     if (case_obj_getattr(type, i))
       if (!case_obj_getattr(obj, i)) {
-        has = false;
+        has = case_bool_false;
         break;
       }
   return has;
