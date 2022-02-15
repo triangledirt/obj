@@ -107,8 +107,7 @@ See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
 These 14 functions return inference properties of the set of objects case is managing at this time. Call them once you've case_observe()d at least one object
 
-    double case_frequencyi(case_obj_t indicator, case_obj_t target,
-      long type);
+    double case_frequencyi(case_obj_t indicator, case_obj_t target, long type);
 
 *The following 13 functions use the same parameters as above*
 
