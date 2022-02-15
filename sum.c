@@ -15,9 +15,10 @@ void initonce()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++)
+    for (type = 0; type < 32; type++) {
       fitness[type] = 0.0;
       case_obj_randomize(&ideal[type]);
+    }
     once = 1;
   }
 }

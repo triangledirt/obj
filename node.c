@@ -1,5 +1,4 @@
 #include "node.h"
-#include "op.h"
 
 void node_init(node_t *node)
 {

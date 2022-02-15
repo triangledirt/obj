@@ -22,9 +22,8 @@ void initonce()
   if (!once) {
     for (type = 0; type < 32; type++)
       for (i = 0; i < 31; i++)
-        for (j = 0; j < (31 - i); j++) {
-          op_randomize(&node->op[type][i][j]);
-        }
+        for (j = 0; j < (31 - i); j++)
+          node_init(&node[type][i][j]);
     once = 1;
   }
 }
@@ -44,14 +43,14 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
   case_bit_t bit2;
   case_bit_t op;
   initonce();
-    for (i = 0; i < 31; i++)
-      for (j = 0; j < (31 - i); j++) {
-        op = ..;
-        bit1 = ..;
-        bit2 = ..;
-        val = op_calc(op, bit1, bit2);
-        set val in values;
-      }
+  for (i = 0; i < 31; i++)
+    for (j = 0; j < (31 - i); j++) {
+      op = ..;
+      bit1 = ..;
+      bit2 = ..;
+      val = op_calc(op, bit1, bit2);
+      set val in values;
+    }
   val = the last value in the net;
 #if CASE_VERBOSE
   printf("type%ld net   ft1 ", type);

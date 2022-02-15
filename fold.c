@@ -100,8 +100,8 @@ void init(case_obj_t pop[], long type)
 {
   long i;
   case_obj_t obj;
+  obj = ideal[type];
   for (i = 0; i < POP; i++) {
-    obj = ideal[type];
     case_obj_mutate(&obj);
     pop[i] = obj;
     fits[type][i] = -1;
