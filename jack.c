@@ -45,13 +45,15 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
   initonce();
   for (i = 0; i < 31; i++)
     for (j = 0; j < (31 - i); j++) {
+/*
       op = ..;
       bit1 = ..;
       bit2 = ..;
       val = op_calc(op, bit1, bit2);
       set val in values;
+*/
     }
-  val = the last value in the net;
+  /* val = the last value in the net; */
 #if CASE_VERBOSE
   printf("type%ld net   ft1 ", type);
   /* case_obj_print(one[type]); */

@@ -10,8 +10,8 @@
 #include "filt.h"
 #include "fold.h"
 #include "gene.h"
+#include "jack.h"
 #include "jung.h"
-#include "net.h"
 #include "obj.h"
 #include "sum.h"
 
@@ -39,8 +39,8 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t filtclass;
   case_bit_t foldclass;
   case_bit_t geneclass;
+  case_bit_t jackclass;
   case_bit_t jungclass;
-  case_bit_t netclass;
   case_bit_t sumclass;
   initonce();
   notetype(type);
@@ -48,13 +48,13 @@ case_bit_t case_classify(case_obj_t obj, long type)
   filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
   geneclass = gene_classify(obj, type);
+  jackclass = jack_classify(obj, type);
   jungclass = jung_classify(obj, type);
-  netclass = net_classify(obj, type);
   sumclass = sum_classify(obj, type);
-  tally = coreclass + filtclass + foldclass + geneclass + jungclass + netclass + sumclass;
+  tally = coreclass + filtclass + foldclass + geneclass + jackclass + jungclass + sumclass;
   class = (tally >= 3) ? 1 : 0;
 #if CASE_VERBOSE && SHOW_DETAILS
-  printf("type%ld class     core=%d filt=%d fold=%d gene=%d jung=%d net=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jungclass, netclass, sumclass);
+  printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
 }
@@ -315,8 +315,8 @@ void learn()
   long long filttime;
   long long foldtime;
   long long genetime;
+  long long jacktime;
   long long jungtime;
-  long long nettime;
   long long sumtime;
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
@@ -341,21 +341,21 @@ void learn()
       genetime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
+      jack_learn(object[type], OBJECT_CACHE, type);
+      gettimeofday(&tv2, NULL);
+      jacktime = tv2.tv_usec - tv1.tv_usec;
+      ;
+      gettimeofday(&tv1, NULL);
       jung_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
-      ;
-      gettimeofday(&tv1, NULL);
-      net_learn(object[type], OBJECT_CACHE, type);
-      gettimeofday(&tv2, NULL);
-      nettime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
       sum_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && SHOW_DETAILS
-      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jungtime, sumtime);
+      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jack=%d jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
 }
