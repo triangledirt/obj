@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "bit.h"
 #include "case.h"
 
 #define DIABETES 0

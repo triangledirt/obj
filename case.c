@@ -322,10 +322,12 @@ void learn()
   long long sumtime;
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
+/*
       gettimeofday(&tv1, NULL);
       core_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
+*/
       ;
       gettimeofday(&tv1, NULL);
       filt_learn(object[type], OBJECT_CACHE, type);
@@ -337,20 +339,26 @@ void learn()
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
+/*
       gettimeofday(&tv1, NULL);
       gene_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
+*/
       ;
+/*
       gettimeofday(&tv1, NULL);
       jack_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jacktime = tv2.tv_usec - tv1.tv_usec;
+*/
       ;
+/*
       gettimeofday(&tv1, NULL);
       jung_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
+*/
       ;
       gettimeofday(&tv1, NULL);
       sum_learn(object[type], OBJECT_CACHE, type);
