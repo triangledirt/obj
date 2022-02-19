@@ -25,7 +25,7 @@ void initonce()
 
 case_bit_t sum_classify(case_obj_t obj, long type)
 {
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
+  return case_obj_comparet(obj, ideal[type]) > (0.75 * fitness[type]);
 }
 
 void sum_learn(case_obj_t obj[], long objsz, long type)

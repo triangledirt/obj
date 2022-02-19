@@ -65,7 +65,7 @@ void testfile(char *filename, long type)
   fclose(file);
   freefirst();
 #if CASE_VERBOSE
-  printf("                                                =%0.3f\%\n", (double) correct / total);
+  printf("                                                =%0.3f%%\n", (double) correct / total);
 #endif
 }
 
