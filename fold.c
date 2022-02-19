@@ -7,8 +7,8 @@
 #include "indx.h"
 #include "obj.h"
 
-#define POP 32
-#define FOLDS 8
+#define POP 128
+#define FOLDS 1
 
 typedef case_obj_t pop_t[POP];
 

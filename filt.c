@@ -5,7 +5,7 @@
 #include "filt.h"
 #include "obj.h"
 
-#define ACTS 8
+#define ACTS 4
 
 static case_bit_t once = 0;
 static case_obj_t one[32];
@@ -37,7 +37,7 @@ void calcfit(case_obj_t obj[], long objsz, long type)
 
 case_bit_t filt_classify(case_obj_t obj, long type)
 {
-  return score(obj, type) > (0.9 * fitness[type]);
+  return score(obj, type) > (0.75 * fitness[type]);
 }
 
 void filt_learn(case_obj_t obj[], long objsz, long type)

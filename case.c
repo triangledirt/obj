@@ -34,26 +34,26 @@ static void notetype(long type);
 case_bit_t case_classify(case_obj_t obj, long type)
 {
   case_bit_t class;
-  case_bit_t coreclass;
-  case_bit_t filtclass;
-  case_bit_t foldclass;
-  case_bit_t geneclass;
-  case_bit_t jackclass;
-  case_bit_t jungclass;
-  case_bit_t sumclass;
+  case_bit_t coreclass = 0;
+  case_bit_t filtclass = 0;
+  case_bit_t foldclass = 0;
+  case_bit_t geneclass = 0;
+  case_bit_t jackclass = 0;
+  case_bit_t jungclass = 0;
+  case_bit_t sumclass = 0;
   long onecount;
   long zerocount;
   initonce();
   notetype(type);
-  coreclass = core_classify(obj, type);
+  /* coreclass = core_classify(obj, type); */
   filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
-  geneclass = gene_classify(obj, type);
-  jackclass = jack_classify(obj, type);
-  jungclass = jung_classify(obj, type);
+  /* geneclass = gene_classify(obj, type); */
+  /* jackclass = jack_classify(obj, type); */
+  /* jungclass = jung_classify(obj, type); */
   sumclass = sum_classify(obj, type);
-  onecount = coreclass + filtclass + foldclass + geneclass + jackclass + jungclass + sumclass;
-  zerocount = 7 - onecount;
+  onecount = filtclass + foldclass + sumclass;
+  zerocount = 3 - onecount;
   class = (zerocount >= onecount) ? 0 : 1;
 #if CASE_VERBOSE && SHOW_DETAILS
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
