@@ -75,7 +75,9 @@ void testline(char *line, long type)
   long i = 0;
   case_bit_t val;
   char *tok;
+  char c;
   case_bit_t class;
+  case_bit_t objclass;
   case_obj_clear(&obj);
   tok = strtok(line, ",");
   val = (0 == strcmp(tok, firstline[i])) ? 1 : 0;
@@ -87,11 +89,13 @@ void testline(char *line, long type)
   }
   case_observe(obj, type);
   class = case_classify(obj, type);
+  objclass = case_obj_getclass(obj);
   total++;
-  correct += (class == case_obj_getclass(obj)) ? 1 : 0;
+  correct += (class == objclass) ? 1 : 0;
 #if CASE_VERBOSE
+  c = (class == objclass) ? '+' : '-';
   printf("type%ld obsrv ", type);
-  printf("(%d) ", class);
+  printf("(%c) ", c);
   case_obj_print(obj);
   printf("\n");
 #endif
