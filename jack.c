@@ -55,7 +55,7 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
     }
   /* val = the last value in the net; */
 #if CASE_VERBOSE
-  printf("type%ld net   ft1 ", type);
+  printf("type%ld ideal jck                                 ", type);
   /* case_obj_print(one[type]); */
   printf(" %0.3f%%\n", fitness[type]);
 #endif

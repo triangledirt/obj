@@ -12,6 +12,7 @@
 static long fields;
 static char *firstline[MAX_FIELDS];
 static long total = 0;
+static long correct = 0;
 
 static void freefirst();
 static void initfirst();
@@ -64,6 +65,9 @@ void testfile(char *filename, long type)
   }
   fclose(file);
   freefirst();
+#if CASE_VERBOSE
+  printf("                                                =%0.3f\%\n", (double) correct / total);
+#endif
 }
 
 void testline(char *line, long type)
@@ -72,9 +76,7 @@ void testline(char *line, long type)
   long i = 0;
   case_bit_t val;
   char *tok;
-#if CASE_VERBOSE
   case_bit_t class;
-#endif
   case_obj_clear(&obj);
   tok = strtok(line, ",");
   val = (0 == strcmp(tok, firstline[i])) ? 1 : 0;
@@ -85,9 +87,10 @@ void testline(char *line, long type)
     case_obj_setattr(&obj, i, val);
   }
   case_observe(obj, type);
-#if CASE_VERBOSE
   class = case_classify(obj, type);
   total++;
+  correct += (class == case_obj_getclass(obj)) ? 1 : 0;
+#if CASE_VERBOSE
   printf("type%ld obsrv ", type);
   printf("(%d) ", class);
   case_obj_print(obj);

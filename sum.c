@@ -37,9 +37,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   long onecount[32];
   long thresh = objsz / 8;
   case_bit_t class;
-#if CASE_VERBOSE
   double tot = 0;
-#endif
   initonce();
   for (bit = 1; bit < 32; bit++)
     onecount[bit] = 0;

@@ -34,7 +34,6 @@ static void notetype(long type);
 case_bit_t case_classify(case_obj_t obj, long type)
 {
   case_bit_t class;
-  long tally;
   case_bit_t coreclass;
   case_bit_t filtclass;
   case_bit_t foldclass;
@@ -42,6 +41,8 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t jackclass;
   case_bit_t jungclass;
   case_bit_t sumclass;
+  long onecount;
+  long zerocount;
   initonce();
   notetype(type);
   coreclass = core_classify(obj, type);
@@ -51,8 +52,9 @@ case_bit_t case_classify(case_obj_t obj, long type)
   jackclass = jack_classify(obj, type);
   jungclass = jung_classify(obj, type);
   sumclass = sum_classify(obj, type);
-  tally = coreclass + filtclass + foldclass + geneclass + jackclass + jungclass + sumclass;
-  class = (tally >= 3) ? 1 : 0;
+  onecount = coreclass + filtclass + foldclass + geneclass + jackclass + jungclass + sumclass;
+  zerocount = 7 - onecount;
+  class = (zerocount >= onecount) ? 0 : 1;
 #if CASE_VERBOSE && SHOW_DETAILS
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
