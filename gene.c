@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "bit.h"
@@ -39,7 +40,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
     if (coin_toss())
       tot += case_obj_comparet(calcobj, obj[i]);
   fit = tot / (objsz / 2);
-  /* fit = pow(fit, 2); */
+  fit = pow(fit, 2);
   fits[type][o] = fit;
   if (fit > fitness[type]) {
     fittest[type] = calcobj;
