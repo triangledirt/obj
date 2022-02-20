@@ -365,7 +365,7 @@ void learn()
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && SHOW_DETAILS
-      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jack=%d jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
+      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jack=%lld jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
 }
