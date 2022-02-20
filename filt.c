@@ -57,9 +57,9 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
 #if CASE_VERBOSE
   printf("type%ld filtr ft1 ", type);
   case_obj_print(one[type]);
-  printf(" %0.3f%%\ntype%ld filtr ft0 ", fitness[type], type);
+  printf(" %0.3f\ntype%ld filtr ft0 ", fitness[type], type);
   case_obj_print(zero[type]);
-  printf(" %0.3f%%\n", fitness[type]);
+  printf(" %0.3f\n", fitness[type]);
 #endif
 }
 

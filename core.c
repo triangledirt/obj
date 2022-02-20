@@ -84,7 +84,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
 #if CASE_VERBOSE
   printf("type%ld ideal cor ", type);
   case_obj_print(ideal[type]);
-  printf(" %0.3f%%\n", fitness[type]);
+  printf(" %0.3f\n", fitness[type]);
 #endif
 }
 
