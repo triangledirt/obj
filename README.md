@@ -32,7 +32,7 @@ First, get the source code:
 
     git clone git@github.com:triangledirt/case.git
 
-Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_VERBOSE_EXTRA to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_VERBOSE_EXTRA is 1, you get extra information printed to stdout. This is the only configuration you need to set
+Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_EXTRA_VERBOSE to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_EXTRA_VERBOSE is 1, you get extra information printed to stdout. This is the only configuration you need to set
 
 Once you change those settings to whatever you want them to be, you can build. From the case directory, execute:
 
