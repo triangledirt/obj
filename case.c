@@ -16,7 +16,6 @@
 #include "sum.h"
 
 #define OBJECT_CACHE 64
-#define SHOW_DETAILS 1
 
 static case_obj_t object[32][OBJECT_CACHE];
 static case_bit_t once = 0;
@@ -55,7 +54,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   onecount = filtclass + foldclass + sumclass;
   zerocount = 3 - onecount;
   class = (zerocount >= onecount) ? 0 : 1;
-#if CASE_VERBOSE && SHOW_DETAILS
+#if CASE_VERBOSE && CASE_EXTRA_VERBOSE
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
@@ -364,7 +363,7 @@ void learn()
       sum_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
-#if CASE_VERBOSE && SHOW_DETAILS
+#if CASE_VERBOSE && CASE_EXTRA_VERBOSE
       printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jack=%lld jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }

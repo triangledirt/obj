@@ -26,13 +26,31 @@ case does not profess to be perfect for any one task. It is not for critical tas
 
 ## build and use case
 
-To build, get the source code, change to its directory and execute:
+The case project has no release tags--the latest code is the latest release. I try to keep it compilable and running
+
+First, get the source code:
+
+    git clone git@github.com:triangledirt/case.git
+
+Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_VERBOSE_EXTRA to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_VERBOSE_EXTRA is 1, you get extra information printed to stdout. This is the only configuration you need to set
+
+Once you change those settings to whatever you want them to be, you can build. From the case directory, execute:
 
     ./make
 
-That builds object files and a library. Include "[case.h](https://github.com/triangledirt/case/blob/main/case.h)" in your project and see that file and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions
+That builds object files and a library called libcase.a. It requires gcc and the C standard library--nothing else
 
-case.h contains a #define called CASE_VERBOSE. Set it to 1 to make noise when operating, 0 to be quiet
+To use case in your project, do:
+
+    #include "\[path to case directory\]/case.h"
+
+When you build your project, add:
+
+    -lcase -L\[path to case directory\]
+
+:to your compile command
+
+See case.h and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions
 
 ## observe and classify objects
 
