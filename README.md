@@ -42,11 +42,11 @@ That builds object files and a library called libcase.a. It requires only gcc an
 
 To use case in your project, do:
 
-    #include "\[path to case directory\]/case.h"
+    #include "[path to case directory]/case.h"
 
 When you build your project, add:
 
-    -lcase -L\[path to case directory\]
+    -lcase -L[path to case directory]
 
 :to your compile command
 
