@@ -26,7 +26,7 @@ case does not profess to be perfect for any one task. It is not for critical tas
 
 ## build and use case
 
-The case project has no release tags--the latest code is the latest release. I try to keep it compilable and running
+The case project has no release tags. The latest code is the latest release. I try to keep it compilable and running
 
 First, get the source code:
 
@@ -38,7 +38,7 @@ Once you change those settings to whatever you want them to be, you can build. F
 
     ./make
 
-That builds object files and a library called libcase.a. It requires gcc and the C standard library--nothing else
+That builds object files and a library called libcase.a. It requires only gcc and the C standard library
 
 To use case in your project, do:
 
