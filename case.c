@@ -312,13 +312,13 @@ void learn()
   long type;
   struct timeval tv1;
   struct timeval tv2;
-  long long coretime;
-  long long filttime;
-  long long foldtime;
-  long long genetime;
-  long long jacktime;
-  long long jungtime;
-  long long sumtime;
+  long coretime;
+  long filttime;
+  long foldtime;
+  long genetime;
+  long jacktime;
+  long jungtime;
+  long sumtime;
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
 /*
@@ -364,7 +364,7 @@ void learn()
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && CASE_EXTRA_VERBOSE
-      printf("type%ld times     core=%lld filt=%lld fold=%lld gene=%lld jack=%lld jung=%lld sum=%lld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
+      printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
 }
