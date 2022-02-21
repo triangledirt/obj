@@ -18,43 +18,45 @@ These 14 properties are a fingerprint of the inference landscape. Their meanings
 
 ## real time
 
-case doesn't use much memory or processing time. So it is real time
+case doesn't use much memory or processor time. So it is real time
 
-It doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process
+It is real time in the sense that learning and classification take place interleaved in time
+
+case doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no functional settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process
 
 case does not profess to be perfect for any one task. It is not for critical tasks. case is generalized object classification with statistical, genetic, and other methods under the hood
 
 ## build and use case
 
-The case project has no release tags. The latest code is the latest release. I try to keep it compilable and running
+The case project has no release tags. The latest code is the latest release. I try to keep it compilable and runnable
 
-First, get the source code:
+To use, first get the source code
 
     git clone git@github.com:triangledirt/case.git
 
 Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_EXTRA_VERBOSE to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_EXTRA_VERBOSE is 1, you get extra information printed to stdout. This is the only configuration you need to set
 
-Once you change those settings to whatever you want them to be, you can build. From the case directory, execute:
+Once you change those settings to whatever you want them to be, you can build. From the case directory, execute
 
     ./make
 
 That builds object files and a library called libcase.a. It requires only gcc and the C standard library
 
-To use case in your project, do:
+To use case in your project, do
 
     #include "[path to case directory]/case.h"
 
-When you build your project, add:
+When you build your project, add
 
     -lcase -L[path to case directory]
 
-:to your compile command
+to your compile command
 
 See case.h and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions
 
 ## observe and classify objects
 
-These two functions are used to observe and classify objects:
+These two functions are used to observe and classify objects
 
     void case_observe(case_obj_t obj, long type);
     case_bit_t case_classify(case_obj_t obj, long type);
@@ -66,12 +68,14 @@ Call case_observe() on a case_obj_t when you see it. Pass the type, which is a l
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
-You can do object observation on 32 types in any order
+You can do object observation on these 32 types in any order
 
     case_observe(obj1, MUSHROOM);
     case_observe(obj2, GAME_MAP);
+    case_observe(obj3, IMAGE_GOTHIC);
+    case_observe(obj4, GAME_MAP);
 
-So you can do object classification on 32 types in any order. If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
+If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
 
     c = case_classify(obj1, MUSHROOM);
     d = case_classify(obj2, GAME_MAP);
@@ -82,38 +86,38 @@ If you want to re-use a type to mean another type, go ahead and do so. If you ne
 
 ## case_obj_t
 
-case_obj_ts are longs. [obj.h](https://github.com/triangledirt/case/blob/main/obj.h) defines some ways to manipulate them. At base, you'll do this:
+case_obj_ts are longs. [obj.h](https://github.com/triangledirt/case/blob/main/obj.h) defines some ways to manipulate them. At base, you'll do this
 
     case_obj_clear(&obj);
 
-:to initialize. And:
+to initialize. And
 
     case_obj_setattr(&obj, idx, val);
     val = case_obj_getattr(obj, idx);
 
-:to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does:
+to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does
 
     case_obj_setattr(&obj, 6, 1);
 
-This says the cap doesn't:
+This says the cap doesn't
 
     case_obj_setattr(&obj, 6, 0);
 
-This sets attribute 7 to 0 in the object:
+This sets attribute 7 to 0 in the object
 
     case_obj_setattr(&obj, 7, 0);
 
-The 0-indexed attribute is the class attribute. You can set it in two ways:
+The 0-indexed attribute is the class attribute. You can set it in two ways
 
     case_obj_setattr(&obj, 0, class);
     case_obj_setclass(&obj, class);
 
-:and get it similarly:
+and get it similarly
 
     class = case_obj_getattr(obj, 0);
     class = case_obj_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. case likes it messy. If you're feeling daring, instead of initializing an case_obj_t with case_obj_clear(), do this:
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. case likes it messy. If you're feeling daring, instead of initializing a case_obj_t with case_obj_clear(), do this
 
     case_obj_randomize(&obj);
 
@@ -127,7 +131,7 @@ These 14 functions return inference properties of the set of objects case is man
 
     double case_frequencyi(case_obj_t indicator, case_obj_t target, long type);
 
-*The following 13 functions use the same parameters as above*
+The following 13 functions use the same parameters as above
 
     double case_frequencyt(..);
     double case_overlapi(..);
@@ -185,25 +189,25 @@ When overlap is close to 0, the overlap between indicator and target is small. W
 
     (indicator - target) / (target - indicator)
 
-:is the degree to which the indicator set is unsuitable for inferring the target set
+is the degree to which the indicator set is unsuitable for inferring the target set
 
 ### target mismatch
 
     (target - indicator) / (indicator - target)
 
-:is the degree to which the target set is unsuitable for targeting the indicator set
+is the degree to which the target set is unsuitable for targeting the indicator set
 
 ### indicator impertinence
 
     (indicator - target) / target
 
-:the degree to which the indicator set is irrelevant or impertinent to the target set. A high number here means that almost all the indicator set is useless inferring the target set
+the degree to which the indicator set is irrelevant or impertinent to the target set. A high number here means that almost all the indicator set is useless inferring the target set
 
 ### target impertinence
 
     (target - indicator) / indicator
 
-:the degree to which the target set is impertinent to the indicator set. A high number here means that almost all the target set is useless targeting the indicator set
+the degree to which the target set is impertinent to the indicator set. A high number here means that almost all the target set is useless targeting the indicator set
 
 ### indicator opacity
 
