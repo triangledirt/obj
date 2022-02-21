@@ -6,13 +6,13 @@ case is a library of C functions used to classify objects in real time
 
 First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to case when you observe them
 
-Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1: a bit to let you know whether case thinks the object is a member of the target set
+Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1 (a bit to let you know whether case thinks the object is a member of the target set)
 
 ## statistical inference properties
 
 case also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set
 
-For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set: the degree to which the indicator set implies the target set
+For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
 
 These 14 properties are a fingerprint of the inference landscape. Their meanings are [explained](#infer-from-set-to-set) later
 
@@ -22,7 +22,7 @@ case doesn't use much memory or processor time. So it is real time
 
 It is real time in the sense that learning and classification take place interleaved in time
 
-case doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no functional settings for you to mess with. No threads, disk access, network or database connections: just a small library to attach to your process
+case doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no functional settings for you to mess with. No threads, disk access, network or database connections (just a small library to attach to your process)
 
 case does not profess to be perfect for any one task. It is not for critical tasks. case is generalized object classification with statistical, genetic, and other methods under the hood
 
