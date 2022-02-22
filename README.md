@@ -54,7 +54,7 @@ to your compile command
 
 See case.h and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions
 
-## observe and classify objects
+## observe and classify
 
 These two functions are used to observe and classify objects
 
