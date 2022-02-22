@@ -104,8 +104,12 @@ double case_impertinencet(case_obj_t indicator, case_obj_t target, long type)
   return (long) targsubcnt / indicnt;
 }
 
-void case_lens(char *obj, long type)
+void case_lens(char *csvobj, long type)
 {
+  case_obj_t obj;
+  case_obj_randomize(&obj);
+  ;
+  case_observe(obj, type);
 }
 
 double case_mismatchi(case_obj_t indicator, case_obj_t target, long type)

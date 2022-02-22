@@ -20,7 +20,7 @@ These 14 properties are a fingerprint of the inference landscape. Their meanings
 
 case doesn't use much memory or processor time. So it is real time
 
-It is real time in the sense that learning and classification take place interleaved in time
+It is real time in the sense that observation and classification take place interleaved in time
 
 case doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no functional settings for you to mess with. No threads, disk access, network or database connections (just a small library to attach to your process)
 

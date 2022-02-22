@@ -10,7 +10,7 @@
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 
-void case_lens(char *obj, long type);
+void case_lens(char *csvobj, long type);
 
 double case_frequencyi(case_obj_t indicator, case_obj_t target, long type);
 double case_frequencyt(case_obj_t indicator, case_obj_t target, long type);
