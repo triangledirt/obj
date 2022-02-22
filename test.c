@@ -5,6 +5,7 @@
 
 #define DIABETES 0
 #define MUSHROOM 1
+
 #define BUFF 1024
 #define MAX_FIELDS 32
 
