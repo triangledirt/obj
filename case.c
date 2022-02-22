@@ -14,12 +14,25 @@
 #include "jung.h"
 #include "obj.h"
 #include "sum.h"
+#include "type.h"
+#include "val.h"
 
 #define OBJECT_CACHE 64
 
 static case_obj_t object[32][OBJECT_CACHE];
 static case_bit_t once = 0;
 static case_obj_t types;
+static val_t lens[32][OBJECT_CACHE][32];
+
+/*
+ have different lens methods--ideal object, choose an ideal object every once in a while, first line and then every once in a while in a stochastic manner and you would compare text fields (whether they're equal to the (ideal) object) or not (so that's a 1 or a 0) or whether a number is greater than (which is one) or less than the ideal object (which is 0)
+ or instead of picking an ideal object you could store the last n character or numeric fields and see what the most common character value is or average numerical field value is
+ for the historical collection of n characters you'd store the first say 8 characters to calculate with
+ for the average of numerical values, could use a pseudo-average so I can store only one value
+ provide a classification index parameter so you don't have to rearrange the csv--that's a parameter to the lens() functions
+ for the lens history, have a struct containing a character value and a double value and then a field that says which one it is (since there are no unions in C)--There are unions in C, but it might be simpler to do it this way anyway
+ use OBJECT_CACHE as the size of the history to save?
+*/
 
 static long count(long type, case_obj_t typ);
 static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
@@ -28,6 +41,7 @@ static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static void learn();
+static void lensread(char *csvobj, val_t valobj[32]);
 static void notetype(long type);
 
 case_bit_t case_classify(case_obj_t obj, long type)
@@ -104,10 +118,12 @@ double case_impertinencet(case_obj_t indicator, case_obj_t target, long type)
   return (long) targsubcnt / indicnt;
 }
 
-void case_lens(char *csvobj, long type)
+void case_lensfirst(char *csvobj, long classidx, long type)
 {
   case_obj_t obj;
+  val_t valobj[32];
   case_obj_randomize(&obj);
+  lensread(csvobj, valobj);
   ;
   case_observe(obj, type);
 }
@@ -371,6 +387,10 @@ void learn()
       printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
+}
+
+void lensread(char *csvobj, val_t valobj[32])
+{
 }
 
 void notetype(long type)
