@@ -68,14 +68,16 @@ Call case_observe() on a case_obj_t when you see it. Pass the type, which is a l
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
-You can do object observation on these 32 types in any order
+You can observe objects of these 32 types in any order
 
     case_observe(obj1, MUSHROOM);
     case_observe(obj2, GAME_MAP);
     case_observe(obj3, IMAGE_GOTHIC);
     case_observe(obj4, GAME_MAP);
 
-If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
+If you're observing a MUSHROOM-type case_obj_t, you specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type
+
+When the time comes, you can classify new objects of unknown classification using the type parameter
 
     c = case_classify(obj1, MUSHROOM);
     d = case_classify(obj2, GAME_MAP);
