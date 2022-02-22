@@ -75,7 +75,9 @@ You can do object observation on these 32 types in any order
     case_observe(obj3, IMAGE_GOTHIC);
     case_observe(obj4, GAME_MAP);
 
-If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type. When the time comes, you can classify new objects of unknown classification using the type parameter
+If I'm observing a MUSHROOM-type case_obj_t, I specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type
+
+When the time comes, you can classify new objects of unknown classification using the type parameter
 
     c = case_classify(obj1, MUSHROOM);
     d = case_classify(obj2, GAME_MAP);
