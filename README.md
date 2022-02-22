@@ -26,7 +26,7 @@ case doesn't guarantee to produce the same result twice. It doesn't store its st
 
 case does not profess to be perfect for any one task. It is not for critical tasks. case is generalized object classification with statistical, genetic, and other methods under the hood
 
-## build and use case
+## build and use
 
 The case project has no release tags. The latest code is the latest release. I try to keep it compilable and runnable
 
