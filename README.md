@@ -68,7 +68,7 @@ Call case_observe() on a case_obj_t when you see it. Pass the type, which is a l
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
-You can do object observation on these 32 types in any order
+You can observe objects of these 32 types in any order
 
     case_observe(obj1, MUSHROOM);
     case_observe(obj2, GAME_MAP);
