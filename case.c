@@ -23,8 +23,11 @@ static case_obj_t object[32][OBJECT_CACHE];
 static case_bit_t once = 0;
 static case_obj_t types;
 static val_t lens[32][OBJECT_CACHE][32];
+static long lensidx = 0;
 
 /*
+ a function that increments the lenspos
+ insert into the lens at random
  have different lens methods--ideal object, choose an ideal object every once in a while, first line and then every once in a while in a stochastic manner and you would compare text fields (whether they're equal to the (ideal) object) or not (so that's a 1 or a 0) or whether a number is greater than (which is one) or less than the ideal object (which is 0)
  or instead of picking an ideal object you could store the last n character or numeric fields and see what the most common character value is or average numerical field value is
  for the historical collection of n characters you'd store the first say 8 characters to calculate with

@@ -1,4 +1,5 @@
 DEBUG=-g
-gcc $DEBUG -O3 -c bit.c bool.c case.c core.c filt.c fold.c gene.c indx.c jack.c jung.c node.c obj.c op.c trace.c sum.c
+COMPILER=gcc
+$COMPILER $DEBUG -O3 -c bit.c bool.c case.c core.c filt.c fold.c gene.c indx.c jack.c jung.c node.c obj.c op.c trace.c sum.c
 ar rcs libcase.a *.o
-gcc $DEBUG -O3 -o test test.c -lcase -L.
+$COMPILER $DEBUG -O3 -o test test.c -lcase -L.
