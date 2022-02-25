@@ -1,2 +1,2 @@
 wc -l *.h *c | tail -1
-grep TODO *.h *.c
+grep TODO *.md *.h *.c

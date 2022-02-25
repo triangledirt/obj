@@ -129,6 +129,10 @@ Then set only the bits you are certain are a 0 or a 1 in only the attributes you
 
 See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
+## lens()
+
+TODO: write
+
 ## infer from set to set
 
 These 14 functions return inference properties of the set of objects case is managing at this time. Call them once you've case_observe()d at least one object
