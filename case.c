@@ -27,21 +27,18 @@ enum lens_t {
 typedef enum lens_t lens_t;
 
 static case_obj_t object[32][OBJECT_CACHE];
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 static case_obj_t types;
-static val_t lens[32][OBJECT_CACHE][32];
+
+static val_t lens[32][OBJECT_CACHE / 2][32];
+static val_t lensfirstobj[32][32];
+static case_bool_t isfirstlens = case_bool_true;
 static type_t lenstypes[32][32];
 
 /*
- a function that increments the lenspos
  insert into the lens at random
  have different lens methods--ideal object, choose an ideal object every once in a while, first line and then every once in a while in a stochastic manner and you would compare text fields (whether they're equal to the (ideal) object) or not (so that's a 1 or a 0) or whether a number is greater than (which is one) or less than the ideal object (which is 0)
  or instead of picking an ideal object you could store the last n character or numeric fields and see what the most common character value is or average numerical field value is
- for the historical collection of n characters you'd store the first say 8 characters to calculate with
- for the average of numerical values, could use a pseudo-average so I can store only one value
- provide a classification index parameter so you don't have to rearrange the csv--that's a parameter to the lens() functions
- for the lens history, have a struct containing a character value and a double value and then a field that says which one it is (since there are no unions in C)--There are unions in C, but it might be simpler to do it this way anyway
- use OBJECT_CACHE as the size of the history to save?
 */
 
 static long count(long type, case_obj_t typ);
@@ -338,14 +335,23 @@ void initonce()
 {
   long i;
   long type;
+  long attr;
   case_obj_clear(&types);
   if (!once) {
-    for (type = 0; type < 32; type++)
-      for (i = 0; i < OBJECT_CACHE; i++)
+    for (type = 0; type < 32; type++) {
+      for (i = 0; i < OBJECT_CACHE; i++) {
         case_obj_randomize(&object[type][i]);
-    once = 1;
+        for (attr = 0; attr < 32; attr++) {
+          val_init(&lens[type][i][attr]);
+        }
+      }
+      for (attr = 0; attr < 32; attr++) {
+        val_init(&lensfirstobj[type][attr]);
+        lenstypes[type][attr] = type_str;
+      }
+    }
+    once = case_bool_true;
   }
-  /* TODO: initialize lens */
 }
 
 void learn()
@@ -422,6 +428,7 @@ void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
 {
   case_obj_t obj;
   val_t valobj[32];
+  initonce();
   case_obj_randomize(&obj);
   lensread(csvobj, classidx, valobj);
   lensinsert(valobj);

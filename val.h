@@ -9,4 +9,6 @@ union val_t {
 };
 typedef union val_t val_t;
 
+void val_init(val_t *val);
+
 #endif
