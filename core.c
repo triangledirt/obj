@@ -46,7 +46,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   o = pop[c->x][c->y][c->z];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparet(o, obj[i]);
+      tot += case_obj_cmptypes(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y][c->z] = fit;
   if (fit > fitness[type]) {
@@ -57,7 +57,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 
 case_bit_t core_classify(case_obj_t obj, long type)
 {
-  return case_obj_comparet(obj, ideal[type]) > (0.9 * fitness[type]);
+  return case_obj_cmptypes(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
 void core_learn(case_obj_t obj[], long objsz, long type)

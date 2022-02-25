@@ -1,10 +1,10 @@
 #include <string.h>
 #include "val.h"
 
-void val_copy(val_t *dest, val_t *source)
+void val_copy(val_t *dest, val_t *src)
 {
-  dest->num = source->num;
-  memcpy(dest->str, source->str, VAL_STR_SZ);
+  dest->num = src->num;
+  memcpy(dest->str, src->str, VAL_STR_SZ);
 }
 
 void val_init(val_t *val)

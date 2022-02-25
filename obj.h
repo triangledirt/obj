@@ -18,9 +18,9 @@ void case_obj_rotate(case_obj_t *obj, long inc);
 #define case_obj_setclass(obj, val) if (val) { *obj |= ((long) 1); } else { *obj &= ~((long) 1); }
 #define case_obj_getclass(obj) (obj & (long) 1)
 
-double case_obj_comparet(case_obj_t obj1, case_obj_t obj2);
-double case_obj_compareq(case_obj_t obj1, case_obj_t obj2);
-double case_obj_comparex(case_obj_t obj1, case_obj_t obj2);
+double case_obj_cmpequal(case_obj_t obj1, case_obj_t obj2);
+double case_obj_cmpsmash(case_obj_t obj1, case_obj_t obj2);
+double case_obj_cmptypes(case_obj_t obj1, case_obj_t obj2);
 
 void case_obj_print(case_obj_t obj);
 

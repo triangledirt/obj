@@ -10,26 +10,7 @@ void case_obj_clear(case_obj_t *obj)
   *obj = 0;
 }
 
-double case_obj_comparet(case_obj_t obj1, case_obj_t obj2)
-{
-  long bit;
-  long correct = 0;
-  long total = 1;
-  case_bit_t bit1;
-  case_bit_t bit2;
-  for (bit = 1; bit < 32; bit++) {
-    bit1 = case_obj_getattr(obj1, bit);
-    bit2 = case_obj_getattr(obj2, bit);
-    if ((1 == bit1) || (1 == bit2)) {
-      total++;
-      if ((1 == bit1) && (1 == bit2))
-        correct++;
-    }
-  }
-  return (double) correct / total;
-}
-
-double case_obj_compareq(case_obj_t obj1, case_obj_t obj2)
+double case_obj_cmpequal(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;
   long correct = 0;
@@ -44,7 +25,7 @@ double case_obj_compareq(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / 31;
 }
 
-double case_obj_comparex(case_obj_t obj1, case_obj_t obj2)
+double case_obj_cmpsmash(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;
   long endbit;
@@ -66,6 +47,25 @@ double case_obj_comparex(case_obj_t obj1, case_obj_t obj2)
     bit2 = case_obj_getattr(obj2, bit);
     if (bit1 == bit2)
       correct++;
+  }
+  return (double) correct / total;
+}
+
+double case_obj_cmptypes(case_obj_t obj1, case_obj_t obj2)
+{
+  long bit;
+  long correct = 0;
+  long total = 1;
+  case_bit_t bit1;
+  case_bit_t bit2;
+  for (bit = 1; bit < 32; bit++) {
+    bit1 = case_obj_getattr(obj1, bit);
+    bit2 = case_obj_getattr(obj2, bit);
+    if ((1 == bit1) || (1 == bit2)) {
+      total++;
+      if ((1 == bit1) && (1 == bit2))
+        correct++;
+    }
   }
   return (double) correct / total;
 }
