@@ -19,11 +19,17 @@
 
 #define OBJECT_CACHE 64
 
+enum lens_t {
+  lens_avg,
+  lens_first,
+  lens_rand
+};
+typedef enum lens_t lens_t;
+
 static case_obj_t object[32][OBJECT_CACHE];
 static case_bit_t once = 0;
 static case_obj_t types;
 static val_t lens[32][OBJECT_CACHE][32];
-static long lensidx = 0;
 
 /*
  a function that increments the lenspos
@@ -44,7 +50,12 @@ static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static void learn();
-static void lensread(char *csvobj, val_t valobj[32]);
+static void lensavg(case_obj_t *obj);
+static void lensfirst(case_obj_t *obj);
+static void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype);
+static void lensinsert(val_t valobj[32]);
+static void lensrand(case_obj_t *obj);
+static void lensread(char *csvobj, long classidx, val_t valobj[32]);
 static void notetype(long type);
 
 case_bit_t case_classify(case_obj_t obj, long type)
@@ -121,14 +132,19 @@ double case_impertinencet(case_obj_t indicator, case_obj_t target, long type)
   return (long) targsubcnt / indicnt;
 }
 
+void case_lensavg(char *csvobj, long classidx, long type)
+{
+  lensgeneral(csvobj, classidx, type, lens_avg);
+}
+
 void case_lensfirst(char *csvobj, long classidx, long type)
 {
-  case_obj_t obj;
-  val_t valobj[32];
-  case_obj_randomize(&obj);
-  lensread(csvobj, valobj);
-  ;
-  case_observe(obj, type);
+  lensgeneral(csvobj, classidx, type, lens_first);
+}
+
+void case_lensrand(char *csvobj, long classidx, long type)
+{
+  lensgeneral(csvobj, classidx, type, lens_rand);
 }
 
 double case_mismatchi(case_obj_t indicator, case_obj_t target, long type)
@@ -392,7 +408,44 @@ void learn()
     }
 }
 
-void lensread(char *csvobj, val_t valobj[32])
+void lensavg(case_obj_t *obj)
+{
+}
+
+void lensinsert(val_t valobj[32])
+{
+}
+
+void lensfirst(case_obj_t *obj)
+{
+}
+
+void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
+{
+  case_obj_t obj;
+  val_t valobj[32];
+  case_obj_randomize(&obj);
+  lensread(csvobj, classidx, valobj);
+  lensinsert(valobj);
+  switch (lenstype) {
+    case lens_avg:
+      lensavg(&obj);
+      break;
+    case lens_first:
+      lensfirst(&obj);
+      break;
+    case lens_rand:
+      lensrand(&obj);
+      break;
+  };
+  case_observe(obj, type);
+}
+
+void lensrand(case_obj_t *obj)
+{
+}
+
+void lensread(char *csvobj, long classidx, val_t valobj[32])
 {
 }
 

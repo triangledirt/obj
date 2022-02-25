@@ -249,6 +249,6 @@ Transparency is the ratio between the overlap and the xor of the indicator and t
 - No dependencies outside the C standard library
 - No disk access or network connections
 - No malloc/free() or other heap use (outside of test.c)
-- No const
+- No const parameters
 - No comments in completed code
 - Thank you!
