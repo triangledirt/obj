@@ -30,6 +30,7 @@ static case_obj_t object[32][OBJECT_CACHE];
 static case_bit_t once = 0;
 static case_obj_t types;
 static val_t lens[32][OBJECT_CACHE][32];
+static type_t lenstypes[32][32];
 
 /*
  a function that increments the lenspos
@@ -344,6 +345,7 @@ void initonce()
         case_obj_randomize(&object[type][i]);
     once = 1;
   }
+  /* TODO: initialize lens */
 }
 
 void learn()
@@ -412,10 +414,6 @@ void lensavg(case_obj_t *obj)
 {
 }
 
-void lensinsert(val_t valobj[32])
-{
-}
-
 void lensfirst(case_obj_t *obj)
 {
 }
@@ -439,6 +437,10 @@ void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
       break;
   };
   case_observe(obj, type);
+}
+
+void lensinsert(val_t valobj[32])
+{
 }
 
 void lensrand(case_obj_t *obj)
