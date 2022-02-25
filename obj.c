@@ -70,7 +70,7 @@ double case_obj_cmptypes(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / total;
 }
 
-double case_obj_getobliv(case_obj_t obj1, case_obj_t obj2)
+double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
 {
   double oblivion;
   long match;
