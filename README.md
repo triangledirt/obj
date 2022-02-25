@@ -151,7 +151,7 @@ The following 13 functions use the same parameters as above
     double case_targtrans(..);
     double case_trans(..);
 
-Some of the names begin with *indi* or *targ*. Those mean *indicator* or *target*. *freq* means frequency, *over* means overlap, *mis* means mismatch, *imp* means impertinence, *opac* means opacity, and *trans* means transparency. So indifreq() returns the indicator frequency. targfreq() returns the target frequency. Etc
+Some of the names begin with *indi* or *targ*. Those mean indicator or target. *freq* means frequency, *over* means overlap, *mis* means mismatch, *imp* means impertinence, *opac* means opacity, and *trans* means transparency. So indifreq() returns the indicator frequency. targfreq() returns the target frequency. Etc
 
 Each takes an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_obj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
 
