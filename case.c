@@ -18,6 +18,7 @@
 #include "val.h"
 
 #define OBJECT_CACHE 64
+#define LENS_CACHE OBJECT_CACHE
 
 enum lens_t {
   lens_avg,
@@ -30,7 +31,7 @@ static case_obj_t object[32][OBJECT_CACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
-static val_t lens[32][OBJECT_CACHE / 2][32];
+static val_t lens[32][LENS_CACHE][32];
 static val_t lensfirstobj[32][32];
 static case_bool_t isfirstlens = case_bool_true;
 static type_t lenstypes[32][32];
@@ -51,7 +52,7 @@ static void learn();
 static void lensavg(case_obj_t *obj);
 static void lensfirst(case_obj_t *obj);
 static void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype);
-static void lensinsert(val_t valobj[32]);
+static void lensinsert(val_t valobj[32], long type);
 static void lensrand(case_obj_t *obj);
 static void lensread(char *csvobj, long classidx, val_t valobj[32]);
 static void notetype(long type);
@@ -431,7 +432,7 @@ void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
   initonce();
   case_obj_randomize(&obj);
   lensread(csvobj, classidx, valobj);
-  lensinsert(valobj);
+  lensinsert(valobj, type);
   switch (lenstype) {
     case lens_avg:
       lensavg(&obj);
@@ -446,8 +447,14 @@ void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
   case_observe(obj, type);
 }
 
-void lensinsert(val_t valobj[32])
+void lensinsert(val_t valobj[32], long type)
 {
+  long obj;
+  long field;
+  obj = random() % LENS_CACHE;
+  for (field = 0; field < 32; field++) {
+    val_copy(&lens[type][obj][field], &valobj[field]);
+  }
 }
 
 void lensrand(case_obj_t *obj)

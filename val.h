@@ -10,5 +10,6 @@ union val_t {
 typedef union val_t val_t;
 
 void val_init(val_t *val);
+void val_copy(val_t *dest, val_t *source);
 
 #endif
