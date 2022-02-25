@@ -133,27 +133,27 @@ See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
 These 14 functions return inference properties of the set of objects case is managing at this time. Call them once you've case_observe()d at least one object
 
-    double case_frequencyi(case_obj_t indicator, case_obj_t target, long type);
+    double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
 
 The following 13 functions use the same parameters as above
 
-    double case_frequencyt(..);
-    double case_overlapi(..);
-    double case_overlapt(..);
-    double case_overlap(..);
-    double case_mismatchi(..);
-    double case_mismatcht(..);
-    double case_impertinencei(..);
-    double case_impertinencet(..);
-    double case_opacityi(..);
-    double case_opacityt(..);
-    double case_transparencyi(..);
-    double case_transparencyt(..);
-    double case_transparency(..);
+    double case_targfreq(..);
+    double case_indiover(..);
+    double case_targover(..);
+    double case_over(..);
+    double case_indimis(..);
+    double case_targmis(..);
+    double case_indiimp(..);
+    double case_targimp(..);
+    double case_indiopac(..);
+    double case_targopac(..);
+    double case_inditrans(..);
+    double case_targtrans(..);
+    double case_trans(..);
 
-Some of the names end with *i* or *t*. Those mean *indicator* or *target*. So frequencyi() returns the indicator frequency. frequencyt() returns the target frequency
+Some of the names begin with *indi* or *targ*. Those mean *indicator* or *target*. *freq* means frequency, *over* means overlap, *mis* means mismatch, *imp* means impertinence, *opac* means opacity, and *trans* means transparency. So indifreq() returns the indicator frequency. targfreq() returns the target frequency. Etc
 
-Each tages an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_obj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
+Each takes an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_obj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
 
 ### indicator frequency
 

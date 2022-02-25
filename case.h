@@ -14,19 +14,19 @@ void case_lensfirst(char *csvobj, long classidx, long type);
 void case_lensavg(char *csvobj, long classidx, long type);
 void case_lensrand(char *csvobj, long classidx, long type);
 
-double case_frequencyi(case_obj_t indicator, case_obj_t target, long type);
-double case_frequencyt(case_obj_t indicator, case_obj_t target, long type);
-double case_overlapi(case_obj_t indicator, case_obj_t target, long type);
-double case_overlapt(case_obj_t indicator, case_obj_t target, long type);
-double case_overlap(case_obj_t indicator, case_obj_t target, long type);
-double case_mismatchi(case_obj_t indicator, case_obj_t target, long type);
-double case_mismatcht(case_obj_t indicator, case_obj_t target, long type);
-double case_impertinencei(case_obj_t indicator, case_obj_t target, long type);
-double case_impertinencet(case_obj_t indicator, case_obj_t target, long type);
-double case_opacityi(case_obj_t indicator, case_obj_t target, long type);
-double case_opacityt(case_obj_t indicator, case_obj_t target, long type);
-double case_transparencyi(case_obj_t indicator, case_obj_t target, long type);
-double case_transparencyt(case_obj_t indicator, case_obj_t target, long type);
-double case_transparency(case_obj_t indicator, case_obj_t target, long type);
+double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
+double case_targfreq(case_obj_t indicator, case_obj_t target, long type);
+double case_indiover(case_obj_t indicator, case_obj_t target, long type);
+double case_targover(case_obj_t indicator, case_obj_t target, long type);
+double case_over(case_obj_t indicator, case_obj_t target, long type);
+double case_indimis(case_obj_t indicator, case_obj_t target, long type);
+double case_targmis(case_obj_t indicator, case_obj_t target, long type);
+double case_indiimp(case_obj_t indicator, case_obj_t target, long type);
+double case_targimp(case_obj_t indicator, case_obj_t target, long type);
+double case_indiopac(case_obj_t indicator, case_obj_t target, long type);
+double case_targopac(case_obj_t indicator, case_obj_t target, long type);
+double case_inditrans(case_obj_t indicator, case_obj_t target, long type);
+double case_targtrans(case_obj_t indicator, case_obj_t target, long type);
+double case_trans(case_obj_t indicator, case_obj_t target, long type);
 
 #endif
