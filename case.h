@@ -5,7 +5,7 @@
 #include "obj.h"
 
 #define CASE_VERBOSE 1
-#define CASE_EXTRA_VERBOSE 1
+#define CASE_XVERBOSE 1
 
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);

@@ -34,7 +34,7 @@ To use, first get the source code
 
     git clone git@github.com:triangledirt/case.git
 
-Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_EXTRA_VERBOSE to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_EXTRA_VERBOSE is 1, you get extra information printed to stdout
+Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_XVERBOSE to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_XVERBOSE is 1, you get extra information printed to stdout
 
 Once you change those code settings, you can change some build settings. These are in [make](https://github.com/triangledirt/case/blob/main/make). Change DEBUG to be "" if you don't want debug info, "-g" if you do want debug info and your compiler is gcc. Change COMPILER to be whatever your compiler is. Etc
 

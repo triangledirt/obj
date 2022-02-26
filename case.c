@@ -20,13 +20,6 @@
 #define OBJECT_CACHE 64
 #define LENS_CACHE OBJECT_CACHE
 
-enum lens_t {
-  lens_avg,
-  lens_first,
-  lens_rand
-};
-typedef enum lens_t lens_t;
-
 static case_obj_t object[32][OBJECT_CACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
@@ -83,7 +76,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   onecount = filtclass + foldclass + sumclass;
   zerocount = 3 - onecount;
   class = (zerocount >= onecount) ? 0 : 1;
-#if CASE_VERBOSE && CASE_EXTRA_VERBOSE
+#if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
@@ -344,9 +337,8 @@ void initonce()
     for (type = 0; type < 32; type++) {
       for (i = 0; i < OBJECT_CACHE; i++) {
         case_obj_randomize(&object[type][i]);
-        for (attr = 0; attr < 32; attr++) {
+        for (attr = 0; attr < 32; attr++)
           val_init(&lens[type][i][attr]);
-        }
       }
       for (attr = 0; attr < 32; attr++) {
         val_init(&lensfirstobj[type][attr]);
@@ -413,7 +405,7 @@ void learn()
       sum_learn(object[type], OBJECT_CACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
-#if CASE_VERBOSE && CASE_EXTRA_VERBOSE
+#if CASE_VERBOSE && CASE_XVERBOSE
       printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
@@ -444,9 +436,8 @@ void lensinsert(val_t valobj[32], long type)
   long obj;
   long field;
   obj = random() % LENS_CACHE;
-  for (field = 0; field < 32; field++) {
-    val_copy(&lens[type][obj][field], &valobj[field]);
-  }
+  for (field = 0; field < 32; field++)
+    val_copy(&valobj[field], &lens[type][obj][field]);
 }
 
 void lensrand(case_obj_t *obj)
