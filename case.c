@@ -42,6 +42,8 @@ static type_t lenstypes[32][32];
  or instead of picking an ideal object you could store the last n character or numeric fields and see what the most common character value is or average numerical field value is
 */
 
+typedef void (*lens_f)(case_obj_t*);
+
 static long count(long type, case_obj_t typ);
 static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
 static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
@@ -51,7 +53,7 @@ static void initonce();
 static void learn();
 static void lensavg(case_obj_t *obj);
 static void lensfirst(case_obj_t *obj);
-static void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype);
+static void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc);
 static void lensinsert(val_t valobj[32], long type);
 static void lensrand(case_obj_t *obj);
 static void lensread(char *csvobj, long classidx, val_t valobj[32]);
@@ -155,17 +157,17 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
 
 void case_lensavg(char *csvobj, long classidx, long type)
 {
-  lensgeneral(csvobj, classidx, type, lens_avg);
+  lensgeneral(csvobj, classidx, type, lensavg);
 }
 
 void case_lensfirst(char *csvobj, long classidx, long type)
 {
-  lensgeneral(csvobj, classidx, type, lens_first);
+  lensgeneral(csvobj, classidx, type, lensfirst);
 }
 
 void case_lensrand(char *csvobj, long classidx, long type)
 {
-  lensgeneral(csvobj, classidx, type, lens_rand);
+  lensgeneral(csvobj, classidx, type, lensrand);
 }
 
 void case_observe(case_obj_t obj, long type)
@@ -425,7 +427,7 @@ void lensfirst(case_obj_t *obj)
 {
 }
 
-void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
+void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc)
 {
   case_obj_t obj;
   val_t valobj[32];
@@ -433,17 +435,7 @@ void lensgeneral(char *csvobj, long classidx, long type, lens_t lenstype)
   case_obj_randomize(&obj);
   lensread(csvobj, classidx, valobj);
   lensinsert(valobj, type);
-  switch (lenstype) {
-    case lens_avg:
-      lensavg(&obj);
-      break;
-    case lens_first:
-      lensfirst(&obj);
-      break;
-    case lens_rand:
-      lensrand(&obj);
-      break;
-  };
+  lensfunc(&obj);
   case_observe(obj, type);
 }
 
