@@ -7,16 +7,16 @@
 #define MUSHROOM 1
 
 #define BUFF 1024
-#define MAX_FIELDS 32
+#define MAXFIELDS 32
 
 static long fields;
-static char *firstline[MAX_FIELDS];
+static char *firstline[MAXFIELDS];
 static long total = 0;
 static long correct = 0;
 
 static void freefirst();
 static void initfirst();
-static void savefirst(char line[MAX_FIELDS]);
+static void savefirst(char line[MAXFIELDS]);
 static void testfile(char *filename, long type);
 static void testline(char *line, long type);
 

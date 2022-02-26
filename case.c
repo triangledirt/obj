@@ -19,14 +19,14 @@
 #include "type.h"
 #include "val.h"
 
-#define OBJECT_CACHE 64
-#define LENS_CACHE OBJECT_CACHE
+#define OBJECTCACHE 64
+#define LENSCACHE OBJECTCACHE
 
-static case_obj_t object[32][OBJECT_CACHE];
+static case_obj_t object[32][OBJECTCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
-static val_t lens[32][LENS_CACHE][32];
+static val_t lens[32][LENSCACHE][32];
 static val_t lensfirstobj[32][32];
 static case_bool_t isfirstlens = case_bool_true;
 static type_t lenstypes[32][32];
@@ -172,9 +172,9 @@ void case_observe(case_obj_t obj, long type)
   long i;
   initonce();
   notetype(type);
-  i = random() % OBJECT_CACHE;
+  i = random() % OBJECTCACHE;
   object[type][i] = obj;
-  if (die_toss(OBJECT_CACHE / 16))
+  if (die_toss(OBJECTCACHE / 16))
     learn();
 }
 
@@ -271,7 +271,7 @@ long count(long type, case_obj_t typ)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECT_CACHE; i++) {
+  for (i = 0; i < OBJECTCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, typ);
   }
@@ -283,7 +283,7 @@ long countboth(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECT_CACHE; i++) {
+  for (i = 0; i < OBJECTCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
   }
@@ -295,7 +295,7 @@ long counteither(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECT_CACHE; i++) {
+  for (i = 0; i < OBJECTCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
   }
@@ -307,7 +307,7 @@ long countsub(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECT_CACHE; i++) {
+  for (i = 0; i < OBJECTCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
   }
@@ -321,7 +321,7 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   long i;
   case_bit_t has1;
   case_bit_t has2;
-  for (i = 0; i < OBJECT_CACHE; i++) {
+  for (i = 0; i < OBJECTCACHE; i++) {
     obj = object[type][i];
     has1 = case_obj_hastype(obj, typ1);
     has2 = case_obj_hastype(obj, typ2);
@@ -339,7 +339,7 @@ void initonce()
   case_obj_clear(&types);
   if (!once) {
     for (type = 0; type < 32; type++) {
-      for (i = 0; i < OBJECT_CACHE; i++) {
+      for (i = 0; i < OBJECTCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
           val_init(&lens[type][i][attr]);
@@ -362,7 +362,7 @@ case_bool_t isnum(char *text)
   textlen = strlen(text);
   for (i = 0; i < textlen; i++) {
     c = *(text + i);
-    if (!((c == '.') || isdigit(c))) {
+    if (!(('-' == c) || ('.' == c) || isdigit(c))) {
       is = case_bool_false;
       break;
     }
@@ -386,44 +386,44 @@ void learn()
     if (case_obj_getattr(types, type)) {
 /*
       gettimeofday(&tv1, NULL);
-      core_learn(object[type], OBJECT_CACHE, type);
+      core_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      filt_learn(object[type], OBJECT_CACHE, type);
+      filt_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       filttime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      fold_learn(object[type], OBJECT_CACHE, type);
+      fold_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
 /*
       gettimeofday(&tv1, NULL);
-      gene_learn(object[type], OBJECT_CACHE, type);
+      gene_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jack_learn(object[type], OBJECT_CACHE, type);
+      jack_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       jacktime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jung_learn(object[type], OBJECT_CACHE, type);
+      jung_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      sum_learn(object[type], OBJECT_CACHE, type);
+      sum_learn(object[type], OBJECTCACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && CASE_XVERBOSE
@@ -456,7 +456,7 @@ void lensinsert(val_t valobj[32], long type)
 {
   long obj;
   long field;
-  obj = random() % LENS_CACHE;
+  obj = random() % LENSCACHE;
   for (field = 0; field < 32; field++)
     val_copy(&valobj[field], &lens[type][obj][field]);
 }
@@ -470,10 +470,10 @@ void lensread(char *csvobj, long classidx, val_t valobj[32])
   char *tok;
   long csvidx = 0;
   long validx = 0;
-  tok = strtok(csvobj, ",");
+  tok = strtok(csvobj, ",\n");
   validx = (classidx == csvidx) ? 0 : 1;
   lensreadfield(tok, &valobj[validx]);
-  while (tok = strtok(NULL, ",\0\n")) {
+  while (tok = strtok(NULL, ",\n")) {
     csvidx++;
     validx = (classidx == csvidx) ? 0 : ++validx;
     lensreadfield(tok, &valobj[validx]);
