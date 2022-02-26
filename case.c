@@ -19,10 +19,10 @@
 #include "type.h"
 #include "val.h"
 
-#define OBJECTCACHE 64
-#define LENSCACHE OBJECTCACHE
+#define OBJCACHE 64
+#define LENSCACHE OBJCACHE
 
-static case_obj_t object[32][OBJECTCACHE];
+static case_obj_t object[32][OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
@@ -172,9 +172,9 @@ void case_observe(case_obj_t obj, long type)
   long i;
   initonce();
   notetype(type);
-  i = random() % OBJECTCACHE;
+  i = random() % OBJCACHE;
   object[type][i] = obj;
-  if (die_toss(OBJECTCACHE / 16))
+  if (die_toss(OBJCACHE / 16))
     learn();
 }
 
@@ -271,7 +271,7 @@ long count(long type, case_obj_t typ)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECTCACHE; i++) {
+  for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, typ);
   }
@@ -283,7 +283,7 @@ long countboth(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECTCACHE; i++) {
+  for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
   }
@@ -295,7 +295,7 @@ long counteither(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECTCACHE; i++) {
+  for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
   }
@@ -307,7 +307,7 @@ long countsub(long type, case_obj_t typ1, case_obj_t typ2)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJECTCACHE; i++) {
+  for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
     count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
   }
@@ -321,7 +321,7 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   long i;
   case_bit_t has1;
   case_bit_t has2;
-  for (i = 0; i < OBJECTCACHE; i++) {
+  for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
     has1 = case_obj_hastype(obj, typ1);
     has2 = case_obj_hastype(obj, typ2);
@@ -339,7 +339,7 @@ void initonce()
   case_obj_clear(&types);
   if (!once) {
     for (type = 0; type < 32; type++) {
-      for (i = 0; i < OBJECTCACHE; i++) {
+      for (i = 0; i < OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
           val_init(&lens[type][i][attr]);
@@ -386,44 +386,44 @@ void learn()
     if (case_obj_getattr(types, type)) {
 /*
       gettimeofday(&tv1, NULL);
-      core_learn(object[type], OBJECTCACHE, type);
+      core_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      filt_learn(object[type], OBJECTCACHE, type);
+      filt_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       filttime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      fold_learn(object[type], OBJECTCACHE, type);
+      fold_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
 /*
       gettimeofday(&tv1, NULL);
-      gene_learn(object[type], OBJECTCACHE, type);
+      gene_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jack_learn(object[type], OBJECTCACHE, type);
+      jack_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       jacktime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jung_learn(object[type], OBJECTCACHE, type);
+      jung_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      sum_learn(object[type], OBJECTCACHE, type);
+      sum_learn(object[type], OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && CASE_XVERBOSE
