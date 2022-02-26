@@ -32,9 +32,7 @@ static case_bool_t isfirstlens = case_bool_true;
 static type_t lenstypes[32][32];
 
 /*
- insert into the lens at random
- have different lens methods--ideal object, choose an ideal object every once in a while, first line and then every once in a while in a stochastic manner and you would compare text fields (whether they're equal to the (ideal) object) or not (so that's a 1 or a 0) or whether a number is greater than (which is one) or less than the ideal object (which is 0)
- or instead of picking an ideal object you could store the last n character or numeric fields and see what the most common character value is or average numerical field value is
+  or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
 */
 
 typedef void (*lens_f)(case_obj_t*);
