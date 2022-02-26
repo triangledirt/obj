@@ -1,5 +1,7 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 #include <time.h>
 #include "bit.h"
@@ -43,6 +45,7 @@ static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
 static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
+static case_bool_t isnum(char *text);
 static void learn();
 static void lensavg(case_obj_t *obj);
 static void lensfirst(case_obj_t *obj);
@@ -50,6 +53,7 @@ static void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc)
 static void lensinsert(val_t valobj[32], long type);
 static void lensrand(case_obj_t *obj);
 static void lensread(char *csvobj, long classidx, val_t valobj[32]);
+static void lensreadfield(char *text, val_t *val);
 static void notetype(long type);
 
 case_bit_t case_classify(case_obj_t obj, long type)
@@ -349,6 +353,23 @@ void initonce()
   }
 }
 
+case_bool_t isnum(char *text)
+{
+  long textlen;
+  long i;
+  char c;
+  case_bool_t is = case_bool_true;
+  textlen = strlen(text);
+  for (i = 0; i < textlen; i++) {
+    c = *(text + i);
+    if (!((c == '.') || isdigit(c))) {
+      is = case_bool_false;
+      break;
+    }
+  }
+  return is;
+}
+
 void learn()
 {
   long type;
@@ -446,6 +467,26 @@ void lensrand(case_obj_t *obj)
 
 void lensread(char *csvobj, long classidx, val_t valobj[32])
 {
+  char *tok;
+  long csvidx = 0;
+  long validx = 0;
+  tok = strtok(csvobj, ",");
+  validx = (classidx == csvidx) ? 0 : 1;
+  lensreadfield(tok, &valobj[validx]);
+  while (tok = strtok(NULL, ",\0\n")) {
+    csvidx++;
+    validx = (classidx == csvidx) ? 0 : ++validx;
+    lensreadfield(tok, &valobj[validx]);
+  }
+}
+
+void lensreadfield(char *text, val_t *val)
+{
+  if (isnum(text)) {
+    val->num = strtod(text, NULL);
+  } else {
+    memcpy(val->str, text, VAL_STRSZ);
+  }
 }
 
 void notetype(long type)
