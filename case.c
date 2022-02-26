@@ -32,7 +32,7 @@ static case_bool_t isfirstlens = case_bool_true;
 static type_t lenstypes[32][32];
 
 /*
-  or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
+  TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
 */
 
 typedef void (*lens_f)(case_obj_t*);
@@ -432,10 +432,12 @@ void learn()
 
 void lensavg(case_obj_t *obj)
 {
+  /* TODO: implement */
 }
 
 void lensfirst(case_obj_t *obj)
 {
+  /* TODO: implement */
 }
 
 void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc)
@@ -461,6 +463,7 @@ void lensinsert(val_t valobj[32], long type)
 
 void lensrand(case_obj_t *obj)
 {
+  /* TODO: implement */
 }
 
 void lensread(char *csvobj, long classidx, val_t valobj[32])
