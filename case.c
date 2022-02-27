@@ -26,10 +26,10 @@ static case_obj_t object[32][OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
-static val_t csv[32][LENSCACHE][32];
-static val_t firstcsvobj[32][32];
-static type_t csvtypes[32][32];
-static case_bool_t isfirstcsv = case_bool_true;
+static val_t value[32][LENSCACHE][32];
+static val_t firstval[32][32];
+static type_t valtypes[32][32];
+static case_bool_t firstpack = case_bool_true;
 
 /*
   TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
@@ -355,11 +355,11 @@ void initonce()
       for (i = 0; i < OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
-          val_init(&csv[type][i][attr]);
+          val_init(&value[type][i][attr]);
       }
       for (attr = 0; attr < 32; attr++) {
-        val_init(&firstcsvobj[type][attr]);
-        csvtypes[type][attr] = type_str;
+        val_init(&firstval[type][attr]);
+        valtypes[type][attr] = type_str;
       }
     }
     once = case_bool_true;
@@ -372,7 +372,7 @@ void insertcsv(val_t valobj[32], long type)
   long field;
   obj = random() % LENSCACHE;
   for (field = 0; field < 32; field++)
-    val_copy(&valobj[field], &csv[type][obj][field]);
+    val_copy(&valobj[field], &value[type][obj][field]);
 }
 
 case_bool_t isnum(char *text)
@@ -474,6 +474,11 @@ case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
   val_t valobj[32];
   long field;
   case_bit_t bit;
+  if (firstpack) {
+    /* TODO: set types in valtypes array */
+    /* TODO: insert valobj into firstval array */
+    firstpack = case_bool_false;
+  }
   csv2valobj(csvobj, classidx, valobj);
   for (field = 0; field < 32; field++) {
     bit = packfunc(&valobj[field], field);
