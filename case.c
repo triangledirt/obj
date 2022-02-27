@@ -35,15 +35,14 @@ static case_bool_t isfirstcsv = case_bool_true;
   TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
 */
 
+static void learn();
+static void initonce();
+static void notetype(long type);
 static long count(long type, case_obj_t typ);
 static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
 static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
 static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
-static void initonce();
-static case_bool_t isnum(char *text);
-static void learn();
-static void notetype(long type);
 
 typedef case_bit_t (*pack_f)(val_t *, long);
 static case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc);
@@ -53,6 +52,7 @@ static case_bit_t packrand(val_t *val, long idx);
 static void insertcsv(val_t valobj[32], long type);
 static void csv2valobj(char *csvobj, long classidx, val_t valobj[32]);
 static void text2val(char *text, val_t *val);
+static case_bool_t isnum(char *text);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
