@@ -461,10 +461,12 @@ void notetype(long type)
 
 case_bit_t packavg(val_t *val, long idx)
 {
+  /* TODO: implement */
 }
 
 case_bit_t packfirst(val_t *val, long idx)
 {
+  /* TODO: implement */
 }
 
 case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
@@ -490,6 +492,7 @@ case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
 
 case_bit_t packrand(val_t *val, long idx)
 {
+  /* TODO: implement */
 }
 
 void text2val(char *text, val_t *val)
