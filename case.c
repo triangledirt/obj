@@ -45,16 +45,14 @@ static case_bool_t isnum(char *text);
 static void learn();
 static void notetype(long type);
 
-typedef case_bit_t (*compress_f)(val_t *, long);
-static void observecsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc);
-static case_bit_t classifycsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc);
-static case_bit_t compressvalavg(val_t *val, long idx);
-static case_bit_t compressvalfirst(val_t *val, long idx);
-static case_bit_t compressvalrand(val_t *val, long idx);
+typedef case_bit_t (*pack_f)(val_t *, long);
+static case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc);
+static case_bit_t packavg(val_t *val, long idx);
+static case_bit_t packfirst(val_t *val, long idx);
+static case_bit_t packrand(val_t *val, long idx);
 static void insertcsv(val_t valobj[32], long type);
 static void csv2valobj(char *csvobj, long classidx, val_t valobj[32]);
 static void text2val(char *text, val_t *val);
-static case_obj_t csv2obj(char *csvobj, long classidx, compress_f compressfunc);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
@@ -84,21 +82,6 @@ case_bit_t case_classify(case_obj_t obj, long type)
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
-}
-
-case_bit_t case_classifycsvavg(char *csvobj, long classidx, long type)
-{
-  classifycsvgeneral(csvobj, type, classidx, compressvalavg);
-}
-
-case_bit_t case_classifycsvfirst(char *csvobj, long classidx, long type)
-{
-  classifycsvgeneral(csvobj, type, classidx, compressvalfirst);
-}
-
-case_bit_t case_classifycsvrand(char *csvobj, long classidx, long type)
-{
-  classifycsvgeneral(csvobj, type, classidx, compressvalrand);
 }
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
@@ -178,21 +161,6 @@ void case_observe(case_obj_t obj, long type)
     learn();
 }
 
-void case_observecsvavg(char *csvobj, long classidx, long type)
-{
-  observecsvgeneral(csvobj, classidx, type, compressvalavg);
-}
-
-void case_observecsvfirst(char *csvobj, long classidx, long type)
-{
-  observecsvgeneral(csvobj, classidx, type, compressvalfirst);
-}
-
-void case_observecsvrand(char *csvobj, long classidx, long type)
-{
-  observecsvgeneral(csvobj, classidx, type, compressvalrand);
-}
-
 double case_over(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
@@ -202,6 +170,21 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
   if (0 == eithercnt)
     eithercnt = 1;
   return (long) bothcnt / eithercnt;
+}
+
+case_obj_t case_packavg(char *csvobj, long classidx, long type)
+{
+  return packgeneral(csvobj, type, classidx, packavg);
+}
+
+case_obj_t case_packfirst(char *csvobj, long classidx, long type)
+{
+  packgeneral(csvobj, type, classidx, packfirst);
+}
+
+case_obj_t case_packrand(char *csvobj, long classidx, long type)
+{
+  packgeneral(csvobj, type, classidx, packrand);
 }
 
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
@@ -281,26 +264,6 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / xorcnt;
 }
 
-case_bit_t classifycsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc)
-{
-  case_obj_t obj;
-  initonce();
-  obj = csv2obj(csvobj, classidx, compressfunc);
-  return case_classify(obj, type);
-}
-
-case_bit_t compressvalavg(val_t *val, long idx)
-{
-}
-
-case_bit_t compressvalfirst(val_t *val, long idx)
-{
-}
-
-case_bit_t compressvalrand(val_t *val, long idx)
-{
-}
-
 long count(long type, case_obj_t typ)
 {
   long count = 0;
@@ -364,20 +327,6 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
       count++;
   }
   return count;
-}
-
-case_obj_t csv2obj(char *csvobj, long classidx, compress_f compressfunc)
-{
-  case_obj_t obj;
-  val_t valobj[32];
-  long field;
-  case_bit_t bit;
-  csv2valobj(csvobj, classidx, valobj);
-  for (field = 0; field < 32; field++) {
-    bit = compressfunc(&valobj[field], field);
-    case_obj_setattr(&obj, field, bit);
-  }
-  return obj;
 }
 
 void csv2valobj(char *csvobj, long classidx, val_t valobj[32])
@@ -505,25 +454,37 @@ void learn()
     }
 }
 
-void observecsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc)
-{
-/*
-  case_obj_t obj;
-  val_t valobj[32];
-  initonce();
-  case_obj_randomize(&obj);
-  csv2valobj(csvobj, classidx, valobj);
-  insertcsv(valobj, type);
-  for (field ..) {
-    bit = csvfunc(valob[f]j);  do for field
-    set bit in field;
-  }
-*/
-}
-
 void notetype(long type)
 {
   case_obj_setattr(&types, type, 1);
+}
+
+case_bit_t packavg(val_t *val, long idx)
+{
+}
+
+case_bit_t packfirst(val_t *val, long idx)
+{
+}
+
+case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
+{
+  initonce();
+  case_obj_t obj;
+  val_t valobj[32];
+  long field;
+  case_bit_t bit;
+  csv2valobj(csvobj, classidx, valobj);
+  for (field = 0; field < 32; field++) {
+    bit = packfunc(&valobj[field], field);
+    case_obj_setattr(&obj, field, bit);
+  }
+  insertcsv(valobj, type);
+  return obj;
+}
+
+case_bit_t packrand(val_t *val, long idx)
+{
 }
 
 void text2val(char *text, val_t *val)
