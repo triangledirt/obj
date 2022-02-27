@@ -129,7 +129,7 @@ Then set only the bits you are certain are a 0 or a 1 in only the attributes you
 
 See [test.c](https://github.com/triangledirt/case/blob/main/test.c) for examples
 
-## lens()
+## csv
 
 TODO: write
 

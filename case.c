@@ -26,16 +26,14 @@ static case_obj_t object[32][OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
-static val_t lens[32][LENSCACHE][32];
-static val_t lensfirstobj[32][32];
-static case_bool_t isfirstlens = case_bool_true;
-static type_t lenstypes[32][32];
+static val_t csv[32][LENSCACHE][32];
+static val_t firstcsvobj[32][32];
+static type_t csvtypes[32][32];
+static case_bool_t isfirstcsv = case_bool_true;
 
 /*
   TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
 */
-
-typedef void (*lens_f)(case_obj_t*);
 
 static long count(long type, case_obj_t typ);
 static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
@@ -45,14 +43,18 @@ static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 static void initonce();
 static case_bool_t isnum(char *text);
 static void learn();
-static void lensavg(case_obj_t *obj);
-static void lensfirst(case_obj_t *obj);
-static void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc);
-static void lensinsert(val_t valobj[32], long type);
-static void lensrand(case_obj_t *obj);
-static void lensread(char *csvobj, long classidx, val_t valobj[32]);
-static void lensreadfield(char *text, val_t *val);
 static void notetype(long type);
+
+typedef case_bit_t (*compress_f)(val_t *, long);
+static void observecsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc);
+static case_bit_t classifycsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc);
+static case_bit_t compressvalavg(val_t *val, long idx);
+static case_bit_t compressvalfirst(val_t *val, long idx);
+static case_bit_t compressvalrand(val_t *val, long idx);
+static void insertcsv(val_t valobj[32], long type);
+static void csv2valobj(char *csvobj, long classidx, val_t valobj[32]);
+static void text2val(char *text, val_t *val);
+static case_obj_t csv2obj(char *csvobj, long classidx, compress_f compressfunc);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
@@ -82,6 +84,21 @@ case_bit_t case_classify(case_obj_t obj, long type)
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
+}
+
+case_bit_t case_classifycsvavg(char *csvobj, long classidx, long type)
+{
+  classifycsvgeneral(csvobj, type, classidx, compressvalavg);
+}
+
+case_bit_t case_classifycsvfirst(char *csvobj, long classidx, long type)
+{
+  classifycsvgeneral(csvobj, type, classidx, compressvalfirst);
+}
+
+case_bit_t case_classifycsvrand(char *csvobj, long classidx, long type)
+{
+  classifycsvgeneral(csvobj, type, classidx, compressvalrand);
 }
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
@@ -150,21 +167,6 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / indisubcnt;
 }
 
-void case_lensavg(char *csvobj, long classidx, long type)
-{
-  lensgeneral(csvobj, classidx, type, lensavg);
-}
-
-void case_lensfirst(char *csvobj, long classidx, long type)
-{
-  lensgeneral(csvobj, classidx, type, lensfirst);
-}
-
-void case_lensrand(char *csvobj, long classidx, long type)
-{
-  lensgeneral(csvobj, classidx, type, lensrand);
-}
-
 void case_observe(case_obj_t obj, long type)
 {
   long i;
@@ -174,6 +176,21 @@ void case_observe(case_obj_t obj, long type)
   object[type][i] = obj;
   if (die_toss(OBJCACHE / 16))
     learn();
+}
+
+void case_observecsvavg(char *csvobj, long classidx, long type)
+{
+  observecsvgeneral(csvobj, classidx, type, compressvalavg);
+}
+
+void case_observecsvfirst(char *csvobj, long classidx, long type)
+{
+  observecsvgeneral(csvobj, classidx, type, compressvalfirst);
+}
+
+void case_observecsvrand(char *csvobj, long classidx, long type)
+{
+  observecsvgeneral(csvobj, classidx, type, compressvalrand);
 }
 
 double case_over(case_obj_t indicator, case_obj_t target, long type)
@@ -264,6 +281,26 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / xorcnt;
 }
 
+case_bit_t classifycsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc)
+{
+  case_obj_t obj;
+  initonce();
+  obj = csv2obj(csvobj, classidx, compressfunc);
+  return case_classify(obj, type);
+}
+
+case_bit_t compressvalavg(val_t *val, long idx)
+{
+}
+
+case_bit_t compressvalfirst(val_t *val, long idx)
+{
+}
+
+case_bit_t compressvalrand(val_t *val, long idx)
+{
+}
+
 long count(long type, case_obj_t typ)
 {
   long count = 0;
@@ -329,6 +366,35 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   return count;
 }
 
+case_obj_t csv2obj(char *csvobj, long classidx, compress_f compressfunc)
+{
+  case_obj_t obj;
+  val_t valobj[32];
+  long field;
+  case_bit_t bit;
+  csv2valobj(csvobj, classidx, valobj);
+  for (field = 0; field < 32; field++) {
+    bit = compressfunc(&valobj[field], field);
+    case_obj_setattr(&obj, field, bit);
+  }
+  return obj;
+}
+
+void csv2valobj(char *csvobj, long classidx, val_t valobj[32])
+{
+  char *tok;
+  long csvidx = 0;
+  long validx = 0;
+  tok = strtok(csvobj, ",\n");
+  validx = (classidx == csvidx) ? 0 : 1;
+  text2val(tok, &valobj[validx]);
+  while (tok = strtok(NULL, ",\n")) {
+    csvidx++;
+    validx = (classidx == csvidx) ? 0 : ++validx;
+    text2val(tok, &valobj[validx]);
+  }
+}
+
 void initonce()
 {
   long i;
@@ -340,15 +406,24 @@ void initonce()
       for (i = 0; i < OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
-          val_init(&lens[type][i][attr]);
+          val_init(&csv[type][i][attr]);
       }
       for (attr = 0; attr < 32; attr++) {
-        val_init(&lensfirstobj[type][attr]);
-        lenstypes[type][attr] = type_str;
+        val_init(&firstcsvobj[type][attr]);
+        csvtypes[type][attr] = type_str;
       }
     }
     once = case_bool_true;
   }
+}
+
+void insertcsv(val_t valobj[32], long type)
+{
+  long obj;
+  long field;
+  obj = random() % LENSCACHE;
+  for (field = 0; field < 32; field++)
+    val_copy(&valobj[field], &csv[type][obj][field]);
 }
 
 case_bool_t isnum(char *text)
@@ -430,67 +505,32 @@ void learn()
     }
 }
 
-void lensavg(case_obj_t *obj)
+void observecsvgeneral(char *csvobj, long classidx, long type, compress_f compressfunc)
 {
-  /* TODO: implement */
-}
-
-void lensfirst(case_obj_t *obj)
-{
-  /* TODO: implement */
-}
-
-void lensgeneral(char *csvobj, long classidx, long type, lens_f lensfunc)
-{
+/*
   case_obj_t obj;
   val_t valobj[32];
   initonce();
   case_obj_randomize(&obj);
-  lensread(csvobj, classidx, valobj);
-  lensinsert(valobj, type);
-  lensfunc(&obj);
-  case_observe(obj, type);
-}
-
-void lensinsert(val_t valobj[32], long type)
-{
-  long obj;
-  long field;
-  obj = random() % LENSCACHE;
-  for (field = 0; field < 32; field++)
-    val_copy(&valobj[field], &lens[type][obj][field]);
-}
-
-void lensrand(case_obj_t *obj)
-{
-  /* TODO: implement */
-}
-
-void lensread(char *csvobj, long classidx, val_t valobj[32])
-{
-  char *tok;
-  long csvidx = 0;
-  long validx = 0;
-  tok = strtok(csvobj, ",\n");
-  validx = (classidx == csvidx) ? 0 : 1;
-  lensreadfield(tok, &valobj[validx]);
-  while (tok = strtok(NULL, ",\n")) {
-    csvidx++;
-    validx = (classidx == csvidx) ? 0 : ++validx;
-    lensreadfield(tok, &valobj[validx]);
+  csv2valobj(csvobj, classidx, valobj);
+  insertcsv(valobj, type);
+  for (field ..) {
+    bit = csvfunc(valob[f]j);  do for field
+    set bit in field;
   }
+*/
 }
 
-void lensreadfield(char *text, val_t *val)
+void notetype(long type)
+{
+  case_obj_setattr(&types, type, 1);
+}
+
+void text2val(char *text, val_t *val)
 {
   if (isnum(text)) {
     val->num = strtod(text, NULL);
   } else {
     memcpy(val->str, text, VAL_STRSZ);
   }
-}
-
-void notetype(long type)
-{
-  case_obj_setattr(&types, type, 1);
 }

@@ -10,9 +10,12 @@
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 
-void case_lensavg(char *csvobj, long classidx, long type);
-void case_lensrand(char *csvobj, long classidx, long type);
-void case_lensfirst(char *csvobj, long classidx, long type);
+void case_observecsvavg(char *csvobj, long classidx, long type);
+void case_observecsvfirst(char *csvobj, long classidx, long type);
+void case_observecsvrand(char *csvobj, long classidx, long type);
+case_bit_t case_classifycsvavg(char *csvobj, long classidx, long type);
+case_bit_t case_classifycsvrand(char *csvobj, long classidx, long type);
+case_bit_t case_classifycsvfirst(char *csvobj, long classidx, long type);
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type);
