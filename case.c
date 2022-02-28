@@ -29,7 +29,7 @@ static case_obj_t types;
 static val_t value[32][LENSCACHE][32];
 static val_t firstval[32][32];
 static type_t valtypes[32][32];
-static case_bool_t firstpack = case_bool_true;
+static case_bool_t firstpack[32];
 
 /*
   TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
@@ -88,6 +88,7 @@ double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
 {
   long indicnt;
   long targcnt;
+  initonce();
   indicnt = count(indicator, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -99,6 +100,7 @@ double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long targcnt;
+  initonce();
   indisubcnt = countsub(indicator, target, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -110,6 +112,7 @@ double case_indimis(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long targsubcnt;
+  initonce();
   indisubcnt = countsub(indicator, target, type);
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
@@ -121,6 +124,7 @@ double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long bothcnt;
+  initonce();
   indisubcnt = countsub(indicator, target, type);
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
@@ -132,6 +136,7 @@ double case_indiover(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long indicnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -143,6 +148,7 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long indisubcnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
@@ -165,6 +171,7 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long eithercnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   eithercnt = counteither(indicator, target, type);
   if (0 == eithercnt)
@@ -174,16 +181,19 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
 
 case_obj_t case_packavg(char *csvobj, long classidx, long type)
 {
+  initonce();
   return packgeneral(csvobj, type, classidx, packavg);
 }
 
 case_obj_t case_packfirst(char *csvobj, long classidx, long type)
 {
+  initonce();
   packgeneral(csvobj, type, classidx, packfirst);
 }
 
 case_obj_t case_packrand(char *csvobj, long classidx, long type)
 {
+  initonce();
   packgeneral(csvobj, type, classidx, packrand);
 }
 
@@ -191,6 +201,7 @@ double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
 {
   long targcnt;
   long indicnt;
+  initonce();
   targcnt = count(target, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -202,6 +213,7 @@ double case_targimp(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long indicnt;
+  initonce();
   targsubcnt = countsub(target, indicator, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -213,6 +225,7 @@ double case_targmis(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long indisubcnt;
+  initonce();
   targsubcnt = countsub(target, indicator, type);
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
@@ -224,6 +237,7 @@ double case_targopac(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long bothcnt;
+  initonce();
   targsubcnt = countsub(target, indicator, type);
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
@@ -235,6 +249,7 @@ double case_targover(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long targcnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -246,6 +261,7 @@ double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long targsubcnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
@@ -257,6 +273,7 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long xorcnt;
+  initonce();
   bothcnt = countboth(indicator, target, type);
   xorcnt = countxor(indicator, target, type);
   if (0 == xorcnt)
@@ -336,8 +353,8 @@ void csv2valobj(char *csvobj, long classidx, val_t valobj[32])
   long validx = 0;
   tok = strtok(csvobj, ",\n");
   validx = (classidx == csvidx) ? 0 : 1;
-  text2val(tok, &valobj[validx]);
-  while (tok = strtok(NULL, ",\n")) {
+  text2val(tok, &valobj[validx]);  /* should this pay attention to valtypes[] ?? */
+  while ((tok = strtok(NULL, ",\n")) && (csvidx < 31)) {
     csvidx++;
     validx = (classidx == csvidx) ? 0 : ++validx;
     text2val(tok, &valobj[validx]);
@@ -359,8 +376,9 @@ void initonce()
       }
       for (attr = 0; attr < 32; attr++) {
         val_init(&firstval[type][attr]);
-        valtypes[type][attr] = type_str;
+        valtypes[type][attr] = type_str;  /* ?? */
       }
+      firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
   }
@@ -471,15 +489,14 @@ case_bit_t packfirst(val_t *val, long idx)
 
 case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
 {
-  initonce();
   case_obj_t obj;
   val_t valobj[32];
   long field;
   case_bit_t bit;
-  if (firstpack) {
+  if (firstpack[type]) {
     /* TODO: set types in valtypes array */
     /* TODO: insert valobj into firstval array */
-    firstpack = case_bool_false;
+    firstpack[type] = case_bool_false;
   }
   csv2valobj(csvobj, classidx, valobj);
   for (field = 0; field < 32; field++) {
