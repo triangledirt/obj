@@ -366,8 +366,8 @@ void initonce()
   long i;
   long type;
   long attr;
-  case_obj_clear(&types);
   if (!once) {
+    case_obj_clear(&types);
     for (type = 0; type < 32; type++) {
       for (i = 0; i < OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
