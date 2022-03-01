@@ -20,13 +20,13 @@
 #include "val.h"
 
 #define OBJCACHE 64
-#define LENSCACHE OBJCACHE
+#define PACKCACHE OBJCACHE
 
 static case_obj_t object[32][OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
-static val_t value[32][LENSCACHE][32];
+static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
 static type_t valtypes[32][32];
 static case_bool_t firstpack[32];
@@ -388,7 +388,7 @@ void insertcsv(val_t valobj[32], long type)
 {
   long obj;
   long field;
-  obj = random() % LENSCACHE;
+  obj = random() % PACKCACHE;
   for (field = 0; field < 32; field++)
     val_copy(&valobj[field], &value[type][obj][field]);
 }
