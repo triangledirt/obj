@@ -135,7 +135,7 @@ TODO: write
 
 ## infer from set to set
 
-These 14 functions return inference properties of the set of objects case is managing at this time. Call them once you've case_observe()d at least one object
+These 14 functions return inference properties of the set of objects case is managing at this time (a subset of the objects you've case_observe()d)
 
     double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
 
