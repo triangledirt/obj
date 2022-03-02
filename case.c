@@ -28,7 +28,7 @@ static case_obj_t types;
 
 static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
-static type_t valtypes[32][32];
+static type_t valtype[32][32];
 static case_bool_t firstpack[32];
 
 /*
@@ -49,7 +49,9 @@ static case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f pac
 static case_bit_t packavg(val_t *val, long idx);
 static case_bit_t packfirst(val_t *val, long idx);
 static case_bit_t packrand(val_t *val, long idx);
-static void insertcsv(val_t valobj[32], long type);
+static void setvaltypes(char *csvobj, long classidx);
+static void insertfirstval(val_t valobj[32], long type);
+static void insertval(val_t valobj[32], long type);
 static void csv2valobj(char *csvobj, long classidx, val_t valobj[32]);
 static void text2val(char *text, val_t *val);
 static case_bool_t isnum(char *text);
@@ -300,7 +302,7 @@ long countboth(long type, case_obj_t typ1, case_obj_t typ2)
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += (case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2));
+    count += case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2);
   }
   return count;
 }
@@ -312,7 +314,7 @@ long counteither(long type, case_obj_t typ1, case_obj_t typ2)
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += (case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2));
+    count += case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2);
   }
   return count;
 }
@@ -324,7 +326,7 @@ long countsub(long type, case_obj_t typ1, case_obj_t typ2)
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += (case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2));
+    count += case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2);
   }
   return count;
 }
@@ -353,7 +355,7 @@ void csv2valobj(char *csvobj, long classidx, val_t valobj[32])
   long validx = 0;
   tok = strtok(csvobj, ",\n");
   validx = (classidx == csvidx) ? 0 : 1;
-  text2val(tok, &valobj[validx]);  /* should this pay attention to valtypes[] ?? */
+  text2val(tok, &valobj[validx]);  /* should this pay attention to valtype[] ?? */
   while ((tok = strtok(NULL, ",\n")) && (csvidx < 31)) {
     csvidx++;
     validx = (classidx == csvidx) ? 0 : ++validx;
@@ -376,7 +378,7 @@ void initonce()
       }
       for (attr = 0; attr < 32; attr++) {
         val_init(&firstval[type][attr]);
-        valtypes[type][attr] = type_str;  /* ?? */
+        valtype[type][attr] = type_str;  /* no longer necessary ?? */
       }
       firstpack[type] = case_bool_true;
     }
@@ -384,7 +386,16 @@ void initonce()
   }
 }
 
-void insertcsv(val_t valobj[32], long type)
+void insertfirstval(val_t valobj[32], long type)
+{
+  long obj;
+  long field;
+  obj = random() % PACKCACHE;
+  for (field = 0; field < 32; field++)
+    val_copy(&valobj[field], &firstval[type][field]);
+}
+
+void insertval(val_t valobj[32], long type)
 {
   long obj;
   long field;
@@ -494,22 +505,28 @@ case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
   long field;
   case_bit_t bit;
   if (firstpack[type]) {
-    /* TODO: set types in valtypes array */
-    /* TODO: insert valobj into firstval array */
-    firstpack[type] = case_bool_false;
+    setvaltypes(csvobj, classidx);
   }
   csv2valobj(csvobj, classidx, valobj);
+  if (firstpack[type]) {
+    insertfirstval(valobj, type);
+    firstpack[type] = case_bool_false;
+  }
   for (field = 0; field < 32; field++) {
     bit = packfunc(&valobj[field], field);
     case_obj_setattr(&obj, field, bit);
   }
-  insertcsv(valobj, type);
+  insertval(valobj, type);
   return obj;
 }
 
 case_bit_t packrand(val_t *val, long idx)
 {
   /* TODO: implement */
+}
+
+void setvaltypes(char *csvobj, long classidx)
+{
 }
 
 void text2val(char *text, val_t *val)
