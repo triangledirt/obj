@@ -24,11 +24,11 @@ static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
 
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
-static void init(pop_t pop, long type);
 static void initonce();
 static void meet(pop_t pop, coord_t *a, coord_t *b);
 static void move(pop_t pop, coord_t *a, coord_t *b);
 static void randcoord(coord_t *c);
+static void reset(pop_t pop, long type);
 
 void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
@@ -64,19 +64,6 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   return fits[type][c->x][c->y];
 }
 
-void init(pop_t pop, long type)
-{
-  coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++)
-    for (c.y = 0; c.y < DIM; c.y++) {
-      pop[c.x][c.y] = ideal[type];
-      case_obj_mutate(&pop[c.x][c.y]);
-      fits[type][c.x][c.y] = -1;
-    }
-  fitness[type] = 0.0;
-  case_obj_randomize(&fittest[type]);
-}
-
 void initonce()
 {
   long type;
@@ -102,7 +89,7 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
   double fitb;
   pop_t pop;
   initonce();
-  init(pop, type);
+  reset(pop, type);
   for (iter = 0; iter < ITER; iter++) {
     randcoord(&a);
     i.x = (random() % 3) - 1;
@@ -155,4 +142,17 @@ void randcoord(coord_t *c)
 {
   c->x = random() % DIM;
   c->y = random() % DIM;
+}
+
+void reset(pop_t pop, long type)
+{
+  coord_t c;
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++) {
+      pop[c.x][c.y] = ideal[type];
+      case_obj_mutate(&pop[c.x][c.y]);
+      fits[type][c.x][c.y] = -1;
+    }
+  fitness[type] = 0.0;
+  case_obj_randomize(&fittest[type]);
 }

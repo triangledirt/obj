@@ -33,9 +33,9 @@ static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[
 
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
-static void init(pop_t pop, long type);
 static void initonce();
 static void randcoord(coord_t *c);
+static void reset(pop_t pop, long type);
 
 void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 {
@@ -68,7 +68,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
   coord_t worst;
   pop_t pop;
   initonce();
-  init(pop, type);
+  reset(pop, type);
   for (act = 0; act < ACTS; act++) {
     randcoord(&actor);
     findbest(pop, &actor, &best, obj, objsz, type);
@@ -168,20 +168,6 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   return fits[type][c->x][c->y][c->z];
 }
 
-void init(pop_t pop, long type)
-{
-  struct coord_t c;
-  for (c.x = 0; c.x < DIM; c.x++)
-    for (c.y = 0; c.y < DIM; c.y++)
-      for (c.z = 0; c.z < DIM; c.z++) {
-        pop[c.x][c.y][c.z] = ideal[type];
-        case_obj_mutate(&pop[c.x][c.y][c.z]);
-        fits[type][c.x][c.y][c.z] = -1;
-      }
-  fitness[type] = 0.0;
-  case_obj_randomize(&fittest[type]);
-}
-
 void initonce()
 {
   long type;
@@ -197,4 +183,18 @@ void randcoord(coord_t *c)
   c->x = random() % DIM;
   c->y = random() % DIM;
   c->z = random() % DIM;
+}
+
+void reset(pop_t pop, long type)
+{
+  struct coord_t c;
+  for (c.x = 0; c.x < DIM; c.x++)
+    for (c.y = 0; c.y < DIM; c.y++)
+      for (c.z = 0; c.z < DIM; c.z++) {
+        pop[c.x][c.y][c.z] = ideal[type];
+        case_obj_mutate(&pop[c.x][c.y][c.z]);
+        fits[type][c.x][c.y][c.z] = -1;
+      }
+  fitness[type] = 0.0;
+  case_obj_randomize(&fittest[type]);
 }

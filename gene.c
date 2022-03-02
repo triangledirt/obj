@@ -26,8 +26,8 @@ static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 
 static case_obj_t getparent(pop_t pop, case_obj_t obj[], long objsz, long type);
 
-static void init(case_obj_t pop[], long type);
 static void initonce();
+static void reset(case_obj_t pop[], long type);
 
 void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 {
@@ -73,7 +73,7 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
   long i;
   case_bit_t val;
   initonce();
-  init(pop, type);
+  reset(pop, type);
   for (mating = 0; mating < MATINGS; mating++) {
     parent1 = getparent(pop, obj, objsz, type);
     parent2 = getparent(pop, obj, objsz, type);
@@ -125,7 +125,17 @@ case_obj_t getparent(case_obj_t pop[], case_obj_t obj[], long objsz, long type)
   return pop[i];
 }
 
-void init(case_obj_t pop[], long type)
+void initonce()
+{
+  long type;
+  if (!once) {
+    for (type = 0; type < 32; type++)
+      case_obj_randomize(&ideal[type]);
+    once = 1;
+  }
+}
+
+void reset(case_obj_t pop[], long type)
 {
   long i;
   case_obj_t obj;
@@ -137,14 +147,4 @@ void init(case_obj_t pop[], long type)
   }
   fitness[type] = 0.0;
   case_obj_randomize(&fittest[type]);
-}
-
-void initonce()
-{
-  long type;
-  if (!once) {
-    for (type = 0; type < 32; type++)
-      case_obj_randomize(&ideal[type]);
-    once = 1;
-  }
 }
