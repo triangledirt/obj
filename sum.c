@@ -25,6 +25,7 @@ void initonce()
 
 case_bit_t sum_classify(case_obj_t obj, long type)
 {
+  initonce();
   return case_obj_cmptypes(obj, ideal[type]) > (0.75 * fitness[type]);
 }
 

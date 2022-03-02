@@ -57,6 +57,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 
 case_bit_t core_classify(case_obj_t obj, long type)
 {
+  initonce();
   return case_obj_cmptypes(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 

@@ -37,6 +37,7 @@ void calcfit(case_obj_t obj[], long objsz, long type)
 
 case_bit_t filt_classify(case_obj_t obj, long type)
 {
+  initonce();
   return score(obj, type) > (0.75 * fitness[type]);
 }
 

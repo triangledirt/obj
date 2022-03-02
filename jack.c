@@ -30,6 +30,7 @@ void initonce()
 
 case_bit_t jack_classify(case_obj_t obj, long type)
 {
+  initonce();
   /* return score(obj, type) > (0.9 * fitness[type]); */
 }
 
