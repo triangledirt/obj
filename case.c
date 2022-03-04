@@ -513,11 +513,11 @@ case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
     insertfirstval(valobj, type);
     firstpack[type] = case_bool_false;
   }
+  insertval(valobj, type);
   for (attr = 0; attr < 32; attr++) {
     bit = packfunc(&valobj[attr], attr);
     case_obj_setattr(&obj, attr, bit);
   }
-  insertval(valobj, type);
   return obj;
 }
 
