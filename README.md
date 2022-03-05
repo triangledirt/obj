@@ -246,13 +246,3 @@ This can be thought of as an extent to which, or a thoroughness with which, the 
     intersection(indicator, target) / xor(indicator, target)
 
 Transparency is the ratio between the overlap and the xor of the indicator and target sets. As this approaches 0, the indicator and target sets are less and less related in terms of inference. As this approaches infinity, the indicator set and the target set are more and more related in terms of inference. As it approaches infinity, though, the indicator set and the target set are identical and inference between them is meaningless
-
-## contributing
-
-- Follow existing naming and formatting style
-- No dependencies outside the C standard library
-- No disk access or network connections
-- No malloc/free() or other heap use (outside of test.c)
-- No const parameters
-- No comments in completed code
-- Thank you!

@@ -44,11 +44,13 @@ static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
 static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 
-typedef case_bit_t (*pack_f)(val_t *, long);
+typedef case_bit_t (*pack_f)(val_t *, long, long);
 static case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc);
-static case_bit_t packavg(val_t *val, long idx);
-static case_bit_t packfirst(val_t *val, long idx);
-static case_bit_t packrand(val_t *val, long idx);
+static case_bit_t packavg(val_t *val, long attr, long type);
+static case_bit_t packavgnum(val_t *val, long attr, long type);
+static case_bit_t packavgstr(val_t *val, long attr, long type);
+static case_bit_t packfirst(val_t *val, long attr, long type);
+static case_bit_t packrand(val_t *val, long attr, long type);
 static void setvaltypes(char *csvobj, long classidx, long type);
 static void insertfirstval(val_t valobj[32], long type);
 static void insertval(val_t valobj[32], long type);
@@ -185,19 +187,19 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
 case_obj_t case_packavg(char *csvobj, long classidx, long type)
 {
   initonce();
-  return packgeneral(csvobj, type, classidx, packavg);
+  return packgeneral(csvobj, classidx, type, packavg);
 }
 
 case_obj_t case_packfirst(char *csvobj, long classidx, long type)
 {
   initonce();
-  packgeneral(csvobj, type, classidx, packfirst);
+  packgeneral(csvobj, classidx, type, packfirst);
 }
 
 case_obj_t case_packrand(char *csvobj, long classidx, long type)
 {
   initonce();
-  packgeneral(csvobj, type, classidx, packrand);
+  packgeneral(csvobj, classidx, type, packrand);
 }
 
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
@@ -489,14 +491,49 @@ void notetype(long type)
   case_obj_setattr(&types, type, 1);
 }
 
-case_bit_t packavg(val_t *val, long idx)
+case_bit_t packavg(val_t *val, long attr, long type)
 {
-  /* TODO: implement */
+  case_bit_t bit;
+  switch (valtype[type][attr]) {
+    case type_num:
+      bit = packavgnum(val, attr, type);
+      break;
+    case type_str:
+      bit = packavgstr(val, attr, type);
+      break;
+  }
+  return bit;
 }
 
-case_bit_t packfirst(val_t *val, long idx)
+case_bit_t packavgnum(val_t *val, long attr, long type)
 {
-  /* TODO: implement */
+  case_bit_t bit;
+  double avg;
+  double tot = 0.0;
+  long i;
+  for (i = 0; i < PACKCACHE; i++)
+    tot += value[type][i][attr].num;
+  avg = tot / PACKCACHE;
+  bit = val->num > avg;
+  return bit;
+}
+
+case_bit_t packavgstr(val_t *val, long attr, long type)
+{
+  char str[PACKCACHE][VAL_STRSZ];
+  long cnt[PACKCACHE];
+  long i;
+  for (i = 0; i < PACKCACHE; i++) {
+  }
+}
+
+case_bit_t packfirst(val_t *val, long attr, long type)
+{
+  case_bit_t bit;
+  long cmp;
+  cmp = val_cmp(val, &firstval[type][attr], valtype[type][attr]);
+  bit = (cmp != 0.0) ? 0 : 1;
+  return bit;
 }
 
 case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
@@ -515,13 +552,13 @@ case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
   }
   insertval(valobj, type);
   for (attr = 0; attr < 32; attr++) {
-    bit = packfunc(&valobj[attr], attr);
+    bit = packfunc(&valobj[attr], attr, type);
     case_obj_setattr(&obj, attr, bit);
   }
   return obj;
 }
 
-case_bit_t packrand(val_t *val, long idx)
+case_bit_t packrand(val_t *val, long attr, long type)
 {
   /* TODO: implement */
 }
