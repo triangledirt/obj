@@ -529,10 +529,10 @@ case_bit_t packrand(val_t *val, long idx)
 long reorderidx(long attridx, long classidx)
 {
   long reidx;
-  if (0 == classidx) {
-    reidx = attridx;
+  if (attridx == classidx) {
+    reidx = 0;
   } else {
-    reidx = (attridx == classidx) ? 0 : attridx + 1;
+    reidx = (0 == attridx) ? classidx : attridx;
   }
   return reidx;
 }
