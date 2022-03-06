@@ -1,49 +1,63 @@
+#include <stdio.h>
 #include <string.h>
 #include "val.h"
 
-static long cmpnum(double val1, double val2);
-static long cmpstr(char val1[VAL_STRSZ], char val2[VAL_STRSZ]);
+static long comparenum(double val1, double val2);
+static long comparestr(char val1[VAL_STRSZ], char val2[VAL_STRSZ]);
 
-long cmpnum(double val1, double val2)
+long comparenum(double val1, double val2)
 {
-  long cmp;
+  long compare;
   if (val1 < val2) {
-    cmp = -1;
+    compare = -1;
   } else if (val1 > val2) {
-    cmp = 1;
+    compare = 1;
   } else {
-    cmp = 0;
+    compare = 0;
   }
-  return cmp;
+  return compare;
 }
 
-long cmpstr(char val1[VAL_STRSZ], char val2[VAL_STRSZ])
+long comparestr(char val1[VAL_STRSZ], char val2[VAL_STRSZ])
 {
-  return strncmp(val1, val2, VAL_STRSZ);
+  return strncmp(val1, val2, VAL_STRSZ - 1);
 }
 
-long val_cmp(val_t *val1, val_t *val2, type_t type)
+long val_compare(val_t *val1, val_t *val2, type_t type)
 {
-  long cmp;
+  long compare;
   switch (type) {
     case type_num:
-      cmp = cmpnum(val1->num, val2->num);
+      compare = comparenum(val1->num, val2->num);
       break;
     case type_str:
-      cmp = cmpstr(val1->str, val2->str);
+      compare = comparestr(val1->str, val2->str);
+      printf(":%s:%s:\n", val1->str, val2->str);
       break;
   };
-  return cmp;
+  return compare;
 }
 
-void val_copy(val_t *source, val_t *dest)
+void val_copy(val_t *source, val_t *dest, type_t type)
 {
-  dest->num = source->num;
-  memcpy(dest->str, source->str, VAL_STRSZ);
+  switch (type) {
+    case type_num:
+      dest->num = source->num;
+      break;
+    case type_str:
+      strncpy(dest->str, source->str, VAL_STRSZ - 1);
+      break;
+  };
 }
 
-void val_init(val_t *val)
+void val_init(val_t *val, type_t type)
 {
-  val->num = 0.0;
-  memset(val->str, ' ', VAL_STRSZ);
+  switch (type) {
+    case type_num:
+      val->num = 0.0;
+      break;
+    case type_str:
+      val->str[0] = '\0';
+      break;
+  };
 }

@@ -7,4 +7,6 @@ enum type_t {
 };
 typedef enum type_t type_t;
 
+char *type_name(type_t type);
+
 #endif
