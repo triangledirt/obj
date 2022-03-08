@@ -608,7 +608,7 @@ void setvaltypes(char *csvobj, long classidx, long type)
     valtype[type][validx] = isnum(tok) ? type_num : type_str;
   }
 #if CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%d types     ", type);
+  printf("type%ld types     ", type);
   for (validx = 0; validx < 32; validx++)
     printf("%s,", type_name(valtype[type][validx]));
   printf("\n");
