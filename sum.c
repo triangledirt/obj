@@ -26,7 +26,7 @@ void initonce()
 case_bit_t sum_classify(case_obj_t obj, long type)
 {
   initonce();
-  return case_obj_cmptypes(obj, ideal[type]) > (0.75 * fitness[type]);
+  return case_obj_comparetypes(obj, ideal[type]) > (0.75 * fitness[type]);
 }
 
 void sum_learn(case_obj_t obj[], long objsz, long type)
@@ -62,7 +62,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
     }
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_cmptypes(ideal[type], obj[i]);
+      tot += case_obj_comparetypes(ideal[type], obj[i]);
   fitness[type] = tot / (objsz / 2);
 #if CASE_VERBOSE
   printf("type%ld ideal sum ", type);

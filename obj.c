@@ -10,7 +10,7 @@ void case_obj_clear(case_obj_t *obj)
   *obj = 0;
 }
 
-double case_obj_cmpequal(case_obj_t obj1, case_obj_t obj2)
+double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;
   long correct = 0;
@@ -25,7 +25,7 @@ double case_obj_cmpequal(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / 31;
 }
 
-double case_obj_cmpsmash(case_obj_t obj1, case_obj_t obj2)
+double case_obj_comparesmash(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;
   long endbit;
@@ -51,7 +51,7 @@ double case_obj_cmpsmash(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / total;
 }
 
-double case_obj_cmptypes(case_obj_t obj1, case_obj_t obj2)
+double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;
   long correct = 0;

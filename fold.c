@@ -36,7 +36,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   calcobj = pop[o];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_cmptypes(calcobj, obj[i]);
+      tot += case_obj_comparetypes(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][o] = fit;
   if (fit > fitness[type]) {
@@ -48,7 +48,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 case_bit_t fold_classify(case_obj_t obj, long type)
 {
   initonce();
-  return case_obj_cmptypes(obj, ideal[type]) > (0.9 * fitness[type]);
+  return case_obj_comparetypes(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
 void fold_learn(case_obj_t obj[], long objsz, long type)
