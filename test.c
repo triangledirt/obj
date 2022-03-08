@@ -31,8 +31,8 @@ void testline(char *line, long classindx, long type)
 {
   case_obj_t obj;
   char c;
-  case_bit_t actualclass;
   case_bit_t guessclass;
+  case_bit_t actualclass;
   obj = case_packfirst(line, classindx, type);
   case_observe(obj, type);
   guessclass = case_classify(obj, type);
