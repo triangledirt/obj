@@ -32,7 +32,6 @@ long val_compare(val_t *val1, val_t *val2, type_t type)
       break;
     case type_str:
       compare = comparestr(val1->str, val2->str);
-      printf(":%s:%s:\n", val1->str, val2->str);
       break;
   };
   return compare;
@@ -58,6 +57,18 @@ void val_init(val_t *val, type_t type)
       break;
     case type_str:
       val->str[0] = '\0';
+      break;
+  };
+}
+
+void val_print(val_t *val, type_t type)
+{
+  switch (type) {
+    case type_num:
+      printf("%f", val->num);
+      break;
+    case type_str:
+      printf("%s", val->str);
       break;
   };
 }

@@ -193,13 +193,13 @@ case_obj_t case_packavg(char *csvobj, long classidx, long type)
 case_obj_t case_packfirst(char *csvobj, long classidx, long type)
 {
   initonce();
-  packgeneral(csvobj, classidx, type, packfirst);
+  return packgeneral(csvobj, classidx, type, packfirst);
 }
 
 case_obj_t case_packrand(char *csvobj, long classidx, long type)
 {
   initonce();
-  packgeneral(csvobj, classidx, type, packrand);
+  return packgeneral(csvobj, classidx, type, packrand);
 }
 
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
@@ -366,6 +366,8 @@ void csv2valobj(char *csvobj, long classidx, val_t valobj[32], long type)
     validx = reorderidx(csvidx, classidx);
     text2val(tok, &valobj[validx], validx, type);
   }
+  for (validx = csvidx + 1; validx < 32; validx++)
+    val_init(&valobj[validx], type);
 }
 
 void initonce()
