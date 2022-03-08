@@ -516,7 +516,6 @@ case_bit_t packavgnum(val_t *val, long attr, long type)
   return val->num > avg;
 }
 
-/*  TODO: implement so it's precalculated  */
 case_bit_t packavgstr(val_t *val, long attr, long type)
 {
   long cnt[PACKCACHE];
