@@ -15,29 +15,29 @@ static char *firstline[MAXFIELDS];
 static long total = 0;
 static long correct = 0;
 
-static void testfile(char *filename, long classidx, long type);
-static void testline(char *line, long classidx, long type);
+static void testfile(char *filename, long classindx, long type);
+static void testline(char *line, long classindx, long type);
 
-void testfile(char *filename, long classidx, long type)
+void testfile(char *filename, long classindx, long type)
 {
   FILE *file;
   char line[CASE_CSVOBJSZ];
   file = fopen(filename, "r");
   while (fgets(line, CASE_CSVOBJSZ, file))
-    testline(line, classidx, type);
+    testline(line, classindx, type);
   fclose(file);
 #if CASE_VERBOSE
   printf("                                                =%0.3f%%\n", (double) correct / total);
 #endif
 }
 
-void testline(char *line, long classidx, long type)
+void testline(char *line, long classindx, long type)
 {
   case_obj_t obj;
   char c;
   case_bit_t actualclass;
   case_bit_t guessclass;
-  obj = case_packfirst(line, classidx, type);
+  obj = case_packfirst(line, classindx, type);
   case_observe(obj, type);
   guessclass = case_classify(obj, type);
   actualclass = case_obj_getclass(obj);

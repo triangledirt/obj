@@ -41,19 +41,19 @@ static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
 static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
 
 typedef case_bit_t (*pack_f)(val_t *, long, long);
-static case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc);
+static case_obj_t packgeneral(char *csvobj, long classindx, long type, pack_f packfunc);
 static case_bit_t packavg(val_t *val, long attr, long type);
 static case_bit_t packavgnum(val_t *val, long attr, long type);
 static case_bit_t packavgstr(val_t *val, long attr, long type);
 static case_bit_t packfirst(val_t *val, long attr, long type);
 static case_bit_t packrand(val_t *val, long attr, long type);
-static void setvaltypes(char *csvobj, long classidx, long type);
+static void setvaltypes(char *csvobj, long classindx, long type);
 static void insertfirstval(val_t valobj[32], long type);
 static void insertval(val_t valobj[32], long type);
-static void csv2valobj(char *csvobj, long classidx, val_t valobj[32], long type);
-static void text2val(char *text, val_t *val, long validx, long type);
+static void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type);
+static void text2val(char *text, val_t *val, long valindx, long type);
 static case_bool_t isnum(char *str);
-static long reorderidx(long attridx, long classidx);
+static long reorderindx(long attrindx, long classindx);
 
 case_bit_t case_classify(case_obj_t obj, long type)
 {
@@ -180,22 +180,22 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / eithercnt;
 }
 
-case_obj_t case_packavg(char *csvobj, long classidx, long type)
+case_obj_t case_packavg(char *csvobj, long classindx, long type)
 {
   initonce();
-  return packgeneral(csvobj, classidx, type, packavg);
+  return packgeneral(csvobj, classindx, type, packavg);
 }
 
-case_obj_t case_packfirst(char *csvobj, long classidx, long type)
+case_obj_t case_packfirst(char *csvobj, long classindx, long type)
 {
   initonce();
-  return packgeneral(csvobj, classidx, type, packfirst);
+  return packgeneral(csvobj, classindx, type, packfirst);
 }
 
-case_obj_t case_packrand(char *csvobj, long classidx, long type)
+case_obj_t case_packrand(char *csvobj, long classindx, long type)
 {
   initonce();
-  return packgeneral(csvobj, classidx, type, packrand);
+  return packgeneral(csvobj, classindx, type, packrand);
 }
 
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
@@ -347,23 +347,23 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   return count;
 }
 
-void csv2valobj(char *csvobj, long classidx, val_t valobj[32], long type)
+void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type)
 {
   char csvobjcopy[CASE_CSVOBJSZ];
   char *tok;
-  long csvidx = 0;
-  long validx;
+  long csvindx = 0;
+  long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJSZ);
   tok = strtok(csvobjcopy, ",\n");
-  validx = reorderidx(csvidx, classidx);
-  text2val(tok, &valobj[validx], validx, type);
-  while ((tok = strtok(NULL, ",\n")) && (csvidx < 31)) {
-    csvidx++;
-    validx = reorderidx(csvidx, classidx);
-    text2val(tok, &valobj[validx], validx, type);
+  valindx = reorderindx(csvindx, classindx);
+  text2val(tok, &valobj[valindx], valindx, type);
+  while ((tok = strtok(NULL, ",\n")) && (csvindx < 31)) {
+    csvindx++;
+    valindx = reorderindx(csvindx, classindx);
+    text2val(tok, &valobj[valindx], valindx, type);
   }
-  for (validx = csvidx + 1; validx < 32; validx++)
-    val_init(&valobj[validx], type);
+  for (valindx = csvindx + 1; valindx < 32; valindx++)
+    val_init(&valobj[valindx], type);
 }
 
 void initonce()
@@ -379,10 +379,8 @@ void initonce()
         for (attr = 0; attr < 32; attr++)
           val_init(&value[type][i][attr], type_str);
       }
-      for (attr = 0; attr < 32; attr++) {
+      for (attr = 0; attr < 32; attr++)
         val_init(&firstval[type][attr], type_str);
-        valtype[type][attr] = type_str;
-      }
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -522,7 +520,7 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
   long i;
   long j;
   long max = 0;
-  long maxidx = 0;
+  long maxindx = 0;
   for (i = 0; i < PACKCACHE; i++)
     cnt[i] = 0;
   for (i = 0; i < PACKCACHE; i++)
@@ -532,9 +530,9 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
   for (i = 0; i < PACKCACHE; i++)
     if (cnt[i] > max) {
       max = cnt[i];
-      maxidx = i;
+      maxindx = i;
     }
-  return 0 == strncmp(val->str, value[type][maxidx][attr].str, VAL_STRSZ - 1);
+  return 0 == strncmp(val->str, value[type][maxindx][attr].str, VAL_STRSZ - 1);
 }
 
 case_bit_t packfirst(val_t *val, long attr, long type)
@@ -544,15 +542,15 @@ case_bit_t packfirst(val_t *val, long attr, long type)
   return compare == 0;
 }
 
-case_obj_t packgeneral(char *csvobj, long classidx, long type, pack_f packfunc)
+case_obj_t packgeneral(char *csvobj, long classindx, long type, pack_f packfunc)
 {
   case_obj_t obj;
   val_t valobj[32];
   long attr;
   case_bit_t bit;
   if (firstpack[type])
-    setvaltypes(csvobj, classidx, type);
-  csv2valobj(csvobj, classidx, valobj, type);
+    setvaltypes(csvobj, classindx, type);
+  csv2valobj(csvobj, classindx, valobj, type);
   if (firstpack[type]) {
     insertfirstval(valobj, type);
     firstpack[type] = case_bool_false;
@@ -576,43 +574,45 @@ case_bit_t packrand(val_t *val, long attr, long type)
   return bit;
 }
 
-long reorderidx(long attridx, long classidx)
+long reorderindx(long attrindx, long classindx)
 {
-  long reidx;
-  if (attridx == classidx) {
-    reidx = 0;
+  long reindx;
+  if (attrindx == classindx) {
+    reindx = 0;
   } else {
-    reidx = (0 == attridx) ? classidx : attridx;
+    reindx = (0 == attrindx) ? classindx : attrindx;
   }
-  return reidx;
+  return reindx;
 }
 
-void setvaltypes(char *csvobj, long classidx, long type)
+void setvaltypes(char *csvobj, long classindx, long type)
 {
   char csvobjcopy[CASE_CSVOBJSZ];
   char *tok;
-  long csvidx = 0;
-  long validx;
+  long csvindx = 0;
+  long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJSZ - 1);
   tok = strtok(csvobjcopy, ",\n");
-  validx = reorderidx(csvidx, classidx);
-  valtype[type][validx] = isnum(tok) ? type_num : type_str;
-  while ((tok = strtok(NULL, ",\n")) && (csvidx < 31)) {
-    csvidx++;
-    validx = reorderidx(csvidx, classidx);
-    valtype[type][validx] = isnum(tok) ? type_num : type_str;
+  valindx = reorderindx(csvindx, classindx);
+  valtype[type][valindx] = isnum(tok) ? type_num : type_str;
+  while ((tok = strtok(NULL, ",\n")) && (csvindx < 31)) {
+    csvindx++;
+    valindx = reorderindx(csvindx, classindx);
+    valtype[type][valindx] = isnum(tok) ? type_num : type_str;
   }
+  for (valindx = csvindx + 1; valindx < 32; valindx++)
+    valtype[type][valindx] = type_str;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld types     ", type);
-  for (validx = 0; validx < 32; validx++)
-    printf("%s,", type_name(valtype[type][validx]));
+  for (valindx = 0; valindx < 32; valindx++)
+    printf("%s,", type_name(valtype[type][valindx]));
   printf("\n");
 #endif
 }
 
-void text2val(char *text, val_t *val, long validx, long type)
+void text2val(char *text, val_t *val, long valindx, long type)
 {
-  if (type_num == valtype[type][validx]) {
+  if (type_num == valtype[type][valindx]) {
     val->num = strtod(text, NULL);
   } else {
     strncpy(val->str, text, VAL_STRSZ - 1);
