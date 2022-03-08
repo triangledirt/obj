@@ -4,7 +4,9 @@
 #include "case.h"
 
 #define DIABETES 0
-#define MUSHROOM 1
+#define DRUG 1
+#define FOREST 2
+#define MUSHROOM 3
 
 #define MAXFIELDS 32
 
@@ -52,6 +54,8 @@ void testline(char *line, long classidx, long type)
 
 int main(int argc, char **argv)
 {
-  if (0) testfile("data/diabetes.data", 0, DIABETES);
-  if (1) testfile("data/mushroom.data", 0, MUSHROOM);
+  if (0) testfile("data/diabetes.csv", 0, DIABETES);
+  if (0) testfile("data/drug.csv", 0, DRUG);
+  if (0) testfile("data/forest.csv", 0, FOREST);
+  if (1) testfile("data/mushroom.csv", 0, MUSHROOM);
 }
