@@ -31,10 +31,6 @@ static val_t firstval[32][32];
 static type_t valtype[32][32];
 static case_bool_t firstpack[32];
 
-/*
-  TODO: or whether a number is greater than (which is one) or less than the ideal object or characters come before or after the ideal object
-*/
-
 static void learn();
 static void initonce();
 static void notetype(long type);
