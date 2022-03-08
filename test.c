@@ -8,10 +8,6 @@
 #define FOREST 2
 #define MUSHROOM 3
 
-#define MAXFIELDS 32
-
-static long fields;
-static char *firstline[MAXFIELDS];
 static long total = 0;
 static long correct = 0;
 
