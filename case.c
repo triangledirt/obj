@@ -34,11 +34,11 @@ static case_bool_t firstpack[32];
 static void learn();
 static void initonce();
 static void notetype(long type);
-static long count(long type, case_obj_t typ);
-static long countboth(long type, case_obj_t typ1, case_obj_t typ2);
-static long counteither(long type, case_obj_t typ1, case_obj_t typ2);
-static long countsub(long type, case_obj_t typ1, case_obj_t typ2);
-static long countxor(long type, case_obj_t typ1, case_obj_t typ2);
+static long count(case_obj_t objtype, long type);
+static long countboth(case_obj_t objtype1, case_obj_t objtype2, long type);
+static long counteither(case_obj_t objtype1, case_obj_t objtype2, long type);
+static long countsub(case_obj_t objtype1, case_obj_t objtype2, long type);
+static long countxor(case_obj_t objtype1, case_obj_t objtype2, long type);
 
 typedef case_bit_t (*pack_f)(val_t *, long, long);
 static case_obj_t packgeneral(char *csvobj, long classindx, long type, pack_f packfunc);
@@ -282,55 +282,55 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / xorcnt;
 }
 
-long count(long type, case_obj_t typ)
+long count(case_obj_t objtype, long type)
 {
   long count = 0;
   case_obj_t obj;
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, typ);
+    count += case_obj_hastype(obj, objtype);
   }
   return count;
 }
 
-long countboth(long type, case_obj_t typ1, case_obj_t typ2)
+long countboth(case_obj_t objtype1, case_obj_t objtype2, long type)
 {
   long count = 0;
   case_obj_t obj;
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, typ1) && case_obj_hastype(obj, typ2);
+    count += case_obj_hastype(obj, objtype1) && case_obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long counteither(long type, case_obj_t typ1, case_obj_t typ2)
+long counteither(case_obj_t objtype1, case_obj_t objtype2, long type)
 {
   long count = 0;
   case_obj_t obj;
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, typ1) || case_obj_hastype(obj, typ2);
+    count += case_obj_hastype(obj, objtype1) || case_obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long countsub(long type, case_obj_t typ1, case_obj_t typ2)
+long countsub(case_obj_t objtype1, case_obj_t objtype2, long type)
 {
   long count = 0;
   case_obj_t obj;
   long i;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, typ1) && !case_obj_hastype(obj, typ2);
+    count += case_obj_hastype(obj, objtype1) && !case_obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long countxor(long type, case_obj_t typ1, case_obj_t typ2)
+long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
 {
   long count = 0;
   case_obj_t obj;
@@ -339,8 +339,8 @@ long countxor(long type, case_obj_t typ1, case_obj_t typ2)
   case_bit_t has2;
   for (i = 0; i < OBJCACHE; i++) {
     obj = object[type][i];
-    has1 = case_obj_hastype(obj, typ1);
-    has2 = case_obj_hastype(obj, typ2);
+    has1 = case_obj_hastype(obj, objtype1);
+    has2 = case_obj_hastype(obj, objtype2);
     if (has1 ^ has2)
       count++;
   }
