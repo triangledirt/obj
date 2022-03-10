@@ -74,10 +74,10 @@ void initonce()
   }
 }
 
-case_bit_t jung_classify(case_obj_t obj, long type)
+double jung_classify(case_obj_t obj, long type)
 {
   initonce();
-  return case_obj_comparetypes(obj, ideal[type]) > (0.9 * fitness[type]);
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 void jung_learn(case_obj_t obj[], long objsz, long type)

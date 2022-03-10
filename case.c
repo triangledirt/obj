@@ -57,36 +57,25 @@ static long reorderindx(long attrindx, long classindx);
 case_bit_t case_classify(case_obj_t obj, long type)
 {
   case_bit_t class;
-  case_bit_t coreclass = 0;
-  case_bit_t filtclass = 0;
-  case_bit_t foldclass = 0;
-  case_bit_t geneclass = 0;
-  case_bit_t jackclass = 0;
-  case_bit_t jungclass = 0;
-  case_bit_t sumclass = 0;
-  double filtdouble = 0.0;
-  double folddouble = 0.0;
-  double sumdouble = 0.0;
-  long onecount;
-  long zerocount;
+  double coreclass = 0.0;
+  double filtclass = 0.0;
+  double foldclass = 0.0;
+  double geneclass = 0.0;
+  double jackclass = 0.0;
+  double jungclass = 0.0;
+  double sumclass = 0.0;
   initonce();
   notetype(type);
-  /* coreclass = core_classify(obj, type); */
+  /*  coreclass = core_classify(obj, type);  */
   filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
-  /* geneclass = gene_classify(obj, type); */
-  /* jackclass = jack_classify(obj, type); */
-  /* jungclass = jung_classify(obj, type); */
+  /*  geneclass = gene_classify(obj, type);  */
+  /*  jackclass = jack_classify(obj, type);  */
+  /*  jungclass = jung_classify(obj, type);  */
   sumclass = sum_classify(obj, type);
-  filtdouble = filt_classifydouble(obj, type);
-  folddouble = fold_classifydouble(obj, type);
-  sumdouble = sum_classifydouble(obj, type);
-  onecount = filtclass + foldclass + sumclass;
-  zerocount = 3 - onecount;
-  class = (zerocount >= onecount) ? 0 : 1;
-  class = ((filtdouble + folddouble + sumdouble) > 1.5) ? 1 : 0;
+  class = ((filtclass + foldclass + sumclass) > (3 * 0.5)) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
+  printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
   return class;
 }

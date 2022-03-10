@@ -28,10 +28,10 @@ void initonce()
   }
 }
 
-case_bit_t jack_classify(case_obj_t obj, long type)
+double jack_classify(case_obj_t obj, long type)
 {
   initonce();
-  /* return score(obj, type) > (0.9 * fitness[type]); */
+  return score(obj, type);
 }
 
 void jack_learn(case_obj_t obj[], long objsz, long type)

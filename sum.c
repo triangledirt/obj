@@ -23,13 +23,7 @@ void initonce()
   }
 }
 
-case_bit_t sum_classify(case_obj_t obj, long type)
-{
-  initonce();
-  return case_obj_comparetypes(obj, ideal[type]) > (0.75 * fitness[type]);
-}
-
-double sum_classifydouble(case_obj_t obj, long type)
+double sum_classify(case_obj_t obj, long type)
 {
   initonce();
   return case_obj_comparetypes(obj, ideal[type]);

@@ -5,6 +5,6 @@
 #include "obj.h"
 
 void gene_learn(case_obj_t obj[], long objsz, long type);
-case_bit_t gene_classify(case_obj_t obj, long type);
+double gene_classify(case_obj_t obj, long type);
 
 #endif

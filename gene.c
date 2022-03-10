@@ -56,10 +56,10 @@ void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
       calcfit(pop, o, obj, objsz, type);
 }
 
-case_bit_t gene_classify(case_obj_t obj, long type)
+double gene_classify(case_obj_t obj, long type)
 {
   initonce();
-  return case_obj_comparetypes(obj, ideal[type]) > (0.9 * fitness[type]);
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 void gene_learn(case_obj_t obj[], long objsz, long type)
