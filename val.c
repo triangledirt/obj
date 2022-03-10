@@ -33,7 +33,7 @@ long val_compare(val_t *val1, val_t *val2, type_t type)
     case type_str:
       compare = comparestr(val1->str, val2->str);
       break;
-  };
+  }
   return compare;
 }
 
@@ -46,7 +46,7 @@ void val_copy(val_t *source, val_t *dest, type_t type)
     case type_str:
       strncpy(dest->str, source->str, CASE_STR - 1);
       break;
-  };
+  }
 }
 
 void val_init(val_t *val, type_t type)
@@ -58,7 +58,7 @@ void val_init(val_t *val, type_t type)
     case type_str:
       val->str[0] = '\0';
       break;
-  };
+  }
 }
 
 void val_print(val_t *val, type_t type)
@@ -70,5 +70,5 @@ void val_print(val_t *val, type_t type)
     case type_str:
       printf("%s", val->str);
       break;
-  };
+  }
 }

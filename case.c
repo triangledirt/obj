@@ -348,17 +348,26 @@ void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type)
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ);
+  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
   tok = strtok(csvobjcopy, ",\n");
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(NULL, ",\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, ",\n")) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     text2val(tok, &valobj[valindx], valindx, type);
   }
   for (valindx = csvindx + 1; valindx < 32; valindx++)
-    val_init(&valobj[valindx], type);
+    val_init(&valobj[valindx], valtype[type][valindx]);
+#if 0 && CASE_VERBOSE && CASE_XVERBOSE
+  printf("type%lu   csv     %s", type, csvobj);
+  printf("type%lu   val     ", type);
+  for (valindx = 0; valindx < 32; valindx++) {
+    val_print(&valobj[valindx], valtype[type][valindx]);
+    printf(",");
+  }
+  printf("\n");
+#endif
 }
 
 void initonce()
@@ -432,46 +441,46 @@ void learn()
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
 /*
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       core_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       coretime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       filt_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       filttime = tv2.tv_usec - tv1.tv_usec;
       ;
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       fold_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
 /*
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       gene_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       genetime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       jack_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       jacktime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       jung_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       jungtime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
-      gettimeofday(&tv1, NULL);
+      gettimeofday(&tv1, 0);
       sum_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, NULL);
+      gettimeofday(&tv2, 0);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && CASE_XVERBOSE
       printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
@@ -590,7 +599,7 @@ void setvaltypes(char *csvobj, long classindx, long type)
   tok = strtok(csvobjcopy, ",\n");
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? type_num : type_str;
-  while ((tok = strtok(NULL, ",\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, ",\n")) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     valtype[type][valindx] = isnum(tok) ? type_num : type_str;
@@ -608,7 +617,7 @@ void setvaltypes(char *csvobj, long classindx, long type)
 void text2val(char *text, val_t *val, long valindx, long type)
 {
   if (type_num == valtype[type][valindx]) {
-    val->num = strtod(text, NULL);
+    val->num = strtod(text, 0);
   } else {
     strncpy(val->str, text, CASE_STR - 1);
   }
