@@ -69,11 +69,11 @@ case_bit_t case_classify(case_obj_t obj, long type)
   /*  coreclass = core_classify(obj, type);  */
   filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
-  /*  geneclass = gene_classify(obj, type);  */
+  geneclass = gene_classify(obj, type);
   /*  jackclass = jack_classify(obj, type);  */
   /*  jungclass = jung_classify(obj, type);  */
   sumclass = sum_classify(obj, type);
-  class = ((filtclass + foldclass + sumclass) > (3 * 0.5)) ? 1 : 0;
+  class = ((filtclass + foldclass + geneclass + sumclass) > (4 * 0.5)) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
