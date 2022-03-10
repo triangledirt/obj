@@ -19,7 +19,7 @@
 #include "type.h"
 #include "val.h"
 
-#define PACKCACHE CASE_OBJCACHE
+#define PACKCACHE (CASE_OBJCACHE / 2)
 
 static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
