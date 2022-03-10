@@ -3,7 +3,7 @@
 #include "val.h"
 
 static long comparenum(double val1, double val2);
-static long comparestr(char val1[VAL_STRSZ], char val2[VAL_STRSZ]);
+static long comparestr(char val1[CASE_STR], char val2[CASE_STR]);
 
 long comparenum(double val1, double val2)
 {
@@ -18,9 +18,9 @@ long comparenum(double val1, double val2)
   return compare;
 }
 
-long comparestr(char val1[VAL_STRSZ], char val2[VAL_STRSZ])
+long comparestr(char val1[CASE_STR], char val2[CASE_STR])
 {
-  return strncmp(val1, val2, VAL_STRSZ - 1);
+  return strncmp(val1, val2, CASE_STR - 1);
 }
 
 long val_compare(val_t *val1, val_t *val2, type_t type)
@@ -44,7 +44,7 @@ void val_copy(val_t *source, val_t *dest, type_t type)
       dest->num = source->num;
       break;
     case type_str:
-      strncpy(dest->str, source->str, VAL_STRSZ - 1);
+      strncpy(dest->str, source->str, CASE_STR - 1);
       break;
   };
 }

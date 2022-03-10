@@ -19,10 +19,9 @@
 #include "type.h"
 #include "val.h"
 
-#define OBJCACHE 64
-#define PACKCACHE OBJCACHE
+#define PACKCACHE CASE_OBJCACHE
 
-static case_obj_t object[32][OBJCACHE];
+static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
 
@@ -65,6 +64,9 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t jackclass = 0;
   case_bit_t jungclass = 0;
   case_bit_t sumclass = 0;
+  double filtdouble = 0.0;
+  double folddouble = 0.0;
+  double sumdouble = 0.0;
   long onecount;
   long zerocount;
   initonce();
@@ -76,9 +78,13 @@ case_bit_t case_classify(case_obj_t obj, long type)
   /* jackclass = jack_classify(obj, type); */
   /* jungclass = jung_classify(obj, type); */
   sumclass = sum_classify(obj, type);
+  filtdouble = filt_classifydouble(obj, type);
+  folddouble = fold_classifydouble(obj, type);
+  sumdouble = sum_classifydouble(obj, type);
   onecount = filtclass + foldclass + sumclass;
   zerocount = 3 - onecount;
   class = (zerocount >= onecount) ? 0 : 1;
+  class = ((filtdouble + folddouble + sumdouble) > 1.5) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%d filt=%d fold=%d gene=%d jack=%d jung=%d sum=%d\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
@@ -162,9 +168,9 @@ void case_observe(case_obj_t obj, long type)
   long i;
   initonce();
   notetype(type);
-  i = random() % OBJCACHE;
+  i = random() % CASE_OBJCACHE;
   object[type][i] = obj;
-  if (die_toss(OBJCACHE / 16))
+  if (die_toss(CASE_OBJCACHE / 16))
     learn();
 }
 
@@ -287,7 +293,7 @@ long count(case_obj_t objtype, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJCACHE; i++) {
+  for (i = 0; i < CASE_OBJCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype);
   }
@@ -299,7 +305,7 @@ long countboth(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJCACHE; i++) {
+  for (i = 0; i < CASE_OBJCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) && case_obj_hastype(obj, objtype2);
   }
@@ -311,7 +317,7 @@ long counteither(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJCACHE; i++) {
+  for (i = 0; i < CASE_OBJCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) || case_obj_hastype(obj, objtype2);
   }
@@ -323,7 +329,7 @@ long countsub(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < OBJCACHE; i++) {
+  for (i = 0; i < CASE_OBJCACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) && !case_obj_hastype(obj, objtype2);
   }
@@ -337,7 +343,7 @@ long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
   long i;
   case_bit_t has1;
   case_bit_t has2;
-  for (i = 0; i < OBJCACHE; i++) {
+  for (i = 0; i < CASE_OBJCACHE; i++) {
     obj = object[type][i];
     has1 = case_obj_hastype(obj, objtype1);
     has2 = case_obj_hastype(obj, objtype2);
@@ -349,11 +355,11 @@ long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
 
 void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type)
 {
-  char csvobjcopy[CASE_CSVOBJSZ];
+  char csvobjcopy[CASE_CSVOBJ];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, CASE_CSVOBJSZ);
+  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ);
   tok = strtok(csvobjcopy, ",\n");
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
@@ -374,7 +380,7 @@ void initonce()
   if (!once) {
     case_obj_clear(&types);
     for (type = 0; type < 32; type++) {
-      for (i = 0; i < OBJCACHE; i++) {
+      for (i = 0; i < CASE_OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
           val_init(&value[type][i][attr], type_str);
@@ -438,44 +444,44 @@ void learn()
     if (case_obj_getattr(types, type)) {
 /*
       gettimeofday(&tv1, NULL);
-      core_learn(object[type], OBJCACHE, type);
+      core_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       coretime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      filt_learn(object[type], OBJCACHE, type);
+      filt_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       filttime = tv2.tv_usec - tv1.tv_usec;
       ;
       gettimeofday(&tv1, NULL);
-      fold_learn(object[type], OBJCACHE, type);
+      fold_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
 /*
       gettimeofday(&tv1, NULL);
-      gene_learn(object[type], OBJCACHE, type);
+      gene_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       genetime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jack_learn(object[type], OBJCACHE, type);
+      jack_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       jacktime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
 /*
       gettimeofday(&tv1, NULL);
-      jung_learn(object[type], OBJCACHE, type);
+      jung_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       jungtime = tv2.tv_usec - tv1.tv_usec;
 */
       ;
       gettimeofday(&tv1, NULL);
-      sum_learn(object[type], OBJCACHE, type);
+      sum_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, NULL);
       sumtime = tv2.tv_usec - tv1.tv_usec;
 #if CASE_VERBOSE && CASE_XVERBOSE
@@ -525,14 +531,14 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
     cnt[i] = 0;
   for (i = 0; i < PACKCACHE; i++)
     for (j = 0; j < PACKCACHE; j++)
-      if (0 == strncmp(value[type][i][attr].str, value[type][j][attr].str, VAL_STRSZ - 1))
+      if (0 == strncmp(value[type][i][attr].str, value[type][j][attr].str, CASE_STR - 1))
         cnt[i]++;
   for (i = 0; i < PACKCACHE; i++)
     if (cnt[i] > max) {
       max = cnt[i];
       maxindx = i;
     }
-  return 0 == strncmp(val->str, value[type][maxindx][attr].str, VAL_STRSZ - 1);
+  return 0 == strncmp(val->str, value[type][maxindx][attr].str, CASE_STR - 1);
 }
 
 case_bit_t packfirst(val_t *val, long attr, long type)
@@ -587,11 +593,11 @@ long reorderindx(long attrindx, long classindx)
 
 void setvaltypes(char *csvobj, long classindx, long type)
 {
-  char csvobjcopy[CASE_CSVOBJSZ];
+  char csvobjcopy[CASE_CSVOBJ];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, CASE_CSVOBJSZ - 1);
+  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
   tok = strtok(csvobjcopy, ",\n");
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? type_num : type_str;
@@ -615,6 +621,6 @@ void text2val(char *text, val_t *val, long valindx, long type)
   if (type_num == valtype[type][valindx]) {
     val->num = strtod(text, NULL);
   } else {
-    strncpy(val->str, text, VAL_STRSZ - 1);
+    strncpy(val->str, text, CASE_STR - 1);
   }
 }

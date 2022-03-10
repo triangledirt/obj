@@ -41,6 +41,12 @@ case_bit_t filt_classify(case_obj_t obj, long type)
   return score(obj, type) > (0.75 * fitness[type]);
 }
 
+double filt_classifydouble(case_obj_t obj, long type)
+{
+  initonce();
+  return score(obj, type);
+}
+
 void filt_learn(case_obj_t obj[], long objsz, long type)
 {
   long bit;

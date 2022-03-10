@@ -1,13 +1,12 @@
 #ifndef val_h
 #define val_h
 
+#include "case.h"
 #include "type.h"
-
-#define VAL_STRSZ 4
 
 union val_t {
   double num;
-  char str[VAL_STRSZ];
+  char str[CASE_STR];
 };
 typedef union val_t val_t;
 

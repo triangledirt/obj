@@ -6,5 +6,6 @@
 
 void fold_learn(case_obj_t obj[], long objsz, long type);
 case_bit_t fold_classify(case_obj_t obj, long type);
+double fold_classifydouble(case_obj_t obj, long type);
 
 #endif

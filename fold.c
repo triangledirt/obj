@@ -51,6 +51,12 @@ case_bit_t fold_classify(case_obj_t obj, long type)
   return case_obj_comparetypes(obj, ideal[type]) > (0.9 * fitness[type]);
 }
 
+double fold_classifydouble(case_obj_t obj, long type)
+{
+  initonce();
+  return case_obj_comparetypes(obj, ideal[type]);
+}
+
 void fold_learn(case_obj_t obj[], long objsz, long type)
 {
   pop_t pop;
