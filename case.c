@@ -375,6 +375,7 @@ void init()
   long i;
   long type;
   if (!once) {
+    srandom(time(NULL));
     case_obj_clear(&types);
     for (type = 0; type < 32; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++)
