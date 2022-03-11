@@ -14,9 +14,9 @@
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 
-case_obj_t case_packavg(char *csvobj, long classindx, long type);
-case_obj_t case_packrand(char *csvobj, long classindx, long type);
-case_obj_t case_packfirst(char *csvobj, long classindx, long type);
+case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type);
+case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);
+case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type);
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type);

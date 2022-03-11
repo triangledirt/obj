@@ -14,8 +14,8 @@ typedef case_obj_t (*pack_f)(char *, long, long);
 
 static void reset();
 static void summarize();
-static void testfile(char *filename, long classindx, long type, pack_f packfunc);
-static void testline(char *line, long classindx, long type, pack_f packfunc);
+static void testpack(char *filename, long classindx, long type, pack_f packfunc);
+static void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc);
 static void testrand(long type);
 
 void reset()
@@ -31,25 +31,13 @@ void summarize()
 #endif
 }
 
-void testfile(char *filename, long classindx, long type, pack_f packfunc)
-{
-  FILE *file;
-  char line[CASE_CSVOBJ];
-  reset();
-  file = fopen(filename, "r");
-  while (fgets(line, CASE_CSVOBJ, file))
-    testline(line, classindx, type, packfunc);
-  fclose(file);
-  summarize();
-}
-
-void testline(char *line, long classindx, long type, pack_f packfunc)
+void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc)
 {
   case_obj_t obj;
   char c;
   case_bit_t guessclass;
   case_bit_t actualclass;
-  obj = packfunc(line, classindx, type);
+  obj = packfunc(csvobj, classindx, type);
   case_observe(obj, type);
   guessclass = case_classify(obj, type);
   actualclass = case_obj_getclass(obj);
@@ -62,6 +50,18 @@ void testline(char *line, long classindx, long type, pack_f packfunc)
   case_obj_print(obj);
   printf("\n");
 #endif
+}
+
+void testpack(char *filename, long classindx, long type, pack_f packfunc)
+{
+  FILE *file;
+  char csvobj[CASE_CSVOBJ];
+  reset();
+  file = fopen(filename, "r");
+  while (fgets(csvobj, CASE_CSVOBJ, file))
+    testcsvobj(csvobj, classindx, type, packfunc);
+  fclose(file);
+  summarize();
 }
 
 void testrand(long type)
@@ -95,11 +95,11 @@ void testrand(long type)
   summarize();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
   if (0) testrand(RANDOM);
-  if (0) testfile("data/diabetes.csv", 0, DIABETES, case_packfirst);
-  if (0) testfile("data/drug.csv", 3, DRUG, case_packfirst);
-  if (0) testfile("data/forest.csv", 0, FOREST, case_packavg);
-  if (1) testfile("data/mushroom.csv", 0, MUSHROOM, case_packavg);
+  if (0) testpack("data/diabetes.csv", 0, DIABETES, case_packfirst);
+  if (0) testpack("data/drug.csv", 3, DRUG, case_packfirst);
+  if (0) testpack("data/forest.csv", 0, FOREST, case_packavg);
+  if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
 }

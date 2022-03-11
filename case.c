@@ -42,16 +42,16 @@ static long countsub(case_obj_t objtype1, case_obj_t objtype2, long type);
 static long countxor(case_obj_t objtype1, case_obj_t objtype2, long type);
 
 typedef case_bit_t (*pack_f)(val_t *, long, long);
-static case_obj_t packgeneral(char *csvobj, long classindx, long type, pack_f packfunc);
+static case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc);
 static case_bit_t packavg(val_t *val, long attr, long type);
 static case_bit_t packavgnum(val_t *val, long attr, long type);
 static case_bit_t packavgstr(val_t *val, long attr, long type);
 static case_bit_t packfirst(val_t *val, long attr, long type);
 static case_bit_t packrand(val_t *val, long attr, long type);
-static void setvaltypes(char *csvobj, long classindx, long type);
+static void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type);
 static void insertfirstval(val_t valobj[32], long type);
 static void insertval(val_t valobj[32], long type);
-static void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type);
+static void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long type);
 static void text2val(char *text, val_t *val, long valindx, long type);
 static case_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
@@ -177,19 +177,19 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
   return (long) bothcnt / eithercnt;
 }
 
-case_obj_t case_packavg(char *csvobj, long classindx, long type)
+case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packavg);
 }
 
-case_obj_t case_packfirst(char *csvobj, long classindx, long type)
+case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packfirst);
 }
 
-case_obj_t case_packrand(char *csvobj, long classindx, long type)
+case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packrand);
@@ -344,7 +344,7 @@ long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
   return count;
 }
 
-void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type)
+void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long type)
 {
   char csvobjcopy[CASE_CSVOBJ];
   char *tok;
@@ -516,7 +516,7 @@ case_bit_t packfirst(val_t *val, long attr, long type)
   return compare == 0;
 }
 
-case_obj_t packgeneral(char *csvobj, long classindx, long type, pack_f packfunc)
+case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc)
 {
   case_obj_t obj;
   val_t valobj[32];
@@ -559,7 +559,7 @@ long reorderindx(long attrindx, long classindx)
   return reindx;
 }
 
-void setvaltypes(char *csvobj, long classindx, long type)
+void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
 {
   char csvobjcopy[CASE_CSVOBJ];
   char *tok;
