@@ -30,7 +30,9 @@ static val_t firstval[32][32];
 static valtype_t valtype[32][32];
 static case_bool_t firstpack[32];
 
+typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn();
+static long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc);
 static void init();
 static void notetype(long type);
 static long count(case_obj_t objtype, long type);
@@ -422,8 +424,6 @@ case_bool_t isnum(char *str)
 void learn()
 {
   long type;
-  struct timeval tv1;
-  struct timeval tv2;
   long coretime = 0;
   long filttime = 0;
   long foldtime = 0;
@@ -433,52 +433,29 @@ void learn()
   long sumtime = 0;
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
-/*
-      gettimeofday(&tv1, 0);
-      core_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      coretime = tv2.tv_usec - tv1.tv_usec;
-*/
-      ;
-      gettimeofday(&tv1, 0);
-      filt_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      filttime = tv2.tv_usec - tv1.tv_usec;
-      ;
-      gettimeofday(&tv1, 0);
-      fold_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      foldtime = tv2.tv_usec - tv1.tv_usec;
-      ;
-/*
-      gettimeofday(&tv1, 0);
-      gene_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      genetime = tv2.tv_usec - tv1.tv_usec;
-*/
-      ;
-/*
-      gettimeofday(&tv1, 0);
-      jack_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      jacktime = tv2.tv_usec - tv1.tv_usec;
-*/
-      ;
-/*
-      gettimeofday(&tv1, 0);
-      jung_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      jungtime = tv2.tv_usec - tv1.tv_usec;
-*/
-      ;
-      gettimeofday(&tv1, 0);
-      sum_learn(object[type], CASE_OBJCACHE, type);
-      gettimeofday(&tv2, 0);
-      sumtime = tv2.tv_usec - tv1.tv_usec;
+      /*  coretime = learngeneral(object[type], CASE_OBJCACHE, type, core_learn);  */
+      filttime = learngeneral(object[type], CASE_OBJCACHE, type, filt_learn);
+      foldtime = learngeneral(object[type], CASE_OBJCACHE, type, fold_learn);
+      /*  genetime = learngeneral(object[type], CASE_OBJCACHE, type, gene_learn);  */
+      /*  jacktime = learngeneral(object[type], CASE_OBJCACHE, type, jack_learn);  */
+      /*  jungtime = learngeneral(object[type], CASE_OBJCACHE, type, jung_learn);  */
+      sumtime = learngeneral(object[type], CASE_OBJCACHE, type, sum_learn);
 #if CASE_VERBOSE && CASE_XVERBOSE
       printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
     }
+}
+
+long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
+{
+  struct timeval tv1;
+  struct timeval tv2;
+  long time;
+  gettimeofday(&tv1, 0);
+  learnfunc(obj, objsz, type);
+  gettimeofday(&tv2, 0);
+  time = tv2.tv_usec - tv1.tv_usec;
+  return time;
 }
 
 void notetype(long type)
