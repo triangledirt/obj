@@ -380,11 +380,15 @@ void initonce()
     for (type = 0; type < 32; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
+/*
         for (attr = 0; attr < 32; attr++)
           val_init(&value[type][i][attr], valtype_str);
+*/
       }
+/*
       for (attr = 0; attr < 32; attr++)
         val_init(&firstval[type][attr], valtype_str);
+*/
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -393,9 +397,7 @@ void initonce()
 
 void insertfirstval(val_t valobj[32], long type)
 {
-  long obj;
   long attr;
-  obj = random() % PACKCACHE;
   for (attr = 0; attr < 32; attr++)
     val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
 }
@@ -431,13 +433,13 @@ void learn()
   long type;
   struct timeval tv1;
   struct timeval tv2;
-  long coretime;
-  long filttime;
-  long foldtime;
-  long genetime;
-  long jacktime;
-  long jungtime;
-  long sumtime;
+  long coretime = 0;
+  long filttime = 0;
+  long foldtime = 0;
+  long genetime = 0;
+  long jacktime = 0;
+  long jungtime = 0;
+  long sumtime = 0;
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
 /*
@@ -457,12 +459,10 @@ void learn()
       gettimeofday(&tv2, 0);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
-/*
       gettimeofday(&tv1, 0);
       gene_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, 0);
       genetime = tv2.tv_usec - tv1.tv_usec;
-*/
       ;
 /*
       gettimeofday(&tv1, 0);
