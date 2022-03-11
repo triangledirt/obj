@@ -374,21 +374,11 @@ void initonce()
 {
   long i;
   long type;
-  long attr;
   if (!once) {
     case_obj_clear(&types);
     for (type = 0; type < 32; type++) {
-      for (i = 0; i < CASE_OBJCACHE; i++) {
+      for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
-/*
-        for (attr = 0; attr < 32; attr++)
-          val_init(&value[type][i][attr], valtype_str);
-*/
-      }
-/*
-      for (attr = 0; attr < 32; attr++)
-        val_init(&firstval[type][attr], valtype_str);
-*/
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
