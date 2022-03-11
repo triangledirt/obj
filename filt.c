@@ -35,12 +35,6 @@ void calcfit(case_obj_t obj[], long objsz, long type)
   fitness[type] = s / (objsz / 2);
 }
 
-double filt_classify(case_obj_t obj, long type)
-{
-  init();
-  return score(obj, type);
-}
-
 void filt_learn(case_obj_t obj[], long objsz, long type)
 {
   long bit;
@@ -62,6 +56,12 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(zero[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double filt_score(case_obj_t obj, long type)
+{
+  init();
+  return score(obj, type);
 }
 
 void init()

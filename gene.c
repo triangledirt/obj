@@ -56,12 +56,6 @@ void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
       calcfit(pop, o, obj, objsz, type);
 }
 
-double gene_classify(case_obj_t obj, long type)
-{
-  init();
-  return case_obj_comparetypes(obj, ideal[type]);
-}
-
 void gene_learn(case_obj_t obj[], long objsz, long type)
 {
   long mating;
@@ -99,6 +93,12 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double gene_score(case_obj_t obj, long type)
+{
+  init();
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)

@@ -23,12 +23,6 @@ void init()
   }
 }
 
-double sum_classify(case_obj_t obj, long type)
-{
-  init();
-  return case_obj_comparetypes(obj, ideal[type]);
-}
-
 void sum_learn(case_obj_t obj[], long objsz, long type)
 {
   long i;
@@ -69,4 +63,10 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double sum_score(case_obj_t obj, long type)
+{
+  init();
+  return case_obj_comparetypes(obj, ideal[type]);
 }

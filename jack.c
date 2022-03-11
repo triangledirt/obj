@@ -28,12 +28,6 @@ void init()
   }
 }
 
-double jack_classify(case_obj_t obj, long type)
-{
-  init();
-  return score(obj, type);
-}
-
 void jack_learn(case_obj_t obj[], long objsz, long type)
 {
   case_bit_t values[31][31];
@@ -60,6 +54,12 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
   /* case_obj_print(one[type]); */
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double jack_score(case_obj_t obj, long type)
+{
+  init();
+  return score(obj, type);
 }
 
 double score(case_obj_t obj, long type)

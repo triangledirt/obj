@@ -5,6 +5,6 @@
 #include "obj.h"
 
 void jung_learn(case_obj_t obj[], long objsz, long type);
-double jung_classify(case_obj_t obj, long type);
+double jung_score(case_obj_t obj, long type);
 
 #endif

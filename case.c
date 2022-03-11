@@ -57,25 +57,25 @@ static long reorderindx(long attrindx, long classindx);
 case_bit_t case_classify(case_obj_t obj, long type)
 {
   case_bit_t class;
-  double coreclass = 0.0;
-  double filtclass = 0.0;
-  double foldclass = 0.0;
-  double geneclass = 0.0;
-  double jackclass = 0.0;
-  double jungclass = 0.0;
-  double sumclass = 0.0;
+  double corescore = 0.0;
+  double filtscore = 0.0;
+  double foldscore = 0.0;
+  double genescore = 0.0;
+  double jackscore = 0.0;
+  double jungscore = 0.0;
+  double sumscore = 0.0;
   init();
   notetype(type);
-  /*  coreclass = core_classify(obj, type);  */
-  filtclass = filt_classify(obj, type);
-  foldclass = fold_classify(obj, type);
-  /*  geneclass = gene_classify(obj, type);  */
-  /*  jackclass = jack_classify(obj, type);  */
-  /*  jungclass = jung_classify(obj, type);  */
-  sumclass = sum_classify(obj, type);
-  class = ((filtclass + foldclass + sumclass) > (3 * 0.5)) ? 1 : 0;
+  /*  corescore = core_score(obj, type);  */
+  filtscore = filt_score(obj, type);
+  foldscore = fold_score(obj, type);
+  /*  genescore = gene_score(obj, type);  */
+  /*  jackscore = jack_score(obj, type);  */
+  /*  jungscore = jung_score(obj, type);  */
+  sumscore = sum_score(obj, type);
+  class = ((filtscore + foldscore + sumscore) > (3 * 0.5)) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
+  printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, corescore, filtscore, foldscore, genescore, jackscore, jungscore, sumscore);
 #endif
   return class;
 }

@@ -45,12 +45,6 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   }
 }
 
-double fold_classify(case_obj_t obj, long type)
-{
-  init();
-  return case_obj_comparetypes(obj, ideal[type]);
-}
-
 void fold_learn(case_obj_t obj[], long objsz, long type)
 {
   pop_t pop;
@@ -80,6 +74,12 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double fold_score(case_obj_t obj, long type)
+{
+  init();
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)

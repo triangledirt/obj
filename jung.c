@@ -74,12 +74,6 @@ void init()
   }
 }
 
-double jung_classify(case_obj_t obj, long type)
-{
-  init();
-  return case_obj_comparetypes(obj, ideal[type]);
-}
-
 void jung_learn(case_obj_t obj[], long objsz, long type)
 {
   long iter;
@@ -114,6 +108,12 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double jung_score(case_obj_t obj, long type)
+{
+  init();
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 void meet(pop_t pop, coord_t *a, coord_t *b)

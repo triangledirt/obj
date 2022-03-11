@@ -5,6 +5,6 @@
 #include "obj.h"
 
 void sum_learn(case_obj_t obj[], long objsz, long type);
-double sum_classify(case_obj_t obj, long type);
+double sum_score(case_obj_t obj, long type);
 
 #endif

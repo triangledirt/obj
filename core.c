@@ -55,12 +55,6 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   }
 }
 
-double core_classify(case_obj_t obj, long type)
-{
-  init();
-  return case_obj_comparetypes(obj, ideal[type]);
-}
-
 void core_learn(case_obj_t obj[], long objsz, long type)
 {
   long act;
@@ -87,6 +81,12 @@ void core_learn(case_obj_t obj[], long objsz, long type)
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
+}
+
+double core_score(case_obj_t obj, long type)
+{
+  init();
+  return case_obj_comparetypes(obj, ideal[type]);
 }
 
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
