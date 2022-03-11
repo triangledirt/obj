@@ -16,8 +16,8 @@
 #include "jung.h"
 #include "obj.h"
 #include "sum.h"
-#include "type.h"
 #include "val.h"
+#include "valtype.h"
 
 #define PACKCACHE (CASE_OBJCACHE / 2)
 
@@ -27,7 +27,7 @@ static case_obj_t types;
 
 static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
-static type_t valtype[32][32];
+static valtype_t valtype[32][32];
 static case_bool_t firstpack[32];
 
 static void learn();
@@ -381,10 +381,10 @@ void initonce()
       for (i = 0; i < CASE_OBJCACHE; i++) {
         case_obj_randomize(&object[type][i]);
         for (attr = 0; attr < 32; attr++)
-          val_init(&value[type][i][attr], type_str);
+          val_init(&value[type][i][attr], valtype_str);
       }
       for (attr = 0; attr < 32; attr++)
-        val_init(&firstval[type][attr], type_str);
+        val_init(&firstval[type][attr], valtype_str);
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -497,10 +497,10 @@ case_bit_t packavg(val_t *val, long attr, long type)
 {
   case_bit_t bit;
   switch (valtype[type][attr]) {
-    case type_num:
+    case valtype_num:
       bit = packavgnum(val, attr, type);
       break;
-    case type_str:
+    case valtype_str:
       bit = packavgstr(val, attr, type);
       break;
   }
@@ -598,25 +598,25 @@ void setvaltypes(char *csvobj, long classindx, long type)
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
   tok = strtok(csvobjcopy, ",\n");
   valindx = reorderindx(csvindx, classindx);
-  valtype[type][valindx] = isnum(tok) ? type_num : type_str;
+  valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
   while ((tok = strtok(0, ",\n")) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
-    valtype[type][valindx] = isnum(tok) ? type_num : type_str;
+    valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
   }
   for (valindx = csvindx + 1; valindx < 32; valindx++)
-    valtype[type][valindx] = type_str;
+    valtype[type][valindx] = valtype_str;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld types     ", type);
   for (valindx = 0; valindx < 32; valindx++)
-    printf("%s,", type_name(valtype[type][valindx]));
+    printf("%s,", valtype_name(valtype[type][valindx]));
   printf("\n");
 #endif
 }
 
 void text2val(char *text, val_t *val, long valindx, long type)
 {
-  if (type_num == valtype[type][valindx]) {
+  if (valtype_num == valtype[type][valindx]) {
     val->num = strtod(text, 0);
   } else {
     strncpy(val->str, text, CASE_STR - 1);

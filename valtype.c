@@ -1,16 +1,16 @@
-#include "type.h"
+#include "valtype.h"
 
 static char *numname = "num";
 static char *strname = "str";
 
-char *type_name(type_t type)
+char *valtype_name(valtype_t valtype)
 {
   char *str;
-  switch (type) {
-    case type_num:
+  switch (valtype) {
+    case valtype_num:
       str = numname;
       break;
-    case type_str:
+    case valtype_str:
       str = strname;
       break;
   }

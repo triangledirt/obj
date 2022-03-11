@@ -23,51 +23,51 @@ long comparestr(char val1[CASE_STR], char val2[CASE_STR])
   return strncmp(val1, val2, CASE_STR - 1);
 }
 
-long val_compare(val_t *val1, val_t *val2, type_t type)
+long val_compare(val_t *val1, val_t *val2, valtype_t valtype)
 {
   long compare;
-  switch (type) {
-    case type_num:
+  switch (valtype) {
+    case valtype_num:
       compare = comparenum(val1->num, val2->num);
       break;
-    case type_str:
+    case valtype_str:
       compare = comparestr(val1->str, val2->str);
       break;
   }
   return compare;
 }
 
-void val_copy(val_t *source, val_t *dest, type_t type)
+void val_copy(val_t *source, val_t *dest, valtype_t valtype)
 {
-  switch (type) {
-    case type_num:
+  switch (valtype) {
+    case valtype_num:
       dest->num = source->num;
       break;
-    case type_str:
+    case valtype_str:
       strncpy(dest->str, source->str, CASE_STR - 1);
       break;
   }
 }
 
-void val_init(val_t *val, type_t type)
+void val_init(val_t *val, valtype_t valtype)
 {
-  switch (type) {
-    case type_num:
+  switch (valtype) {
+    case valtype_num:
       val->num = 0.0;
       break;
-    case type_str:
+    case valtype_str:
       val->str[0] = '\0';
       break;
   }
 }
 
-void val_print(val_t *val, type_t type)
+void val_print(val_t *val, valtype_t valtype)
 {
-  switch (type) {
-    case type_num:
+  switch (valtype) {
+    case valtype_num:
       printf("%f", val->num);
       break;
-    case type_str:
+    case valtype_str:
       printf("%s", val->str);
       break;
   }
