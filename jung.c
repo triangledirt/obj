@@ -16,7 +16,7 @@ static double fitness[32];
 static double fits[32][DIM][DIM];
 static case_obj_t fittest[32];
 static case_obj_t ideal[32];
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
@@ -24,7 +24,7 @@ static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
 
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
-static void initonce();
+static void init();
 static void meet(pop_t pop, coord_t *a, coord_t *b);
 static void move(pop_t pop, coord_t *a, coord_t *b);
 static void randcoord(coord_t *c);
@@ -64,19 +64,19 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   return fits[type][c->x][c->y];
 }
 
-void initonce()
+void init()
 {
   long type;
   if (!once) {
     for (type = 0; type < 32; type++)
       case_obj_randomize(&ideal[type]);
-    once = 1;
+    once = case_bool_true;
   }
 }
 
 double jung_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return case_obj_comparetypes(obj, ideal[type]);
 }
 
@@ -89,7 +89,7 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
   double fita;
   double fitb;
   pop_t pop;
-  initonce();
+  init();
   reset(pop, type);
   for (iter = 0; iter < ITER; iter++) {
     randcoord(&a);

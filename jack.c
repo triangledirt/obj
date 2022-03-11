@@ -7,14 +7,14 @@
 #include "obj.h"
 #include "op.h"
 
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 static double fitness[32];
 static node_t node[32][31][31];
 
-static void initonce();
+static void init();
 static double score(case_obj_t obj, long type);
 
-void initonce()
+void init()
 {
   long type;
   long i;
@@ -24,13 +24,13 @@ void initonce()
       for (i = 0; i < 31; i++)
         for (j = 0; j < (31 - i); j++)
           node_init(&node[type][i][j]);
-    once = 1;
+    once = case_bool_true;
   }
 }
 
 double jack_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return score(obj, type);
 }
 
@@ -43,7 +43,7 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
   case_bit_t bit1;
   case_bit_t bit2;
   case_bit_t op;
-  initonce();
+  init();
   for (i = 0; i < 31; i++)
     for (j = 0; j < (31 - i); j++) {
 /*

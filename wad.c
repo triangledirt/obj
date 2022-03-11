@@ -8,9 +8,9 @@ struct wad_t {
 };
 
 static case_bool_t once = case_bool_false;
-static void initonce(wad_t *wad);
+static void init(wad_t *wad);
 
-void initonce(wad_t *wad)
+void init(wad_t *wad)
 {
   long i;
   strcnt_t *prev;
@@ -33,10 +33,10 @@ void initonce(wad_t *wad)
 
 void wad_update(wad_t *wad, char *str)
 {
-  initonce(wad);
+  init(wad);
 }
 
 char *wad_popular(wad_t *wad)
 {
-  initonce(wad);
+  init(wad);
 }

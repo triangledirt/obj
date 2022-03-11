@@ -19,7 +19,7 @@ static double fitness[32];
 static double fits[32][DIM][DIM][DIM];
 static case_obj_t fittest[32];
 static case_obj_t ideal[32];
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
@@ -33,7 +33,7 @@ static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[
 
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
 
-static void initonce();
+static void init();
 static void randcoord(coord_t *c);
 static void reset(pop_t pop, long type);
 
@@ -57,7 +57,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 
 double core_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return case_obj_comparetypes(obj, ideal[type]);
 }
 
@@ -68,7 +68,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
   coord_t best;
   coord_t worst;
   pop_t pop;
-  initonce();
+  init();
   reset(pop, type);
   for (act = 0; act < ACTS; act++) {
     randcoord(&actor);
@@ -169,13 +169,13 @@ double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   return fits[type][c->x][c->y][c->z];
 }
 
-void initonce()
+void init()
 {
   long type;
   if (!once) {
     for (type = 0; type < 32; type++)
       case_obj_randomize(&ideal[type]);
-    once = 1;
+    once = case_bool_true;
   }
 }
 

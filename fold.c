@@ -16,7 +16,7 @@ static double fitness[32];
 static case_obj_t fittest[32];
 static double fits[32][POP];
 static case_obj_t ideal[32];
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
 
@@ -24,7 +24,7 @@ static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
 
 static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
 
-static void initonce();
+static void init();
 static void reset(case_obj_t pop[], long type);
 
 void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
@@ -47,7 +47,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
 
 double fold_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return case_obj_comparetypes(obj, ideal[type]);
 }
 
@@ -61,7 +61,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
   case_bit_t val;
   long len;
   long each;
-  initonce();
+  init();
   reset(pop, type);
   for (each = 0; each <= FOLDS; each++) {
     o = random() % POP;
@@ -97,13 +97,13 @@ double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   return fits[type][o];
 }
 
-void initonce()
+void init()
 {
   long type;
   if (!once) {
     for (type = 0; type < 32; type++)
       case_obj_randomize(&ideal[type]);
-    once = 1;
+    once = case_bool_true;
   }
 }
 

@@ -31,7 +31,7 @@ static valtype_t valtype[32][32];
 static case_bool_t firstpack[32];
 
 static void learn();
-static void initonce();
+static void init();
 static void notetype(long type);
 static long count(case_obj_t objtype, long type);
 static long countboth(case_obj_t objtype1, case_obj_t objtype2, long type);
@@ -64,16 +64,16 @@ case_bit_t case_classify(case_obj_t obj, long type)
   double jackclass = 0.0;
   double jungclass = 0.0;
   double sumclass = 0.0;
-  initonce();
+  init();
   notetype(type);
   /*  coreclass = core_classify(obj, type);  */
   filtclass = filt_classify(obj, type);
   foldclass = fold_classify(obj, type);
-  geneclass = gene_classify(obj, type);
+  /*  geneclass = gene_classify(obj, type);  */
   /*  jackclass = jack_classify(obj, type);  */
   /*  jungclass = jung_classify(obj, type);  */
   sumclass = sum_classify(obj, type);
-  class = ((filtclass + foldclass + geneclass + sumclass) > (4 * 0.5)) ? 1 : 0;
+  class = ((filtclass + foldclass + sumclass) > (3 * 0.5)) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, coreclass, filtclass, foldclass, geneclass, jackclass, jungclass, sumclass);
 #endif
@@ -84,7 +84,7 @@ double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
 {
   long indicnt;
   long targcnt;
-  initonce();
+  init();
   indicnt = count(indicator, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -96,7 +96,7 @@ double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long targcnt;
-  initonce();
+  init();
   indisubcnt = countsub(indicator, target, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -108,7 +108,7 @@ double case_indimis(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long targsubcnt;
-  initonce();
+  init();
   indisubcnt = countsub(indicator, target, type);
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
@@ -120,7 +120,7 @@ double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
 {
   long indisubcnt;
   long bothcnt;
-  initonce();
+  init();
   indisubcnt = countsub(indicator, target, type);
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
@@ -132,7 +132,7 @@ double case_indiover(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long indicnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -144,7 +144,7 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long indisubcnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
@@ -155,7 +155,7 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
 void case_observe(case_obj_t obj, long type)
 {
   long i;
-  initonce();
+  init();
   notetype(type);
   i = random() % CASE_OBJCACHE;
   object[type][i] = obj;
@@ -167,7 +167,7 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long eithercnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   eithercnt = counteither(indicator, target, type);
   if (0 == eithercnt)
@@ -177,19 +177,19 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
 
 case_obj_t case_packavg(char *csvobj, long classindx, long type)
 {
-  initonce();
+  init();
   return packgeneral(csvobj, classindx, type, packavg);
 }
 
 case_obj_t case_packfirst(char *csvobj, long classindx, long type)
 {
-  initonce();
+  init();
   return packgeneral(csvobj, classindx, type, packfirst);
 }
 
 case_obj_t case_packrand(char *csvobj, long classindx, long type)
 {
-  initonce();
+  init();
   return packgeneral(csvobj, classindx, type, packrand);
 }
 
@@ -197,7 +197,7 @@ double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
 {
   long targcnt;
   long indicnt;
-  initonce();
+  init();
   targcnt = count(target, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -209,7 +209,7 @@ double case_targimp(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long indicnt;
-  initonce();
+  init();
   targsubcnt = countsub(target, indicator, type);
   indicnt = count(indicator, type);
   if (0 == indicnt)
@@ -221,7 +221,7 @@ double case_targmis(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long indisubcnt;
-  initonce();
+  init();
   targsubcnt = countsub(target, indicator, type);
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
@@ -233,7 +233,7 @@ double case_targopac(case_obj_t indicator, case_obj_t target, long type)
 {
   long targsubcnt;
   long bothcnt;
-  initonce();
+  init();
   targsubcnt = countsub(target, indicator, type);
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
@@ -245,7 +245,7 @@ double case_targover(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long targcnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   targcnt = count(target, type);
   if (0 == targcnt)
@@ -257,7 +257,7 @@ double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long targsubcnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
@@ -269,7 +269,7 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
 {
   long bothcnt;
   long xorcnt;
-  initonce();
+  init();
   bothcnt = countboth(indicator, target, type);
   xorcnt = countxor(indicator, target, type);
   if (0 == xorcnt)
@@ -370,7 +370,7 @@ void csv2valobj(char *csvobj, long classindx, val_t valobj[32], long type)
 #endif
 }
 
-void initonce()
+void init()
 {
   long i;
   long type;
@@ -449,10 +449,12 @@ void learn()
       gettimeofday(&tv2, 0);
       foldtime = tv2.tv_usec - tv1.tv_usec;
       ;
+/*
       gettimeofday(&tv1, 0);
       gene_learn(object[type], CASE_OBJCACHE, type);
       gettimeofday(&tv2, 0);
       genetime = tv2.tv_usec - tv1.tv_usec;
+*/
       ;
 /*
       gettimeofday(&tv1, 0);

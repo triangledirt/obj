@@ -7,11 +7,11 @@
 
 static double fitness[32];
 static case_obj_t ideal[32];
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 
-static void initonce();
+static void init();
 
-void initonce()
+void init()
 {
   long type;
   if (!once) {
@@ -19,13 +19,13 @@ void initonce()
       fitness[type] = 0.0;
       case_obj_randomize(&ideal[type]);
     }
-    once = 1;
+    once = case_bool_true;
   }
 }
 
 double sum_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return case_obj_comparetypes(obj, ideal[type]);
 }
 
@@ -39,7 +39,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   long thresh = objsz / 8;
   case_bit_t class;
   double tot = 0;
-  initonce();
+  init();
   for (bit = 1; bit < 32; bit++)
     onecount[bit] = 0;
   for (i = 0; i < objsz; i++) {

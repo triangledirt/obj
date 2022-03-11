@@ -7,7 +7,7 @@
 
 #define ACTS 4
 
-static case_bit_t once = 0;
+static case_bool_t once = case_bool_false;
 static case_obj_t one[32];
 static case_obj_t onesv[32];
 static double fitness[32];
@@ -16,7 +16,7 @@ static case_obj_t zero[32];
 static case_obj_t zerosv[32];
 
 static void calcfit(case_obj_t obj[], long objsz, long type);
-static void initonce();
+static void init();
 static void mutate(case_obj_t *obj1, case_obj_t *obj2);
 static void restore(long type);
 static void save(long type);
@@ -37,7 +37,7 @@ void calcfit(case_obj_t obj[], long objsz, long type)
 
 double filt_classify(case_obj_t obj, long type)
 {
-  initonce();
+  init();
   return score(obj, type);
 }
 
@@ -46,7 +46,7 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
   long bit;
   case_obj_t o;
   long act;
-  initonce();
+  init();
   for (act = 0; act < ACTS; act++) {
     calcfit(obj, objsz, type);
     save(type);
@@ -64,7 +64,7 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
 #endif
 }
 
-void initonce()
+void init()
 {
   long type;
   if (!once) {
@@ -72,7 +72,7 @@ void initonce()
       case_obj_clear(&one[type]);
       case_obj_clear(&zero[type]);
     }
-    once = 1;
+    once = case_bool_true;
   }
 }
 
