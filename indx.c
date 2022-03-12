@@ -1,14 +1,14 @@
 #include "indx.h"
 
-unsigned long indx_wrap(long i, unsigned long range)
+unsigned long indx_wrap(long indx, unsigned long range)
 {
   unsigned long wrap;
-  if (i >= (long) range) {
-    wrap = i % range;
-  } else if (i < 0) {
-    wrap = (1 == range) ? 0 : range - (-i % range);
+  if (indx >= (long) range) {
+    wrap = indx % range;
+  } else if (indx < 0) {
+    wrap = (1 == range) ? 0 : range - (-indx % range);
   } else {
-    wrap = i;
+    wrap = indx;
   }
   return wrap;
 }
