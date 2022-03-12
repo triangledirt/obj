@@ -14,7 +14,7 @@
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 
-case_obj_t case_packauto(char csvobj[CASE_CSVOBJ], long classindx, long type);
+case_obj_t case_pack(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type);
