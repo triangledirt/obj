@@ -9,11 +9,12 @@
 
 #define CASE_OBJCACHE 64
 #define CASE_CSVOBJ 4096
-#define CASE_STR 4
+#define CASE_STR (4 + 1)
 
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 
+case_obj_t case_packauto(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type);
