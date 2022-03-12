@@ -70,25 +70,6 @@ double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / total;
 }
 
-double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
-{
-  double oblivion;
-  long match;
-  long opposite = 0;
-  long i;
-  case_bit_t o1bit;
-  case_bit_t o2bit;
-  for (i = 0; i < 32; i++) {
-    o1bit = case_obj_getattr(obj1, i);
-    o2bit = case_obj_getattr(obj2, i);
-    if (o1bit != o2bit)
-      opposite++;
-  }
-  match = 32 - opposite;
-  oblivion = (32 - labs(match - opposite)) / 32;
-  return oblivion;
-}
-
 long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 {
   long place = 1;
@@ -121,6 +102,25 @@ void case_obj_mutate(case_obj_t *obj)
   i = random() % 32;
   case_bit_randomize(&val);
   case_obj_setattr(obj, i, val);
+}
+
+double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
+{
+  double oblivion;
+  long match;
+  long opposite = 0;
+  long i;
+  case_bit_t o1bit;
+  case_bit_t o2bit;
+  for (i = 0; i < 32; i++) {
+    o1bit = case_obj_getattr(obj1, i);
+    o2bit = case_obj_getattr(obj2, i);
+    if (o1bit != o2bit)
+      opposite++;
+  }
+  match = 32 - opposite;
+  oblivion = (32 - labs(match - opposite)) / 32;
+  return oblivion;
 }
 
 void case_obj_print(case_obj_t obj)
