@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 #include <time.h>
 #include "bit.h"
 #include "case.h"
@@ -16,6 +15,7 @@
 #include "jung.h"
 #include "obj.h"
 #include "sum.h"
+#include "timer.h"
 #include "val.h"
 #include "valtype.h"
 
@@ -448,13 +448,10 @@ void learn()
 
 long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
 {
-  struct timeval tv1;
-  struct timeval tv2;
   long time;
-  gettimeofday(&tv1, 0);
+  timer_start();
   learnfunc(obj, objsz, type);
-  gettimeofday(&tv2, 0);
-  time = tv2.tv_usec - tv1.tv_usec;
+  time = timer_stop();
   return time;
 }
 
@@ -490,21 +487,30 @@ case_bit_t packavgnum(val_t *val, long attr, long type)
 
 case_bit_t packavgstr(val_t *val, long attr, long type)
 {
-  long cnt[PACKCACHE];
+  long samplesz = PACKCACHE / 8;
+  long sampleobj[samplesz];
+  long samplecnt[samplesz];
   long i;
   long j;
+  long k;
   long max = 0;
   long maxindx = 0;
+  for (i = 0; i < samplesz; i++) {
+    sampleobj[i] = random() % PACKCACHE;
+    samplecnt[i] = 0;
+  }
   for (i = 0; i < PACKCACHE; i++)
-    cnt[i] = 0;
-  for (i = 0; i < PACKCACHE; i++)
-    for (j = 0; j < PACKCACHE; j++)
-      if (0 == strncmp(value[type][i][attr].str, value[type][j][attr].str, CASE_STR - 1))
-        cnt[i]++;
-  for (i = 0; i < PACKCACHE; i++)
-    if (cnt[i] > max) {
-      max = cnt[i];
-      maxindx = i;
+    for (j = 0; j < samplesz; j++) {
+      k = sampleobj[j];
+      if (0 == strncmp(value[type][i][attr].str, value[type][k][attr].str, CASE_STR - 1)) {
+        samplecnt[j]++;
+        break;
+      }
+    }
+  for (j = 0; j < samplesz; j++)
+    if (samplecnt[j] > max) {
+      max = samplecnt[j];
+      maxindx = sampleobj[j];
     }
   return 0 == strncmp(val->str, value[type][maxindx][attr].str, CASE_STR - 1);
 }
