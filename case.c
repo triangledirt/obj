@@ -449,7 +449,7 @@ void learn()
 long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
 {
   long time;
-  timer_start();
+  timer_start(0);
   learnfunc(obj, objsz, type);
   time = timer_stop();
   return time;
