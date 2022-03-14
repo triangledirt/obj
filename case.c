@@ -14,6 +14,7 @@
 #include "jack.h"
 #include "jung.h"
 #include "obj.h"
+#include "step.h"
 #include "sum.h"
 #include "timer.h"
 #include "val.h"
@@ -24,6 +25,7 @@
 static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
+static step_t step[32];
 
 static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
@@ -68,6 +70,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   double sumscore = 0.0;
   init();
   notetype(type);
+  case_obj_obscureclass(&obj);
   /*  corescore = core_score(obj, type);  */
   filtscore = filt_score(obj, type);
   foldscore = fold_score(obj, type);
@@ -75,11 +78,21 @@ case_bit_t case_classify(case_obj_t obj, long type)
   /*  jackscore = jack_score(obj, type);  */
   /*  jungscore = jung_score(obj, type);  */
   sumscore = sum_score(obj, type);
-  class = ((filtscore + foldscore + sumscore) > (3 * 0.5)) ? 1 : 0;
+  class = ((filtscore + foldscore + sumscore) > (4 * 0.5)) ? 1 : 0;
+  class = ( (sumscore > 1 * 0.75) && (foldscore > 0.5) ) ? 1 : 0;
+  class = (sumscore > 0.5) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, corescore, filtscore, foldscore, genescore, jackscore, jungscore, sumscore);
 #endif
   return class;
+}
+
+case_bit_t case_classifyknown(case_obj_t obj, case_bit_t knownclass, long type)
+{
+  case_bit_t guessclass;
+  guessclass = case_classify(obj, type);
+  step_noteclasses(&step[type], guessclass, knownclass);
+  return guessclass;
 }
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
@@ -128,6 +141,7 @@ double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
   if (0 == bothcnt)
     bothcnt = 1;
   return (long) indisubcnt / bothcnt;
+/*  TODO (long) ?? (double) ??  */
 }
 
 double case_indiover(case_obj_t indicator, case_obj_t target, long type)
@@ -362,8 +376,8 @@ void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long
   for (valindx = csvindx + 1; valindx < 32; valindx++)
     val_init(&valobj[valindx], valtype[type][valindx]);
 #if 0 && CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%lu   csv     %s", type, csvobj);
-  printf("type%lu   val     ", type);
+  printf("type%ld   csv     %s", type, csvobj);
+  printf("type%ld   val     ", type);
   for (valindx = 0; valindx < 32; valindx++) {
     val_print(&valobj[valindx], valtype[type][valindx]);
     printf(",");
@@ -382,6 +396,7 @@ void init()
     for (type = 0; type < 32; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
+      step_reset(&step[type]);
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -554,6 +569,17 @@ case_bit_t packrand(val_t *val, long attr, long type)
   return bit;
 }
 
+void case_printstep(long type)
+{
+  double fmeasure;
+  double precision;
+  double recall;
+  fmeasure = step_fmeasure(&step[type]);
+  precision = step_precision(&step[type]);
+  recall = step_recall(&step[type]);
+  printf("type%ld steps     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
+}
+
 long reorderindx(long attrindx, long classindx)
 {
   long reindx;
@@ -563,6 +589,11 @@ long reorderindx(long attrindx, long classindx)
     reindx = (0 == attrindx) ? classindx : attrindx;
   }
   return reindx;
+}
+
+void case_resetstep(long type)
+{
+  step_reset(&step[type]);
 }
 
 void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)

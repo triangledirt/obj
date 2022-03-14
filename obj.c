@@ -123,6 +123,11 @@ double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
   return oblivion;
 }
 
+void case_obj_obscureclass(case_obj_t *obj)
+{
+  case_obj_setclass(obj, case_bit_random());
+}
+
 void case_obj_print(case_obj_t obj)
 {
   long i;
