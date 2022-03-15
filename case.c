@@ -101,7 +101,7 @@ double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
   targcnt = count(target, type);
   if (0 == targcnt)
     targcnt = 1;
-  return (long) indicnt / targcnt;
+  return (double) indicnt / targcnt;
 }
 
 double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
@@ -113,7 +113,7 @@ double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
   targcnt = count(target, type);
   if (0 == targcnt)
     targcnt = 1;
-  return (long) indisubcnt / targcnt;
+  return (double) indisubcnt / targcnt;
 }
 
 double case_indimis(case_obj_t indicator, case_obj_t target, long type)
@@ -125,7 +125,7 @@ double case_indimis(case_obj_t indicator, case_obj_t target, long type)
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
     targsubcnt = 1;
-  return (long) indisubcnt / targsubcnt;
+  return (double) indisubcnt / targsubcnt;
 }
 
 double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
@@ -137,8 +137,7 @@ double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
     bothcnt = 1;
-  return (long) indisubcnt / bothcnt;
-/*  TODO (long) ?? (double) ??  */
+  return (double) indisubcnt / bothcnt;
 }
 
 double case_indiover(case_obj_t indicator, case_obj_t target, long type)
@@ -150,7 +149,7 @@ double case_indiover(case_obj_t indicator, case_obj_t target, long type)
   indicnt = count(indicator, type);
   if (0 == indicnt)
     indicnt = 1;
-  return (long) bothcnt / indicnt;
+  return (double) bothcnt / indicnt;
 }
 
 double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
@@ -162,7 +161,7 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
     indisubcnt = 1;
-  return (long) bothcnt / indisubcnt;
+  return (double) bothcnt / indisubcnt;
 }
 
 void case_observe(case_obj_t obj, long type)
@@ -185,7 +184,7 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
   eithercnt = counteither(indicator, target, type);
   if (0 == eithercnt)
     eithercnt = 1;
-  return (long) bothcnt / eithercnt;
+  return (double) bothcnt / eithercnt;
 }
 
 case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type)
@@ -215,7 +214,7 @@ double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
   indicnt = count(indicator, type);
   if (0 == indicnt)
     indicnt = 1;
-  return (long) targcnt / indicnt;
+  return (double) targcnt / indicnt;
 }
 
 double case_targimp(case_obj_t indicator, case_obj_t target, long type)
@@ -227,7 +226,7 @@ double case_targimp(case_obj_t indicator, case_obj_t target, long type)
   indicnt = count(indicator, type);
   if (0 == indicnt)
     indicnt = 1;
-  return (long) targsubcnt / indicnt;
+  return (double) targsubcnt / indicnt;
 }
 
 double case_targmis(case_obj_t indicator, case_obj_t target, long type)
@@ -239,7 +238,7 @@ double case_targmis(case_obj_t indicator, case_obj_t target, long type)
   indisubcnt = countsub(indicator, target, type);
   if (0 == indisubcnt)
     indisubcnt = 1;
-  return (long) targsubcnt / indisubcnt;
+  return (double) targsubcnt / indisubcnt;
 }
 
 double case_targopac(case_obj_t indicator, case_obj_t target, long type)
@@ -251,7 +250,7 @@ double case_targopac(case_obj_t indicator, case_obj_t target, long type)
   bothcnt = countboth(indicator, target, type);
   if (0 == bothcnt)
     bothcnt = 1;
-  return (long) targsubcnt / bothcnt;
+  return (double) targsubcnt / bothcnt;
 }
 
 double case_targover(case_obj_t indicator, case_obj_t target, long type)
@@ -263,7 +262,7 @@ double case_targover(case_obj_t indicator, case_obj_t target, long type)
   targcnt = count(target, type);
   if (0 == targcnt)
     targcnt = 1;
-  return (long) bothcnt / targcnt;
+  return (double) bothcnt / targcnt;
 }
 
 double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
@@ -275,7 +274,7 @@ double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
   targsubcnt = countsub(target, indicator, type);
   if (0 == targsubcnt)
     targsubcnt = 1;
-  return (long) bothcnt / targsubcnt;
+  return (double) bothcnt / targsubcnt;
 }
 
 double case_trans(case_obj_t indicator, case_obj_t target, long type)
@@ -287,7 +286,7 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
   xorcnt = countxor(indicator, target, type);
   if (0 == xorcnt)
     xorcnt = 1;
-  return (long) bothcnt / xorcnt;
+  return (double) bothcnt / xorcnt;
 }
 
 long count(case_obj_t objtype, long type)
