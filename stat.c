@@ -38,7 +38,7 @@ void case_stat_print(case_stat_t *stat)
   precision = case_stat_precision(stat);
   recall = case_stat_recall(stat);
   fmeasure = case_stat_fmeasure(stat);
-  printf("fmeasure=%0.3f precision=%0.3f recall=%0.3f truepos=%ld falsepos=%ld trueneg=%ld falseneg=%ld\n", fmeasure, precision, recall, stat->truepos, stat->falsepos, stat->trueneg, stat->falseneg);
+  printf("                fmeasure=%0.3f precision=%0.3f recall=%0.3f truepos=%ld falsepos=%ld trueneg=%ld falseneg=%ld\n", fmeasure, precision, recall, stat->truepos, stat->falsepos, stat->trueneg, stat->falseneg);
 }
 
 double case_stat_recall(case_stat_t *stat)

@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include "case.h"
 
-#define DIABETES 0
-#define DRUG 1
-#define FOREST 2
-#define MUSHROOM 3
+#define CENSUS 0
+#define MUSHROOM 1
+#define MUSHROOM2 2
 
 typedef case_obj_t (*pack_f)(char *, long, long);
 
@@ -35,6 +34,7 @@ void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f pack
 void testpack(char *filename, long classindx, long type, pack_f packfunc)
 {
   FILE *file;
+  case_stat_t *stat;
   char csvobj[CASE_CSVOBJ];
   file = fopen(filename, "r");
   while (fgets(csvobj, CASE_CSVOBJ, file))
@@ -42,13 +42,14 @@ void testpack(char *filename, long classindx, long type, pack_f packfunc)
   fclose(file);
 #if CASE_VERBOSE
   case_printstat(type);
+  stat = case_stat(type);
+  case_stat_print(stat);
 #endif
 }
 
 int main(int argc, char *argv[])
 {
-  if (0) testpack("data/diabetes.csv", 0, DIABETES, case_packavg);
-  if (0) testpack("data/drug.csv", 3, DRUG, case_packavg);
-  if (0) testpack("data/forest.csv", 0, FOREST, case_packavg);
+  if (0) testpack("data/census.csv", 14, CENSUS, case_packavg);
   if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
+  if (0) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
 }

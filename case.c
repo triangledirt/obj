@@ -69,15 +69,13 @@ case_bit_t case_classify(case_obj_t obj, long type)
   notetype(type);
   case_obj_obscureclass(&obj);
   /*  corescore = core_score(obj, type);  */
-  filtscore = filt_score(obj, type);
-  foldscore = fold_score(obj, type);
+  /*  filtscore = filt_score(obj, type);  */
+  /*  foldscore = fold_score(obj, type);  */
   /*  genescore = gene_score(obj, type);  */
   /*  jackscore = jack_score(obj, type);  */
   /*  jungscore = jung_score(obj, type);  */
   sumscore = sum_score(obj, type);
-  class = ((filtscore + foldscore + sumscore) > (4 * 0.5)) ? 1 : 0;
-  class = ( (sumscore > 1 * 0.75) && (foldscore > 0.5) ) ? 1 : 0;
-  class = (sumscore > 0.5) ? 1 : 0;
+  class = ((sumscore) > (1 * 0.75)) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   printf("type%ld class     core=%0.3f filt=%0.3f fold=%0.3f gene=%0.3f jack=%0.3f jung=%0.3f sum=%0.3f\n", type, corescore, filtscore, foldscore, genescore, jackscore, jungscore, sumscore);
 #endif
@@ -361,10 +359,10 @@ void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long
   long csvindx = 0;
   long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
-  tok = strtok(csvobjcopy, ",\n");
+  tok = strtok(csvobjcopy, ",;\n");
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(0, ",\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, ",;\n")) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     text2val(tok, &valobj[valindx], valindx, type);
@@ -445,8 +443,8 @@ void learn()
   for (type = 0; type < 32; type++)
     if (case_obj_getattr(types, type)) {
       /*  coretime = learngeneral(object[type], CASE_OBJCACHE, type, core_learn);  */
-      filttime = learngeneral(object[type], CASE_OBJCACHE, type, filt_learn);
-      foldtime = learngeneral(object[type], CASE_OBJCACHE, type, fold_learn);
+      /*  filttime = learngeneral(object[type], CASE_OBJCACHE, type, filt_learn);  */
+      /*  foldtime = learngeneral(object[type], CASE_OBJCACHE, type, fold_learn);  */
       /*  genetime = learngeneral(object[type], CASE_OBJCACHE, type, gene_learn);  */
       /*  jacktime = learngeneral(object[type], CASE_OBJCACHE, type, jack_learn);  */
       /*  jungtime = learngeneral(object[type], CASE_OBJCACHE, type, jung_learn);  */
@@ -599,10 +597,10 @@ void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
   long csvindx = 0;
   long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
-  tok = strtok(csvobjcopy, ",\n");
+  tok = strtok(csvobjcopy, ",;\n");
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
-  while ((tok = strtok(0, ",\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, ",;\n")) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
