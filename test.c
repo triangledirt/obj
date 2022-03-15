@@ -41,14 +41,14 @@ void testpack(char *filename, long classindx, long type, pack_f packfunc)
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
 #if CASE_VERBOSE
-  case_printstep(type);
+  case_printstat(type);
 #endif
 }
 
 int main(int argc, char *argv[])
 {
-  if (0) testpack("data/diabetes.csv", 0, DIABETES, case_packfirst);
-  if (0) testpack("data/drug.csv", 3, DRUG, case_packfirst);
+  if (0) testpack("data/diabetes.csv", 0, DIABETES, case_packavg);
+  if (0) testpack("data/drug.csv", 3, DRUG, case_packavg);
   if (0) testpack("data/forest.csv", 0, FOREST, case_packavg);
   if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
 }

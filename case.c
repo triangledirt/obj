@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "bit.h"
 #include "case.h"
 #include "coin.h"
 #include "core.h"
@@ -13,8 +12,6 @@
 #include "gene.h"
 #include "jack.h"
 #include "jung.h"
-#include "obj.h"
-#include "step.h"
 #include "sum.h"
 #include "timer.h"
 #include "val.h"
@@ -25,7 +22,7 @@
 static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
-static case_step_t step[32];
+static case_stat_t stat[32];
 
 static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
@@ -91,13 +88,8 @@ case_bit_t case_classifyknown(case_obj_t obj, case_bit_t knownclass, long type)
 {
   case_bit_t guessclass;
   guessclass = case_classify(obj, type);
-  case_step_noteclasses(&step[type], guessclass, knownclass);
+  case_stat_noteclasses(&stat[type], guessclass, knownclass);
   return guessclass;
-}
-
-case_step_t *case_getstep(long type)
-{
-  return &step[type];
 }
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
@@ -401,7 +393,7 @@ void init()
     for (type = 0; type < 32; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
-      case_step_reset(&step[type]);
+      case_stat_reset(&stat[type]);
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -574,15 +566,15 @@ case_bit_t packrand(val_t *val, long attr, long type)
   return bit;
 }
 
-void case_printstep(long type)
+void case_printstat(long type)
 {
   double fmeasure;
   double precision;
   double recall;
-  fmeasure = case_step_fmeasure(&step[type]);
-  precision = case_step_precision(&step[type]);
-  recall = case_step_recall(&step[type]);
-  printf("type%ld steps     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
+  fmeasure = case_stat_fmeasure(&stat[type]);
+  precision = case_stat_precision(&stat[type]);
+  recall = case_stat_recall(&stat[type]);
+  printf("type%ld stats     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
 }
 
 long reorderindx(long attrindx, long classindx)
@@ -596,9 +588,9 @@ long reorderindx(long attrindx, long classindx)
   return reindx;
 }
 
-void case_resetstep(long type)
+void case_resetstat(long type)
 {
-  case_step_reset(&step[type]);
+  case_stat_reset(&stat[type]);
 }
 
 void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
@@ -624,6 +616,11 @@ void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
     printf("%s,", valtype_name(valtype[type][valindx]));
   printf("\n");
 #endif
+}
+
+case_stat_t *case_stat(long type)
+{
+  return &stat[type];
 }
 
 void text2val(char *text, val_t *val, long valindx, long type)
