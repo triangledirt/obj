@@ -25,7 +25,7 @@
 static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
 static case_obj_t types;
-static step_t step[32];
+static case_step_t step[32];
 
 static val_t value[32][PACKCACHE][32];
 static val_t firstval[32][32];
@@ -91,8 +91,13 @@ case_bit_t case_classifyknown(case_obj_t obj, case_bit_t knownclass, long type)
 {
   case_bit_t guessclass;
   guessclass = case_classify(obj, type);
-  step_noteclasses(&step[type], guessclass, knownclass);
+  case_step_noteclasses(&step[type], guessclass, knownclass);
   return guessclass;
+}
+
+case_step_t *case_getstep(long type)
+{
+  return &step[type];
 }
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
@@ -396,7 +401,7 @@ void init()
     for (type = 0; type < 32; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
-      step_reset(&step[type]);
+      case_step_reset(&step[type]);
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
@@ -574,9 +579,9 @@ void case_printstep(long type)
   double fmeasure;
   double precision;
   double recall;
-  fmeasure = step_fmeasure(&step[type]);
-  precision = step_precision(&step[type]);
-  recall = step_recall(&step[type]);
+  fmeasure = case_step_fmeasure(&step[type]);
+  precision = case_step_precision(&step[type]);
+  recall = case_step_recall(&step[type]);
   printf("type%ld steps     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
 }
 
@@ -593,7 +598,7 @@ long reorderindx(long attrindx, long classindx)
 
 void case_resetstep(long type)
 {
-  step_reset(&step[type]);
+  case_step_reset(&step[type]);
 }
 
 void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)

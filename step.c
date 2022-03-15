@@ -1,55 +1,55 @@
 #include <stdio.h>
 #include "step.h"
 
-double step_fmeasure(step_t *step)
+double case_step_fmeasure(case_step_t *step)
 {
   double precision;
   double recall;
   double fmeasure;
-  precision = step_precision(step);
-  recall = step_recall(step);
+  precision = case_step_precision(step);
+  recall = case_step_recall(step);
   fmeasure = (2 * precision * recall) / (precision + recall);
   return fmeasure;
 }
 
-void step_noteclasses(step_t *step, case_bit_t guess, case_bit_t actual)
+void case_step_noteclasses(case_step_t *step, case_bit_t guess, case_bit_t actual)
 {
   if ((0 == guess) && (0 == actual)) {
-    step->tn++;
+    step->trueneg++;
   } else if ((0 == guess) && (1 == actual)) {
-    step->fn++;
+    step->falseneg++;
   } else if ((1 == guess) && (0 == actual)) {
-    step->fp++;
+    step->falsepos++;
   } else {
-    step->tp++;
+    step->truepos++;
   }
 }
 
-double step_precision(step_t *step)
+double case_step_precision(case_step_t *step)
 {
-  return (double) step->tp / (1 + step->tp + step->fp);
+  return (double) step->truepos / (1 + step->truepos + step->falsepos);
 }
 
-void step_print(step_t *step)
+void case_step_print(case_step_t *step)
 {
   double precision;
   double recall;
   double fmeasure;
-  precision = step_precision(step);
-  recall = step_recall(step);
-  fmeasure = step_fmeasure(step);
-  printf("fmeasure=%0.3f precision=%0.3f recall=%0.3f tp=%ld fp=%ld tn=%ld fn=%ld\n", fmeasure, precision, recall, step->tp, step->fp, step->tn, step->fn);
+  precision = case_step_precision(step);
+  recall = case_step_recall(step);
+  fmeasure = case_step_fmeasure(step);
+  printf("fmeasure=%0.3f precision=%0.3f recall=%0.3f truepos=%ld falsepos=%ld trueneg=%ld falseneg=%ld\n", fmeasure, precision, recall, step->truepos, step->falsepos, step->trueneg, step->falseneg);
 }
 
-double step_recall(step_t *step)
+double case_step_recall(case_step_t *step)
 {
-  return (double) step->tp / (1 + step->tp + step->fn);
+  return (double) step->truepos / (1 + step->truepos + step->falseneg);
 }
 
-void step_reset(step_t *step)
+void case_step_reset(case_step_t *step)
 {
-  step->tp = 0;
-  step->fp = 0;
-  step->tn = 0;
-  step->fn = 0;
+  step->truepos = 0;
+  step->falsepos = 0;
+  step->trueneg = 0;
+  step->falseneg = 0;
 }

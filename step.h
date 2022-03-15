@@ -1,23 +1,23 @@
-#ifndef step_h
-#define step_h
+#ifndef case_step_h
+#define case_step_h
 
 #include "bit.h"
 
-struct step_t {
-  long tp;
-  long fp;
-  long tn;
-  long fn;
+struct case_step_t {
+  long truepos;
+  long falsepos;
+  long trueneg;
+  long falseneg;
 };
-typedef struct step_t step_t;
+typedef struct case_step_t case_step_t;
 
-void step_reset(step_t *step);
-void step_noteclasses(step_t *step, case_bit_t guess, case_bit_t actual);
+void case_step_reset(case_step_t *step);
+void case_step_noteclasses(case_step_t *step, case_bit_t guess, case_bit_t actual);
 
-double step_fmeasure(step_t *step);
-double step_precision(step_t *step);
-double step_recall(step_t *step);
+double case_step_fmeasure(case_step_t *step);
+double case_step_precision(case_step_t *step);
+double case_step_recall(case_step_t *step);
 
-void step_print(step_t *step);
+void case_step_print(case_step_t *step);
 
 #endif

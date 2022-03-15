@@ -3,6 +3,7 @@
 
 #include "bit.h"
 #include "obj.h"
+#include "step.h"
 
 #define CASE_VERBOSE 1
 #define CASE_XVERBOSE 1
@@ -20,8 +21,9 @@ case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type);
 
-void case_printstep(long type);
 void case_resetstep(long type);
+void case_printstep(long type);
+case_step_t *case_getstep(long type);
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
 double case_targfreq(case_obj_t indicator, case_obj_t target, long type);
