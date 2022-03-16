@@ -189,7 +189,7 @@ void case_observe(case_obj_t obj, long type)
   init();
   i = random() % CASE_OBJCACHE;
   object[type][i] = obj;
-  if (die_toss(CASE_OBJCACHE / 16))
+  if (die_toss(CASE_OBJCACHE / 8))
     learn(type);
 }
 
