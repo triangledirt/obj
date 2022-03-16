@@ -18,6 +18,7 @@
 #include "valtype.h"
 
 #define PACKCACHE (CASE_OBJCACHE / 2)
+#define STRTOK ",;\n"
 
 static case_obj_t object[32][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
@@ -392,10 +393,10 @@ void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long
   long csvindx = 0;
   long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
-  tok = strtok(csvobjcopy, ",;\n");
+  tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(0, ",;\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, STRTOK)) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     text2val(tok, &valobj[valindx], valindx, type);
@@ -635,10 +636,10 @@ void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
   long csvindx = 0;
   long valindx;
   strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
-  tok = strtok(csvobjcopy, ",;\n");
+  tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
-  while ((tok = strtok(0, ",;\n")) && (csvindx < 31)) {
+  while ((tok = strtok(0, STRTOK)) && (csvindx < 31)) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
