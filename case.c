@@ -420,7 +420,7 @@ void init()
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
       case_stat_reset(&stat[type]);
-      favscoreindx[type] = 0;
+      favscoreindx[type] = random() % SCORE;
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;
