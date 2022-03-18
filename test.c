@@ -32,16 +32,16 @@ void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, case_pack_f
 void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
 {
   FILE *file;
-  case_stat_t *stat;
+  /*  case_stat_t *stat;  */
   char csvobj[CASE_CSVOBJ];
   file = fopen(filename, "r");
   while (fgets(csvobj, CASE_CSVOBJ, file))
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
-#if CASE_VERBOSE
+#if 1 || CASE_VERBOSE
   case_printstat(type);
-  stat = case_stat(type);
-  case_stat_print(stat);
+  /*  stat = case_stat(type);  */
+  /*  case_stat_print(stat);  */
 #endif
 }
 
