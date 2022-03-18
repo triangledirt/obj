@@ -87,7 +87,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
 #if CASE_VERBOSE && CASE_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
-      printf("type%ld class     switching algo from %s >> %s\n", type, scorefname, rescorefname);
+      printf("type%ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorefname, score, rescorefname, rescore);
 #endif
       favscoreindx[type] = rescorefindx;
       score = rescore;
