@@ -59,7 +59,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
       tot += case_obj_comparetypes(ideal[type], obj[i]);
   fitness[type] = tot / (objsz / 2);
 #if CASE_VERBOSE
-  printf("type%ld ideal sum ", type);
+  printf("type%02ld ideal sum ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif

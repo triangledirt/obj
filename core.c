@@ -77,7 +77,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
   forcecalc(pop, obj, objsz, type);
   ideal[type] = fittest[type];
 #if CASE_VERBOSE
-  printf("type%ld ideal cor ", type);
+  printf("type%02ld ideal cor ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif

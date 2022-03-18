@@ -24,7 +24,7 @@ void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f pack
   guessclass = case_classifyknown(obj, actualclass, type);
 #if CASE_VERBOSE
   c = (guessclass == actualclass) ? '+' : '-';
-  printf("type%ld obsrv ", type);
+  printf("type%02ld obsrv ", type);
   printf("(%c) ", c);
   case_obj_print(obj);
   printf("\n");

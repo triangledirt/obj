@@ -104,7 +104,7 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
   forcecalc(pop, obj, objsz, type);
   ideal[type] = fittest[type];
 #if CASE_VERBOSE
-  printf("type%ld ideal jng ", type);
+  printf("type%02ld ideal jng ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif

@@ -70,7 +70,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
   forcecalc(pop, obj, objsz, type);
   ideal[type] = fittest[type];
 #if CASE_VERBOSE
-  printf("type%ld ideal fld ", type);
+  printf("type%02ld ideal fld ", type);
   case_obj_print(ideal[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif

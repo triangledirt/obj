@@ -87,7 +87,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
 #if CASE_VERBOSE && CASE_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
-      printf("type%ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorefname, score, rescorefname, rescore);
+      printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorefname, score, rescorefname, rescore);
 #endif
       favscoreindx[type] = rescorefindx;
       score = rescore;
@@ -98,7 +98,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   c = case_bit_char(class);
 #if CASE_VERBOSE && CASE_XVERBOSE
   scorefname = scorename[scorefindx];
-  printf("type%ld class     class=%c scorefunc=%s score=%0.3f\n", type, c, scorefname, score);
+  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f\n", type, c, scorefname, score);
 #endif
   return class;
 }
@@ -400,8 +400,8 @@ void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[32], long
   for (valindx = csvindx + 1; valindx < 32; valindx++)
     val_init(&valobj[valindx], valtype[type][valindx]);
 #if 0 && CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%ld   csv     %s", type, csvobj);
-  printf("type%ld   val     ", type);
+  printf("type%02ld   csv     %s", type, csvobj);
+  printf("type%02ld   val     ", type);
   for (valindx = 0; valindx < 32; valindx++) {
     val_print(&valobj[valindx], valtype[type][valindx]);
     printf(",");
@@ -477,7 +477,7 @@ void learn(long type)
   jungtime = learngeneral(object[type], CASE_OBJCACHE, type, jung_learn);
   sumtime = learngeneral(object[type], CASE_OBJCACHE, type, sum_learn);
 #if CASE_VERBOSE && CASE_XVERBOSE
-      printf("type%ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
+      printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
 }
 
@@ -592,7 +592,7 @@ void case_printstat(long type)
   fmeasure = case_stat_fmeasure(&stat[type]);
   precision = case_stat_precision(&stat[type]);
   recall = case_stat_recall(&stat[type]);
-  printf("type%ld stats     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
+  printf("type%02ld stats     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
 }
 
 long randomscoreindx(long exclude)
@@ -633,7 +633,7 @@ void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
   for (valindx = csvindx + 1; valindx < 32; valindx++)
     valtype[type][valindx] = valtype_str;
 #if CASE_VERBOSE && CASE_XVERBOSE
-  printf("type%ld types     ", type);
+  printf("type%02ld types     ", type);
   for (valindx = 0; valindx < 32; valindx++)
     printf("%s,", valtype_name(valtype[type][valindx]));
   printf("\n");
