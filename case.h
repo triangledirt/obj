@@ -16,6 +16,7 @@ void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);
 case_bit_t case_classifyknown(case_obj_t obj, case_bit_t knownclass, long type);
 
+typedef case_obj_t (*case_pack_f)(char *, long, long);
 case_obj_t case_packauto(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);

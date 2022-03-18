@@ -5,14 +5,12 @@
 #define MUSHROOM 1
 #define MUSHROOM2 2
 
-typedef case_obj_t (*pack_f)(char *, long, long);
-
 static void summarize(long type);
-static void testpack(char *filename, long classindx, long type, pack_f packfunc);
-static void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc);
+static void testpack(char *filename, long classindx, long type, case_pack_f packfunc);
+static void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, case_pack_f packfunc);
 static void testrand(long type);
 
-void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc)
+void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, case_pack_f packfunc)
 {
   case_obj_t obj;
   char c;
@@ -31,7 +29,7 @@ void testcsvobj(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f pack
 #endif
 }
 
-void testpack(char *filename, long classindx, long type, pack_f packfunc)
+void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
 {
   FILE *file;
   case_stat_t *stat;
