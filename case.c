@@ -103,11 +103,13 @@ case_bit_t case_classify(case_obj_t obj, long type)
   return class;
 }
 
-case_bit_t case_classifyknown(case_obj_t obj, case_bit_t knownclass, long type)
+case_bit_t case_classifyknown(case_obj_t obj, long type)
 {
   case_bit_t guessclass;
+  case_bit_t actualclass;
   guessclass = case_classify(obj, type);
-  case_stat_noteclasses(&stat[type], guessclass, knownclass);
+  actualclass = case_obj_getclass(obj);
+  case_stat_noteclasses(&stat[type], guessclass, actualclass);
   return guessclass;
 }
 
