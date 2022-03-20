@@ -152,7 +152,7 @@ void case_obj_rotate(case_obj_t *obj, long inc)
   *obj = obj2;
 }
 
-void case_obj_setfromstr(case_obj_t *obj, char *str)
+void case_obj_setfromstr(case_obj_t *obj, char str[32])
 {
   long i;
   case_bit_t val;

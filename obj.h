@@ -7,7 +7,7 @@ typedef long case_obj_t;
 
 void case_obj_clear(case_obj_t *obj);
 void case_obj_randomize(case_obj_t *obj);
-void case_obj_setfromstr(case_obj_t *obj, char *str);
+void case_obj_setfromstr(case_obj_t *obj, char str[32]);
 
 #define case_obj_setattr(obj, indx, val) if (val) { *obj |= ((long) 1 << indx); } else { *obj &= ~((long) 1 << indx); }
 #define case_obj_getattr(obj, indx) ((obj >> indx) & (long) 1)
