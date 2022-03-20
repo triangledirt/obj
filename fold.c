@@ -19,11 +19,8 @@ static case_obj_t ideal[32];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
-
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
-
 static double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
-
 static void init();
 static void reset(case_obj_t pop[], long type);
 

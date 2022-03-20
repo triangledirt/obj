@@ -22,17 +22,11 @@ static case_obj_t ideal[32];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
-
 static void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type);
-
 static void dance(pop_t pop_t, coord_t *dest, coord_t *src1, coord_t *src2, long type);
-
 static void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long objsz, long type);
-
 static void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type);
-
 static double getfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
-
 static void init();
 static void randcoord(coord_t *c);
 static void reset(pop_t pop, long type);

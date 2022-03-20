@@ -464,13 +464,13 @@ case_bool_t isnum(char *str)
 
 void learn(long type)
 {
-  long coretime = 0;
-  long filttime = 0;
-  long foldtime = 0;
-  long genetime = 0;
-  long jacktime = 0;
-  long jungtime = 0;
-  long sumtime = 0;
+  long coretime;
+  long filttime;
+  long foldtime;
+  long genetime;
+  long jacktime;
+  long jungtime;
+  long sumtime;
   coretime = learngeneral(object[type], CASE_OBJCACHE, type, core_learn);
   filttime = learngeneral(object[type], CASE_OBJCACHE, type, filt_learn);
   foldtime = learngeneral(object[type], CASE_OBJCACHE, type, fold_learn);
@@ -549,9 +549,7 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
 
 case_bit_t packfirst(val_t *val, long attr, long type)
 {
-  long compare;
-  compare = val_compare(val, &firstval[type][attr], valtype[type][attr]);
-  return compare == 0;
+  return 0 == val_compare(val, &firstval[type][attr], valtype[type][attr]);
 }
 
 case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc)
@@ -577,13 +575,9 @@ case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack
 
 case_bit_t packrand(val_t *val, long attr, long type)
 {
-  case_bit_t bit;
-  long compare;
   long i;
   i = random() % PACKCACHE;
-  compare = val_compare(val, &value[type][i][attr], valtype[type][attr]);
-  bit = compare == 0;
-  return bit;
+  return 0 == val_compare(val, &value[type][i][attr], valtype[type][attr]);
 }
 
 void case_printstat(long type)

@@ -106,7 +106,6 @@ void case_obj_mutate(case_obj_t *obj)
 
 double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
 {
-  double oblivion;
   long match;
   long opposite = 0;
   long i;
@@ -119,8 +118,7 @@ double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
       opposite++;
   }
   match = 32 - opposite;
-  oblivion = (32 - labs(match - opposite)) / 32;
-  return oblivion;
+  return (32 - labs(match - opposite)) / 32;
 }
 
 void case_obj_obscureclass(case_obj_t *obj)
