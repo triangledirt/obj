@@ -38,7 +38,7 @@ void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
   while (fgets(csvobj, CASE_CSVOBJ, file))
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
-#if 1 || CASE_VERBOSE
+#if CASE_VERBOSE
   case_printstat(type);
   /*  stat = case_stat(type);  */
   /*  case_stat_print(stat);  */
