@@ -11,10 +11,10 @@ void case_obj_clear(case_obj_t *obj);
 void case_obj_randomize(case_obj_t *obj);
 void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ]);
 
-#define case_obj_setattr(obj, indx, val) if (val) { *obj |= ((long) 1 << indx); } else { *obj &= ~((long) 1 << indx); }
-#define case_obj_getattr(obj, indx) ((obj >> indx) & (long) 1)
-#define case_obj_setclass(obj, val) if (val) { *obj |= ((long) 1); } else { *obj &= ~((long) 1); }
-#define case_obj_getclass(obj) (obj & (long) 1)
+#define case_obj_setattr(obj, indx, val) if (val) { *obj |= ((long long) 1 << indx); } else { *obj &= ~((long long) 1 << indx); }
+#define case_obj_getattr(obj, indx) ((obj >> indx) & (long long) 1)
+#define case_obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
+#define case_obj_getclass(obj) (obj & (long long) 1)
 
 double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2);
 double case_obj_comparesmash(case_obj_t obj1, case_obj_t obj2);
