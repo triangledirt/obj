@@ -12,10 +12,10 @@
 
 typedef case_obj_t pop_t[POP];
 
-static double fitness[32];
-static case_obj_t fittest[32];
-static double fits[32][POP];
-static case_obj_t ideal[32];
+static double fitness[CASE_OBJ];
+static case_obj_t fittest[CASE_OBJ];
+static double fits[CASE_OBJ][POP];
+static case_obj_t ideal[CASE_OBJ];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
@@ -56,12 +56,12 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
   reset(pop, type);
   for (each = 0; each <= FOLDS; each++) {
     o = random() % POP;
-    start = random() % 32;
+    start = random() % CASE_OBJ;
     val = random() % 2;
     len = random() % 3;
     dir = coin_toss() ? 1 : -1;
     for (i = start; labs(start - i) <= len; i += dir)
-      case_obj_setattr(&pop[o], indx_wrap(i, 32), val);
+      case_obj_setattr(&pop[o], indx_wrap(i, CASE_OBJ), val);
     fits[type][o] = -1;
   }
   forcecalc(pop, obj, objsz, type);
@@ -98,7 +98,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++)
+    for (type = 0; type < CASE_OBJ; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }

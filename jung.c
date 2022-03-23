@@ -12,10 +12,10 @@
 
 typedef case_obj_t pop_t[DIM][DIM];
 
-static double fitness[32];
-static double fits[32][DIM][DIM];
-static case_obj_t fittest[32];
-static case_obj_t ideal[32];
+static double fitness[CASE_OBJ];
+static double fits[CASE_OBJ][DIM][DIM];
+static case_obj_t fittest[CASE_OBJ];
+static case_obj_t ideal[CASE_OBJ];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
@@ -65,7 +65,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++)
+    for (type = 0; type < CASE_OBJ; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }
@@ -117,7 +117,7 @@ void meet(pop_t pop, coord_t *a, coord_t *b)
 {
   long bit;
   case_bit_t val;
-  for (bit = 1; bit <= 32; bit++) {
+  for (bit = 1; bit <= CASE_OBJ; bit++) {
     if (coin_toss()) {
       val = case_obj_getattr(pop[a->x][a->y], bit);
       case_obj_setattr(&pop[b->x][b->y], bit, val);

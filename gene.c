@@ -12,10 +12,10 @@
 
 typedef case_obj_t pop_t[POP];
 
-static double fitness[32];
-static case_obj_t fittest[32];
-static double fits[32][POP];
-static case_obj_t ideal[32];
+static double fitness[CASE_OBJ];
+static case_obj_t fittest[CASE_OBJ];
+static double fits[CASE_OBJ][POP];
+static case_obj_t ideal[CASE_OBJ];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
@@ -68,12 +68,12 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
   for (mating = 0; mating < MATINGS; mating++) {
     parent1 = getparent(pop, obj, objsz, type);
     parent2 = getparent(pop, obj, objsz, type);
-    crossover = random() % 32;
+    crossover = random() % CASE_OBJ;
     for (bit = 0; bit < crossover; bit++) {
       val = case_obj_getattr(parent1, bit);
       case_obj_setattr(&child, bit, val);
     }
-    for (bit = crossover; bit < 32; bit++) {
+    for (bit = crossover; bit < CASE_OBJ; bit++) {
       val = case_obj_getattr(parent2, bit);
       case_obj_setattr(&child, bit, val);
     }
@@ -126,7 +126,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++)
+    for (type = 0; type < CASE_OBJ; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }

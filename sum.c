@@ -5,8 +5,8 @@
 #include "obj.h"
 #include "sum.h"
 
-static double fitness[32];
-static case_obj_t ideal[32];
+static double fitness[CASE_OBJ];
+static case_obj_t ideal[CASE_OBJ];
 static case_bool_t once = case_bool_false;
 
 static void init();
@@ -15,7 +15,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++) {
+    for (type = 0; type < CASE_OBJ; type++) {
       fitness[type] = 0.0;
       case_obj_randomize(&ideal[type]);
     }
@@ -29,12 +29,12 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   long bit;
   case_bit_t val;
   case_obj_t o;
-  long onecount[32];
+  long onecount[CASE_OBJ];
   long thresh = objsz / 8;
   case_bit_t class;
   double tot = 0;
   init();
-  for (bit = 1; bit < 32; bit++)
+  for (bit = 1; bit < CASE_OBJ; bit++)
     onecount[bit] = 0;
   for (i = 0; i < objsz; i++) {
     if (coin_toss())
@@ -42,13 +42,13 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
     o = obj[i];
     class = case_obj_getclass(o);
     if (class)
-      for (bit = 1; bit < 32; bit++) {
+      for (bit = 1; bit < CASE_OBJ; bit++) {
         val = case_obj_getattr(o, bit);
         if (val)
           onecount[bit]++;
       }
   }
-  for (bit = 1; bit < 32; bit++)
+  for (bit = 1; bit < CASE_OBJ; bit++)
     if (onecount[bit] > thresh) {
       case_obj_setattr(&ideal[type], bit, 1);
     } else {

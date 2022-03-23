@@ -15,10 +15,10 @@
 
 typedef case_obj_t pop_t[DIM][DIM][DIM];
 
-static double fitness[32];
-static double fits[32][DIM][DIM][DIM];
-static case_obj_t fittest[32];
-static case_obj_t ideal[32];
+static double fitness[CASE_OBJ];
+static double fits[CASE_OBJ][DIM][DIM][DIM];
+static case_obj_t fittest[CASE_OBJ];
+static case_obj_t ideal[CASE_OBJ];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
@@ -92,8 +92,8 @@ void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
   parent2 = pop[src2->x][src2->y][src2->z];
   child = &pop[dest->x][dest->y][dest->z];
   long bit;
-  long crossover = random() % 32;
-  for (bit = 0; bit < 32; bit++) {
+  long crossover = random() % CASE_OBJ;
+  for (bit = 0; bit < CASE_OBJ; bit++) {
     if (bit >= crossover) {
       case_obj_setattr(child, bit, case_obj_getattr(parent1, bit));
     } else {
@@ -167,7 +167,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++)
+    for (type = 0; type < CASE_OBJ; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }

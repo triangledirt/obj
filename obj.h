@@ -3,11 +3,13 @@
 
 #include "bool.h"
 
-typedef long case_obj_t;
+#define CASE_OBJ 64
+
+typedef long long case_obj_t;
 
 void case_obj_clear(case_obj_t *obj);
 void case_obj_randomize(case_obj_t *obj);
-void case_obj_setfromstr(case_obj_t *obj, char str[32]);
+void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ]);
 
 #define case_obj_setattr(obj, indx, val) if (val) { *obj |= ((long) 1 << indx); } else { *obj &= ~((long) 1 << indx); }
 #define case_obj_getattr(obj, indx) ((obj >> indx) & (long) 1)

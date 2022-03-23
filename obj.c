@@ -16,13 +16,13 @@ double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2)
   long correct = 0;
   case_bit_t bit1;
   case_bit_t bit2;
-  for (bit = 1; bit < 32; bit++) {
+  for (bit = 1; bit < CASE_OBJ; bit++) {
     bit1 = case_obj_getattr(obj1, bit);
     bit2 = case_obj_getattr(obj2, bit);
     if (bit1 == bit2)
       correct++;
   }
-  return (double) correct / 31;
+  return (double) correct / (CASE_OBJ - 1);
 }
 
 double case_obj_comparesmash(case_obj_t obj1, case_obj_t obj2)
@@ -33,7 +33,7 @@ double case_obj_comparesmash(case_obj_t obj1, case_obj_t obj2)
   long total;
   case_bit_t bit1;
   case_bit_t bit2;
-  endbit = 31;
+  endbit = CASE_OBJ - 1;
   bit1 = case_obj_getattr(obj1, endbit);
   bit2 = case_obj_getattr(obj2, endbit);
   while ((endbit > 0) && !bit1 && !bit2) {
@@ -58,7 +58,7 @@ double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2)
   long total = 1;
   case_bit_t bit1;
   case_bit_t bit2;
-  for (bit = 1; bit < 32; bit++) {
+  for (bit = 1; bit < CASE_OBJ; bit++) {
     bit1 = case_obj_getattr(obj1, bit);
     bit2 = case_obj_getattr(obj2, bit);
     if ((1 == bit1) || (1 == bit2)) {
@@ -86,7 +86,7 @@ case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type)
 {
   case_bool_t has = case_bool_true;
   long i;
-  for (i = 0; i < 32; i++)
+  for (i = 0; i < CASE_OBJ; i++)
     if (case_obj_getattr(type, i))
       if (!case_obj_getattr(obj, i)) {
         has = case_bool_false;
@@ -99,7 +99,7 @@ void case_obj_mutate(case_obj_t *obj)
 {
   long i;
   case_bit_t val;
-  i = random() % 32;
+  i = random() % CASE_OBJ;
   case_bit_randomize(&val);
   case_obj_setattr(obj, i, val);
 }
@@ -111,14 +111,14 @@ double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2)
   long i;
   case_bit_t o1bit;
   case_bit_t o2bit;
-  for (i = 0; i < 32; i++) {
+  for (i = 0; i < CASE_OBJ; i++) {
     o1bit = case_obj_getattr(obj1, i);
     o2bit = case_obj_getattr(obj2, i);
     if (o1bit != o2bit)
       opposite++;
   }
-  match = 32 - opposite;
-  return (32 - labs(match - opposite)) / 32;
+  match = CASE_OBJ - opposite;
+  return (CASE_OBJ - labs(match - opposite)) / CASE_OBJ;
 }
 
 void case_obj_obscureclass(case_obj_t *obj)
@@ -129,7 +129,7 @@ void case_obj_obscureclass(case_obj_t *obj)
 void case_obj_print(case_obj_t obj)
 {
   long i;
-  for (i = 0; i < 32; i++)
+  for (i = 0; i < CASE_OBJ; i++)
     printf("%lu", case_obj_getattr(obj, i));
 }
 
@@ -144,19 +144,19 @@ void case_obj_rotate(case_obj_t *obj, long inc)
   long i;
   long newi;
   case_bit_t bit;
-  for (i = 0; i < 32; i++) {
+  for (i = 0; i < CASE_OBJ; i++) {
     bit = case_obj_getattr(*obj, i);
-    newi = indx_wrap(i + inc, 32);
+    newi = indx_wrap(i + inc, CASE_OBJ);
     case_obj_setattr(&obj2, newi, bit);
   }
   *obj = obj2;
 }
 
-void case_obj_setfromstr(case_obj_t *obj, char str[32])
+void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ])
 {
   long i;
   case_bit_t val;
-  for (i = 0; i < 32; i++) {
+  for (i = 0; i < CASE_OBJ; i++) {
     val = ('0' == str[i]) ? 0 : 1;
     case_obj_setattr(obj, i, val);
   }

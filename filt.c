@@ -8,12 +8,12 @@
 #define ACTS 4
 
 static case_bool_t once = case_bool_false;
-static case_obj_t one[32];
-static case_obj_t onesv[32];
-static double fitness[32];
-static double fitnesssv[32];
-static case_obj_t zero[32];
-static case_obj_t zerosv[32];
+static case_obj_t one[CASE_OBJ];
+static case_obj_t onesv[CASE_OBJ];
+static double fitness[CASE_OBJ];
+static double fitnesssv[CASE_OBJ];
+static case_obj_t zero[CASE_OBJ];
+static case_obj_t zerosv[CASE_OBJ];
 
 static void calcfit(case_obj_t obj[], long objsz, long type);
 static void init();
@@ -68,7 +68,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < 32; type++) {
+    for (type = 0; type < CASE_OBJ; type++) {
       case_obj_clear(&one[type]);
       case_obj_clear(&zero[type]);
     }
@@ -82,7 +82,7 @@ void mutate(case_obj_t *obj1, case_obj_t *obj2)
   case_obj_t *o2;
   long bit;
   case_bit_t val;
-  bit = random() % 32;
+  bit = random() % CASE_OBJ;
   case_bit_randomize(&val);
   if (coin_toss()) {
     o1 = obj1;
@@ -119,7 +119,7 @@ double score(case_obj_t obj, long type)
   case_bit_t onebit;
   case_bit_t zerobit;
   case_bit_t objbit;
-  for (bit = 1; bit < 32; bit++) {
+  for (bit = 1; bit < CASE_OBJ; bit++) {
     onebit = case_obj_getattr(one[type], bit);
     zerobit = case_obj_getattr(zero[type], bit);
     onetot += onebit;

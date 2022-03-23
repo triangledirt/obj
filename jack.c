@@ -8,8 +8,8 @@
 #include "op.h"
 
 static case_bool_t once = case_bool_false;
-static double fitness[32];
-static node_t node[32][31][31];
+static double fitness[CASE_OBJ];
+static node_t node[CASE_OBJ][CASE_OBJ - 1][CASE_OBJ - 1];
 
 static void init();
 static double score(case_obj_t obj, long type);
@@ -20,9 +20,9 @@ void init()
   long i;
   long j;
   if (!once) {
-    for (type = 0; type < 32; type++)
-      for (i = 0; i < 31; i++)
-        for (j = 0; j < (31 - i); j++)
+    for (type = 0; type < CASE_OBJ; type++)
+      for (i = 0; i < (CASE_OBJ - 1); i++)
+        for (j = 0; j < ((CASE_OBJ - 1) - i); j++)
           node_init(&node[type][i][j]);
     once = case_bool_true;
   }
@@ -30,7 +30,7 @@ void init()
 
 void jack_learn(case_obj_t obj[], long objsz, long type)
 {
-  case_bit_t values[31][31];
+  case_bit_t values[CASE_OBJ - 1][CASE_OBJ - 1];
   long i;
   long j;
   case_bit_t val;
@@ -38,8 +38,8 @@ void jack_learn(case_obj_t obj[], long objsz, long type)
   case_bit_t bit2;
   case_bit_t op;
   init();
-  for (i = 0; i < 31; i++)
-    for (j = 0; j < (31 - i); j++) {
+  for (i = 0; i < (CASE_OBJ - 1); i++)
+    for (j = 0; j < ((CASE_OBJ - 1) - i); j++) {
 /*
       op = ..;
       bit1 = ..;
