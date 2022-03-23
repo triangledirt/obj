@@ -46,7 +46,7 @@ void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
   while (fgets(csvobj, CASE_CSVOBJ, file))
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
-#if CASE_VERBOSE
+#if 1 || CASE_VERBOSE
   case_printstat(type);
   /*  stat = case_stat(type);  */
   /*  case_stat_print(stat);  */
@@ -55,15 +55,19 @@ void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
 
 int main(int argc, char *argv[])
 {
-  if (0) testpack("data/census.csv", 14, CENSUS, case_packavg);
-  if (0) testpack("data/connect4.csv", 42, CONNECT4, case_packavg);
-  if (0) testpack("data/letter.csv", 0, LETTER, case_packavg);
-  if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
-  if (0) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
-  if (0) testpack("data/namegender.csv", 1, NAMEGENDER, case_packavg);
-  if (0) testpack("data/nursery.csv", 0, NURSERY, case_packavg);
-  if (0) testpack("data/occupancy.csv", 18, OCCUPANCY, case_packavg);
-  if (0) testpack("data/poker.csv", 10, POKER, case_packavg);
-  if (0) testpack("data/sepsis.csv", 3, SEPSIS, case_packavg);
-  if (0) testpack("data/shuttle.csv", 9, SHUTTLE, case_packavg);
+  if (1) {
+    if (1) testpack("data/census.csv", 14, CENSUS, case_packavg);
+    if (1) testpack("data/connect4.csv", 42, CONNECT4, case_packavg);
+    if (1) testpack("data/letter.csv", 0, LETTER, case_packavg);
+    if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
+    if (1) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
+    if (1) testpack("data/namegender.csv", 1, NAMEGENDER, case_packavg);
+    if (1) testpack("data/nursery.csv", 0, NURSERY, case_packavg);
+    if (1) testpack("data/occupancy.csv", 18, OCCUPANCY, case_packavg);
+    if (1) testpack("data/poker.csv", 10, POKER, case_packavg);
+    if (1) testpack("data/sepsis.csv", 3, SEPSIS, case_packavg);
+    if (1) testpack("data/shuttle.csv", 9, SHUTTLE, case_packavg);
+  } else {
+    if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
+  }
 }
