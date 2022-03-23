@@ -56,7 +56,7 @@ void testpack(char *filename, long classindx, long type, case_pack_f packfunc)
 int main(int argc, char *argv[])
 {
   if (0) testpack("data/census.csv", 14, CENSUS, case_packavg);
-  if (0) testpack("data/connect4.csv", 0, CONNECT4, case_packavg);
+  if (0) testpack("data/connect4.csv", 42, CONNECT4, case_packavg);
   if (0) testpack("data/letter.csv", 0, LETTER, case_packavg);
   if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
   if (0) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
