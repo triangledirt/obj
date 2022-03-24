@@ -23,7 +23,6 @@ case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type);
 case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type);
 
 void case_resetstat(long type);
-void case_printstat(long type);
 case_stat_t *case_stat(long type);
 
 double case_indifreq(case_obj_t indicator, case_obj_t target, long type);

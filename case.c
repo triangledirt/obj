@@ -581,17 +581,6 @@ case_bit_t packrand(val_t *val, long attr, long type)
   return 0 == val_compare(val, &value[type][i][attr], valtype[type][attr]);
 }
 
-void case_printstat(long type)
-{
-  double fmeasure;
-  double precision;
-  double recall;
-  fmeasure = case_stat_fmeasure(&stat[type]);
-  precision = case_stat_precision(&stat[type]);
-  recall = case_stat_recall(&stat[type]);
-  printf("type%02ld stats     fmeasure=%0.3f precision=%0.3f recall=%0.3f\n", type, fmeasure, precision, recall);
-}
-
 long randomscoreindx(long exclude)
 {
   double r;
