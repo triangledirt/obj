@@ -18,6 +18,6 @@ void case_stat_noteclasses(case_stat_t *stat, case_bit_t guess, case_bit_t actua
 double case_stat_f1(case_stat_t *stat);
 double case_stat_phi(case_stat_t *stat);
 double case_stat_precision(case_stat_t *stat);
-double case_stat_recall(case_stat_t *stat);
+double case_stat_sensitivity(case_stat_t *stat);
 
 #endif

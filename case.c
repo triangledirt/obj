@@ -34,7 +34,7 @@ typedef double (*score_f)(case_obj_t, long);
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
 static long favscoreindx[CASE_OBJ];
-static long scorefuncoverride = -1;
+static long scorefuncoverride = 6;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);
@@ -95,7 +95,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scorefindx = rescorefindx;
     }
   }
-  class = (score > 0.75) ? 1 : 0;
+  class = (score > 0.9) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
   scorefname = scorename[scorefindx];
