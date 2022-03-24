@@ -70,11 +70,11 @@ double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / total;
 }
 
-long case_obj_getnum(case_obj_t obj, long startbit, long bits)
+long long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 {
   long place = 1;
   long bit;
-  long num = 0;
+  long long num = 0;
   for (bit = startbit; bit < bits; bit++) {
     num += place * case_obj_getattr(obj, bit);
     place *= 2;
@@ -162,12 +162,12 @@ void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ])
   }
 }
 
-void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long num)
+void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long long num)
 {
   long place = 2;
   long bit = startbit;
   case_bit_t val;
-  long rem = num;
+  long long rem = num;
   do {
     val = rem % place;
     case_obj_setattr(obj, bit, val);

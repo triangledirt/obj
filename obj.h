@@ -28,7 +28,7 @@ double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2);
 void case_obj_mutate(case_obj_t *obj);
 void case_obj_rotate(case_obj_t *obj, long inc);
 
-void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long num);
-long case_obj_getnum(case_obj_t obj, long startbit, long bits);
+void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long long num);
+long long case_obj_getnum(case_obj_t obj, long startbit, long bits);
 
 #endif
