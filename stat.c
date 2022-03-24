@@ -40,7 +40,7 @@ void case_stat_print(case_stat_t *stat, long type)
   f1 = case_stat_f1(stat);
   precision = case_stat_precision(stat);
   sensitivity = case_stat_sensitivity(stat);
-  printf("type%02ld stats     phi=%0.3f f1=%0.3f prec=%0.3f sens=%0.3f true+=%ld true-=%ld false+=%ld false-=%ld\n", type, phi, f1, precision, sensitivity, stat->truepos, stat->trueneg, stat->falsepos, stat->falseneg);
+  printf("type%02ld stats     phi=%0.3f f1=%0.3f prec=%0.3f sens=%0.3f tpos=%ld tneg=%ld fpos=%ld fneg=%ld\n", type, phi, f1, precision, sensitivity, stat->truepos, stat->trueneg, stat->falsepos, stat->falseneg);
 }
 
 double case_stat_sensitivity(case_stat_t *stat)
