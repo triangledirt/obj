@@ -1,5 +1,9 @@
 # case
 
+## in development
+
+case is in development. It is not ready to use
+
 ## classify objects in real time
 
 case is a library of C functions used to classify objects in real time
