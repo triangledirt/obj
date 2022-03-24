@@ -63,14 +63,14 @@ These two functions are used to observe and classify objects
     void case_observe(case_obj_t obj, long type);
     case_bit_t case_classify(case_obj_t obj, long type);
 
-Call case_observe() on a case_obj_t when you see it. Pass the type, which is a long you define to be one of 32 types
+Call case_observe() on a case_obj_t when you see it. Pass the type, which is a long you define to be one of 64 types
 
     #define MUSHROOM 0
     #define GAME_MAP 1
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
-You can observe objects of these 32 types in any order
+You can observe objects of these 64 types in any order
 
     case_observe(obj1, MUSHROOM);
     case_observe(obj2, GAME_MAP);
@@ -121,7 +121,7 @@ and get it similarly
     class = case_obj_getattr(obj, 0);
     class = case_obj_getclass(obj);
 
-You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 32 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. case likes it messy. If you're feeling daring, instead of initializing a case_obj_t with case_obj_clear(), do this
+You don't have to set any particular bit. You don't have to set the class when you don't know it. You don't have to use all 64 bits. If you have an unknown, ignore it. Or set it with a random bit. Don't worry about cleaning up your data. case likes it messy. If you're feeling daring, instead of initializing a case_obj_t with case_obj_clear(), do this
 
     case_obj_randomize(&obj);
 
