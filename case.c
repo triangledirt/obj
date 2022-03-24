@@ -80,11 +80,11 @@ case_bit_t case_classify(case_obj_t obj, long type)
   scorefindx = favscoreindx[type];
   scoref = scorefunc[scorefindx];
   score = scoref(obj, type);
-  if (die_toss(CASE_OBJCACHE / 1)) {
+  if ((scorefuncoverride < 0) && die_toss(CASE_OBJCACHE / 1)) {
     rescorefindx = randomscoreindx(scorefindx);
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
-    if ((scorefuncoverride < 0) && ((rescore - score) > 0.1)) {
+    if ((rescore - score) > 0.1) {
 #if CASE_VERBOSE && CASE_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
@@ -96,8 +96,8 @@ case_bit_t case_classify(case_obj_t obj, long type)
     }
   }
   class = (score > 0.75) ? 1 : 0;
-  c = case_bit_char(class);
 #if CASE_VERBOSE && CASE_XVERBOSE
+  c = case_bit_char(class);
   scorefname = scorename[scorefindx];
   printf("type%02ld class     class=%c scorefunc=%s score=%0.3f\n", type, c, scorefname, score);
 #endif
