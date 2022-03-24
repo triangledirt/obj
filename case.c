@@ -34,6 +34,7 @@ typedef double (*score_f)(case_obj_t, long);
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
 static long favscoreindx[CASE_OBJ];
+static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);
@@ -83,7 +84,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
     rescorefindx = randomscoreindx(scorefindx);
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
-    if ((rescore - score) > 0.1) {
+    if ((scorefuncoverride < 0) && ((rescore - score) > 0.1)) {
 #if CASE_VERBOSE && CASE_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
@@ -422,7 +423,7 @@ void init()
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
       case_stat_reset(&stat[type]);
-      favscoreindx[type] = random() % SCORE;
+      favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
       firstpack[type] = case_bool_true;
     }
     once = case_bool_true;

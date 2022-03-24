@@ -5,8 +5,8 @@
 #include "obj.h"
 #include "stat.h"
 
-#define CASE_VERBOSE 0
-#define CASE_XVERBOSE 0
+#define CASE_VERBOSE 1
+#define CASE_XVERBOSE 1
 
 #define CASE_OBJCACHE 64
 #define CASE_CSVOBJ 4096
