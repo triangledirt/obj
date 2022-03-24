@@ -90,7 +90,7 @@ If you want to re-use a type to mean another type, go ahead and do so. If you ne
 
 ## case_obj_t
 
-case_obj_ts are longs. [obj.h](https://github.com/triangledirt/case/blob/main/obj.h) defines some ways to manipulate them. At base, you'll do this
+case_obj_ts are long longs (64 bits). [obj.h](https://github.com/triangledirt/case/blob/main/obj.h) defines some ways to manipulate them. At base, you'll do this
 
     case_obj_clear(&obj);
 
