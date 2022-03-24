@@ -99,7 +99,7 @@ to initialize. And
     case_obj_setattr(&obj, idx, val);
     val = case_obj_getattr(obj, idx);
 
-to set and get attributes. Index values go from 0 to 31. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does
+to set and get attributes. Index values go from 0 to 63. Bit 0 is the classification attribute. Say you're setting up a MUSHROOM object and you've decided to use bit 6 to represent whether the cap has spots on it. This says that the cap does
 
     case_obj_setattr(&obj, 6, 1);
 
