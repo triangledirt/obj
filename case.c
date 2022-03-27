@@ -34,7 +34,7 @@ typedef double (*score_f)(case_obj_t, long);
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
 static long favscoreindx[CASE_OBJ];
-static long scorefuncoverride = 6;
+static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);
@@ -95,7 +95,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scorefindx = rescorefindx;
     }
   }
-  class = (score > 0.9) ? 1 : 0;
+  class = (score > 0.5) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
   scorefname = scorename[scorefindx];
@@ -512,6 +512,8 @@ case_bit_t packavgnum(val_t *val, long attr, long type)
   double avg;
   double tot = 0.0;
   long i;
+  if (0.0 == val->num)
+    return 0;
   for (i = 0; i < PACKCACHE; i++)
     tot += value[type][i][attr].num;
   avg = tot / PACKCACHE;
@@ -528,6 +530,8 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
   long k;
   long max = 0;
   long maxindx = 0;
+  if (0 == strlen(val->str))
+    return 0;
   for (i = 0; i < samplesz; i++) {
     sampleobj[i] = random() % PACKCACHE;
     samplecnt[i] = 0;
@@ -583,7 +587,7 @@ case_bit_t packrand(val_t *val, long attr, long type)
 
 long randomscoreindx(long exclude)
 {
-  double r;
+  long r;
   do {
     r = random() % SCORE;
   } while (r == exclude);

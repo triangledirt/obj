@@ -69,5 +69,6 @@ int main(int argc, char *argv[])
   } else {
     if (0) testpack("data/poker.csv", 10, POKER, case_packavg);
     if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
+    if (1) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
   }
 }
