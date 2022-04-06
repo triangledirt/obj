@@ -27,11 +27,8 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
 {
   long i;
   long bit;
-  case_bit_t val;
-  case_obj_t o;
   long onecount[CASE_OBJ];
   long thresh = objsz / 8;
-  case_bit_t class;
   double tot = 0;
   init();
   for (bit = 1; bit < CASE_OBJ; bit++)
@@ -39,14 +36,9 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
   for (i = 0; i < objsz; i++) {
     if (coin_toss())
       continue;
-    o = obj[i];
-    class = case_obj_getclass(o);
-    if (class)
-      for (bit = 1; bit < CASE_OBJ; bit++) {
-        val = case_obj_getattr(o, bit);
-        if (val)
-          onecount[bit]++;
-      }
+    if (case_obj_getclass(obj[i]))
+      for (bit = 1; bit < CASE_OBJ; bit++)
+        onecount[bit] += case_obj_getattr(obj[i], bit);
   }
   for (bit = 1; bit < CASE_OBJ; bit++)
     if (onecount[bit] > thresh) {
