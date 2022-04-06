@@ -13,6 +13,25 @@ void case_obj_clear(case_obj_t *obj)
   *obj = 0;
 }
 
+double case_obj_comparebox(case_obj_t obj1, case_obj_t obj2)
+{
+  long smash;
+  long i;
+  long j;
+  case_bit_t o1bit;
+  case_bit_t o2bit;
+  long and = 0;
+  smash = findsmashpoint(obj1, obj2);
+  for (i = 0; i < smash; i++)
+    for (j = 0; j < smash; j++) {
+      o1bit = case_obj_getattr(obj1, i);
+      o2bit = case_obj_getattr(obj2, j);
+      if (o1bit && o2bit)
+	and++;
+    }
+  return and / pow(smash, 2);
+}
+
 double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2)
 {
   long bit;

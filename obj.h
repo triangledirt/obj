@@ -16,6 +16,7 @@ void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ]);
 #define case_obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define case_obj_getclass(obj) (obj & (long long) 1)
 
+double case_obj_comparebox(case_obj_t obj1, case_obj_t obj2);
 double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2);
 double case_obj_comparefocus(case_obj_t obj1, case_obj_t obj2);
 double case_obj_compareoblivion(case_obj_t obj1, case_obj_t obj2);
