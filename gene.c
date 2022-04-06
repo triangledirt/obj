@@ -34,7 +34,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   calcobj = pop[o];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparetypes(calcobj, obj[i]);
+      tot += case_obj_comparefocus(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fit = pow(fit, 2);
   fits[type][o] = fit;
@@ -94,7 +94,7 @@ void gene_learn(case_obj_t obj[], long objsz, long type)
 double gene_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparetypes(obj, ideal[type]);
+  return case_obj_comparefocus(obj, ideal[type]);
 }
 
 double getfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)

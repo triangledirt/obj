@@ -17,14 +17,15 @@ void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ]);
 #define case_obj_getclass(obj) (obj & (long long) 1)
 
 double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2);
-double case_obj_comparesmash(case_obj_t obj1, case_obj_t obj2);
+double case_obj_comparefocus(case_obj_t obj1, case_obj_t obj2);
+double case_obj_compareoblivion(case_obj_t obj1, case_obj_t obj2);
 double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2);
+double case_obj_comparexor(case_obj_t obj1, case_obj_t obj2);
 
 case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type);
 void case_obj_print(case_obj_t obj);
 
 void case_obj_obscureclass(case_obj_t *obj);
-double case_obj_oblivion(case_obj_t obj1, case_obj_t obj2);
 void case_obj_mutate(case_obj_t *obj);
 void case_obj_rotate(case_obj_t *obj, long inc);
 

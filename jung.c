@@ -36,7 +36,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   o = pop[c->x][c->y];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparetypes(o, obj[i]);
+      tot += case_obj_comparefocus(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y] = fit;
   if (fit > fitness[type]) {
@@ -110,7 +110,7 @@ void jung_learn(case_obj_t obj[], long objsz, long type)
 double jung_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparetypes(obj, ideal[type]);
+  return case_obj_comparefocus(obj, ideal[type]);
 }
 
 void meet(pop_t pop, coord_t *a, coord_t *b)

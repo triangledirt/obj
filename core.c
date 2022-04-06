@@ -40,7 +40,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   o = pop[c->x][c->y][c->z];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparetypes(o, obj[i]);
+      tot += case_obj_comparefocus(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y][c->z] = fit;
   if (fit > fitness[type]) {
@@ -80,7 +80,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
 double core_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparetypes(obj, ideal[type]);
+  return case_obj_comparefocus(obj, ideal[type]);
 }
 
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
@@ -110,6 +110,7 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
   coord_t c;
   double fit = 0.0;
   double f;
+  case_bool_t found = case_bool_false;
   for (t.x = -1; t.x < 2; t.x++)
     for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
@@ -122,8 +123,15 @@ void findbest(pop_t pop, coord_t *actor, coord_t *best, case_obj_t obj[], long o
         if (f > fit) {
           fit = f;
           *best = c;
-        }
+	  found = case_bool_true;
+	}
       }
+  if (!found) {
+    c.x = indx_wrap(actor->x + ((random() % 3) - 1), DIM);
+    c.y = indx_wrap(actor->y + ((random() % 3) - 1), DIM);
+    c.z = indx_wrap(actor->z + ((random() % 3) - 1), DIM);
+    *best = c;
+  }
 }
 
 void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long objsz, long type)
@@ -132,6 +140,7 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
   coord_t c;
   double fit = 1.0;
   double f;
+  case_bool_t found = case_bool_false;
   for (t.x = -1; t.x < 2; t.x++)
     for (t.y = -1; t.y < 2; t.y++)
       for (t.z = -1; t.z < 2; t.z++) {
@@ -142,8 +151,15 @@ void findworst(pop_t pop, coord_t *actor, coord_t *worst, case_obj_t obj[], long
         if (f < fit) {
           fit = f;
           *worst = c;
+	  found = case_bool_true;
         }
       }
+  if (!found) {
+    c.x = indx_wrap(actor->x + ((random() % 3) - 1), DIM);
+    c.y = indx_wrap(actor->y + ((random() % 3) - 1), DIM);
+    c.z = indx_wrap(actor->z + ((random() % 3) - 1), DIM);
+    *worst = c;
+  }
 }
 
 void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)

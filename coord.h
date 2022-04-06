@@ -8,4 +8,6 @@ struct coord_t {
 };
 typedef struct coord_t coord_t;
 
+void coord_print(coord_t *coord);
+
 #endif
