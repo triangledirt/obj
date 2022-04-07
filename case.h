@@ -11,6 +11,7 @@
 #define CASE_OBJCACHE 64
 #define CASE_CSVOBJ 4096
 #define CASE_STR (4 + 1)
+#define CASE_TYPE CASE_OBJ
 
 void case_observe(case_obj_t obj, long type);
 case_bit_t case_classify(case_obj_t obj, long type);

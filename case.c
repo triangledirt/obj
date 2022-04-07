@@ -20,21 +20,21 @@
 #define PACKCACHE (CASE_OBJCACHE / 2)
 #define STRTOK ",;\n"
 
-static case_obj_t object[CASE_OBJ][CASE_OBJCACHE];
+static case_obj_t object[CASE_TYPE][CASE_OBJCACHE];
 static case_bool_t once = case_bool_false;
-static case_stat_t stat[CASE_OBJ];
+static case_stat_t stat[CASE_TYPE];
 
-static val_t value[CASE_OBJ][PACKCACHE][CASE_OBJ];
-static val_t firstval[CASE_OBJ][CASE_OBJ];
-static valtype_t valtype[CASE_OBJ][CASE_OBJ];
-static case_bool_t firstpack[CASE_OBJ];
+static val_t value[CASE_TYPE][PACKCACHE][CASE_OBJ];
+static val_t firstval[CASE_TYPE][CASE_OBJ];
+static valtype_t valtype[CASE_TYPE][CASE_OBJ];
+static case_bool_t firstpack[CASE_TYPE];
 
 typedef double (*score_f)(case_obj_t, long);
 #define SCORE 7
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
-static long favscoreindx[CASE_OBJ];
-static long scorefuncoverride = 6;
+static long favscoreindx[CASE_TYPE];
+static long scorefuncoverride = 3;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);
@@ -95,7 +95,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scorefindx = rescorefindx;
     }
   }
-  class = (score > 0.5) ? 1 : 0;
+  class = (score > 0.4) ? 1 : 0;  /*  need one of these per algorithm per object type ??  */
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
   scorefname = scorename[scorefindx];
@@ -391,7 +391,7 @@ void init()
   long type;
   if (!once) {
     srandom(time(NULL));
-    for (type = 0; type < CASE_OBJ; type++) {
+    for (type = 0; type < CASE_TYPE; type++) {
       for (i = 0; i < CASE_OBJCACHE; i++)
         case_obj_randomize(&object[type][i]);
       case_stat_reset(&stat[type]);

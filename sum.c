@@ -5,8 +5,8 @@
 #include "obj.h"
 #include "sum.h"
 
-static double fitness[CASE_OBJ];
-static case_obj_t ideal[CASE_OBJ];
+static double fitness[CASE_TYPE];
+static case_obj_t ideal[CASE_TYPE];
 static case_bool_t once = case_bool_false;
 
 static void init();
@@ -15,7 +15,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < CASE_OBJ; type++) {
+    for (type = 0; type < CASE_TYPE; type++) {
       fitness[type] = 0.0;
       case_obj_randomize(&ideal[type]);
     }
@@ -48,7 +48,7 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
     }
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparebox(ideal[type], obj[i]);
+      tot += case_obj_compare(ideal[type], obj[i]);
   fitness[type] = tot / (objsz / 2);
 #if CASE_VERBOSE
   printf("type%02ld ideal sum ", type);
@@ -60,5 +60,5 @@ void sum_learn(case_obj_t obj[], long objsz, long type)
 double sum_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparebox(obj, ideal[type]);
+  return case_obj_compare(obj, ideal[type]);
 }

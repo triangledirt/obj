@@ -15,10 +15,10 @@
 
 typedef case_obj_t pop_t[DIM][DIM][DIM];
 
-static double fitness[CASE_OBJ];
-static double fits[CASE_OBJ][DIM][DIM][DIM];
-static case_obj_t fittest[CASE_OBJ];
-static case_obj_t ideal[CASE_OBJ];
+static double fitness[CASE_TYPE];
+static double fits[CASE_TYPE][DIM][DIM][DIM];
+static case_obj_t fittest[CASE_TYPE];
+static case_obj_t ideal[CASE_TYPE];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type);
@@ -40,7 +40,7 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
   o = pop[c->x][c->y][c->z];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparefocus(o, obj[i]);
+      tot += case_obj_compare(o, obj[i]);
   fit = tot / (objsz / 2);
   fits[type][c->x][c->y][c->z] = fit;
   if (fit > fitness[type]) {
@@ -80,7 +80,7 @@ void core_learn(case_obj_t obj[], long objsz, long type)
 double core_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparefocus(obj, ideal[type]);
+  return case_obj_compare(obj, ideal[type]);
 }
 
 void dance(pop_t pop, coord_t *dest, coord_t *src1, coord_t *src2, long type)
@@ -183,7 +183,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < CASE_OBJ; type++)
+    for (type = 0; type < CASE_TYPE; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }

@@ -13,10 +13,10 @@
 
 typedef case_obj_t pop_t[POP];
 
-static double fitness[CASE_OBJ];
-static case_obj_t fittest[CASE_OBJ];
-static double fits[CASE_OBJ][POP];
-static case_obj_t ideal[CASE_OBJ];
+static double fitness[CASE_TYPE];
+static case_obj_t fittest[CASE_TYPE];
+static double fits[CASE_TYPE][POP];
+static case_obj_t ideal[CASE_TYPE];
 static case_bool_t once = case_bool_false;
 
 static void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type);
@@ -34,7 +34,7 @@ void calcfit(pop_t pop, long o, case_obj_t obj[], long objsz, long type)
   calcobj = pop[o];
   for (i = 0; i < objsz; i++)
     if (coin_toss())
-      tot += case_obj_comparefocus(calcobj, obj[i]);
+      tot += case_obj_compare(calcobj, obj[i]);
   fit = tot / (objsz / 2);
   fit = pow(fit, 2);
   fits[type][o] = fit;
@@ -78,7 +78,7 @@ void fold_learn(case_obj_t obj[], long objsz, long type)
 double fold_score(case_obj_t obj, long type)
 {
   init();
-  return case_obj_comparefocus(obj, ideal[type]);
+  return case_obj_compare(obj, ideal[type]);
 }
 
 void forcecalc(pop_t pop, case_obj_t obj[], long objsz, long type)
@@ -100,7 +100,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < CASE_OBJ; type++)
+    for (type = 0; type < CASE_TYPE; type++)
       case_obj_randomize(&ideal[type]);
     once = case_bool_true;
   }

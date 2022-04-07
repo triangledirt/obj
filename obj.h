@@ -4,7 +4,6 @@
 #include "bool.h"
 
 #define CASE_OBJ 64
-
 typedef long long case_obj_t;
 
 void case_obj_clear(case_obj_t *obj);
@@ -22,6 +21,7 @@ double case_obj_comparefocus(case_obj_t obj1, case_obj_t obj2);
 double case_obj_compareoblivion(case_obj_t obj1, case_obj_t obj2);
 double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2);
 double case_obj_comparexor(case_obj_t obj1, case_obj_t obj2);
+#define case_obj_compare(obj1, obj2) case_obj_comparetypes(obj1, obj2)
 
 case_bool_t case_obj_hastype(case_obj_t obj, case_obj_t type);
 void case_obj_print(case_obj_t obj);
@@ -32,5 +32,7 @@ void case_obj_rotate(case_obj_t *obj, long inc);
 
 void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long long num);
 long long case_obj_getnum(case_obj_t obj, long startbit, long bits);
+
+long case_obj_smash(case_obj_t obj1, case_obj_t obj2);
 
 #endif

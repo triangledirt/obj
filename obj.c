@@ -6,8 +6,6 @@
 #include "indx.h"
 #include "obj.h"
 
-static long findsmashpoint(case_obj_t obj1, case_obj_t obj2);
-
 void case_obj_clear(case_obj_t *obj)
 {
   *obj = 0;
@@ -21,9 +19,9 @@ double case_obj_comparebox(case_obj_t obj1, case_obj_t obj2)
   case_bit_t o1bit;
   case_bit_t o2bit;
   long and = 0;
-  smash = findsmashpoint(obj1, obj2);
-  for (i = 0; i < smash; i++)
-    for (j = 0; j < smash; j++) {
+  smash = case_obj_smash(obj1, obj2);
+  for (i = 0; i <= smash; i++)
+    for (j = 0; j <= smash; j++) {
       o1bit = case_obj_getattr(obj1, i);
       o2bit = case_obj_getattr(obj2, j);
       if (o1bit && o2bit)
@@ -39,14 +37,14 @@ double case_obj_compareequal(case_obj_t obj1, case_obj_t obj2)
   long correct = 0;
   case_bit_t bit1;
   case_bit_t bit2;
-  smash = findsmashpoint(obj1, obj2);
-  for (bit = 1; bit < smash; bit++) {
+  smash = case_obj_smash(obj1, obj2);
+  for (bit = 1; bit <= smash; bit++) {
     bit1 = case_obj_getattr(obj1, bit);
     bit2 = case_obj_getattr(obj2, bit);
     if (bit1 == bit2)
       correct++;
   }
-  return (double) correct / 1 + smash;
+  return (double) correct / (1 + smash);
 }
 
 double case_obj_comparefocus(case_obj_t obj1, case_obj_t obj2)
@@ -62,8 +60,8 @@ double case_obj_compareoblivion(case_obj_t obj1, case_obj_t obj2)
   long i;
   case_bit_t o1bit;
   case_bit_t o2bit;
-  smash = findsmashpoint(obj1, obj2);
-  for (i = 0; i < smash; i++) {
+  smash = case_obj_smash(obj1, obj2);
+  for (i = 0; i <= smash; i++) {
     o1bit = case_obj_getattr(obj1, i);
     o2bit = case_obj_getattr(obj2, i);
     if (o1bit != o2bit)
@@ -89,7 +87,7 @@ double case_obj_comparetypes(case_obj_t obj1, case_obj_t obj2)
         correct++;
     }
   }
-  return (double) correct / 1 + total;
+  return (double) correct / (1 + total);
 }
 
 double case_obj_comparexor(case_obj_t obj1, case_obj_t obj2)
@@ -99,14 +97,14 @@ double case_obj_comparexor(case_obj_t obj1, case_obj_t obj2)
   long correct = 0;
   case_bit_t bit1;
   case_bit_t bit2;
-  smash = findsmashpoint(obj1, obj2);
-  for (bit = 1; bit < smash; bit++) {
+  smash = case_obj_smash(obj1, obj2);
+  for (bit = 1; bit <= smash; bit++) {
     bit1 = case_obj_getattr(obj1, bit);
     bit2 = case_obj_getattr(obj2, bit);
     if (bit1 ^ bit2)
       correct++;
   }
-  return (double) correct / 1 + smash;
+  return (double) correct / (1 + smash);
 }
 
 long long case_obj_getnum(case_obj_t obj, long startbit, long bits)
@@ -199,7 +197,7 @@ void case_obj_setnum(case_obj_t *obj, long startbit, long bits, long long num)
   } while (bit < bits);
 }
 
-long findsmashpoint(case_obj_t obj1, case_obj_t obj2)
+long case_obj_smash(case_obj_t obj1, case_obj_t obj2)
 {
   long smash = CASE_OBJ - 1;
   case_bit_t bit1;
