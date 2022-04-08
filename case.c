@@ -99,8 +99,8 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scoref = scorefunc[scorefindx];
     }
   }
-  past_note(&scorepast[type][scorefindx], score);
   thresh = past_avg(&scorepast[type][scorefindx]);
+  past_note(&scorepast[type][scorefindx], score);
   class = (score > thresh) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
