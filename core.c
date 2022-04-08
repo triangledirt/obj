@@ -9,7 +9,7 @@
 #include "indx.h"
 #include "obj.h"
 
-#define ACTS 32
+#define TIMES 32
 #define ANARCHY 4
 #define DIM 4
 
@@ -51,14 +51,14 @@ void calcfit(pop_t pop, coord_t *c, case_obj_t obj[], long objsz, long type)
 
 void core_learn(case_obj_t obj[], long objsz, long type)
 {
-  long act;
+  long time;
   coord_t actor;
   coord_t best;
   coord_t worst;
   pop_t pop;
   init();
   reset(pop, type);
-  for (act = 0; act < ACTS; act++) {
+  for (time = 0; time < TIMES; time++) {
     randcoord(&actor);
     findbest(pop, &actor, &best, obj, objsz, type);
     findworst(pop, &actor, &worst, obj, objsz, type);

@@ -12,17 +12,20 @@
 #include "gene.h"
 #include "jack.h"
 #include "jung.h"
+#include "past.h"
 #include "sum.h"
 #include "timer.h"
 #include "val.h"
 #include "valtype.h"
 
-#define PACKCACHE (CASE_OBJCACHE / 2)
+#define PACKCACHE (CASE_CACHE / 2)
+#define SCORE 7
 #define STRTOK ",;\n"
 
-static case_obj_t object[CASE_TYPE][CASE_OBJCACHE];
+static case_obj_t object[CASE_TYPE][CASE_CACHE];
 static case_bool_t once = case_bool_false;
 static case_stat_t stat[CASE_TYPE];
+static past_t scorepast[CASE_TYPE][SCORE];
 
 static val_t value[CASE_TYPE][PACKCACHE][CASE_OBJ];
 static val_t firstval[CASE_TYPE][CASE_OBJ];
@@ -30,11 +33,10 @@ static valtype_t valtype[CASE_TYPE][CASE_OBJ];
 static case_bool_t firstpack[CASE_TYPE];
 
 typedef double (*score_f)(case_obj_t, long);
-#define SCORE 7
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
 static long favscoreindx[CASE_TYPE];
-static long scorefuncoverride = 3;
+static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);
@@ -61,6 +63,7 @@ static void text2val(char *text, val_t *val, long valindx, long type);
 static case_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
 
+static double newthresh(double thresh);
 static long randomscoreindx(long exclude);
 
 case_bit_t case_classify(case_obj_t obj, long type)
@@ -68,6 +71,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   case_bit_t class;
   double score;
   double rescore;
+  double thresh;
   long scorefindx;
   long rescorefindx;
   score_f scoref;
@@ -80,7 +84,7 @@ case_bit_t case_classify(case_obj_t obj, long type)
   scorefindx = favscoreindx[type];
   scoref = scorefunc[scorefindx];
   score = scoref(obj, type);
-  if ((scorefuncoverride < 0) && die_toss(CASE_OBJCACHE / 2)) {
+  if ((scorefuncoverride < 0) && die_toss(CASE_CACHE / 2)) {
     rescorefindx = randomscoreindx(scorefindx);
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
@@ -93,13 +97,16 @@ case_bit_t case_classify(case_obj_t obj, long type)
       favscoreindx[type] = rescorefindx;
       score = rescore;
       scorefindx = rescorefindx;
+      scoref = scorefunc[scorefindx];
     }
   }
-  class = (score > 0.4) ? 1 : 0;  /*  need one of these per algorithm per object type ??  */
+  past_note(&scorepast[type][scorefindx], score);
+  thresh = past_avg(&scorepast[type][scorefindx]);
+  class = (score > thresh) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
   scorefname = scorename[scorefindx];
-  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f\n", type, c, scorefname, score);
+  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorefname, score, thresh);
 #endif
   return class;
 }
@@ -178,9 +185,9 @@ void case_observe(case_obj_t obj, long type)
 {
   long i;
   init();
-  i = random() % CASE_OBJCACHE;
+  i = random() % CASE_CACHE;
   object[type][i] = obj;
-  if (die_toss(CASE_OBJCACHE / 8))
+  if (die_toss(CASE_CACHE / 8))
     learn(type);
 }
 
@@ -297,7 +304,7 @@ long count(case_obj_t objtype, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < CASE_OBJCACHE; i++) {
+  for (i = 0; i < CASE_CACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype);
   }
@@ -309,7 +316,7 @@ long countboth(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < CASE_OBJCACHE; i++) {
+  for (i = 0; i < CASE_CACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) && case_obj_hastype(obj, objtype2);
   }
@@ -321,7 +328,7 @@ long counteither(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < CASE_OBJCACHE; i++) {
+  for (i = 0; i < CASE_CACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) || case_obj_hastype(obj, objtype2);
   }
@@ -333,7 +340,7 @@ long countsub(case_obj_t objtype1, case_obj_t objtype2, long type)
   long count = 0;
   case_obj_t obj;
   long i;
-  for (i = 0; i < CASE_OBJCACHE; i++) {
+  for (i = 0; i < CASE_CACHE; i++) {
     obj = object[type][i];
     count += case_obj_hastype(obj, objtype1) && !case_obj_hastype(obj, objtype2);
   }
@@ -347,7 +354,7 @@ long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
   long i;
   case_bit_t has1;
   case_bit_t has2;
-  for (i = 0; i < CASE_OBJCACHE; i++) {
+  for (i = 0; i < CASE_CACHE; i++) {
     obj = object[type][i];
     has1 = case_obj_hastype(obj, objtype1);
     has2 = case_obj_hastype(obj, objtype2);
@@ -389,11 +396,14 @@ void init()
 {
   long i;
   long type;
+  long score;
   if (!once) {
     srandom(time(NULL));
     for (type = 0; type < CASE_TYPE; type++) {
-      for (i = 0; i < CASE_OBJCACHE; i++)
+      for (i = 0; i < CASE_CACHE; i++)
         case_obj_randomize(&object[type][i]);
+      for (score = 0; score < SCORE; score++)
+        past_init(&scorepast[type][score]);
       case_stat_reset(&stat[type]);
       favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
       firstpack[type] = case_bool_true;
@@ -444,13 +454,13 @@ void learn(long type)
   long jacktime;
   long jungtime;
   long sumtime;
-  coretime = learngeneral(object[type], CASE_OBJCACHE, type, core_learn);
-  filttime = learngeneral(object[type], CASE_OBJCACHE, type, filt_learn);
-  foldtime = learngeneral(object[type], CASE_OBJCACHE, type, fold_learn);
-  genetime = learngeneral(object[type], CASE_OBJCACHE, type, gene_learn);
-  jacktime = learngeneral(object[type], CASE_OBJCACHE, type, jack_learn);
-  jungtime = learngeneral(object[type], CASE_OBJCACHE, type, jung_learn);
-  sumtime = learngeneral(object[type], CASE_OBJCACHE, type, sum_learn);
+  coretime = learngeneral(object[type], CASE_CACHE, type, core_learn);
+  filttime = learngeneral(object[type], CASE_CACHE, type, filt_learn);
+  foldtime = learngeneral(object[type], CASE_CACHE, type, fold_learn);
+  genetime = learngeneral(object[type], CASE_CACHE, type, gene_learn);
+  jacktime = learngeneral(object[type], CASE_CACHE, type, jack_learn);
+  jungtime = learngeneral(object[type], CASE_CACHE, type, jung_learn);
+  sumtime = learngeneral(object[type], CASE_CACHE, type, sum_learn);
 #if CASE_VERBOSE && CASE_XVERBOSE
       printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
 #endif
@@ -458,11 +468,21 @@ void learn(long type)
 
 long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
 {
-  long time;
   timer_start(0);
   learnfunc(obj, objsz, type);
-  time = timer_stop();
-  return time;
+  return timer_stop();
+}
+
+double newthresh(double thresh)
+{
+  double n = thresh;
+  n += coin_toss() ? 0.1 : -0.1;
+  if (n < 0.0) {
+    n = 0.0;
+  } else if (n > 1.0) {
+    n = 1.0;
+  }
+  return n;
 }
 
 case_bit_t packavg(val_t *val, long attr, long type)

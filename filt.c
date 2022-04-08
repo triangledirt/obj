@@ -34,9 +34,9 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
 {
   long bit;
   case_obj_t o;
-  long act;
+  long time;
   init();
-  for (act = 0; act < 4; act++) {
+  for (time = 0; time < 4; time++) {
     calcfit(obj, objsz, type);
     save(type);
     mutate(&one[type], &zero[type]);
@@ -77,8 +77,8 @@ void mutate(case_obj_t *obj1, case_obj_t *obj2)
   case_obj_t *o2;
   long bit;
   case_bit_t val;
-  long act;
-  for (act = 0; act < 4; act++) {
+  long time;
+  for (time = 0; time < 4; time++) {
     bit = random() % CASE_OBJ;
     case_bit_randomize(&val);
     if (coin_toss()) {

@@ -6,6 +6,7 @@
 #define CASE_OBJ 64
 typedef long long case_obj_t;
 
+/*  fill()?  */
 void case_obj_clear(case_obj_t *obj);
 void case_obj_randomize(case_obj_t *obj);
 void case_obj_setfromstr(case_obj_t *obj, char str[CASE_OBJ]);

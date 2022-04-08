@@ -8,7 +8,7 @@
 #define CASE_VERBOSE 1
 #define CASE_XVERBOSE 1
 
-#define CASE_OBJCACHE 64
+#define CASE_CACHE 64
 #define CASE_CSVOBJ 4096
 #define CASE_STR (4 + 1)
 #define CASE_TYPE CASE_OBJ
