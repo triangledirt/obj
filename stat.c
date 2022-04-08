@@ -7,7 +7,7 @@ double case_stat_f1(case_stat_t *stat)
   return (double) (2 * stat->truepos) / (1 + (2 * stat->truepos) + stat->falsepos + stat->falseneg);
 }
 
-void case_stat_noteclasses(case_stat_t *stat, case_bit_t guess, case_bit_t actual)
+void case_stat_note(case_stat_t *stat, case_bit_t guess, case_bit_t actual)
 {
   if ((0 == guess) && (0 == actual)) {
     stat->trueneg++;
