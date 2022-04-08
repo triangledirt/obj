@@ -63,7 +63,6 @@ static void text2val(char *text, val_t *val, long valindx, long type);
 static case_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
 
-static double newthresh(double thresh);
 static long randomscoreindx(long exclude);
 
 case_bit_t case_classify(case_obj_t obj, long type)
@@ -471,18 +470,6 @@ long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
   timer_start(0);
   learnfunc(obj, objsz, type);
   return timer_stop();
-}
-
-double newthresh(double thresh)
-{
-  double n = thresh;
-  n += coin_toss() ? 0.1 : -0.1;
-  if (n < 0.0) {
-    n = 0.0;
-  } else if (n > 1.0) {
-    n = 1.0;
-  }
-  return n;
 }
 
 case_bit_t packavg(val_t *val, long attr, long type)
