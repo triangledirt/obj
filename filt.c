@@ -118,7 +118,7 @@ double score(case_obj_t obj, long type)
   case_bit_t zerobit;
   case_bit_t objbit;
   long smash;
-  smash = case_obj_smash(obj, 0);
+  smash = case_obj_smash(obj, CASE_OBJ_CLEAR);
   for (bit = 1; bit <= smash; bit++) {
     onebit = case_obj_getattr(one[type], bit);
     zerobit = case_obj_getattr(zero[type], bit);

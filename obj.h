@@ -5,6 +5,7 @@
 
 #define CASE_OBJ 64
 typedef long long case_obj_t;
+#define CASE_OBJ_CLEAR 0
 
 void case_obj_clear(case_obj_t *obj);
 void case_obj_fill(case_obj_t *obj);

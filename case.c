@@ -373,7 +373,7 @@ void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[CASE_OBJ]
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(0, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
+  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     text2val(tok, &valobj[valindx], valindx, type);
@@ -594,7 +594,7 @@ void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
-  while ((tok = strtok(0, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
+  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
