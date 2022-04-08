@@ -107,6 +107,11 @@ double case_obj_comparexor(case_obj_t obj1, case_obj_t obj2)
   return (double) correct / (1 + smash);
 }
 
+void case_obj_fill(case_obj_t *obj)
+{
+  *obj = 1;
+}
+
 long long case_obj_getnum(case_obj_t obj, long startbit, long bits)
 {
   long place = 1;
