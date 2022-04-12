@@ -9,11 +9,11 @@ static long total;
 void timer_start(long totalus)
 {
   total = totalus;
-  gettimeofday(&start, 0);
+  gettimeofday(&start, NULL);
 }
 
 long timer_stop()
 {
-  gettimeofday(&stop, 0);
+  gettimeofday(&stop, NULL);
   return total + (stop.tv_usec - start.tv_usec);
 }
