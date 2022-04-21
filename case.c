@@ -12,20 +12,21 @@
 #include "gene.h"
 #include "jack.h"
 #include "jung.h"
-#include "past.h"
+#include "moire.h"
 #include "sum.h"
 #include "timer.h"
 #include "val.h"
 #include "valtype.h"
+#include "xdouble.h"
 
 #define PACKCACHE (CASE_CACHE / 2)
-#define SCORE 7
+#define SCORE 8
 #define STRTOK ",;\n"
 
 static case_obj_t object[CASE_TYPE][CASE_CACHE];
 static case_bool_t once = case_bool_false;
 static case_stat_t stat[CASE_TYPE];
-static past_t scorepast[CASE_TYPE][SCORE];
+static xdouble_t scorepast[CASE_TYPE][SCORE];
 
 static val_t value[CASE_TYPE][PACKCACHE][CASE_OBJ];
 static val_t firstval[CASE_TYPE][CASE_OBJ];
@@ -33,8 +34,8 @@ static valtype_t valtype[CASE_TYPE][CASE_OBJ];
 static case_bool_t firstpack[CASE_TYPE];
 
 typedef double (*score_f)(case_obj_t, long);
-static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, sum_score};
-static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "sum"};
+static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, moire_score, sum_score};
+static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};
 static long favscoreindx[CASE_TYPE];
 static long scorefuncoverride = 6;
 
@@ -99,8 +100,8 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scoref = scorefunc[scorefindx];
     }
   }
-  thresh = past_avg(&scorepast[type][scorefindx]);
-  past_note(&scorepast[type][scorefindx], score);
+  thresh = xdouble_avg(&scorepast[type][scorefindx]);
+  xdouble_note(&scorepast[type][scorefindx], score);
   class = (score > thresh) ? 1 : 0;
 #if CASE_VERBOSE && CASE_XVERBOSE
   c = case_bit_char(class);
@@ -402,7 +403,7 @@ void init()
       for (i = 0; i < CASE_CACHE; i++)
         case_obj_randomize(&object[type][i]);
       for (score = 0; score < SCORE; score++)
-        past_init(&scorepast[type][score]);
+        xdouble_init(&scorepast[type][score]);
       case_stat_reset(&stat[type]);
       favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
       firstpack[type] = case_bool_true;
@@ -452,6 +453,7 @@ void learn(long type)
   long genetime;
   long jacktime;
   long jungtime;
+  long moiretime;
   long sumtime;
   coretime = learngeneral(object[type], CASE_CACHE, type, core_learn);
   filttime = learngeneral(object[type], CASE_CACHE, type, filt_learn);
@@ -460,8 +462,9 @@ void learn(long type)
   jacktime = learngeneral(object[type], CASE_CACHE, type, jack_learn);
   jungtime = learngeneral(object[type], CASE_CACHE, type, jung_learn);
   sumtime = learngeneral(object[type], CASE_CACHE, type, sum_learn);
+  moiretime = learngeneral(object[type], CASE_CACHE, type, moire_learn);
 #if CASE_VERBOSE && CASE_XVERBOSE
-      printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, sumtime);
+  printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld moire=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, moiretime, sumtime);
 #endif
 }
 

@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     if (1) testpack("data/sepsis.csv", 3, SEPSIS, case_packavg);
     if (1) testpack("data/shuttle.csv", 9, SHUTTLE, case_packavg);
   } else {
-    if (1) testpack("data/occupancy.csv", 18, OCCUPANCY, case_packavg);
+    if (0) testpack("data/occupancy.csv", 18, OCCUPANCY, case_packavg);
     if (1) testpack("data/mushroom.csv", 0, MUSHROOM, case_packavg);
     if (0) testpack("data/mushroom2.csv", 0, MUSHROOM2, case_packavg);
   }
