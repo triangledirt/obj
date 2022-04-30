@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "xbit.h"
 
@@ -5,7 +6,7 @@ static void calc(xbit_t *xbit);
 
 void calc(xbit_t *xbit)
 {
-  case_bit_t onecnt = 0;
+  long onecnt = 0;
   long i;
   for (i = 0; i < XBIT_CNT; i++)
     onecnt += xbit->bit[i];

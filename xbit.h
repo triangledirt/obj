@@ -8,7 +8,7 @@
 struct xbit_t {
   case_bit_t bit[XBIT_CNT];
   long notecnt;
-  case_bit_t zeropart;
+  double zeropart;
 };
 typedef struct xbit_t xbit_t;
 

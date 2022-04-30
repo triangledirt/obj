@@ -24,16 +24,16 @@ void init()
 void moire_learn(case_obj_t obj[], long objsz, long type)
 {
   long i;
-  double zeropart;
+  double onepart;
   init();
   for (i = 0; i < objsz; i++)
     if (die_toss(XBIT_CNT))
       xbit_note(&past[type], case_obj_getclass(obj[i]));
 #if CASE_VERBOSE
-  zeropart = xbit_zeropart(&past[type]);
-  printf("type%02ld commn moi ", type);
+  onepart = 1 - xbit_zeropart(&past[type]);
+  printf("type%02ld onept moi ", type);
   printf("                                                                ");
-  printf(" %0.3f\n", zeropart);
+  printf(" %0.3f\n", onepart);
 #endif
 }
 
