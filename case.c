@@ -37,7 +37,7 @@ typedef double (*score_f)(case_obj_t, long);
 static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, moire_score, sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};
 static long favscoreindx[CASE_TYPE];
-static long scorefuncoverride = -1;
+static long scorefuncoverride = 6;
 
 typedef void (*learn_f)(case_obj_t[], long, long);
 static void learn(long type);

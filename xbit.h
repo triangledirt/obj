@@ -3,7 +3,7 @@
 
 #include "bit.h"
 
-#define XBIT_CNT 16
+#define XBIT_CNT 8
 
 struct xbit_t {
   case_bit_t bit[XBIT_CNT];

@@ -30,7 +30,7 @@ void xbit_note(xbit_t *xbit, case_bit_t bit)
 
 double xbit_zeropart(xbit_t *xbit)
 {
-  if (xbit->notecnt >= (XBIT_CNT / 2)) {
+  if (xbit->notecnt >= (XBIT_CNT / 4)) {
     calc(xbit);
     xbit->notecnt = 0;
   }
