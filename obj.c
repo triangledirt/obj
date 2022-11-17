@@ -157,7 +157,7 @@ void case_obj_print(case_obj_t obj)
 {
   long i;
   for (i = 0; i < CASE_OBJ; i++)
-    printf("%ld", case_obj_getattr(obj, i));
+    printf("%lld", case_obj_getattr(obj, i));
 }
 
 void case_obj_randomize(case_obj_t *obj)
