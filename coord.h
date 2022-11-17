@@ -1,13 +1,13 @@
-#ifndef coord_h
-#define coord_h
+#ifndef obj_coord_h
+#define obj_coord_h
 
-struct coord_t {
+struct obj_coord_t {
   long x;
   long y;
   long z;
 };
-typedef struct coord_t coord_t;
+typedef struct obj_coord_t obj_coord_t;
 
-void coord_print(coord_t *coord);
+void obj_coord_print(obj_coord_t *coord);
 
 #endif

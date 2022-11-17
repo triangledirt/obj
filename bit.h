@@ -1,12 +1,12 @@
-#ifndef bit_h
-#define bit_h
+#ifndef obj_bit_h
+#define obj_bit_h
 
 #include <stdlib.h>
 
-typedef char case_bit_t;
+typedef char obj_bit_t;
 
-case_bit_t case_bit_random();
-void case_bit_randomize(case_bit_t *bit);
-char case_bit_char(case_bit_t bit);
+obj_bit_t obj_bit_random();
+void obj_bit_randomize(obj_bit_t *bit);
+char obj_bit_char(obj_bit_t bit);
 
 #endif

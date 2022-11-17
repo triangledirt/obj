@@ -1,9 +1,9 @@
-#ifndef filt_h
-#define filt_h
+#ifndef obj_filt_h
+#define obj_filt_h
 
 #include "obj.h"
 
-void filt_learn(case_obj_t obj[], long objsz, long type);
-double filt_score(case_obj_t obj, long type);
+void obj_filt_learn(obj_t obj[], long objsz, long type);
+double obj_filt_score(obj_t obj, long type);
 
 #endif

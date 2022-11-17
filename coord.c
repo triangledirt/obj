@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "coord.h"
 
-void coord_print(coord_t *coord)
+void obj_coord_print(obj_coord_t *obj_coord)
 {
   printf("coord::%ld,%ld,%ld\n", coord->x, coord->y, coord->z);
 }
