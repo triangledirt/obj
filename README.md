@@ -1,9 +1,15 @@
 # obj
 
-classify--synchronize--and model binary objects
+## classify--synchronize--model
 
-## [class](https://github.com/triangledirt/obj/blob/main/CLASS.md)
+..
 
-## [sync](https://github.com/triangledirt/obj/blob/main/SYNC.md)
+## [obj_t](OBJ.md)
+
+## [classify](https://github.com/triangledirt/obj/blob/main/CLASS.md)
+
+## [synchronize](https://github.com/triangledirt/obj/blob/main/SYNC.md)
 
 ## [model](https://github.com/triangledirt/obj/blob/main/MODEL.md)
+
+## [build and use](https://github.com/triangledirt/obj/blob/main/BUILD.md)
