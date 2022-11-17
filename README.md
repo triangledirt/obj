@@ -2,11 +2,13 @@
 
 ## classify--synchronize--model
 
-obj defines an obj_t as a binary object--an object with binary attributes
-
 ## [obj_t](OBJ.md)
 
-then it lets you do things with binary objects
+obj defines an obj_t as a binary object--an object with binary attributes
+
+then it lets you do things with binary objects--right now it lets you classify them--soon it may be able to synchronize and model them
+
+read more about [obj_t](OBJ.md)
 
 ## [classify](CLASS.md)
 
