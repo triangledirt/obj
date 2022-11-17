@@ -1,29 +1,36 @@
 # build and use
 
-The case project has no release tags. The latest code is the latest release. I try to keep it compilable and runnable
+the obj project has no release tags--the latest code is the latest release--i try to keep it compilable and runnable
 
-To use, first get the source code
+to use--first get the source code
 
-    git clone git@github.com:triangledirt/case.git
+    git clone git@github.com:triangledirt/obj.git
 
-Next, before you build, edit [case.h](https://github.com/triangledirt/case/blob/main/case.h) and set CASE_VERBOSE and CASE_XVERBOSE to either 0 or 1. case is quiet with CASE_VERBOSE==0 and noisy with CASE_VERBOSE==1. When CASE_XVERBOSE is 1, you get extra information printed to stdout
+next (before you build) edit [obj.h](https://github.com/triangledirt/obj/blob/main/obj.h) and set OBJ_VERBOSE and OBJ_XVERBOSE to either 0 or 1--obj is quiet with OBJ_VERBOSE==0 and noisy with OBJ_VERBOSE==1--when OBJ_XVERBOSE is 1 you get extra information printed to stdout
 
-Once you change those code settings, you can change some build settings. These are in [make](https://github.com/triangledirt/case/blob/main/make). Change DEBUG to be "" if you don't want debug info, "-g" if you do want debug info and your compiler is gcc. Change COMPILER to be whatever your compiler is. Etc
+once you change those code settings--you can change some build settings--these are in [make](https://github.com/triangledirt/obj/blob/main/make)--change DEBUG to be "" if you dont want debug info--"-g" if you do want debug info and your compiler is gcc--change COMPILER to be whatever your compiler is--etc
 
-Now build. From the case directory, execute
+now build--(from the case directory) execute
 
     ./make
 
-That builds object files and a library called libcase.a. It requires only the C standard library
+that builds object files and a library called libobj.a--it requires only the c standard library
 
-To use case in your project, do
+(to use obj in your project) do
 
-    #include "[path to case directory]/case.h"
+    #include "[path to case directory]/class.h"
 
-When you build your project, add
+and/or
+
+    #include "[path to case directory]/sync.h"
+    #include "[path to case directory]/model.h"
+
+depending on which areas of obj you need
+
+(then you build your project) add
 
     -lcase -L[path to case directory]
 
 to your compile command
 
-See case.h and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions
+see case.h and the rest of this document for the syntax of observation/classification functions and set-to-set inference functions

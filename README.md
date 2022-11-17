@@ -1,6 +1,16 @@
 # obj
 
+## in development
+
+obj is in development--it is not ready to use
+
 ## classify--synchronize--model
+
+obj is pronounced *object*
+
+it is a library of c functions used to classify--synchronize--model--generalized binary data objects
+
+its a local slim real-time system using no disk i/o--no network connections--no threading--the only dependency is the c standard library
 
 ## [obj_t](OBJ.md)
 
@@ -35,5 +45,7 @@ read more about [model](MODEL.md)
 ## [build and use](BUILD.md)
 
 how to build and use obj in your project
+
+getting the code--setting code options--compiling--linking
 
 read more about how to [build and use](BUILD.md)
