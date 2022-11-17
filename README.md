@@ -1,6 +1,6 @@
 # obj
 
-contains methods for classifying--synchronizing--and modeling binary objects
+classify--synchronize--and model binary objects
 
 ## [classify](https://github.com/triangledirt/obj/blob/main/CLASSIFY.md)
 
