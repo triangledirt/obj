@@ -22,6 +22,18 @@ read more about [classify](CLASS.md)
 
 ## [synchronize](SYNC.md)
 
+coming soon !!
+
+read more about [synchronize](SYNC.md)
+
 ## [model](MODEL.md)
 
+coming soon !!
+
+read more about [model](MODEL.md)
+
 ## [build and use](BUILD.md)
+
+how to build and use obj in your project
+
+read more about how to [build and use](BUILD.md)
