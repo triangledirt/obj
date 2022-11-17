@@ -2,7 +2,7 @@
 
 classify--synchronize--and model binary objects
 
-## [classify](https://github.com/triangledirt/obj/blob/main/CLASSIFY.md)
+## [class](https://github.com/triangledirt/obj/blob/main/CLASS.md)
 
 ## [sync](https://github.com/triangledirt/obj/blob/main/SYNC.md)
 
