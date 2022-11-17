@@ -4,7 +4,7 @@
 
 ## [obj_t](OBJ.md)
 
-obj defines an obj_t as a binary object--an object with binary attributes
+obj defines obj_t as a binary object--an object with binary attributes
 
 then it lets you do things with binary objects--right now it lets you classify them--soon it may be able to synchronize and model them
 
