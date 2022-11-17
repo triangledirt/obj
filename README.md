@@ -2,7 +2,7 @@
 
 ## classify--synchronize--model
 
-*obj* defines an obj_t as a binary object--an object with binary attributes
+obj defines an obj_t as a binary object--an object with binary attributes
 
 ## [obj_t](OBJ.md)
 
@@ -10,7 +10,7 @@ then it lets you do things with binary objects
 
 ## [classify](CLASS.md)
 
-*classify* lets you classify binary objects
+classify lets you classify binary objects
 
 first you supply a series of objects (each with binary attributes and a binary classification)--you know the classes of these objects and you supply them to classify when you observe them
 
