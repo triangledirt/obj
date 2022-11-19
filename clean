@@ -1,1 +1,1 @@
-rm -f *.o libcase.a test *.core vgcore.* *~ *.~
+rm -f *.o libobj.a test *.core vgcore.* *~ *.~

@@ -1,17 +1,17 @@
-#ifndef node_h
-#define node_h
+#ifndef obj_node_h
+#define obj_node_h
 
 #include "bit.h"
 #include "op.h"
 
-struct node_t {
-  op_t op;
-  case_bit_t val;
+struct obj_node_t {
+  obj_op_t op;
+  obj_bit_t val;
   long active1;
   long active2;
 };
-typedef struct node_t node_t;
+typedef struct obj_node_t obj_node_t;
 
-void node_init(node_t *node);
+void obj_node_init(obj_node_t *node);
 
 #endif

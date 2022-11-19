@@ -3,16 +3,16 @@
 static char *numname = "num";
 static char *strname = "str";
 
-char *valtype_name(valtype_t valtype)
+char *obj_valtype_name(obj_valtype_t valtype)
 {
   char *str;
   switch (valtype) {
-    case valtype_num:
-      str = numname;
-      break;
-    case valtype_str:
-      str = strname;
-      break;
+  case obj_valtype_num:
+    str = numname;
+    break;
+  case obj_valtype_str:
+    str = strname;
+    break;
   }
   return str;
 }

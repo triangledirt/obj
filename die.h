@@ -1,6 +1,6 @@
-#ifndef die_h
-#define die_h
+#ifndef obj_die_h
+#define obj_die_h
 
-#define die_toss(sides) (0 == (random() % sides))
+#define obj_die_toss(sides) (0 == (random() % sides))
 
 #endif

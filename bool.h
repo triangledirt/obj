@@ -1,12 +1,12 @@
-#ifndef bool_h
-#define bool_h
+#ifndef obj_bool_h
+#define obj_bool_h
 
-enum case_bool_t {
-  case_bool_false,
-  case_bool_true
+enum obj_bool_t {
+  obj_bool_false,
+  obj_bool_true
 };
-typedef enum case_bool_t case_bool_t;
+typedef enum obj_bool_t obj_bool_t;
 
-void case_bool_invert(case_bool_t *bool);
+void obj_bool_invert(obj_bool_t *bool);
 
 #endif

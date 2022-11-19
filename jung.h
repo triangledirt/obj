@@ -1,9 +1,9 @@
-#ifndef jung_h
-#define jung_h
+#ifndef obj_jung_h
+#define obj_jung_h
 
 #include "obj.h"
 
-void jung_learn(case_obj_t obj[], long objsz, long type);
-double jung_score(case_obj_t obj, long type);
+void obj_jung_learn(obj_t obj[], long objsz, long type);
+double obj_jung_score(obj_t obj, long type);
 
 #endif

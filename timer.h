@@ -1,7 +1,7 @@
-#ifndef timer_h
-#define timer_h
+#ifndef obj_timer_h
+#define obj_timer_h
 
-void timer_start(long totalus);
-long timer_stop();
+void obj_timer_start(long totalus);
+long obj_timer_stop();
 
 #endif

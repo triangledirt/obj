@@ -1,12 +1,12 @@
-#ifndef objsz_h
-#define objsz_h
+#ifndef obj_objsz_h
+#define obj_objsz_h
 
 #include "obj.h"
 
-struct objsz_t {
-  case_obj_t obj;
+struct obj_objsz_t {
+  obj_t obj;
   long sz;
 };
-typedef struct objsz_t objsz_t;
+typedef struct obj_objsz_t obj_objsz_t;
 
 #endif

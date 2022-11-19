@@ -1,23 +1,23 @@
-#ifndef case_stat_h
-#define case_stat_h
+#ifndef obj_classstat_h
+#define obj_classstat_h
 
 #include "bit.h"
 
-struct case_stat_t {
+struct obj_classstat_t {
   long truepos;
   long trueneg;
   long falsepos;
   long falseneg;
 };
-typedef struct case_stat_t case_stat_t;
+typedef struct obj_classstat_t obj_classstat_t;
 
-void case_stat_reset(case_stat_t *stat);
-void case_stat_note(case_stat_t *stat, case_bit_t guess, case_bit_t actual);
-void case_stat_print(case_stat_t *stat, long type);
+void obj_classstat_reset(obj_classstat_t *stat);
+void obj_classstat_note(obj_classstat_t *stat, obj_bit_t guess, obj_bit_t actual);
+void obj_classstat_print(obj_classstat_t *stat, long type);
 
-double case_stat_f1(case_stat_t *stat);
-double case_stat_phi(case_stat_t *stat);
-double case_stat_precision(case_stat_t *stat);
-double case_stat_sensitivity(case_stat_t *stat);
+double obj_classstat_f1(obj_classstat_t *stat);
+double obj_classstat_phi(obj_classstat_t *stat);
+double obj_classstat_precision(obj_classstat_t *stat);
+double obj_classstat_sensitivity(obj_classstat_t *stat);
 
 #endif

@@ -3,7 +3,7 @@
 #include "val.h"
 
 static long comparenum(double val1, double val2);
-static long comparestr(char val1[CASE_STR], char val2[CASE_STR]);
+static long comparestr(char val1[OBJ_CLASS_STR], char val2[OBJ_CLASS_STR]);
 
 long comparenum(double val1, double val2)
 {
@@ -18,57 +18,57 @@ long comparenum(double val1, double val2)
   return compare;
 }
 
-long comparestr(char val1[CASE_STR], char val2[CASE_STR])
+long comparestr(char val1[OBJ_CLASS_STR], char val2[OBJ_CLASS_STR])
 {
-  return strncmp(val1, val2, CASE_STR - 1);
+  return strncmp(val1, val2, OBJ_CLASS_STR - 1);
 }
 
-long val_compare(val_t *val1, val_t *val2, valtype_t valtype)
+long obj_val_compare(obj_val_t *val1, obj_val_t *val2, obj_valtype_t valtype)
 {
   long compare;
   switch (valtype) {
-    case valtype_num:
-      compare = comparenum(val1->num, val2->num);
-      break;
-    case valtype_str:
-      compare = comparestr(val1->str, val2->str);
-      break;
+  case obj_valtype_num:
+    compare = comparenum(val1->num, val2->num);
+    break;
+  case obj_valtype_str:
+    compare = comparestr(val1->str, val2->str);
+    break;
   }
   return compare;
 }
 
-void val_copy(val_t *source, val_t *dest, valtype_t valtype)
+void obj_val_copy(obj_val_t *source, obj_val_t *dest, obj_valtype_t valtype)
 {
   switch (valtype) {
-    case valtype_num:
-      dest->num = source->num;
-      break;
-    case valtype_str:
-      strncpy(dest->str, source->str, CASE_STR - 1);
-      break;
+  case obj_valtype_num:
+    dest->num = source->num;
+    break;
+  case obj_valtype_str:
+    strncpy(dest->str, source->str, OBJ_CLASS_STR - 1);
+    break;
   }
 }
 
-void val_init(val_t *val, valtype_t valtype)
+void obj_val_init(obj_val_t *val, obj_valtype_t valtype)
 {
   switch (valtype) {
-    case valtype_num:
-      val->num = 0.0;
-      break;
-    case valtype_str:
-      val->str[0] = '\0';
-      break;
+  case obj_valtype_num:
+    val->num = 0.0;
+    break;
+  case obj_valtype_str:
+    val->str[0] = '\0';
+    break;
   }
 }
 
-void val_print(val_t *val, valtype_t valtype)
+void obj_val_print(obj_val_t *val, obj_valtype_t valtype)
 {
   switch (valtype) {
-    case valtype_num:
-      printf("%f", val->num);
-      break;
-    case valtype_str:
-      printf("%s", val->str);
-      break;
+  case obj_valtype_num:
+    printf("%f", val->num);
+    break;
+  case obj_valtype_str:
+    printf("%s", val->str);
+    break;
   }
 }

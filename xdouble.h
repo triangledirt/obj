@@ -1,17 +1,17 @@
-#ifndef xdouble_h
-#define xdouble_h
+#ifndef obj_xdouble_h
+#define obj_xdouble_h
 
-#define XDOUBLE_CNT 8
+#define OBJ_XDOUBLE_CNT 8
 
-struct xdouble_t {
-  double num[XDOUBLE_CNT];
+struct obj_xdouble_t {
+  double num[OBJ_XDOUBLE_CNT];
   long notecnt;
   double avg;
 };
-typedef struct xdouble_t xdouble_t;
+typedef struct obj_xdouble_t obj_xdouble_t;
 
-void xdouble_init(xdouble_t *xdouble);
-void xdouble_note(xdouble_t *xdouble, double num);
-double xdouble_avg(xdouble_t *xdouble);
+void obj_xdouble_init(obj_xdouble_t *xdouble);
+void obj_xdouble_note(obj_xdouble_t *xdouble, double num);
+double obj_xdouble_avg(obj_xdouble_t *xdouble);
 
 #endif

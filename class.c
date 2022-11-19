@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "case.h"
+#include "class.h"
 #include "coin.h"
 #include "core.h"
 #include "die.h"
@@ -19,56 +19,56 @@
 #include "valtype.h"
 #include "xdouble.h"
 
-#define PACKCACHE (CASE_CACHE / 2)
+#define PACKCACHE (OBJ_CLASS_CACHE / 2)
 #define SCORE 8
 #define STRTOK ",;\n"
 
-static case_obj_t object[CASE_TYPE][CASE_CACHE];
-static case_bool_t once = case_bool_false;
-static case_stat_t stat[CASE_TYPE];
-static xdouble_t scorepast[CASE_TYPE][SCORE];
+static obj_t object[OBJ_CLASS_TYPE][OBJ_CLASS_CACHE];
+static obj_bool_t once = obj_bool_false;
+static obj_classstat_t stat[OBJ_CLASS_TYPE];
+static obj_xdouble_t scorepast[OBJ_CLASS_TYPE][SCORE];
 
-static val_t value[CASE_TYPE][PACKCACHE][CASE_OBJ];
-static val_t firstval[CASE_TYPE][CASE_OBJ];
-static valtype_t valtype[CASE_TYPE][CASE_OBJ];
-static case_bool_t firstpack[CASE_TYPE];
+static obj_val_t value[OBJ_CLASS_TYPE][PACKCACHE][OBJ];
+static obj_val_t firstval[OBJ_CLASS_TYPE][OBJ];
+static obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
+static obj_bool_t firstpack[OBJ_CLASS_TYPE];
 
-typedef double (*score_f)(case_obj_t, long);
-static score_f scorefunc[SCORE] = {core_score, filt_score, fold_score, gene_score, jack_score, jung_score, moire_score, sum_score};
+typedef double (*score_f)(obj_t, long);
+static score_f scorefunc[SCORE] = {obj_core_score, obj_filt_score, obj_fold_score, obj_gene_score, obj_jack_score, obj_jung_score, obj_moire_score, obj_sum_score};
 static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};
-static long favscoreindx[CASE_TYPE];
+static long favscoreindx[OBJ_CLASS_TYPE];
 static long scorefuncoverride = 6;
 
-typedef void (*learn_f)(case_obj_t[], long, long);
+typedef void (*learn_f)(obj_t[], long, long);
 static void learn(long type);
-static long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc);
+static long learngeneral(obj_t obj[], long objsz, long type, learn_f learnfunc);
 static void init();
-static long count(case_obj_t objtype, long type);
-static long countboth(case_obj_t objtype1, case_obj_t objtype2, long type);
-static long counteither(case_obj_t objtype1, case_obj_t objtype2, long type);
-static long countsub(case_obj_t objtype1, case_obj_t objtype2, long type);
-static long countxor(case_obj_t objtype1, case_obj_t objtype2, long type);
+static long count(obj_t objtype, long type);
+static long countboth(obj_t objtype1, obj_t objtype2, long type);
+static long counteither(obj_t objtype1, obj_t objtype2, long type);
+static long countsub(obj_t objtype1, obj_t objtype2, long type);
+static long countxor(obj_t objtype1, obj_t objtype2, long type);
 
-typedef case_bit_t (*pack_f)(val_t *, long, long);
-static case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc);
-static case_bit_t packavg(val_t *val, long attr, long type);
-static case_bit_t packavgnum(val_t *val, long attr, long type);
-static case_bit_t packavgstr(val_t *val, long attr, long type);
-static case_bit_t packfirst(val_t *val, long attr, long type);
-static case_bit_t packrand(val_t *val, long attr, long type);
-static void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type);
-static void insertfirstval(val_t valobj[CASE_OBJ], long type);
-static void insertval(val_t valobj[CASE_OBJ], long type);
-static void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[CASE_OBJ], long type);
-static void text2val(char *text, val_t *val, long valindx, long type);
-static case_bool_t isnum(char *str);
+typedef obj_bit_t (*pack_f)(obj_val_t *, long, long);
+static obj_t packgeneral(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type, pack_f packfunc);
+static obj_bit_t packavg(obj_val_t *val, long attr, long type);
+static obj_bit_t packavgnum(obj_val_t *val, long attr, long type);
+static obj_bit_t packavgstr(obj_val_t *val, long attr, long type);
+static obj_bit_t packfirst(obj_val_t *val, long attr, long type);
+static obj_bit_t packrand(obj_val_t *val, long attr, long type);
+static void setvaltypes(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type);
+static void insertfirstval(obj_val_t valobj[OBJ], long type);
+static void insertval(obj_val_t valobj[OBJ], long type);
+static void csv2valobj(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, obj_val_t valobj[OBJ], long type);
+static void text2val(char *text, obj_val_t *val, long valindx, long type);
+static obj_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
 
 static long randomscoreindx(long exclude);
 
-case_bit_t case_classify(case_obj_t obj, long type)
+obj_bit_t obj_class_classify(obj_t obj, long type)
 {
-  case_bit_t class;
+  obj_bit_t class;
   double score;
   double rescore;
   double thresh;
@@ -80,16 +80,16 @@ case_bit_t case_classify(case_obj_t obj, long type)
   char *rescorefname;
   char c;
   init();
-  case_obj_obscureclass(&obj);
+  obj_obscureclass(&obj);
   scorefindx = favscoreindx[type];
   scoref = scorefunc[scorefindx];
   score = scoref(obj, type);
-  if ((scorefuncoverride < 0) && die_toss(CASE_CACHE / 2)) {
+  if ((scorefuncoverride < 0) && obj_die_toss(OBJ_CLASS_CACHE / 2)) {
     rescorefindx = randomscoreindx(scorefindx);
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
     if ((rescore - score) > 0.2) {
-#if CASE_VERBOSE && CASE_XVERBOSE
+#if OBJ_VERBOSE && OBJ_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
       printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorefname, score, rescorefname, rescore);
@@ -100,28 +100,28 @@ case_bit_t case_classify(case_obj_t obj, long type)
       scoref = scorefunc[scorefindx];
     }
   }
-  thresh = xdouble_avg(&scorepast[type][scorefindx]);
-  xdouble_note(&scorepast[type][scorefindx], score);
+  thresh = obj_xdouble_avg(&scorepast[type][scorefindx]);
+  obj_xdouble_note(&scorepast[type][scorefindx], score);
   class = (score > thresh) ? 1 : 0;
-#if CASE_VERBOSE && CASE_XVERBOSE
-  c = case_bit_char(class);
+#if OBJ_VERBOSE && OBJ_XVERBOSE
+  c = obj_bit_char(class);
   scorefname = scorename[scorefindx];
   printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorefname, score, thresh);
 #endif
   return class;
 }
 
-case_bit_t case_classifyknown(case_obj_t obj, long type)
+obj_bit_t obj_class_classifyknown(obj_t obj, long type)
 {
-  case_bit_t guessclass;
-  case_bit_t actualclass;
-  guessclass = case_classify(obj, type);
-  actualclass = case_obj_getclass(obj);
-  case_stat_note(&stat[type], guessclass, actualclass);
+  obj_bit_t guessclass;
+  obj_bit_t actualclass;
+  guessclass = obj_class_classify(obj, type);
+  actualclass = obj_getclass(obj);
+  obj_classstat_note(&stat[type], guessclass, actualclass);
   return guessclass;
 }
 
-double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_indifreq(obj_t indicator, obj_t target, long type)
 {
   long indicnt;
   long targcnt;
@@ -131,7 +131,7 @@ double case_indifreq(case_obj_t indicator, case_obj_t target, long type)
   return (double) indicnt / 1 + targcnt;
 }
 
-double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_indiimp(obj_t indicator, obj_t target, long type)
 {
   long indisubcnt;
   long targcnt;
@@ -141,7 +141,7 @@ double case_indiimp(case_obj_t indicator, case_obj_t target, long type)
   return (double) indisubcnt / 1 + targcnt;
 }
 
-double case_indimis(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_indimis(obj_t indicator, obj_t target, long type)
 {
   long indisubcnt;
   long targsubcnt;
@@ -151,7 +151,7 @@ double case_indimis(case_obj_t indicator, case_obj_t target, long type)
   return (double) indisubcnt / 1 + targsubcnt;
 }
 
-double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_indiopac(obj_t indicator, obj_t target, long type)
 {
   long indisubcnt;
   long bothcnt;
@@ -161,7 +161,7 @@ double case_indiopac(case_obj_t indicator, case_obj_t target, long type)
   return (double) indisubcnt / 1 + bothcnt;
 }
 
-double case_indiover(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_indiover(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long indicnt;
@@ -171,7 +171,7 @@ double case_indiover(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + indicnt;
 }
 
-double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_inditrans(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long indisubcnt;
@@ -181,17 +181,17 @@ double case_inditrans(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + indisubcnt;
 }
 
-void case_observe(case_obj_t obj, long type)
+void obj_class_observe(obj_t obj, long type)
 {
   long i;
   init();
-  i = random() % CASE_CACHE;
+  i = random() % OBJ_CLASS_CACHE;
   object[type][i] = obj;
-  if (die_toss(CASE_CACHE / 8))
+  if (obj_die_toss(OBJ_CLASS_CACHE / 8))
     learn(type);
 }
 
-double case_over(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_over(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long eithercnt;
@@ -201,35 +201,35 @@ double case_over(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + eithercnt;
 }
 
-case_obj_t case_packavg(char csvobj[CASE_CSVOBJ], long classindx, long type)
+obj_t obj_class_packavg(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packavg);
 }
 
-case_obj_t case_packfirst(char csvobj[CASE_CSVOBJ], long classindx, long type)
+obj_t obj_class_packfirst(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packfirst);
 }
 
-case_obj_t case_packrand(char csvobj[CASE_CSVOBJ], long classindx, long type)
+obj_t obj_class_packrand(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packrand);
 }
 
-void case_resetstat(long type)
+void obj_class_resetstat(long type)
 {
-  case_stat_reset(&stat[type]);
+  obj_classstat_reset(&stat[type]);
 }
 
-case_stat_t *case_stat(long type)
+obj_classstat_t *obj_class_stat(long type)
 {
   return &stat[type];
 }
 
-double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targfreq(obj_t indicator, obj_t target, long type)
 {
   long targcnt;
   long indicnt;
@@ -239,7 +239,7 @@ double case_targfreq(case_obj_t indicator, case_obj_t target, long type)
   return (double) targcnt / 1 + indicnt;
 }
 
-double case_targimp(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targimp(obj_t indicator, obj_t target, long type)
 {
   long targsubcnt;
   long indicnt;
@@ -249,7 +249,7 @@ double case_targimp(case_obj_t indicator, case_obj_t target, long type)
   return (double) targsubcnt / 1 + indicnt;
 }
 
-double case_targmis(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targmis(obj_t indicator, obj_t target, long type)
 {
   long targsubcnt;
   long indisubcnt;
@@ -259,7 +259,7 @@ double case_targmis(case_obj_t indicator, case_obj_t target, long type)
   return (double) targsubcnt / 1 + indisubcnt;
 }
 
-double case_targopac(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targopac(obj_t indicator, obj_t target, long type)
 {
   long targsubcnt;
   long bothcnt;
@@ -269,7 +269,7 @@ double case_targopac(case_obj_t indicator, case_obj_t target, long type)
   return (double) targsubcnt / 1 + bothcnt;
 }
 
-double case_targover(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targover(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long targcnt;
@@ -279,7 +279,7 @@ double case_targover(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + targcnt;
 }
 
-double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_targtrans(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long targsubcnt;
@@ -289,7 +289,7 @@ double case_targtrans(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + targsubcnt;
 }
 
-double case_trans(case_obj_t indicator, case_obj_t target, long type)
+double obj_class_trans(obj_t indicator, obj_t target, long type)
 {
   long bothcnt;
   long xorcnt;
@@ -299,92 +299,92 @@ double case_trans(case_obj_t indicator, case_obj_t target, long type)
   return (double) bothcnt / 1 + xorcnt;
 }
 
-long count(case_obj_t objtype, long type)
+long count(obj_t objtype, long type)
 {
   long count = 0;
-  case_obj_t obj;
+  obj_t obj;
   long i;
-  for (i = 0; i < CASE_CACHE; i++) {
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, objtype);
+    count += obj_hastype(obj, objtype);
   }
   return count;
 }
 
-long countboth(case_obj_t objtype1, case_obj_t objtype2, long type)
+long countboth(obj_t objtype1, obj_t objtype2, long type)
 {
   long count = 0;
-  case_obj_t obj;
+  obj_t obj;
   long i;
-  for (i = 0; i < CASE_CACHE; i++) {
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, objtype1) && case_obj_hastype(obj, objtype2);
+    count += obj_hastype(obj, objtype1) && obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long counteither(case_obj_t objtype1, case_obj_t objtype2, long type)
+long counteither(obj_t objtype1, obj_t objtype2, long type)
 {
   long count = 0;
-  case_obj_t obj;
+  obj_t obj;
   long i;
-  for (i = 0; i < CASE_CACHE; i++) {
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, objtype1) || case_obj_hastype(obj, objtype2);
+    count += obj_hastype(obj, objtype1) || obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long countsub(case_obj_t objtype1, case_obj_t objtype2, long type)
+long countsub(obj_t objtype1, obj_t objtype2, long type)
 {
   long count = 0;
-  case_obj_t obj;
+  obj_t obj;
   long i;
-  for (i = 0; i < CASE_CACHE; i++) {
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += case_obj_hastype(obj, objtype1) && !case_obj_hastype(obj, objtype2);
+    count += obj_hastype(obj, objtype1) && !obj_hastype(obj, objtype2);
   }
   return count;
 }
 
-long countxor(case_obj_t objtype1, case_obj_t objtype2, long type)
+long countxor(obj_t objtype1, obj_t objtype2, long type)
 {
   long count = 0;
-  case_obj_t obj;
+  obj_t obj;
   long i;
-  case_bit_t has1;
-  case_bit_t has2;
-  for (i = 0; i < CASE_CACHE; i++) {
+  obj_bit_t has1;
+  obj_bit_t has2;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    has1 = case_obj_hastype(obj, objtype1);
-    has2 = case_obj_hastype(obj, objtype2);
+    has1 = obj_hastype(obj, objtype1);
+    has2 = obj_hastype(obj, objtype2);
     if (has1 ^ has2)
       count++;
   }
   return count;
 }
 
-void csv2valobj(char csvobj[CASE_CSVOBJ], long classindx, val_t valobj[CASE_OBJ], long type)
+void csv2valobj(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, obj_val_t valobj[OBJ], long type)
 {
-  char csvobjcopy[CASE_CSVOBJ];
+  char csvobjcopy[OBJ_CLASS_CSVOBJ];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
+  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSVOBJ - 1);
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
+  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
     text2val(tok, &valobj[valindx], valindx, type);
   }
-  for (valindx = csvindx + 1; valindx < CASE_OBJ; valindx++)
-    val_init(&valobj[valindx], valtype[type][valindx]);
-#if 0 && CASE_VERBOSE && CASE_XVERBOSE
+  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
+    obj_val_init(&valobj[valindx], valtype[type][valindx]);
+#if 0 && OBJ_VERBOSE && OBJ_XVERBOSE
   printf("type%02ld   csv     %s", type, csvobj);
   printf("type%02ld   val     ", type);
-  for (valindx = 0; valindx < CASE_OBJ; valindx++) {
+  for (valindx = 0; valindx < OBJ; valindx++) {
     val_print(&valobj[valindx], valtype[type][valindx]);
     printf(",");
   }
@@ -399,46 +399,46 @@ void init()
   long score;
   if (!once) {
     srandom(time(NULL));
-    for (type = 0; type < CASE_TYPE; type++) {
-      for (i = 0; i < CASE_CACHE; i++)
-        case_obj_randomize(&object[type][i]);
+    for (type = 0; type < OBJ_CLASS_TYPE; type++) {
+      for (i = 0; i < OBJ_CLASS_CACHE; i++)
+        obj_randomize(&object[type][i]);
       for (score = 0; score < SCORE; score++)
-        xdouble_init(&scorepast[type][score]);
-      case_stat_reset(&stat[type]);
+        obj_xdouble_init(&scorepast[type][score]);
+      obj_classstat_reset(&stat[type]);
       favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
-      firstpack[type] = case_bool_true;
+      firstpack[type] = obj_bool_true;
     }
-    once = case_bool_true;
+    once = obj_bool_true;
   }
 }
 
-void insertfirstval(val_t valobj[CASE_OBJ], long type)
+void insertfirstval(obj_val_t valobj[OBJ], long type)
 {
   long attr;
-  for (attr = 0; attr < CASE_OBJ; attr++)
-    val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
+  for (attr = 0; attr < OBJ; attr++)
+    obj_val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
 }
 
-void insertval(val_t valobj[CASE_OBJ], long type)
+void insertval(obj_val_t valobj[OBJ], long type)
 {
   long obj;
   long attr;
   obj = random() % PACKCACHE;
-  for (attr = 0; attr < CASE_OBJ; attr++)
-    val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
+  for (attr = 0; attr < OBJ; attr++)
+    obj_val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
 }
 
-case_bool_t isnum(char *str)
+obj_bool_t isnum(char *str)
 {
   long len;
   long i;
   char c;
-  case_bool_t is = case_bool_true;
+  obj_bool_t is = obj_bool_true;
   len = strlen(str);
   for (i = 0; i < len; i++) {
     c = *(str + i);
     if (!(('+' == c) || ('-' == c) || ('.' == c) || isdigit(c))) {
-      is = case_bool_false;
+      is = obj_bool_false;
       break;
     }
   }
@@ -455,41 +455,41 @@ void learn(long type)
   long jungtime;
   long moiretime;
   long sumtime;
-  coretime = learngeneral(object[type], CASE_CACHE, type, core_learn);
-  filttime = learngeneral(object[type], CASE_CACHE, type, filt_learn);
-  foldtime = learngeneral(object[type], CASE_CACHE, type, fold_learn);
-  genetime = learngeneral(object[type], CASE_CACHE, type, gene_learn);
-  jacktime = learngeneral(object[type], CASE_CACHE, type, jack_learn);
-  jungtime = learngeneral(object[type], CASE_CACHE, type, jung_learn);
-  sumtime = learngeneral(object[type], CASE_CACHE, type, sum_learn);
-  moiretime = learngeneral(object[type], CASE_CACHE, type, moire_learn);
-#if CASE_VERBOSE && CASE_XVERBOSE
+  coretime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_core_learn);
+  filttime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_filt_learn);
+  foldtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_fold_learn);
+  genetime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_gene_learn);
+  jacktime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_jack_learn);
+  jungtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_jung_learn);
+  sumtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_sum_learn);
+  moiretime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_moire_learn);
+#if OBJ_VERBOSE && OBJ_XVERBOSE
   printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld moire=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, moiretime, sumtime);
 #endif
 }
 
-long learngeneral(case_obj_t obj[], long objsz, long type, learn_f learnfunc)
+long learngeneral(obj_t obj[], long objsz, long type, learn_f learnfunc)
 {
-  timer_start(0);
+  obj_timer_start(0);
   learnfunc(obj, objsz, type);
-  return timer_stop();
+  return obj_timer_stop();
 }
 
-case_bit_t packavg(val_t *val, long attr, long type)
+obj_bit_t packavg(obj_val_t *val, long attr, long type)
 {
-  case_bit_t bit;
+  obj_bit_t bit;
   switch (valtype[type][attr]) {
-    case valtype_num:
-      bit = packavgnum(val, attr, type);
-      break;
-    case valtype_str:
-      bit = packavgstr(val, attr, type);
-      break;
+  case obj_valtype_num:
+    bit = packavgnum(val, attr, type);
+    break;
+  case obj_valtype_str:
+    bit = packavgstr(val, attr, type);
+    break;
   }
   return bit;
 }
 
-case_bit_t packavgnum(val_t *val, long attr, long type)
+obj_bit_t packavgnum(obj_val_t *val, long attr, long type)
 {
   double avg;
   double tot = 0.0;
@@ -502,7 +502,7 @@ case_bit_t packavgnum(val_t *val, long attr, long type)
   return val->num > avg;
 }
 
-case_bit_t packavgstr(val_t *val, long attr, long type)
+obj_bit_t packavgstr(obj_val_t *val, long attr, long type)
 {
   long samplesz = PACKCACHE / 8;
   long sampleobj[samplesz];
@@ -521,7 +521,7 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
   for (i = 0; i < PACKCACHE; i++)
     for (j = 0; j < samplesz; j++) {
       k = sampleobj[j];
-      if (0 == strncmp(value[type][i][attr].str, value[type][k][attr].str, CASE_STR - 1)) {
+      if (0 == strncmp(value[type][i][attr].str, value[type][k][attr].str, OBJ_CLASS_STR - 1)) {
         samplecnt[j]++;
         break;
       }
@@ -531,40 +531,40 @@ case_bit_t packavgstr(val_t *val, long attr, long type)
       max = samplecnt[j];
       maxindx = sampleobj[j];
     }
-  return 0 == strncmp(val->str, value[type][maxindx][attr].str, CASE_STR - 1);
+  return 0 == strncmp(val->str, value[type][maxindx][attr].str, OBJ_CLASS_STR - 1);
 }
 
-case_bit_t packfirst(val_t *val, long attr, long type)
+obj_bit_t packfirst(obj_val_t *val, long attr, long type)
 {
-  return 0 == val_compare(val, &firstval[type][attr], valtype[type][attr]);
+  return 0 == obj_val_compare(val, &firstval[type][attr], valtype[type][attr]);
 }
 
-case_obj_t packgeneral(char csvobj[CASE_CSVOBJ], long classindx, long type, pack_f packfunc)
+obj_t packgeneral(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type, pack_f packfunc)
 {
-  case_obj_t obj;
-  val_t valobj[CASE_OBJ];
+  obj_t obj;
+  obj_val_t valobj[OBJ];
   long attr;
-  case_bit_t bit;
+  obj_bit_t bit;
   if (firstpack[type])
     setvaltypes(csvobj, classindx, type);
   csv2valobj(csvobj, classindx, valobj, type);
   if (firstpack[type]) {
     insertfirstval(valobj, type);
-    firstpack[type] = case_bool_false;
+    firstpack[type] = obj_bool_false;
   }
   insertval(valobj, type);
-  for (attr = 0; attr < CASE_OBJ; attr++) {
+  for (attr = 0; attr < OBJ; attr++) {
     bit = packfunc(&valobj[attr], attr, type);
-    case_obj_setattr(&obj, attr, bit);
+    obj_setattr(&obj, attr, bit);
   }
   return obj;
 }
 
-case_bit_t packrand(val_t *val, long attr, long type)
+obj_bit_t packrand(obj_val_t *val, long attr, long type)
 {
   long i;
   i = random() % PACKCACHE;
-  return 0 == val_compare(val, &value[type][i][attr], valtype[type][attr]);
+  return 0 == obj_val_compare(val, &value[type][i][attr], valtype[type][attr]);
 }
 
 long randomscoreindx(long exclude)
@@ -587,36 +587,36 @@ long reorderindx(long attrindx, long classindx)
   return reindx;
 }
 
-void setvaltypes(char csvobj[CASE_CSVOBJ], long classindx, long type)
+void setvaltypes(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type)
 {
-  char csvobjcopy[CASE_CSVOBJ];
+  char csvobjcopy[OBJ_CLASS_CSVOBJ];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, CASE_CSVOBJ - 1);
+  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSVOBJ - 1);
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
-  valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
-  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (CASE_OBJ - 1))) {
+  valtype[type][valindx] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
+  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
     csvindx++;
     valindx = reorderindx(csvindx, classindx);
-    valtype[type][valindx] = isnum(tok) ? valtype_num : valtype_str;
+    valtype[type][valindx] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
   }
-  for (valindx = csvindx + 1; valindx < CASE_OBJ; valindx++)
-    valtype[type][valindx] = valtype_str;
-#if CASE_VERBOSE && CASE_XVERBOSE
+  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
+    valtype[type][valindx] = obj_valtype_str;
+#if OBJ_VERBOSE && OBJ_XVERBOSE
   printf("type%02ld types     ", type);
-  for (valindx = 0; valindx < CASE_OBJ; valindx++)
-    printf("%s,", valtype_name(valtype[type][valindx]));
+  for (valindx = 0; valindx < OBJ; valindx++)
+    printf("%s,", obj_valtype_name(valtype[type][valindx]));
   printf("\n");
 #endif
 }
 
-void text2val(char *text, val_t *val, long valindx, long type)
+void text2val(char *text, obj_val_t *val, long valindx, long type)
 {
-  if (valtype_num == valtype[type][valindx]) {
+  if (obj_valtype_num == valtype[type][valindx]) {
     val->num = strtod(text, 0);
   } else {
-    strncpy(val->str, text, CASE_STR - 1);
+    strncpy(val->str, text, OBJ_CLASS_STR - 1);
   }
 }

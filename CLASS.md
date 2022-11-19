@@ -1,177 +1,53 @@
 # classify
 
-## classify objects in real time
+classify is an area of obj used to classify objects
 
-case is a library of C functions used to classify objects in real time
+first you supply a series of objects each with binary attributes and a binary classification--you know the classes of these objects and you supply them to case when you observe them
 
-First you supply a series of objects each with binary attributes and a binary classification. You know the classes of these objects and you supply them to case when you observe them
+then with new objects (whose classes you do not know) you ask obj to classify the objects--which it does with a 0 or a 1 (a bit to let you know whether obj thinks the object is a member of the target set)
 
-Then with new objects whose classes you do not know, you ask case to classify the objects, which it does with a 0 or a 1 (a bit to let you know whether case thinks the object is a member of the target set)
+## inferring from set to set
 
-## statistical inference properties
+obj also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
 
-case also provides access to some statistical inference properties which you can use to calculate the likelihood, given the stream of objects you have observed, of a given indicator set having a specific relationship with a given target set
+(for example) indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
 
-For example indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
+these 14 properties are a fingerprint of the inference landscape
 
-These 14 properties are a fingerprint of the inference landscape. Their meanings are [explained](#infer-from-set-to-set) later
-
-## real time
-
-case doesn't use much memory or processor time. So it is real time
-
-It is real time in the sense that observation and classification take place interleaved in time
-
-case doesn't guarantee to produce the same result twice. It doesn't store its state when it's not running. There are no functional settings for you to mess with. No threads, disk access, network or database connections (just a small library to attach to your process)
-
-case does not profess to be perfect for any one task. It is not for critical tasks. case is generalized object classification with statistical, genetic, and other methods under the hood
+read more about [inferring from set to set](INFER.md)
 
 ## observe and classify
 
-These two functions are used to observe and classify objects
+these two functions are used to observe and classify objects
 
-    void case_observe(case_obj_t obj, long type);
-    case_bit_t case_classify(case_obj_t obj, long type);
+    void obj_class_observe(obj_t obj, long type);
+    obj_bit_t obj_class_classify(obj_t obj, long type);
 
-Call case_observe() on a case_obj_t when you see it. Pass the type, which is a long you define to be one of 64 types
+call obj_class_observe() on an obj_t when you see it--pass the type (which is a long you define to be one of 64 types)
 
     #define MUSHROOM 0
     #define GAME_MAP 1
     #define IMAGE_GOTHIC 2
     #define IMAGE_PRECAMBRIAN 3
 
-You can observe objects of these 64 types in any order
+you can observe objects of these 64 types in any order
 
-    case_observe(obj1, MUSHROOM);
-    case_observe(obj2, GAME_MAP);
-    case_observe(obj3, IMAGE_GOTHIC);
-    case_observe(obj4, GAME_MAP);
+    obj_class_observe(obj1, MUSHROOM);
+    obj_class_observe(obj2, GAME_MAP);
+    obj_class_observe(obj3, IMAGE_GOTHIC);
+    obj_class_observe(obj4, GAME_MAP);
 
-If you're observing a MUSHROOM-type case_obj_t, you specify that when observing it. But your app can then case_observe() a case_obj_t that's a GAME_MAP type
+if youre observing a MUSHROOM-type obj_t--you specify that when observing it--but your app can then obj_class_observe() an obj_t thats a GAME_MAP type
 
-When the time comes, you can classify new objects of unknown classification using the type parameter
+(when the time comes) you can classify new objects of unknown classification using the type parameter
 
-    c = case_classify(obj1, MUSHROOM);
-    d = case_classify(obj2, GAME_MAP);
+    c = obj_class_classify(obj1, MUSHROOM);
+    d = obj_class_classify(obj2, GAME_MAP);
 
-Call case_observe() and case_classify() as often and in any order you like
+call obj_class_observe() and obj_class_classify() as often and in any order you like
 
-If you want to re-use a type to mean another type, go ahead and do so. If you need to discontinue use of a type, do so
+if you want to re-use a type to mean another type--go ahead and do so--if you need to discontinue use of a type--do so
 
 ## pack csv objects
 
 TODO: write
-
-## infer from set to set
-
-These 14 functions return inference properties of the set of objects case is managing at this time (a subset of the objects you've case_observe()d)
-
-    double case_indifreq(case_obj_t indicator, case_obj_t target, long type);
-
-The following 13 functions use the same parameters as above
-
-    double case_targfreq(..);
-    double case_indiover(..);
-    double case_targover(..);
-    double case_over(..);
-    double case_indimis(..);
-    double case_targmis(..);
-    double case_indiimp(..);
-    double case_targimp(..);
-    double case_indiopac(..);
-    double case_targopac(..);
-    double case_inditrans(..);
-    double case_targtrans(..);
-    double case_trans(..);
-
-Some of the names begin with *indi* or *targ*. Those mean indicator or target. *freq* means frequency, *over* means overlap, *mis* means mismatch, *imp* means impertinence, *opac* means opacity, and *trans* means transparency. So indifreq() returns the indicator frequency. targfreq() returns the target frequency. Etc
-
-Each takes an indicator and a target, as well as the usual type parameter where you specify MUSHROOM, GAME_MAP, etc. The indicator and target are case_obj_t types, but they are interpreted as a type mask which represents a set of objects. A 0 bit in these variables means that attribute field is not used in matching objects to the type. A 1 bit in these variables means an object must also have a 1 in that field in order to match the type
-
-### indicator frequency
-
-    indicator / target
-
-This shows the rate at which the indicator set grows with respect to the growth of the target set. That is, the size or cardinality of the set of objects defined by *indicator* divided by the cardinality of the set defined by *target*
-
-If *indicator* and *target* grow at the same rate, indicator frequency will be 1. If *indicator* grows (or occurs) at twice the rate of *target*, indicator frequency will be 2. If *indicator* occurs at half the rate of *target*, indicator frequency will be 1/2. So this is the frequency with which the indicator occurs with respect to the target. When it is high, there are a lot of indicator objects for every target object. When it is low, there are a lot of target objects for every indicator object. This provides one aspect of the inference fingerprint for this set of objects
-
-### target frequency
-
-    target / indicator
-
-This is the target set as a part of the indicator set. The number of objects defined as members of the *target* set divided by the number of objects defined by *indicator*
-
-When this is below 1, there are many indicator objects per target object
-
-### indicator overlap
-
-    intersection(indicator, target) / indicator
-
-Indicator overlap is the same as conditional probability. indicator overlap is the degree to which *indicator* implies *target*
-
-### target overlap
-
-    intersection(indicator, target) / target
-
-Target overlap is the degree to which the target set is being indicated by, or targeted by, the indicator set. You can use this to construct sets that resist counterinference (by modifying your indicator set to minimize the value of this calculation)
-
-### overlap
-
-    intersection(indicator, target) / union(indicator, target)
-
-When overlap is close to 0, the overlap between indicator and target is small. When overlap is close to 1, the overlap between indicator and target set is large. When close to 0, this means not much inference is possible but the quality of inferences will be high. When close to 1, this means lots of inference is possible but the quality of inferences will be low
-
-### indicator mismatch
-
-    (indicator - target) / (target - indicator)
-
-is the degree to which the indicator set is unsuitable for inferring the target set
-
-### target mismatch
-
-    (target - indicator) / (indicator - target)
-
-is the degree to which the target set is unsuitable for targeting the indicator set
-
-### indicator impertinence
-
-    (indicator - target) / target
-
-the degree to which the indicator set is irrelevant or impertinent to the target set. A high number here means that almost all the indicator set is useless inferring the target set
-
-### target impertinence
-
-    (target - indicator) / indicator
-
-the degree to which the target set is impertinent to the indicator set. A high number here means that almost all the target set is useless targeting the indicator set
-
-### indicator opacity
-
-    (indicator - target) / intersection(indicator, target)
-
-The greater the indicator opacity, the more opaque the indicator set. This means it doesn't reveal capacity for inference. The smaller the indicator opacity, the greater the capacity for inference
-
-### target opacity
-
-    (target - indicator) / intersection(indicator, target)
-
-The greater the target opacity, the more opaque the target set. This means it doesn't reveal capacity for targeting. The smaller the target opacity, the greater the capacity for targeting
-
-### indicator transparency
-
-    intersection(indicator, target) / (indicator - target)
-
-This can be thought of as an extent to which, or a thoroughness with which, the target set invades the indicator set. It can be thought of as a degree to which the target set disects the indicator set
-
-### target transparency
-
-    intersection(indicator, target) / (target - indicator)
-
-This can be thought of as an extent to which, or a thoroughness with which, the indicator set invades the target set. It can be thought of as a degree to which the indicator set disects the target set
-
-### transparency
-
-    intersection(indicator, target) / xor(indicator, target)
-
-Transparency is the ratio between the overlap and the xor of the indicator and target sets. As this approaches 0, the indicator and target sets are less and less related in terms of inference. As this approaches infinity, the indicator set and the target set are more and more related in terms of inference. As it approaches infinity, though, the indicator set and the target set are identical and inference between them is meaningless

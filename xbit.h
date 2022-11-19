@@ -1,19 +1,19 @@
-#ifndef xbit_h
-#define xbit_h
+#ifndef obj_xbit_h
+#define obj_xbit_h
 
 #include "bit.h"
 
-#define XBIT_CNT 8
+#define OBJ_XBIT_CNT 8
 
-struct xbit_t {
-  case_bit_t bit[XBIT_CNT];
+struct obj_xbit_t {
+  obj_bit_t bit[OBJ_XBIT_CNT];
   long notecnt;
   double zeropart;
 };
-typedef struct xbit_t xbit_t;
+typedef struct obj_xbit_t obj_xbit_t;
 
-void xbit_init(xbit_t *xbit);
-void xbit_note(xbit_t *xbit, case_bit_t bit);
-double xbit_zeropart(xbit_t *xbit);
+void obj_xbit_init(obj_xbit_t *xbit);
+void obj_xbit_note(obj_xbit_t *xbit, obj_bit_t bit);
+double obj_xbit_zeropart(obj_xbit_t *xbit);
 
 #endif

@@ -1,39 +1,39 @@
 #include <stdio.h>
 #include "bit.h"
-#include "case.h"
+#include "class.h"
 #include "coin.h"
 #include "filt.h"
 #include "obj.h"
 
-static case_bool_t once = case_bool_false;
-static case_obj_t one[CASE_TYPE];
-static case_obj_t onesv[CASE_TYPE];
-static double fitness[CASE_TYPE];
-static double fitnesssv[CASE_TYPE];
-static case_obj_t zero[CASE_TYPE];
-static case_obj_t zerosv[CASE_TYPE];
+static obj_bool_t once = obj_bool_false;
+static obj_t one[OBJ_CLASS_TYPE];
+static obj_t onesv[OBJ_CLASS_TYPE];
+static double fitness[OBJ_CLASS_TYPE];
+static double fitnesssv[OBJ_CLASS_TYPE];
+static obj_t zero[OBJ_CLASS_TYPE];
+static obj_t zerosv[OBJ_CLASS_TYPE];
 
-static void calcfit(case_obj_t obj[], long objsz, long type);
+static void calcfit(obj_t obj[], long objsz, long type);
 static void init();
-static void mutate(case_obj_t *obj1, case_obj_t *obj2);
+static void mutate(obj_t *obj1, obj_t *obj2);
 static void restore(long type);
 static void save(long type);
-static double score(case_obj_t obj, long type);
+static double score(obj_t obj, long type);
 
-void calcfit(case_obj_t obj[], long objsz, long type)
+void calcfit(obj_t obj[], long objsz, long type)
 {
   long i;
   double s = 0.0;
   for (i = 0; i < objsz; i++)
-    if (coin_toss())
+    if (obj_coin_toss())
       s += score(obj[i], type);
   fitness[type] = s / (objsz / 2);
 }
 
-void filt_learn(case_obj_t obj[], long objsz, long type)
+void obj_filt_learn(obj_t obj[], long objsz, long type)
 {
   long bit;
-  case_obj_t o;
+  obj_t o;
   long time;
   init();
   for (time = 0; time < 4; time++) {
@@ -44,16 +44,16 @@ void filt_learn(case_obj_t obj[], long objsz, long type)
     if (fitnesssv[type] > fitness[type])
       restore(type);
   }
-#if CASE_VERBOSE
+#if OBJ_VERBOSE
   printf("type%02ld filtr ft1 ", type);
-  case_obj_print(one[type]);
+  obj_print(one[type]);
   printf(" %0.3f\ntype%02ld filtr ft0 ", fitness[type], type);
-  case_obj_print(zero[type]);
+  obj_print(zero[type]);
   printf(" %0.3f\n", fitness[type]);
 #endif
 }
 
-double filt_score(case_obj_t obj, long type)
+double obj_filt_score(obj_t obj, long type)
 {
   init();
   return score(obj, type);
@@ -63,33 +63,33 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < CASE_TYPE; type++) {
-      case_obj_clear(&one[type]);
-      case_obj_clear(&zero[type]);
+    for (type = 0; type < OBJ_CLASS_TYPE; type++) {
+      obj_clear(&one[type]);
+      obj_clear(&zero[type]);
     }
-    once = case_bool_true;
+    once = obj_bool_true;
   }
 }
 
-void mutate(case_obj_t *obj1, case_obj_t *obj2)
+void mutate(obj_t *obj1, obj_t *obj2)
 {
-  case_obj_t *o1;
-  case_obj_t *o2;
+  obj_t *o1;
+  obj_t *o2;
   long bit;
-  case_bit_t val;
+  obj_bit_t val;
   long time;
   for (time = 0; time < 4; time++) {
-    bit = random() % CASE_OBJ;
-    case_bit_randomize(&val);
-    if (coin_toss()) {
+    bit = random() % OBJ;
+    obj_bit_randomize(&val);
+    if (obj_coin_toss()) {
       o1 = obj1;
       o2 = obj2;
     } else {
       o1 = obj2;
       o2 = obj1;
     }
-    case_obj_setattr(o1, bit, val);
-    case_obj_setattr(o2, bit, 0);
+    obj_setattr(o1, bit, val);
+    obj_setattr(o2, bit, 0);
   }
 }
 
@@ -107,24 +107,24 @@ void save(long type)
   fitnesssv[type] = fitness[type];
 }
 
-double score(case_obj_t obj, long type)
+double score(obj_t obj, long type)
 {
   long bit;
   long onetot = 0;
   long zerotot = 0;
   long onematch = 0;
   long zeromatch = 0;
-  case_bit_t onebit;
-  case_bit_t zerobit;
-  case_bit_t objbit;
+  obj_bit_t onebit;
+  obj_bit_t zerobit;
+  obj_bit_t objbit;
   long smash;
-  smash = case_obj_smash(obj, CASE_OBJ_CLEAR);
+  smash = obj_smash(obj, OBJ_CLEAR);
   for (bit = 1; bit <= smash; bit++) {
-    onebit = case_obj_getattr(one[type], bit);
-    zerobit = case_obj_getattr(zero[type], bit);
+    onebit = obj_getattr(one[type], bit);
+    zerobit = obj_getattr(zero[type], bit);
     onetot += onebit;
     zerotot += zerobit;
-    objbit = case_obj_getattr(obj, bit);
+    objbit = obj_getattr(obj, bit);
     if (onebit && objbit)
       onematch++;
     if (zerobit && !objbit)

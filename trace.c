@@ -3,17 +3,17 @@
 
 static unsigned char trace[256];
 
-unsigned char trace_calc(unsigned char indx)
+unsigned char obj_trace_calc(unsigned char indx)
 {
   return trace[indx];
 }
 
-unsigned char trace_program(unsigned char indx, unsigned char val)
+unsigned char obj_trace_program(unsigned char indx, unsigned char val)
 {
   trace[indx] = val;
 }
 
-unsigned char trace_randomize()
+unsigned char obj_trace_randomize()
 {
   unsigned char i;
   for (i = 0; i < 256; i++)

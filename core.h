@@ -1,9 +1,9 @@
-#ifndef core_h
-#define core_h
+#ifndef obj_core_h
+#define obj_core_h
 
 #include "obj.h"
 
-void core_learn(case_obj_t obj[], long objsz, long type);
-double core_score(case_obj_t obj, long type);
+void obj_core_learn(obj_t obj[], long objsz, long type);
+double obj_core_score(obj_t obj, long type);
 
 #endif

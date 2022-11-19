@@ -1,9 +1,9 @@
-#ifndef moire_h
-#define moire_h
+#ifndef obj_moire_h
+#define obj_moire_h
 
 #include "obj.h"
 
-void moire_learn(case_obj_t obj[], long objsz, long type);
-double moire_score(case_obj_t obj, long type);
+void obj_moire_learn(obj_t obj[], long objsz, long type);
+double obj_moire_score(obj_t obj, long type);
 
 #endif

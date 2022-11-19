@@ -1,6 +1,6 @@
 #include "indx.h"
 
-unsigned long indx_wrap(long indx, unsigned long range)
+unsigned long obj_indx_wrap(long indx, unsigned long range)
 {
   unsigned long wrap;
   if (indx >= (long) range) {

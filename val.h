@@ -1,18 +1,18 @@
-#ifndef val_h
-#define val_h
+#ifndef obj_val_h
+#define obj_val_h
 
-#include "case.h"
+#include "class.h"
 #include "valtype.h"
 
-union val_t {
+union obj_val_t {
   double num;
-  char str[CASE_STR];
+  char str[OBJ_CLASS_STR];
 };
-typedef union val_t val_t;
+typedef union obj_val_t obj_val_t;
 
-void val_init(val_t *val, valtype_t valtype);
-long val_compare(val_t *val1, val_t *val2, valtype_t valtype);
-void val_copy(val_t *source, val_t *dest, valtype_t valtype);
-void val_print(val_t *val, valtype_t valtype);
+void obj_val_init(obj_val_t *val, obj_valtype_t valtype);
+long obj_val_compare(obj_val_t *val1, obj_val_t *val2, obj_valtype_t valtype);
+void obj_val_copy(obj_val_t *source, obj_val_t *dest, obj_valtype_t valtype);
+void obj_val_print(obj_val_t *val, obj_valtype_t valtype);
 
 #endif
