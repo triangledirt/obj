@@ -1,8 +1,15 @@
 # obj
 
-## *in development*
+## *in development !!*
 
-*obj is in development--it is not ready to use*
+*obj is in development--it is not ready to use !!*
+
+*toc*
+
+classify
+synchronize
+personalize
+model
 
 ## classify--synchronize--model
 
@@ -35,6 +42,12 @@ read more about [classify](CLASS.md)
 coming soon !!
 
 read more about [synchronize](SYNC.md)
+
+## [personalize](PERSON.md)
+
+coming soon !!
+
+read more about [personalize](PERSON.md)
 
 ## [model](MODEL.md)
 
