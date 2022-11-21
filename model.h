@@ -9,7 +9,10 @@ void obj_model_setcalcfitfunc(long type, calcfit_f calcfitfunc);
 
 void obj_model_insert(obj_t obj, long type);
 void obj_model_evolve(long type);
+
 obj_t obj_model_fittest(long type);
+obj_t obj_model_random(long type);
+obj_t obj_model_randomabove(double fitness, long type);
 
 change model params;
 

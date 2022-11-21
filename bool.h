@@ -10,3 +10,4 @@ typedef enum obj_bool_t obj_bool_t;
 void obj_bool_invert(obj_bool_t *bool);
 
 #endif
+
