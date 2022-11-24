@@ -16,7 +16,7 @@
 - [target opacity](#target-opacity)
 - [indicator-transparency](#indicator-transparency)
 - [target transparency](#target-transparency)
-- [transparency](#transparency]
+- [transparency](#transparency)
 
 ## about
 
