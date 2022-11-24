@@ -8,6 +8,8 @@
 #define OBJ_MODEL_TYPE OBJ
 
 typedef double (*calcfit_f)(obj_t);
+// move this to obj.h ??
+
 void obj_model_setcalcfitfunc(long type, calcfit_f calcfitfunc);
 
 void obj_model_insert(obj_t obj, long type);

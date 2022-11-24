@@ -30,6 +30,8 @@ read more about [obj_t](OBJ.md)
 
 ## areas
 
+obj presents interfaces in three areas
+
 ### classify
 
 classify lets you classify binary objects

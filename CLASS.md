@@ -1,12 +1,21 @@
 # classify
 
+## contents
+
+- [about](#about)
+- [infer from set to set](#infer-from-set-to-set)
+- [observe and classify](observe-and-classify)
+- [pack csv objects](#pack-csv-objects)
+
+## about
+
 classify is an area of obj used to classify objects
 
 first you supply a series of objects each with binary attributes and a binary classification--you know the classes of these objects and you supply them to case when you observe them
 
 then with new objects (whose classes you do not know) you ask obj to classify the objects--which it does with a 0 or a 1 (a bit to let you know whether obj thinks the object is a member of the target set)
 
-## inferring from set to set
+## infer from set to set
 
 obj also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
 
