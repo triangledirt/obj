@@ -3,9 +3,10 @@
 ## contents
 
 - [about](#about)
-- [infer from set to set](#infer-from-set-to-set)
+- [use](#use)
 - [observe and classify](#observe-and-classify)
 - [pack csv objects](#pack-csv-objects)
+- [infer from set to set](#infer-from-set-to-set)
 
 ## about
 
@@ -15,15 +16,11 @@ first you supply a series of objects each with binary attributes and a binary cl
 
 then with new objects (whose classes you do not know) you ask obj to classify the objects--which it does with a 0 or a 1 (a bit to let you know whether obj thinks the object is a member of the target set)
 
-## infer from set to set
+## use
 
-obj also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
+to use classify—include this file
 
-(for example) indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
-
-these 14 properties are a fingerprint of the inference landscape
-
-read more about how to [infer from set to set](INFER.md)
+..
 
 ## observe and classify
 
@@ -60,3 +57,13 @@ if you want to re-use a type to mean another type--go ahead and do so--if you ne
 ## pack csv objects
 
 TODO: write
+
+## infer from set to set
+
+obj also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
+
+(for example) indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
+
+these 14 properties are a fingerprint of the inference landscape
+
+read more about how to [infer from set to set](INFER.md)
