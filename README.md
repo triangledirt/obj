@@ -6,18 +6,16 @@
 
 # contents
 
-about
-obj_t
-classify
-synchronize
-[model](#model)
-build and use
+- [about](#about)
+- [obj_t](#obj_t)
+- [classify](#classify)
+- [synchronize](#synchronize)
+- [model](#model)
+- [build and use](#build-and-use)
 
-## classify--synchronize--model
+## about
 
-obj is pronounced *object*
-
-it is a library of c functions used to (classify--synchronize--model) generalized binary data objects
+obj is a library of c functions used to (classify--synchronize--model) generalized binary data objects
 
 its a local slim real-time system using no disk i/o--no network connections--no threading--no dynamic memory--the only dependency is the c standard library
 
