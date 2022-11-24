@@ -23,7 +23,7 @@ long comparestr(char val1[OBJ_CLASS_STR], char val2[OBJ_CLASS_STR])
   return strncmp(val1, val2, OBJ_CLASS_STR - 1);
 }
 
-long obj_val_compare(obj_val_t *val1, obj_val_t *val2, obj_valtype_t valtype)
+long obj_val_compare(union obj_val_t *val1, union obj_val_t *val2, enum obj_valtype_t valtype)
 {
   long compare;
   switch (valtype) {
@@ -37,7 +37,7 @@ long obj_val_compare(obj_val_t *val1, obj_val_t *val2, obj_valtype_t valtype)
   return compare;
 }
 
-void obj_val_copy(obj_val_t *source, obj_val_t *dest, obj_valtype_t valtype)
+void obj_val_copy(union obj_val_t *source, union obj_val_t *dest, enum obj_valtype_t valtype)
 {
   switch (valtype) {
   case obj_valtype_num:
@@ -49,7 +49,7 @@ void obj_val_copy(obj_val_t *source, obj_val_t *dest, obj_valtype_t valtype)
   }
 }
 
-void obj_val_init(obj_val_t *val, obj_valtype_t valtype)
+void obj_val_init(union obj_val_t *val, enum obj_valtype_t valtype)
 {
   switch (valtype) {
   case obj_valtype_num:
@@ -61,7 +61,7 @@ void obj_val_init(obj_val_t *val, obj_valtype_t valtype)
   }
 }
 
-void obj_val_print(obj_val_t *val, obj_valtype_t valtype)
+void obj_val_print(union obj_val_t *val, enum obj_valtype_t valtype)
 {
   switch (valtype) {
   case obj_valtype_num:

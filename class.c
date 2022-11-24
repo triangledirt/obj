@@ -28,9 +28,9 @@ static obj_bool_t once = obj_bool_false;
 static struct obj_classstat_t stat[OBJ_CLASS_TYPE];
 static struct obj_xdouble_t scorepast[OBJ_CLASS_TYPE][SCORE];
 
-static obj_val_t value[OBJ_CLASS_TYPE][PACKCACHE][OBJ];
-static obj_val_t firstval[OBJ_CLASS_TYPE][OBJ];
-static obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
+static union obj_val_t value[OBJ_CLASS_TYPE][PACKCACHE][OBJ];
+static union obj_val_t firstval[OBJ_CLASS_TYPE][OBJ];
+static enum obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_CLASS_TYPE];
 
 typedef double (*score_f)(obj_t, long);
@@ -49,18 +49,18 @@ static long counteither(obj_t objtype1, obj_t objtype2, long type);
 static long countsub(obj_t objtype1, obj_t objtype2, long type);
 static long countxor(obj_t objtype1, obj_t objtype2, long type);
 
-typedef obj_bit_t (*pack_f)(obj_val_t *, long, long);
+typedef obj_bit_t (*pack_f)(union obj_val_t *, long, long);
 static obj_t packgeneral(char csvobj[OBJ_CLASS_CSV], long classindx, long type, pack_f packfunc);
-static obj_bit_t packavg(obj_val_t *val, long attr, long type);
-static obj_bit_t packavgnum(obj_val_t *val, long attr, long type);
-static obj_bit_t packavgstr(obj_val_t *val, long attr, long type);
-static obj_bit_t packfirst(obj_val_t *val, long attr, long type);
-static obj_bit_t packrand(obj_val_t *val, long attr, long type);
+static obj_bit_t packavg(union obj_val_t *val, long attr, long type);
+static obj_bit_t packavgnum(union obj_val_t *val, long attr, long type);
+static obj_bit_t packavgstr(union obj_val_t *val, long attr, long type);
+static obj_bit_t packfirst(union obj_val_t *val, long attr, long type);
+static obj_bit_t packrand(union obj_val_t *val, long attr, long type);
 static void setvaltypes(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
-static void insertfirstval(obj_val_t valobj[OBJ], long type);
-static void insertval(obj_val_t valobj[OBJ], long type);
-static void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, obj_val_t valobj[OBJ], long type);
-static void text2val(char *text, obj_val_t *val, long valindx, long type);
+static void insertfirstval(union obj_val_t valobj[OBJ], long type);
+static void insertval(union obj_val_t valobj[OBJ], long type);
+static void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type);
+static void text2val(char *text, union obj_val_t *val, long valindx, long type);
 static obj_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
 
@@ -364,7 +364,7 @@ long countxor(obj_t objtype1, obj_t objtype2, long type)
   return count;
 }
 
-void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, obj_val_t valobj[OBJ], long type)
+void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
 {
   char csvobjcopy[OBJ_CLASS_CSV];
   char *tok;
@@ -412,14 +412,14 @@ void init()
   }
 }
 
-void insertfirstval(obj_val_t valobj[OBJ], long type)
+void insertfirstval(union obj_val_t valobj[OBJ], long type)
 {
   long attr;
   for (attr = 0; attr < OBJ; attr++)
     obj_val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
 }
 
-void insertval(obj_val_t valobj[OBJ], long type)
+void insertval(union obj_val_t valobj[OBJ], long type)
 {
   long obj;
   long attr;
@@ -475,7 +475,7 @@ long learngeneral(obj_t obj[], long objsz, long type, learn_f learnfunc)
   return obj_timer_stop();
 }
 
-obj_bit_t packavg(obj_val_t *val, long attr, long type)
+obj_bit_t packavg(union obj_val_t *val, long attr, long type)
 {
   obj_bit_t bit;
   switch (valtype[type][attr]) {
@@ -489,7 +489,7 @@ obj_bit_t packavg(obj_val_t *val, long attr, long type)
   return bit;
 }
 
-obj_bit_t packavgnum(obj_val_t *val, long attr, long type)
+obj_bit_t packavgnum(union obj_val_t *val, long attr, long type)
 {
   double avg;
   double tot = 0.0;
@@ -502,7 +502,7 @@ obj_bit_t packavgnum(obj_val_t *val, long attr, long type)
   return val->num > avg;
 }
 
-obj_bit_t packavgstr(obj_val_t *val, long attr, long type)
+obj_bit_t packavgstr(union obj_val_t *val, long attr, long type)
 {
   long samplesz = PACKCACHE / 8;
   long sampleobj[samplesz];
@@ -534,7 +534,7 @@ obj_bit_t packavgstr(obj_val_t *val, long attr, long type)
   return 0 == strncmp(val->str, value[type][maxindx][attr].str, OBJ_CLASS_STR - 1);
 }
 
-obj_bit_t packfirst(obj_val_t *val, long attr, long type)
+obj_bit_t packfirst(union obj_val_t *val, long attr, long type)
 {
   return 0 == obj_val_compare(val, &firstval[type][attr], valtype[type][attr]);
 }
@@ -542,7 +542,7 @@ obj_bit_t packfirst(obj_val_t *val, long attr, long type)
 obj_t packgeneral(char csvobj[OBJ_CLASS_CSV], long classindx, long type, pack_f packfunc)
 {
   obj_t obj;
-  obj_val_t valobj[OBJ];
+  union obj_val_t valobj[OBJ];
   long attr;
   obj_bit_t bit;
   if (firstpack[type])
@@ -560,7 +560,7 @@ obj_t packgeneral(char csvobj[OBJ_CLASS_CSV], long classindx, long type, pack_f 
   return obj;
 }
 
-obj_bit_t packrand(obj_val_t *val, long attr, long type)
+obj_bit_t packrand(union obj_val_t *val, long attr, long type)
 {
   long i;
   i = random() % PACKCACHE;
@@ -612,7 +612,7 @@ void setvaltypes(char csvobj[OBJ_CLASS_CSV], long classindx, long type)
 #endif
 }
 
-void text2val(char *text, obj_val_t *val, long valindx, long type)
+void text2val(char *text, union obj_val_t *val, long valindx, long type)
 {
   if (obj_valtype_num == valtype[type][valindx]) {
     val->num = strtod(text, 0);

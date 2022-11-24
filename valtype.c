@@ -3,7 +3,7 @@
 static char *numname = "num";
 static char *strname = "str";
 
-char *obj_valtype_name(obj_valtype_t valtype)
+char *obj_valtype_name(enum obj_valtype_t valtype)
 {
   char *str;
   switch (valtype) {
