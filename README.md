@@ -1,14 +1,17 @@
 # obj
 
-## *in development !!*
+## *in development*
 
-*obj is in development--it is not ready to use !!*
+*obj is in development--it is not ready to use*
 
 # contents
 
+about
+obj_t
 classify
 synchronize
-model
+[model](#model)
+build and use
 
 ## classify--synchronize--model
 
