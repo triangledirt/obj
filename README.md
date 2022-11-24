@@ -19,7 +19,7 @@ obj is a library of c functions used to (classify--synchronize--model) generaliz
 
 its a local slim real-time system using no disk i/o--no network connections--no threading--no dynamic memory--the only dependency is the c standard library
 
-## [obj_t](OBJ.md)
+## obj_t
 
 obj defines obj_t as a binary object--an object with binary attributes
 
@@ -27,7 +27,7 @@ then it lets you do things with binary objects--right now it lets you classify t
 
 read more about [obj_t](OBJ.md)
 
-## [classify](CLASS.md)
+## classify
 
 classify lets you classify binary objects
 
@@ -37,19 +37,19 @@ then (with new objects whose classes you do not know) you ask classify to classi
 
 read more about [classify](CLASS.md)
 
-## [synchronize](SYNC.md)
+## synchronize
 
 coming soon !!
 
 read more about [synchronize](SYNC.md)
 
-## [model](MODEL.md)
+## model
 
 coming soon !!
 
 read more about [model](MODEL.md)
 
-## [build and use](BUILD.md)
+## build and use
 
 how to build and use obj in your project
 
