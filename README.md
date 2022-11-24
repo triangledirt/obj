@@ -4,7 +4,7 @@
 
 *obj is in development--it is not ready to use*
 
-# contents
+## contents
 
 - [about](#about)
 - [obj_t](#obj_t)
