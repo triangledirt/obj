@@ -3,7 +3,6 @@
 ## contents
 
 - [about](#about)
-- [use](#use)
 - [observe and classify](#observe-and-classify)
 - [pack csv objects](#pack-csv-objects)
 - [infer from set to set](#infer-from-set-to-set)
@@ -15,12 +14,6 @@ classify is an area of obj used to classify objects
 first you supply a series of objects each with binary attributes and a binary classification--you know the classes of these objects and you supply them to case when you observe them
 
 then with new objects (whose classes you do not know) you ask obj to classify the objects--which it does with a 0 or a 1 (a bit to let you know whether obj thinks the object is a member of the target set)
-
-## use
-
-to use classify—include this file
-
-..
 
 ## observe and classify
 
