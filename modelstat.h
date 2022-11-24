@@ -3,6 +3,5 @@
 
 struct obj_modelstat_t {
 };
-typedef struct obj_modelstat_t obj_modelstat_t;
 
 #endif

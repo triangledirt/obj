@@ -25,8 +25,8 @@
 
 static obj_t object[OBJ_CLASS_TYPE][OBJ_CLASS_CACHE];
 static obj_bool_t once = obj_bool_false;
-static obj_classstat_t stat[OBJ_CLASS_TYPE];
-static obj_xdouble_t scorepast[OBJ_CLASS_TYPE][SCORE];
+static struct obj_classstat_t stat[OBJ_CLASS_TYPE];
+static struct obj_xdouble_t scorepast[OBJ_CLASS_TYPE][SCORE];
 
 static obj_val_t value[OBJ_CLASS_TYPE][PACKCACHE][OBJ];
 static obj_val_t firstval[OBJ_CLASS_TYPE][OBJ];
@@ -224,7 +224,7 @@ void obj_class_resetstat(long type)
   obj_classstat_reset(&stat[type]);
 }
 
-obj_classstat_t *obj_class_stat(long type)
+struct obj_classstat_t *obj_class_stat(long type)
 {
   return &stat[type];
 }

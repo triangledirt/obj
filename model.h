@@ -20,6 +20,6 @@ obj_t obj_model_randomabove(double fitness, long type);
 /*  change model params  */
 
 void obj_model_resetstat(long type);
-obj_modelstat_t *obj_model_stat(long type);
+struct obj_modelstat_t *obj_model_stat(long type);
 
 #endif

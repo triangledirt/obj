@@ -6,7 +6,7 @@
 #include "obj.h"
 #include "xbit.h"
 
-static obj_xbit_t past[OBJ_CLASS_TYPE];
+static struct obj_xbit_t past[OBJ_CLASS_TYPE];
 static obj_bool_t once = obj_bool_false;
 
 static void init();

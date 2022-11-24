@@ -10,10 +10,9 @@ struct obj_xbit_t {
   long notecnt;
   double zeropart;
 };
-typedef struct obj_xbit_t obj_xbit_t;
 
-void obj_xbit_init(obj_xbit_t *xbit);
-void obj_xbit_note(obj_xbit_t *xbit, obj_bit_t bit);
-double obj_xbit_zeropart(obj_xbit_t *xbit);
+void obj_xbit_init(struct obj_xbit_t *xbit);
+void obj_xbit_note(struct obj_xbit_t *xbit, obj_bit_t bit);
+double obj_xbit_zeropart(struct obj_xbit_t *xbit);
 
 #endif

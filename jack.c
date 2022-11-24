@@ -9,7 +9,7 @@
 
 static obj_bool_t once = obj_bool_false;
 static double fitness[OBJ];
-static obj_node_t node[OBJ][OBJ - 1][OBJ - 1];
+static struct obj_node_t node[OBJ][OBJ - 1][OBJ - 1];
 
 static void init();
 static double score(obj_t obj, long type);
@@ -24,7 +24,7 @@ void init()
       for (i = 0; i < (OBJ - 1); i++)
         for (j = 0; j < ((OBJ - 1) - i); j++)
           obj_node_init(&node[type][i][j]);
-    once = obj_bool_true;
+          once = obj_bool_true;
   }
 }
 

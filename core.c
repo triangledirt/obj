@@ -21,17 +21,17 @@ static obj_t fittest[OBJ_CLASS_TYPE];
 static obj_t ideal[OBJ_CLASS_TYPE];
 static obj_bool_t once = obj_bool_false;
 
-static void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type);
+static void calcfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type);
 static void forcecalc(pop_t pop, obj_t obj[], long objsz, long type);
-static void dance(pop_t pop_t, obj_coord_t *dest, obj_coord_t *src1, obj_coord_t *src2, long type);
-static void findbest(pop_t pop, obj_coord_t *actor, obj_coord_t *best, obj_t obj[], long objsz, long type);
-static void findworst(pop_t pop, obj_coord_t *actor, obj_coord_t *worst, obj_t obj[], long objsz, long type);
-static double getfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type);
+static void dance(pop_t pop_t, struct obj_coord_t *dest, struct obj_coord_t *src1, struct obj_coord_t *src2, long type);
+static void findbest(pop_t pop, struct obj_coord_t *actor, struct obj_coord_t *best, obj_t obj[], long objsz, long type);
+static void findworst(pop_t pop, struct obj_coord_t *actor, struct obj_coord_t *worst, obj_t obj[], long objsz, long type);
+static double getfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type);
 static void init();
-static void randcoord(obj_coord_t *c);
+static void randcoord(struct obj_coord_t *c);
 static void reset(pop_t pop, long type);
 
-void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
+void calcfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type)
 {
   double fit;
   double tot = 0;
@@ -52,9 +52,9 @@ void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
 void obj_core_learn(obj_t obj[], long objsz, long type)
 {
   long time;
-  obj_coord_t actor;
-  obj_coord_t best;
-  obj_coord_t worst;
+  struct obj_coord_t actor;
+  struct obj_coord_t best;
+  struct obj_coord_t worst;
   pop_t pop;
   init();
   reset(pop, type);
@@ -83,7 +83,7 @@ double obj_core_score(obj_t obj, long type)
   return obj_compare(obj, ideal[type]);
 }
 
-void dance(pop_t pop, obj_coord_t *dest, obj_coord_t *src1, obj_coord_t *src2, long type)
+void dance(pop_t pop, struct obj_coord_t *dest, struct obj_coord_t *src1, struct obj_coord_t *src2, long type)
 {
   obj_t parent1;
   obj_t parent2;
@@ -104,10 +104,10 @@ void dance(pop_t pop, obj_coord_t *dest, obj_coord_t *src1, obj_coord_t *src2, l
   fits[type][dest->x][dest->y][dest->z] = -1;
 }
 
-void findbest(pop_t pop, obj_coord_t *actor, obj_coord_t *best, obj_t obj[], long objsz, long type)
+void findbest(pop_t pop, struct obj_coord_t *actor, struct obj_coord_t *best, obj_t obj[], long objsz, long type)
 {
-  obj_coord_t t;
-  obj_coord_t c;
+  struct obj_coord_t t;
+  struct obj_coord_t c;
   double fit = 0.0;
   double f;
   obj_bool_t found = obj_bool_false;
@@ -134,10 +134,10 @@ void findbest(pop_t pop, obj_coord_t *actor, obj_coord_t *best, obj_t obj[], lon
   }
 }
 
-void findworst(pop_t pop, obj_coord_t *actor, obj_coord_t *worst, obj_t obj[], long objsz, long type)
+void findworst(pop_t pop, struct obj_coord_t *actor, struct obj_coord_t *worst, obj_t obj[], long objsz, long type)
 {
-  obj_coord_t t;
-  obj_coord_t c;
+  struct obj_coord_t t;
+  struct obj_coord_t c;
   double fit = 1.0;
   double f;
   obj_bool_t found = obj_bool_false;
@@ -164,7 +164,7 @@ void findworst(pop_t pop, obj_coord_t *actor, obj_coord_t *worst, obj_t obj[], l
 
 void forcecalc(pop_t pop, obj_t obj[], long objsz, long type)
 {
-  obj_coord_t c;
+  struct obj_coord_t c;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       for (c.z = 0; c.z < DIM; c.z++)
@@ -172,7 +172,7 @@ void forcecalc(pop_t pop, obj_t obj[], long objsz, long type)
           calcfit(pop, &c, obj, objsz, type);
 }
 
-double getfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
+double getfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type)
 {
   if (fits[type][c->x][c->y][c->z] < 0)
     calcfit(pop, c, obj, objsz, type);
@@ -189,7 +189,7 @@ void init()
   }
 }
 
-void randcoord(obj_coord_t *c)
+void randcoord(struct obj_coord_t *c)
 {
   c->x = random() % DIM;
   c->y = random() % DIM;

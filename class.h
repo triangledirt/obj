@@ -21,7 +21,7 @@ obj_t obj_class_packrand(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
 obj_t obj_class_packfirst(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
 
 void obj_class_resetstat(long type);
-obj_classstat_t *obj_class_stat(long type);
+struct obj_classstat_t *obj_class_stat(long type);
 
 double obj_class_indifreq(obj_t indicator, obj_t target, long type);
 double obj_class_targfreq(obj_t indicator, obj_t target, long type);

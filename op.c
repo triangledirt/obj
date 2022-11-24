@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "op.h"
 
 static obj_bit_t value[16][2][2] = {

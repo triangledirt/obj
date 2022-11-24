@@ -18,16 +18,16 @@ static obj_t fittest[OBJ_CLASS_TYPE];
 static obj_t ideal[OBJ_CLASS_TYPE];
 static obj_bool_t once = obj_bool_false;
 
-static void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type);
+static void calcfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type);
 static void forcecalc(pop_t pop, obj_t obj[], long objsz, long type);
-static double getfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type);
+static double getfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type);
 static void init();
-static void meet(pop_t pop, obj_coord_t *a, obj_coord_t *b);
-static void move(pop_t pop, obj_coord_t *a, obj_coord_t *b);
-static void randcoord(obj_coord_t *c);
+static void meet(pop_t pop, struct obj_coord_t *a, struct obj_coord_t *b);
+static void move(pop_t pop, struct obj_coord_t *a, struct obj_coord_t *b);
+static void randcoord(struct obj_coord_t *c);
 static void reset(pop_t pop, long type);
 
-void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
+void calcfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type)
 {
   double fit;
   double tot = 0;
@@ -47,14 +47,14 @@ void calcfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
 
 void forcecalc(pop_t pop, obj_t obj[], long objsz, long type)
 {
-  obj_coord_t c;
+  struct obj_coord_t c;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++)
       if (fits[type][c.x][c.y] < 0)
         calcfit(pop, &c, obj, objsz, type);
 }
 
-double getfit(pop_t pop, obj_coord_t *c, obj_t obj[], long objsz, long type)
+double getfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type)
 {
   if (fits[c->x][c->y] < 0)
     calcfit(pop, c, obj, objsz, type);
@@ -74,9 +74,9 @@ void init()
 void obj_jung_learn(obj_t obj[], long objsz, long type)
 {
   long iter;
-  obj_coord_t a;
-  obj_coord_t b;
-  obj_coord_t i;
+  struct obj_coord_t a;
+  struct obj_coord_t b;
+  struct obj_coord_t i;
   double fita;
   double fitb;
   pop_t pop;
@@ -113,7 +113,7 @@ double obj_jung_score(obj_t obj, long type)
   return obj_compare(obj, ideal[type]);
 }
 
-void meet(pop_t pop, obj_coord_t *a, obj_coord_t *b)
+void meet(pop_t pop, struct obj_coord_t *a, struct obj_coord_t *b)
 {
   long bit;
   obj_bit_t val;
@@ -128,7 +128,7 @@ void meet(pop_t pop, obj_coord_t *a, obj_coord_t *b)
   }
 }
 
-void move(pop_t pop, obj_coord_t *a, obj_coord_t *b)
+void move(pop_t pop, struct obj_coord_t *a, struct obj_coord_t *b)
 {
   obj_t tmp;
   tmp = pop[b->x][b->y];
@@ -136,7 +136,7 @@ void move(pop_t pop, obj_coord_t *a, obj_coord_t *b)
   pop[a->x][a->y] = tmp;
 }
 
-void randcoord(obj_coord_t *c)
+void randcoord(struct obj_coord_t *c)
 {
   c->x = random() % DIM;
   c->y = random() % DIM;
@@ -144,7 +144,7 @@ void randcoord(obj_coord_t *c)
 
 void reset(pop_t pop, long type)
 {
-  obj_coord_t c;
+  struct obj_coord_t c;
   for (c.x = 0; c.x < DIM; c.x++)
     for (c.y = 0; c.y < DIM; c.y++) {
       pop[c.x][c.y] = ideal[type];

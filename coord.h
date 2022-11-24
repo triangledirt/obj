@@ -6,8 +6,7 @@ struct obj_coord_t {
   long y;
   long z;
 };
-typedef struct obj_coord_t obj_coord_t;
 
-void obj_coord_print(obj_coord_t *coord);
+void obj_coord_print(struct obj_coord_t *coord);
 
 #endif

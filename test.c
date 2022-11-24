@@ -15,10 +15,10 @@
 
 static void summarize(long type);
 static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
-static void testcsvobj(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type, obj_class_pack_f packfunc);
+static void testcsvobj(char csvobj[OBJ_CLASS_CSV], long classindx, long type, obj_class_pack_f packfunc);
 static void testrand(long type);
 
-void testcsvobj(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type, obj_class_pack_f packfunc)
+void testcsvobj(char csvobj[OBJ_CLASS_CSV], long classindx, long type, obj_class_pack_f packfunc)
 {
   obj_t obj;
   char c;
@@ -40,10 +40,10 @@ void testcsvobj(char csvobj[OBJ_CLASS_CSVOBJ], long classindx, long type, obj_cl
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
-  obj_classstat_t *stat;
-  char csvobj[OBJ_CLASS_CSVOBJ];
+  struct obj_classstat_t *stat;
+  char csvobj[OBJ_CLASS_CSV];
   file = fopen(filename, "r");
-  while (fgets(csvobj, OBJ_CLASS_CSVOBJ, file))
+  while (fgets(csvobj, OBJ_CLASS_CSV, file))
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
 #if OBJ_VERBOSE

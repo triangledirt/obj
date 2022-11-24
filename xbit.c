@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "xbit.h"
 
-static void calc(obj_xbit_t *xbit);
+static void calc(struct obj_xbit_t *xbit);
 
-void calc(obj_xbit_t *xbit)
+void calc(struct obj_xbit_t *xbit)
 {
   long onecnt = 0;
   long i;
@@ -13,7 +13,7 @@ void calc(obj_xbit_t *xbit)
   xbit->zeropart = (double) (OBJ_XBIT_CNT - onecnt) / OBJ_XBIT_CNT;
 }
 
-void obj_xbit_init(obj_xbit_t *xbit)
+void obj_xbit_init(struct obj_xbit_t *xbit)
 {
   long i;
   for (i = 0; i < OBJ_XBIT_CNT; i++)
@@ -22,13 +22,13 @@ void obj_xbit_init(obj_xbit_t *xbit)
   xbit->zeropart = 0.0;
 }
 
-void obj_xbit_note(obj_xbit_t *xbit, obj_bit_t bit)
+void obj_xbit_note(struct obj_xbit_t *xbit, obj_bit_t bit)
 {
   xbit->bit[random() % OBJ_XBIT_CNT] = bit;
   xbit->notecnt++;
 }
 
-double obj_xbit_zeropart(obj_xbit_t *xbit)
+double obj_xbit_zeropart(struct obj_xbit_t *xbit)
 {
   if (xbit->notecnt >= (OBJ_XBIT_CNT / 4)) {
     calc(xbit);

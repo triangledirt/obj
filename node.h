@@ -10,8 +10,7 @@ struct obj_node_t {
   long active1;
   long active2;
 };
-typedef struct obj_node_t obj_node_t;
 
-void obj_node_init(obj_node_t *node);
+void obj_node_init(struct obj_node_t *node);
 
 #endif
