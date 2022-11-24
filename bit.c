@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "bit.h"
 
 char obj_bit_char(obj_bit_t bit)

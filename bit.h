@@ -1,8 +1,6 @@
 #ifndef obj_bit_h
 #define obj_bit_h
 
-#include <stdlib.h>
-
 typedef char obj_bit_t;
 
 obj_bit_t obj_bit_random();

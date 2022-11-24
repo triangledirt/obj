@@ -2,4 +2,4 @@
 
 #define TICKS OBJ_MODEL_DIM
 
-void tick(..);
+void tick();
