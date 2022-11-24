@@ -23,7 +23,7 @@ obj also provides access to some statistical inference properties which you can 
 
 these 14 properties are a fingerprint of the inference landscape
 
-read more about [inferring from set to set](INFER.md)
+read more about how to [infer from set to set](INFER.md)
 
 ## observe and classify
 

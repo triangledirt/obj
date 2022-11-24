@@ -1,5 +1,25 @@
 # infer from set to set
 
+## contents
+
+- [about](#about)
+- [indicator frequency](#indicator-frequency)
+- [target frequency](#target-frequency)
+- [indicator overlap](#indicator-overlap)
+- [target overlap](#target-overlap)
+- [overlap](#overlap)
+- [indicator mismatch](#indicator-mismatch)
+- [target mismatch](#target-mismatch)
+- [indicator impertinence](#indicator-impertinence)
+- [target impertinence](#target-impertinence)
+- [indicator opacity](#indicator-opacity)
+- [target opacity](#target-opacity)
+- [indicator-transparency](#indicator-transparency)
+- [target transparency](#target-transparency)
+- [transparency](#transparency]
+
+## about
+
 these 14 functions return inference properties of the set of objects obj is managing at this time (a subset of the objects you've obj_class_observe()d)
 
     double obj_class_indifreq(obj_t indicator, obj_t target, long type);
