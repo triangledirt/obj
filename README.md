@@ -8,9 +8,10 @@
 
 - [about](#about)
 - [obj_t](#obj_t)
-- [classify](#classify)
-- [synchronize](#synchronize)
-- [model](#model)
+- areas
+  - [classify](#classify)
+  - [synchronize](#synchronize)
+  - [model](#model)
 - [build and use](#build-and-use)
 
 ## about
@@ -27,7 +28,9 @@ then it lets you do things with binary objects--right now it lets you classify t
 
 read more about [obj_t](OBJ.md)
 
-## classify
+## areas
+
+### classify
 
 classify lets you classify binary objects
 
@@ -37,13 +40,13 @@ then (with new objects whose classes you do not know) you ask classify to classi
 
 read more about [classify](CLASS.md)
 
-## synchronize
+### synchronize
 
 coming soon !!
 
 read more about [synchronize](SYNC.md)
 
-## model
+### model
 
 coming soon !!
 
