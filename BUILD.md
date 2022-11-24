@@ -1,5 +1,13 @@
 # build and use
 
+## contents
+
+- [get the source](#get-the-source)
+- [edit code settings](#edit-code-settings)
+- [edit build settings](#edit-build-settings)
+- [build](#build)
+- [use](#use)
+
 ## get the source
 
 the obj project has no release tags--the latest code is the latest release
