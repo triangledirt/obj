@@ -4,7 +4,7 @@
 
 - [about](#about)
 - [infer from set to set](#infer-from-set-to-set)
-- [observe and classify](observe-and-classify)
+- [observe and classify](#observe-and-classify)
 - [pack csv objects](#pack-csv-objects)
 
 ## about
