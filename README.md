@@ -30,7 +30,7 @@ read more about [obj_t](OBJ.md)
 
 ## areas
 
-obj presents interfaces in three areas
+obj presents interfaces in three areas (classify synchronize and model)
 
 ### classify
 
