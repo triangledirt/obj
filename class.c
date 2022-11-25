@@ -34,9 +34,7 @@ static enum obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_CLASS_TYPE];
 
 typedef double (*score_f)(obj_t, long);
-/*  static score_f scorefunc[SCORE] = {obj_core_score, obj_filt_score, obj_fold_score, obj_gene_score, obj_jack_score, obj_jung_score, obj_moire_score, obj_sum_score};  */
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
-/*  static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};  */
 static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
 static long favscoreindx[OBJ_CLASS_TYPE];
 static long scorefuncoverride = -1;
@@ -449,24 +447,16 @@ obj_bool_t isnum(char *str)
 
 void learn(long type)
 {
-  long coretime;
   long filttime;
   long foldtime;
   long genetime;
-  long jacktime;
-  long jungtime;
-  long moiretime;
   long sumtime;
-  coretime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_core_learn);
   filttime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_filt_learn);
   foldtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_fold_learn);
   genetime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_gene_learn);
-  jacktime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_jack_learn);
-  jungtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_jung_learn);
   sumtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_sum_learn);
-  moiretime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_moire_learn);
 #if OBJ_VERBOSE && OBJ_XVERBOSE
-  printf("type%02ld times     core=%ld filt=%ld fold=%ld gene=%ld jack=%ld jung=%ld moire=%ld sum=%ld\n", type, coretime, filttime, foldtime, genetime, jacktime, jungtime, moiretime, sumtime);
+  printf("type%02ld times     filt=%ld fold=%ld gene=%ld sum=%ld\n", type, filttime, foldtime, genetime, sumtime);
 #endif
 }
 
