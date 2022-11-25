@@ -107,6 +107,11 @@ double obj_comparexor(obj_t obj1, obj_t obj2)
   return (double) correct / (1 + smash);
 }
 
+double obj_defaultfit(obj_t obj, long type, void *context)
+{
+  return 0.0;
+}
+
 void obj_fill(obj_t *obj)
 {
   long bit;

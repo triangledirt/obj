@@ -11,6 +11,10 @@ static void tick();
 
 void init()
 {
+  long type;
+  for (type = 0; type < OBJ_TYPE; type++) {
+    fitfuncs[type] = obj_defaultfit;
+  }
 }
 
 void obj_model_evolve(long type)
