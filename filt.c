@@ -6,12 +6,12 @@
 #include "obj.h"
 
 static obj_bool_t once = obj_bool_false;
-static obj_t one[OBJ_CLASS_TYPE];
-static obj_t onesv[OBJ_CLASS_TYPE];
-static double fitness[OBJ_CLASS_TYPE];
-static double fitnesssv[OBJ_CLASS_TYPE];
-static obj_t zero[OBJ_CLASS_TYPE];
-static obj_t zerosv[OBJ_CLASS_TYPE];
+static obj_t one[OBJ_TYPE];
+static obj_t onesv[OBJ_TYPE];
+static double fitness[OBJ_TYPE];
+static double fitnesssv[OBJ_TYPE];
+static obj_t zero[OBJ_TYPE];
+static obj_t zerosv[OBJ_TYPE];
 
 static void calcfit(obj_t obj[], long objsz, long type);
 static void init();
@@ -63,7 +63,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < OBJ_CLASS_TYPE; type++) {
+    for (type = 0; type < OBJ_TYPE; type++) {
       obj_clear(&one[type]);
       obj_clear(&zero[type]);
     }

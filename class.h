@@ -8,7 +8,6 @@
 #define OBJ_CLASS_CACHE 64
 #define OBJ_CLASS_CSV 4096
 #define OBJ_CLASS_STR (4 + 1)
-#define OBJ_CLASS_TYPE OBJ
 
 void obj_class_observe(obj_t obj, long type);
 obj_bit_t obj_class_classify(obj_t obj, long type);

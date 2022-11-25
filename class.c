@@ -23,20 +23,20 @@
 #define SCORE 4
 #define STRTOK ",;\n"
 
-static obj_t object[OBJ_CLASS_TYPE][OBJ_CLASS_CACHE];
+static obj_t object[OBJ_TYPE][OBJ_CLASS_CACHE];
 static obj_bool_t once = obj_bool_false;
-static struct obj_classstat_t stat[OBJ_CLASS_TYPE];
-static struct obj_xdouble_t scorepast[OBJ_CLASS_TYPE][SCORE];
+static struct obj_classstat_t stat[OBJ_TYPE];
+static struct obj_xdouble_t scorepast[OBJ_TYPE][SCORE];
 
-static union obj_val_t value[OBJ_CLASS_TYPE][PACKCACHE][OBJ];
-static union obj_val_t firstval[OBJ_CLASS_TYPE][OBJ];
-static enum obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
-static obj_bool_t firstpack[OBJ_CLASS_TYPE];
+static union obj_val_t value[OBJ_TYPE][PACKCACHE][OBJ];
+static union obj_val_t firstval[OBJ_TYPE][OBJ];
+static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
+static obj_bool_t firstpack[OBJ_TYPE];
 
 typedef double (*score_f)(obj_t, long);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
 static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
-static long favscoreindx[OBJ_CLASS_TYPE];
+static long favscoreindx[OBJ_TYPE];
 static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(obj_t[], long, long);
@@ -399,7 +399,7 @@ void init()
   long score;
   if (!once) {
     srandom(time(NULL));
-    for (type = 0; type < OBJ_CLASS_TYPE; type++) {
+    for (type = 0; type < OBJ_TYPE; type++) {
       for (i = 0; i < OBJ_CLASS_CACHE; i++)
         obj_randomize(&object[type][i]);
       for (score = 0; score < SCORE; score++)

@@ -15,10 +15,10 @@
 
 typedef obj_t pop_t[DIM][DIM][DIM];
 
-static double fitness[OBJ_CLASS_TYPE];
-static double fits[OBJ_CLASS_TYPE][DIM][DIM][DIM];
-static obj_t fittest[OBJ_CLASS_TYPE];
-static obj_t ideal[OBJ_CLASS_TYPE];
+static double fitness[OBJ_TYPE];
+static double fits[OBJ_TYPE][DIM][DIM][DIM];
+static obj_t fittest[OBJ_TYPE];
+static obj_t ideal[OBJ_TYPE];
 static obj_bool_t once = obj_bool_false;
 
 static void calcfit(pop_t pop, struct obj_coord_t *c, obj_t obj[], long objsz, long type);
@@ -183,7 +183,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < OBJ_CLASS_TYPE; type++)
+    for (type = 0; type < OBJ_TYPE; type++)
       obj_randomize(&ideal[type]);
     once = obj_bool_true;
   }

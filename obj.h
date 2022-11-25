@@ -9,6 +9,7 @@
 #define OBJ 64
 typedef long long obj_t;
 #define OBJ_CLEAR 0
+#define OBJ_TYPE OBJ
 
 typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 

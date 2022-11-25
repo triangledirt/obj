@@ -5,8 +5,8 @@
 #include "obj.h"
 #include "sum.h"
 
-static double fitness[OBJ_CLASS_TYPE];
-static obj_t ideal[OBJ_CLASS_TYPE];
+static double fitness[OBJ_TYPE];
+static obj_t ideal[OBJ_TYPE];
 static obj_bool_t once = obj_bool_false;
 
 static void init();
@@ -15,7 +15,7 @@ void init()
 {
   long type;
   if (!once) {
-    for (type = 0; type < OBJ_CLASS_TYPE; type++) {
+    for (type = 0; type < OBJ_TYPE; type++) {
       fitness[type] = 0.0;
       obj_randomize(&ideal[type]);
     }
