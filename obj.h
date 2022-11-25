@@ -10,7 +10,7 @@
 typedef long long obj_t;
 #define OBJ_CLEAR 0
 
-typedef double (*obj_calcfit_f)(obj_t);
+typedef double (*obj_fit_f)(obj_t);
 
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);

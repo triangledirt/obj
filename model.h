@@ -8,7 +8,7 @@
 #define OBJ_MODEL_DIM 128
 #define OBJ_MODEL_TYPE OBJ
 
-void obj_model_setcalcfitfunc(long type, obj_calcfit_f calcfitfunc);
+void obj_model_setfitfunc(long type, obj_fit_f fitfunc);
 
 void obj_model_insert(obj_t obj, long type);
 void obj_model_evolve(long type);
