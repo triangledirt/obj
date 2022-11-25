@@ -20,7 +20,7 @@
 #include "xdouble.h"
 
 #define PACKCACHE (OBJ_CLASS_CACHE / 2)
-#define SCORE 8
+#define SCORE 4
 #define STRTOK ",;\n"
 
 static obj_t object[OBJ_CLASS_TYPE][OBJ_CLASS_CACHE];
@@ -34,10 +34,12 @@ static enum obj_valtype_t valtype[OBJ_CLASS_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_CLASS_TYPE];
 
 typedef double (*score_f)(obj_t, long);
-static score_f scorefunc[SCORE] = {obj_core_score, obj_filt_score, obj_fold_score, obj_gene_score, obj_jack_score, obj_jung_score, obj_moire_score, obj_sum_score};
-static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};
+/*  static score_f scorefunc[SCORE] = {obj_core_score, obj_filt_score, obj_fold_score, obj_gene_score, obj_jack_score, obj_jung_score, obj_moire_score, obj_sum_score};  */
+static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
+/*  static char *scorename[SCORE] = {"core", "filt", "fold", "gene", "jack", "jung", "moire", "sum"};  */
+static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
 static long favscoreindx[OBJ_CLASS_TYPE];
-static long scorefuncoverride = 6;
+static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(obj_t[], long, long);
 static void learn(long type);
@@ -88,7 +90,7 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
     rescorefindx = randomscoreindx(scorefindx);
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
-    if ((rescore - score) > 0.2) {
+    if ((rescore - score) > 0.5) {
 #if OBJ_VERBOSE && OBJ_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];
