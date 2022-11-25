@@ -10,9 +10,9 @@
 
 ## get the source
 
-the obj project has no release tags--the latest code is the latest release
+the obj project has no release tags—the latest code is the latest release
 
-to use--first get the source code
+to use—first get the source code
 
     git clone git@github.com:triangledirt/obj.git
 
@@ -26,19 +26,19 @@ when OBJ_XVERBOSE is 1 you get extra information printed to stdout
 
 ## edit build settings
 
-once you change those code settings--you can change some build settings--these are in [make](https://github.com/triangledirt/obj/blob/main/make)
+once you change those code settings—you can change some build settings—these are in [make](https://github.com/triangledirt/obj/blob/main/make)
 
-change DEBUG to be "" if you dont want debug info--"-g" if you do want debug info and your compiler is gcc
+change DEBUG to be "" if you dont want debug info—"-g" if you do want debug info and your compiler is gcc
 
-change COMPILER to be whatever your compiler is--etc
+change COMPILER to be whatever your compiler is—etc
 
 ## build
 
-now build--(from the case directory) execute
+now build—(from the case directory) execute
 
     ./make
 
-that builds object files and a library called libobj.a--it requires only the c standard library
+that builds object files and a library called libobj.a—it requires only the c standard library
 
 ## use
 
