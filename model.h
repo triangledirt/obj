@@ -18,7 +18,7 @@ obj_t obj_model_fittest(long type);
 obj_t obj_model_random(long type);
 obj_t obj_model_randomabove(double fitness, long type);
 
-void obj_model_setmeetstyle(enum obj_meetstyle_t meetstyle);
+void obj_model_setmeetstyle(enum obj_meetstyle_t meetstyle, long type);
 
 void obj_model_resetstat(long type);
 struct obj_modelstat_t *obj_model_stat(long type);
