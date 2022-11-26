@@ -89,11 +89,9 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
   if ((scorefuncoverride < 0) && obj_die_toss(OBJ_CLASS_CACHE / 2)) {
     fitf = fitfunc[scorefindx];
     fit = fitf(type);
-
     altfitfindx = randomscoreindx(scorefindx);
     altfitf = fitfunc[altfitfindx];
     altfit = altfitf(type);
-  
     if ((altfit - fit) > 0.2) {
 #if OBJ_VERBOSE && OBJ_XVERBOSE
       printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorename[scorefindx], fit, scorename[altfitfindx], altfit);
