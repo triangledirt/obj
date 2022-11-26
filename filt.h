@@ -6,4 +6,6 @@
 void obj_filt_learn(obj_t obj[], long objsz, long type);
 double obj_filt_score(obj_t obj, long type);
 
+double obj_filt_fit(long type);
+
 #endif

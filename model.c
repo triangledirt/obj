@@ -6,8 +6,16 @@ static obj_fit_f fitfuncs[OBJ_TYPE];
 static obj_bool_t once = obj_bool_false;
 
 static double calcfitdefault(obj_t obj, long type, void *context);
+static void evolve(long ticks, long type);
 static void init();
 static void tick();
+
+void evolve(long ticks, long type)
+{
+  long tick;
+  for (tick = 0; tick < ticks; tick++) {
+  }
+}
 
 void init()
 {
@@ -19,10 +27,12 @@ void init()
 
 void obj_model_evolve(long type)
 {
+  evolve(TICKS, type);
 }
 
 void obj_model_evolvetick(long ticks, long type)
 {
+  evolve(ticks, type);
 }
 
 obj_t obj_model_fittest(long type)

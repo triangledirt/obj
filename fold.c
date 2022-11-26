@@ -44,6 +44,11 @@ void calcfit(pop_t pop, long o, obj_t obj[], long objsz, long type)
   }
 }
 
+double obj_fold_fit(long type)
+{
+  return fitness[type];
+}
+
 void obj_fold_learn(obj_t obj[], long objsz, long type)
 {
   pop_t pop;

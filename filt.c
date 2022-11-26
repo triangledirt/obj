@@ -30,6 +30,11 @@ void calcfit(obj_t obj[], long objsz, long type)
   fitness[type] = s / (objsz / 2);
 }
 
+double obj_filt_fit(long type)
+{
+  return fitness[type];
+}
+
 void obj_filt_learn(obj_t obj[], long objsz, long type)
 {
   long bit;

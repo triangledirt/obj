@@ -33,7 +33,10 @@ static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
-typedef double (*score_f)(obj_t, long);
+typedef double (*fit_f)(obj_t obj, long type);
+static obj_fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
+
+typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
 static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
 static long favscoreindx[OBJ_TYPE];
@@ -89,6 +92,9 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
     rescoref = scorefunc[rescorefindx];
     rescore = rescoref(obj, type);
     if ((rescore - score) > 0.5) {
+
+shouldnt this compare the fitnesses of the two algorithms ??
+
 #if OBJ_VERBOSE && OBJ_XVERBOSE
       scorefname = scorename[scorefindx];
       rescorefname = scorename[rescorefindx];

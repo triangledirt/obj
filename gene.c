@@ -52,6 +52,11 @@ void forcecalc(pop_t pop, obj_t obj[], long objsz, long type)
       calcfit(pop, o, obj, objsz, type);
 }
 
+double obj_gene_fit(long type)
+{
+  return fitness[type];
+}
+
 void obj_gene_learn(obj_t obj[], long objsz, long type)
 {
   long mating;

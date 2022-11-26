@@ -23,6 +23,11 @@ void init()
   }
 }
 
+double obj_sum_fit(long type)
+{
+  return fitness[type];
+}
+
 void obj_sum_learn(obj_t obj[], long objsz, long type)
 {
   long i;

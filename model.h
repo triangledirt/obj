@@ -16,7 +16,7 @@ void obj_model_evolvetick(long ticks, long type);
 
 obj_t obj_model_fittest(long type);
 obj_t obj_model_random(long type);
-obj_t obj_model_randomabove(double fitness, long type);
+obj_t obj_model_randomabove(double fit, long type);
 
 void obj_model_setmeetstyle(enum obj_meetstyle_t meetstyle, long type);
 
