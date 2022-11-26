@@ -33,8 +33,8 @@ static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
-typedef double (*fit_f)(obj_t obj, long type);
-static obj_fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
+typedef double (*fit_f)(long type);
+static fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
 
 typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
@@ -73,46 +73,43 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
 {
   obj_bit_t class;
   double score;
-  double rescore;
   double thresh;
+  double fit;
+  double altfit;
   long scorefindx;
-  long rescorefindx;
+  long altfitfindx;
   score_f scoref;
-  score_f rescoref;
+  fit_f fitf;
+  fit_f altfitf;
   char *scorefname;
-  char *rescorefname;
   char c;
   init();
   obj_obscureclass(&obj);
   scorefindx = favscoreindx[type];
-  scoref = scorefunc[scorefindx];
-  score = scoref(obj, type);
   if ((scorefuncoverride < 0) && obj_die_toss(OBJ_CLASS_CACHE / 2)) {
-    rescorefindx = randomscoreindx(scorefindx);
-    rescoref = scorefunc[rescorefindx];
-    rescore = rescoref(obj, type);
-    if ((rescore - score) > 0.5) {
+    fitf = fitfunc[scorefindx];
+    fit = fitf(type);
 
-shouldnt this compare the fitnesses of the two algorithms ??
-
+    altfitfindx = randomscoreindx(scorefindx);
+    altfitf = fitfunc[altfitfindx];
+    altfit = altfitf(type);
+  
+    if ((altfit - fit) > 0.2) {
 #if OBJ_VERBOSE && OBJ_XVERBOSE
-      scorefname = scorename[scorefindx];
-      rescorefname = scorename[rescorefindx];
-      printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorefname, score, rescorefname, rescore);
+      printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorename[scorefindx], fit, scorename[altfitfindx], altfit);
 #endif
-      favscoreindx[type] = rescorefindx;
-      score = rescore;
-      scorefindx = rescorefindx;
-      scoref = scorefunc[scorefindx];
+      favscoreindx[type] = altfitfindx;
+      scorefindx = altfitfindx;
     }
   }
+  scoref = scorefunc[scorefindx];
+  score = scoref(obj, type);
   thresh = obj_xdouble_avg(&scorepast[type][scorefindx]);
   obj_xdouble_note(&scorepast[type][scorefindx], score);
   class = (score > thresh) ? 1 : 0;
 #if OBJ_VERBOSE && OBJ_XVERBOSE
   c = obj_bit_char(class);
-  scorefname = scorename[scorefindx];
-  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorefname, score, thresh);
+  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorename[scorefindx], score, thresh);
 #endif
   return class;
 }
