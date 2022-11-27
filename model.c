@@ -25,15 +25,15 @@ static double calcfitdefault(obj_t obj, long type, void *context);
 static void evolve(long ticks, long type);
 static void init();
 static void initworld(long type);
-static void meet(long x, long y);
-static void move();
-static void tick();
+static void meet();
+static void move(long x, long y, long type);
+static void tick(long type);
 
 void evolve(long ticks, long type)
 {
   long i;
     for (i = 0; i < ticks; i++) {
-      tick();
+      tick(type);
   }
 }
 
@@ -144,15 +144,18 @@ void meet()
 {
 }
 
-void move(long x, long y)
+void move(long x, long y, long type)
 {
+  obj_t obj;
+  struct obj_movegene_t movegene;
+  obj = world[type][x][y];
 }
 
-void tick()
+void tick(long type)
 {
   long x;
   long y;
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
-  move(x, y);
+  move(x, y, type);
 }
