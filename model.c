@@ -1,14 +1,18 @@
 #include <stdlib.h>
+#include "displaygene.h"
+#include "meetgene.h"
 #include "meetstyle.h"
 #include "model.h"
 #include "modelstat.h"
+#include "movegene.h"
+#include "persongene.h"
 
 #define TICKS OBJ_MODEL_DIM
 
 #define DISPLAY_GENE 0
-#define MEET_GENE 1
-#define MOVE_GENE 2
-#define PERSONALITY_GENE 3
+#define MEET_GENE 8
+#define MOVE_GENE 32
+#define PERSONALITY_GENE 40
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
 static void *contexts[OBJ_TYPE];
