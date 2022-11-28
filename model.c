@@ -12,7 +12,7 @@
 #define DISPLAY_GENE 0
 #define MEET_GENE 8
 #define MOVE_GENE 32
-#define PERSONALITY_GENE 40
+#define PERSON_GENE 40
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
 static void *contexts[OBJ_TYPE];
@@ -22,12 +22,19 @@ static obj_bool_t once = obj_bool_false;
 static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 
 static double calcfitdefault(obj_t obj, long type, void *context);
+static long calcmovecoord(long coord, obj_bit_t offset);
 static void evolve(long ticks, long type);
 static void init();
 static void initworld(long type);
-static void meet();
+static void meet(long x, long y, long targtx, long targety, long type);
 static void move(long x, long y, long type);
+static void swap(long x1, long y1, long x2, long y2, long type);
 static void tick(long type);
+
+long calcmovecoord(long coord, obj_bit_t offset)
+{
+  return (offset) ? coord - 1 : coord + 1;
+}
 
 void evolve(long ticks, long type)
 {
@@ -54,11 +61,9 @@ void initworld(long type)
 {
   long x;
   long y;
-  for (x = 0; x < OBJ_MODEL_DIM; x++) {
-    for (y = 0; y < OBJ_MODEL_DIM; y++) {
+  for (x = 0; x < OBJ_MODEL_DIM; x++)
+    for (y = 0; y < OBJ_MODEL_DIM; y++)
       obj_randomize(&world[type][x][y]);
-    }
-  }
 }
 
 void obj_model_evolve(long type)
@@ -140,15 +145,41 @@ void obj_model_resetstat(long type)
   obj_modelstat_reset(&stats[type]);
 }
 
-void meet()
+void meet(long x, long y, long targetx, long targety, long type)
 {
+  struct obj_meetgene_t meetgene;
+  obj_t thisobj;
+  obj_t thatobj;
+  thisobj = world[type][x][y];
+  thatobj = world[type][targetx][targety];
+  obj_meetgene_parse(&meetgene, MEET_GENE, thisobj);
+  ;;
 }
 
 void move(long x, long y, long type)
 {
   obj_t obj;
   struct obj_movegene_t movegene;
+  struct obj_persongene_t persongene;
+  long targetx;
+  long targety;
   obj = world[type][x][y];
+  obj_movegene_parse(&movegene, MOVE_GENE, obj);
+  obj_persongene_parse(&persongene, PERSON_GENE, obj);
+  if (persongene.extrovert) {
+    targetx = calcmovecoord(x, movegene.xoffset);
+    targety = calcmovecoord(y, movegene.yoffset);
+    meet(x, y, targetx, targety, type);
+    swap(x, y, targetx, targety, type);
+  }
+}
+
+void swap(long x1, long y1, long x2, long y2, long type)
+{
+  obj_t temp;
+  temp = world[type][x1][y1];
+  world[type][x1][y1] = world[type][x2][y2];
+  world[type][x2][y2] = temp;
 }
 
 void tick(long type)

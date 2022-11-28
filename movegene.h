@@ -4,6 +4,7 @@
 #include "bit.h"
 #include "obj.h"
 
+
 struct obj_movegene_t {
   obj_bit_t xoffset;
   obj_bit_t yoffset;
