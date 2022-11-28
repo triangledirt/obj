@@ -119,12 +119,12 @@ void obj_fill(obj_t *obj)
     obj_setattr(obj, bit, 1);
 }
 
-long long obj_getnum(obj_t obj, long startbit, long bits)
+long long obj_getnum(obj_t obj, long startbit, long length)
 {
   long place = 1;
   long bit;
   long long num = 0;
-  for (bit = startbit; bit < bits; bit++) {
+  for (bit = startbit; bit < length; bit++) {
     num += place * obj_getattr(obj, bit);
     place *= 2;
   }
@@ -194,7 +194,7 @@ void obj_setfromstr(obj_t *obj, char str[OBJ])
   }
 }
 
-void obj_setnum(obj_t *obj, long startbit, long bits, long long num)
+void obj_setnum(obj_t *obj, long startbit, long length, long long num)
 {
   long place = 2;
   long bit = startbit;
@@ -206,7 +206,7 @@ void obj_setnum(obj_t *obj, long startbit, long bits, long long num)
     rem -= val;
     place *= 2;
     bit++;
-  } while (bit < bits);
+  } while (bit < length);
 }
 
 long obj_smash(obj_t obj1, obj_t obj2)
