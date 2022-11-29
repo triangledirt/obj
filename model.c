@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "displaygene.h"
+#include "indx.h"
 #include "meetgene.h"
 #include "meetstyle.h"
 #include "model.h"
@@ -26,9 +27,9 @@ static long calcmovecoord(long coord, obj_bit_t offset);
 static void evolve(long ticks, long type);
 static void init();
 static void initworld(long type);
-static void meet(long x, long y, long targtx, long targety, long type);
 static void move(long x, long y, long type);
 static void swap(long x1, long y1, long x2, long y2, long type);
+static void talk(obj_t *obj1, obj_t *obj2, long type);
 static void tick(long type);
 
 long calcmovecoord(long coord, obj_bit_t offset)
@@ -145,35 +146,6 @@ void obj_model_resetstat(long type)
   obj_modelstat_reset(&stats[type]);
 }
 
-void meet(long x, long y, long targetx, long targety, long type)
-{
-  struct obj_meetgene_t meetgene;
-  obj_t thisobj;
-  obj_t thatobj;
-  thisobj = world[type][x][y];
-  thatobj = world[type][targetx][targety];
-  obj_meetgene_parse(&meetgene, MEET_GENE, thisobj);
-  ;;
-}
-
-void move(long x, long y, long type)
-{
-  obj_t obj;
-  struct obj_movegene_t movegene;
-  struct obj_persongene_t persongene;
-  long targetx;
-  long targety;
-  obj = world[type][x][y];
-  obj_movegene_parse(&movegene, MOVE_GENE, obj);
-  obj_persongene_parse(&persongene, PERSON_GENE, obj);
-  if (persongene.extrovert) {
-    targetx = calcmovecoord(x, movegene.xoffset);
-    targety = calcmovecoord(y, movegene.yoffset);
-    meet(x, y, targetx, targety, type);
-    swap(x, y, targetx, targety, type);
-  }
-}
-
 void swap(long x1, long y1, long x2, long y2, long type)
 {
   obj_t temp;
@@ -182,11 +154,40 @@ void swap(long x1, long y1, long x2, long y2, long type)
   world[type][x2][y2] = temp;
 }
 
+void talk(obj_t *obj1, obj_t *obj2, long type)
+{
+  struct obj_meetgene_t meetgene;
+  long i;
+  long j;
+  obj_bit_t bit;
+  obj_meetgene_parse(&meetgene, MEET_GENE, *obj1);
+  for (i = meetgene.startbit; i < meetgene.length; i++) {
+    j = obj_indx_wrap(i, OBJ);
+    bit = obj_getattr(*obj1, j);
+    obj_setattr(obj2, j, bit);
+  }
+}
+
 void tick(long type)
 {
   long x;
   long y;
+  long targetx;
+  long targety;
+  obj_t *obj;
+  obj_t *target;
+  struct obj_movegene_t movegene;
+  struct obj_persongene_t persongene;
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
-  move(x, y, type);
+  obj = &world[type][x][y];
+  obj_movegene_parse(&movegene, MOVE_GENE, *obj);
+  obj_persongene_parse(&persongene, PERSON_GENE, *obj);
+  if (persongene.extrovert) {
+    targetx = calcmovecoord(x, movegene.xoffset);
+    targety = calcmovecoord(y, movegene.yoffset);
+    target = &world[type][targetx][targety];
+    talk(obj, target, type);
+    swap(x, y, targetx, targety, type);
+  }
 }
