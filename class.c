@@ -39,6 +39,7 @@ static fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum
 typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
 static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
+
 static long favscoreindx[OBJ_TYPE];
 static long scorefuncoverride = -1;
 
@@ -404,7 +405,7 @@ void init()
       for (i = 0; i < OBJ_CLASS_CACHE; i++)
         obj_randomize(&object[type][i]);
       for (score = 0; score < SCORE; score++)
-      obj_xdouble_init(&scorepast[type][score]);
+        obj_xdouble_init(&scorepast[type][score]);
       obj_classstat_reset(&stat[type]);
       favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
       firstpack[type] = obj_bool_true;

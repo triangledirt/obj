@@ -40,9 +40,8 @@ long calcmovecoord(long coord, obj_bit_t offset)
 void evolve(long ticks, long type)
 {
   long i;
-    for (i = 0; i < ticks; i++) {
-      tick(type);
-  }
+  for (i = 0; i < ticks; i++)
+    tick(type);
 }
 
 void init()
@@ -181,9 +180,9 @@ void tick(long type)
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
   obj = &world[type][x][y];
-  obj_movegene_parse(&movegene, MOVE_GENE, *obj);
   obj_persongene_parse(&persongene, PERSON_GENE, *obj);
   if (persongene.extrovert) {
+    obj_movegene_parse(&movegene, MOVE_GENE, *obj);
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
