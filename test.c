@@ -79,12 +79,12 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
     obj = packfunc(csvobj, classindx, type);
     obj_model_insert(obj, MUSHROOM);
   }
+  fclose(file);
   obj_model_evolve(type);
-  fittest = obj_model_random(type);
+  fittest = obj_model_fittest(type);
   printf("fittest ");
   obj_print(obj);
   printf("\n");
-  fclose(file);
 }
 
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
