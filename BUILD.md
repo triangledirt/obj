@@ -42,7 +42,7 @@ that builds object files and a library called libobj.a—it requires only the c 
 
 ## use
 
-(to use obj in your project) include any of these obj areas you want to use
+(to use obj in your project) include any of the areas you want to use
 
     #include "[path to case directory]/class.h"
     #include "[path to case directory]/sync.h"
