@@ -65,9 +65,9 @@ read more about [sense](SENSE.md)
 
 ### synchronize
 
-synchronize lets you schedule group and otherwise organize objects into sets of various types
+synchronize lets you (schedule—group—and otherwise organize) objects into sets of various types
 
-it can be used to synchronize tasks sharing resources—group people into personality types—and ..
+it can be used to synchronize tasks that share resources—group people into personality types—and ..
 
 read more about [synchronize](SYNC.md)
 
