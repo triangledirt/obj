@@ -75,6 +75,6 @@ read more about [synchronize](SYNC.md)
 
 this is how to build and use obj in your project
 
-getting the code—setting code options—compiling—linking
+it covers (getting the code—setting code options—compiling—linking)
 
 read more about how to [build and use](BUILD.md)
