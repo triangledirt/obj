@@ -10,6 +10,7 @@
 - [obj_t](#obj_t)
 - areas
   - [classify](#classify)
+  - [sense](#sense)
   - [synchronize](#synchronize)
   - [model](#model)
 - [build and use](#build-and-use)
@@ -69,7 +70,7 @@ read more about [synchronize](SYNC.md)
 
 model lets you grow a population of objects inside a self-partitioning geography
 
-you can then pull objects out of the model with the hope they will be useful in solving your problem
+you can then pull objects out of the model and use them to solve your problem
 
 read more about [model](MODEL.md)
 
