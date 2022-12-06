@@ -1,3 +1,3 @@
-# synchronize
+# sync
 
 TODO: write

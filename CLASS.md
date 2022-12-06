@@ -1,4 +1,4 @@
-# classify
+# class
 
 ## contents
 
@@ -9,7 +9,7 @@
 
 ## about
 
-classify is an area of obj used to classify objects
+class is an area of obj used to classify objects
 
 first you supply a series of objects each with binary attributes and a binary classification—you know the classes of these objects and you supply them to case when you observe them
 
@@ -53,7 +53,7 @@ TODO: write
 
 ## infer from set to set
 
-obj also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
+class also provides access to some statistical inference properties which you can use to calculate the likelihood (given the stream of objects you have observed) of an indicator set having a specific relationship with a target set
 
 (for example) indicator overlap (which is the same as conditional implication) shows the degree to which the indicator set does *indicator overlap* with respect to the target set (the degree to which the indicator set implies the target set)
 

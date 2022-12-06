@@ -9,15 +9,15 @@
 - [about](#about)
 - [obj_t](#obj_t)
 - [areas](#areas)
-  - [classify](#classify)
+  - [class](#class)
   - [model](#model)
   - [sense](#sense)
-  - [synchronize](#synchronize)
+  - [sync](#sync)
 - [build and use](#build-and-use)
 
 ## about
 
-obj is a library of c functions used to (classify—synchronize—model) (and do other things to) generalized binary data objects
+obj is a library of c functions used to (class—sync—model) (and do other things to) generalized binary data objects
 
 its a local slim real-time system using no disk i/o—no network connections—no threading—no dynamic memory—the only dependency is the c standard library
 
@@ -25,7 +25,7 @@ its a local slim real-time system using no disk i/o—no network connections—n
 
 obj defines obj_t as a binary object—an object with binary attributes
 
-then it defines interfaces in some functional areas (classify—synchronize—etc)
+then it defines interfaces in some functional areas (class—sync—etc)
 
 read more about [obj_t](OBJ.md)
 
@@ -33,15 +33,15 @@ read more about [obj_t](OBJ.md)
 
 obj presents interfaces in these areas
 
-### classify
+### class
 
-classify lets you classify binary objects
+class lets you class binary objects
 
-first you supply a series of objects (each with binary attributes and a binary classification)—you know the classes of these objects and you supply them to classify when you observe them
+first you supply a series of objects (each with binary attributes and a binary classification)—you know the classes of these objects and you supply them to class when you observe them
 
-then (with new objects whose classes you do not know) you ask classify to classify the objects—which it does with a 0 or a 1 (a bit to let you know whether classify thinks the object is a member of the target set)
+then (with new objects whose classes you do not know) you ask class to class the objects—which it does with a 0 or a 1 (a bit to let you know whether class thinks the object is a member of the target set)
 
-read more about [classify](CLASS.md)
+read more about [class](CLASS.md)
 
 ### model
 
@@ -65,16 +65,16 @@ you can use those as a starting point for your inference
 
 read more about [sense](SENSE.md)
 
-### synchronize
+### sync
 
-synchronize lets you (schedule—group—and otherwise organize) objects into sets of various types
+sync lets you (schedule—group—and otherwise organize) objects into sets of various types
 
 it can be used to synchronize
 
 - tasks that share resources
 - people into personality groups
 
-read more about [synchronize](SYNC.md)
+read more about [sync](SYNC.md)
 
 ## build and use
 
