@@ -45,7 +45,7 @@ read more about [classify](CLASS.md)
 
 ### model
 
-model lets you grow a population of objects inside a self-partitioning geography—an obj model is like a zoo where objects interact conversationally to produce new objects following your fitness function
+model lets you grow a population of objects inside a self-partitioning geography—an obj model is like a zoo where objects interact to produce new objects (following your fitness function)
 
 you insert objects into the model—define a fitness function—then pull the best objects out of the model and use them to solve your problem
 
@@ -60,6 +60,8 @@ sense shows you which parts of an object to pay attention to
 first you observe a series of objects
 
 then ask sense to tell you which bits of the object are telling you something
+
+you can use those as a starting point for your inference
 
 read more about [sense](SENSE.md)
 
