@@ -25,13 +25,13 @@ its a local slim real-time system using no disk i/o—no network connections—n
 
 obj defines obj_t as a binary object—an object with binary attributes
 
-then it lets you do things with binary objects—right now it lets you classify them—soon it may be able to synchronize and model them
+then it defines functional areas (classify synchronize model—and others) that you can use
 
 read more about [obj_t](OBJ.md)
 
 ## areas
 
-obj presents interfaces in some areas
+obj presents interfaces in these areas
 
 - classify
 - sense
