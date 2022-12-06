@@ -10,9 +10,9 @@
 - [obj_t](#obj_t)
 - areas
   - [classify](#classify)
+  - [model](#model)
   - [sense](#sense)
   - [synchronize](#synchronize)
-  - [model](#model)
 - [build and use](#build-and-use)
 
 ## about
@@ -48,6 +48,14 @@ then (with new objects whose classes you do not know) you ask classify to classi
 
 read more about [classify](CLASS.md)
 
+### model
+
+model lets you grow a population of objects inside a self-partitioning geography
+
+you can then pull objects out of the model and use them to solve your problem
+
+read more about [model](MODEL.md)
+
 ### sense
 
 sense shows you which parts of an object to pay attention to
@@ -65,14 +73,6 @@ synchronize lets you schedule group and otherwise organize objects into sets
 it can be used to
 
 read more about [synchronize](SYNC.md)
-
-### model
-
-model lets you grow a population of objects inside a self-partitioning geography
-
-you can then pull objects out of the model and use them to solve your problem
-
-read more about [model](MODEL.md)
 
 ## build and use
 
