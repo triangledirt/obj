@@ -35,7 +35,7 @@ obj presents interfaces in these areas
 
 ### class
 
-class lets you class binary objects
+class lets you classify binary objects
 
 first you supply a series of objects (each with binary attributes and a binary classification)—you know the classes of these objects and you supply them to class when you observe them
 
