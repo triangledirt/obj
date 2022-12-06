@@ -25,7 +25,7 @@ its a local slim real-time system using no disk i/o—no network connections—n
 
 obj defines obj_t as a binary object—an object with binary attributes
 
-then it defines interfaces in terms of functional areas that you can use
+then it defines interfaces in some functional areas (classify—synchronize—etc)
 
 read more about [obj_t](OBJ.md)
 
