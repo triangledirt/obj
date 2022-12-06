@@ -39,7 +39,7 @@ class lets you class binary objects
 
 first you supply a series of objects (each with binary attributes and a binary classification)—you know the classes of these objects and you supply them to class when you observe them
 
-then (with new objects whose classes you do not know) you ask class to class the objects—which it does with a 0 or a 1 (a bit to let you know whether class thinks the object is a member of the target set)
+then (with new objects whose classes you do not know) you ask class to classify the objects—which it does with a 0 or a 1 (a bit to let you know whether class thinks the object is a member of the target set)
 
 read more about [class](CLASS.md)
 
