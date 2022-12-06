@@ -14,8 +14,8 @@ void init()
 {
   long type;
   long i;
-  observecnt = 0;
   if (!once) {
+    observecnt = 0;
     for (type = 0; type < OBJ_TYPE; type++) {
       for (i = 0; i < OBJ; i++)
         changes[type][i] = 0;
@@ -36,8 +36,10 @@ obj_t obj_sense_live(long type)
   for (i = 0; i < OBJ; i++)
     if (changes[type][i] > thresh)
       obj_setattr(&live, i, 1);
-  if (observecnt <= OBSERVE)
+  if (observecnt >= OBSERVE) {
+    once = obj_bool_false;
     init();
+  }
 }
 
 void obj_sense_observe(obj_t obj, long type)

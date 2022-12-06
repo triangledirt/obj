@@ -69,7 +69,10 @@ read more about [sense](SENSE.md)
 
 synchronize lets you (schedule—group—and otherwise organize) objects into sets of various types
 
-it can be used to synchronize tasks that share resources—group people into personality types—and ..
+it can be used to
+
+- synchronize tasks that share resources
+- group people into personality types
 
 read more about [synchronize](SYNC.md)
 
