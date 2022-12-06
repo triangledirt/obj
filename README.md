@@ -16,7 +16,7 @@
 
 ## about
 
-obj is a library of c functions used to (classify—synchronize—model) generalized binary data objects
+obj is a library of c functions used to (classify—synchronize—model) (and do other things to) generalized binary data objects
 
 its a local slim real-time system using no disk i/o—no network connections—no threading—no dynamic memory—the only dependency is the c standard library
 
@@ -30,7 +30,12 @@ read more about [obj_t](OBJ.md)
 
 ## areas
 
-obj presents interfaces in three areas (classify synchronize and model)
+obj presents interfaces in some areas
+
+- classify
+- sense
+- synchronize
+- model
 
 ### classify
 
@@ -42,15 +47,29 @@ then (with new objects whose classes you do not know) you ask classify to classi
 
 read more about [classify](CLASS.md)
 
+### sense
+
+sense shows you which parts of an object to pay attention to
+
+first you observe a series of objects
+
+then ask sense to tell you which bits of the object are telling you something
+
+read more about [sense](SENSE.md)
+
 ### synchronize
 
-coming soon !!
+synchronize lets you schedule group and otherwise organize objects into sets
+
+it can be used to
 
 read more about [synchronize](SYNC.md)
 
 ### model
 
-coming soon !!
+model lets you grow a population of objects inside a self-partitioning geography
+
+you can then pull objects out of the model with the hope they will be useful in solving your problem
 
 read more about [model](MODEL.md)
 

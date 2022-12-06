@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "class.h"
 #include "model.h"
+#include "sense.h"
 #include "sync.h"
 
 #define CENSUS 0
@@ -104,19 +105,22 @@ void testpack(char *filename, long classindx, long type, obj_class_pack_f packfu
 #endif
 }
 
+void testsense()
+{
+}
+
 void testsync()
 {
 }
 
 int main(int argc, char *argv[])
 {
-  if (0) {
+  if (0)
     testclass();
-  }
-  if (0) {
+  if (0)
+    testsense();
+  if (0)
     testsync();
-  }
-  if (1) {
+  if (1)
     testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
-  }
 }
