@@ -70,6 +70,174 @@ static long reorderindx(long attrindx, long classindx);
 
 static long randomscoreindx(long exclude);
 
+long count(obj_t objtype, long type)
+{
+  long count = 0;
+  obj_t obj;
+  long i;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
+    obj = object[type][i];
+    count += obj_hastype(obj, objtype);
+  }
+  return count;
+}
+
+long countboth(obj_t objtype1, obj_t objtype2, long type)
+{
+  long count = 0;
+  obj_t obj;
+  long i;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
+    obj = object[type][i];
+    count += obj_hastype(obj, objtype1) && obj_hastype(obj, objtype2);
+  }
+  return count;
+}
+
+long counteither(obj_t objtype1, obj_t objtype2, long type)
+{
+  long count = 0;
+  obj_t obj;
+  long i;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
+    obj = object[type][i];
+    count += obj_hastype(obj, objtype1) || obj_hastype(obj, objtype2);
+  }
+  return count;
+}
+
+long countsub(obj_t objtype1, obj_t objtype2, long type)
+{
+  long count = 0;
+  obj_t obj;
+  long i;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
+    obj = object[type][i];
+    count += obj_hastype(obj, objtype1) && !obj_hastype(obj, objtype2);
+  }
+  return count;
+}
+
+long countxor(obj_t objtype1, obj_t objtype2, long type)
+{
+  long count = 0;
+  obj_t obj;
+  long i;
+  obj_bit_t has1;
+  obj_bit_t has2;
+  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
+    obj = object[type][i];
+    has1 = obj_hastype(obj, objtype1);
+    has2 = obj_hastype(obj, objtype2);
+    if (has1 ^ has2)
+      count++;
+  }
+  return count;
+}
+
+void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
+{
+  char csvobjcopy[OBJ_CLASS_CSV];
+  char *tok;
+  long csvindx = 0;
+  long valindx;
+  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSV - 1);
+  tok = strtok(csvobjcopy, STRTOK);
+  valindx = reorderindx(csvindx, classindx);
+  text2val(tok, &valobj[valindx], valindx, type);
+  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
+    csvindx++;
+    valindx = reorderindx(csvindx, classindx);
+    text2val(tok, &valobj[valindx], valindx, type);
+  }
+  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
+    obj_val_init(&valobj[valindx], valtype[type][valindx]);
+#if 0 && OBJ_VERBOSE && OBJ_XVERBOSE
+  printf("type%02ld   csv     %s", type, csvobj);
+  printf("type%02ld   val     ", type);
+  for (valindx = 0; valindx < OBJ; valindx++) {
+    val_print(&valobj[valindx], valtype[type][valindx]);
+    printf(",");
+  }
+  printf("\n");
+#endif
+}
+
+void init()
+{
+  long i;
+  long type;
+  long score;
+  if (!once) {
+    srandom(time(NULL));
+    for (type = 0; type < OBJ_TYPE; type++) {
+      for (i = 0; i < OBJ_CLASS_CACHE; i++)
+        obj_randomize(&object[type][i]);
+      for (score = 0; score < SCORE; score++)
+        obj_xdouble_init(&scorepast[type][score]);
+      obj_classstat_reset(&stat[type]);
+      favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
+      firstpack[type] = obj_bool_true;
+    }
+    once = obj_bool_true;
+  }
+}
+
+void insertfirstval(union obj_val_t valobj[OBJ], long type)
+{
+  long attr;
+  for (attr = 0; attr < OBJ; attr++)
+    obj_val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
+}
+
+void insertval(union obj_val_t valobj[OBJ], long type)
+{
+  long obj;
+  long attr;
+  obj = random() % PACKCACHE;
+  for (attr = 0; attr < OBJ; attr++)
+    obj_val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
+}
+
+obj_bool_t isnum(char *str)
+{
+  long len;
+  long i;
+  char c;
+  obj_bool_t is = obj_bool_true;
+  len = strlen(str);
+  for (i = 0; i < len; i++) {
+    c = *(str + i);
+    if (!(('+' == c) || ('-' == c) || ('.' == c) || isdigit(c))) {
+      is = obj_bool_false;
+      break;
+    }
+  }
+  return is;
+}
+
+void learn(long type)
+{
+  long filttime;
+  long foldtime;
+  long genetime;
+  long sumtime;
+  filttime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_filt_learn);
+  foldtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_fold_learn);
+  genetime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_gene_learn);
+  sumtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_sum_learn);
+#if OBJ_VERBOSE && OBJ_XVERBOSE
+  printf("type%02ld times     filt=%ld fold=%ld gene=%ld sum=%ld\n", type, filttime, foldtime, genetime, sumtime);
+#endif
+}
+
+long learngeneral(obj_t obj[], long objsz, long type, learn_f learnfunc)
+{
+  obj_timer_start(0);
+  learnfunc(obj, objsz, type);
+  return obj_timer_stop();
+}
+
 obj_bit_t obj_class_classify(obj_t obj, long type)
 {
   obj_bit_t class;
@@ -301,174 +469,6 @@ double obj_class_trans(obj_t indicator, obj_t target, long type)
   return (double) bothcnt / 1 + xorcnt;
 }
 
-long count(obj_t objtype, long type)
-{
-  long count = 0;
-  obj_t obj;
-  long i;
-  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
-    obj = object[type][i];
-    count += obj_hastype(obj, objtype);
-  }
-  return count;
-}
-
-long countboth(obj_t objtype1, obj_t objtype2, long type)
-{
-  long count = 0;
-  obj_t obj;
-  long i;
-  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
-    obj = object[type][i];
-    count += obj_hastype(obj, objtype1) && obj_hastype(obj, objtype2);
-  }
-  return count;
-}
-
-long counteither(obj_t objtype1, obj_t objtype2, long type)
-{
-  long count = 0;
-  obj_t obj;
-  long i;
-  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
-    obj = object[type][i];
-    count += obj_hastype(obj, objtype1) || obj_hastype(obj, objtype2);
-  }
-  return count;
-}
-
-long countsub(obj_t objtype1, obj_t objtype2, long type)
-{
-  long count = 0;
-  obj_t obj;
-  long i;
-  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
-    obj = object[type][i];
-    count += obj_hastype(obj, objtype1) && !obj_hastype(obj, objtype2);
-  }
-  return count;
-}
-
-long countxor(obj_t objtype1, obj_t objtype2, long type)
-{
-  long count = 0;
-  obj_t obj;
-  long i;
-  obj_bit_t has1;
-  obj_bit_t has2;
-  for (i = 0; i < OBJ_CLASS_CACHE; i++) {
-    obj = object[type][i];
-    has1 = obj_hastype(obj, objtype1);
-    has2 = obj_hastype(obj, objtype2);
-    if (has1 ^ has2)
-      count++;
-  }
-  return count;
-}
-
-void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
-{
-  char csvobjcopy[OBJ_CLASS_CSV];
-  char *tok;
-  long csvindx = 0;
-  long valindx;
-  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSV - 1);
-  tok = strtok(csvobjcopy, STRTOK);
-  valindx = reorderindx(csvindx, classindx);
-  text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
-    csvindx++;
-    valindx = reorderindx(csvindx, classindx);
-    text2val(tok, &valobj[valindx], valindx, type);
-  }
-  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
-    obj_val_init(&valobj[valindx], valtype[type][valindx]);
-#if 0 && OBJ_VERBOSE && OBJ_XVERBOSE
-  printf("type%02ld   csv     %s", type, csvobj);
-  printf("type%02ld   val     ", type);
-  for (valindx = 0; valindx < OBJ; valindx++) {
-    val_print(&valobj[valindx], valtype[type][valindx]);
-    printf(",");
-  }
-  printf("\n");
-#endif
-}
-
-void init()
-{
-  long i;
-  long type;
-  long score;
-  if (!once) {
-    srandom(time(NULL));
-    for (type = 0; type < OBJ_TYPE; type++) {
-      for (i = 0; i < OBJ_CLASS_CACHE; i++)
-        obj_randomize(&object[type][i]);
-      for (score = 0; score < SCORE; score++)
-        obj_xdouble_init(&scorepast[type][score]);
-      obj_classstat_reset(&stat[type]);
-      favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
-      firstpack[type] = obj_bool_true;
-    }
-    once = obj_bool_true;
-  }
-}
-
-void insertfirstval(union obj_val_t valobj[OBJ], long type)
-{
-  long attr;
-  for (attr = 0; attr < OBJ; attr++)
-    obj_val_copy(&valobj[attr], &firstval[type][attr], valtype[type][attr]);
-}
-
-void insertval(union obj_val_t valobj[OBJ], long type)
-{
-  long obj;
-  long attr;
-  obj = random() % PACKCACHE;
-  for (attr = 0; attr < OBJ; attr++)
-    obj_val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
-}
-
-obj_bool_t isnum(char *str)
-{
-  long len;
-  long i;
-  char c;
-  obj_bool_t is = obj_bool_true;
-  len = strlen(str);
-  for (i = 0; i < len; i++) {
-    c = *(str + i);
-    if (!(('+' == c) || ('-' == c) || ('.' == c) || isdigit(c))) {
-      is = obj_bool_false;
-      break;
-    }
-  }
-  return is;
-}
-
-void learn(long type)
-{
-  long filttime;
-  long foldtime;
-  long genetime;
-  long sumtime;
-  filttime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_filt_learn);
-  foldtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_fold_learn);
-  genetime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_gene_learn);
-  sumtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_sum_learn);
-#if OBJ_VERBOSE && OBJ_XVERBOSE
-  printf("type%02ld times     filt=%ld fold=%ld gene=%ld sum=%ld\n", type, filttime, foldtime, genetime, sumtime);
-#endif
-}
-
-long learngeneral(obj_t obj[], long objsz, long type, learn_f learnfunc)
-{
-  obj_timer_start(0);
-  learnfunc(obj, objsz, type);
-  return obj_timer_stop();
-}
-
 obj_bit_t packavg(union obj_val_t *val, long attr, long type)
 {
   obj_bit_t bit;
@@ -611,6 +611,6 @@ void text2val(char *text, union obj_val_t *val, long valindx, long type)
   if (obj_valtype_num == valtype[type][valindx]) {
     val->num = strtod(text, 0);
   } else {
-    strncpy(val->str, text, OBJ_CLASS_STR - 1);
+    strncpy(val->str, text,OBJ_CLASS_STR - 1);
   }
 }

@@ -73,6 +73,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   char csvobj[OBJ_CLASS_CSV];
   obj_t obj;
   obj_t fittest;
+  long e;
   obj_model_setfitfunc(fit, NULL, MUSHROOM);
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CLASS_CSV, file)) {
@@ -80,7 +81,8 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
     obj_model_insert(obj, MUSHROOM);
   }
   fclose(file);
-  obj_model_evolve(type);
+  for (e = 0; e < 64; e++)
+    obj_model_evolve(type);
   fittest = obj_model_fittest(type);
   printf("fittest ");
   obj_print(obj);
@@ -102,9 +104,19 @@ void testpack(char *filename, long classindx, long type, obj_class_pack_f packfu
 #endif
 }
 
+void testsync()
+{
+}
+
 int main(int argc, char *argv[])
 {
-  /*  testclass();  */
-  /*  testsync();  */
-  testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (0) {
+    testclass();
+  }
+  if (0) {
+    testsync();
+  }
+  if (1) {
+    testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  }
 }
