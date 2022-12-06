@@ -8,7 +8,7 @@
 
 - [about](#about)
 - [obj_t](#obj_t)
-- areas
+- [areas](#areas)
   - [classify](#classify)
   - [model](#model)
   - [sense](#sense)
