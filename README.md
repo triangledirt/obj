@@ -25,18 +25,13 @@ its a local slim real-time system using no disk i/o—no network connections—n
 
 obj defines obj_t as a binary object—an object with binary attributes
 
-then it defines functional areas (classify synchronize model—and others) that you can use
+then it defines interfaces in terms of functional areas that you can use
 
 read more about [obj_t](OBJ.md)
 
 ## areas
 
 obj presents interfaces in these areas
-
-- classify
-- sense
-- synchronize
-- model
 
 ### classify
 
@@ -50,9 +45,11 @@ read more about [classify](CLASS.md)
 
 ### model
 
-model lets you grow a population of objects inside a self-partitioning geography
+model lets you grow a population of objects inside a self-partitioning geography—an obj model is like a zoo where objects interact conversationally to produce new objects following your fitness function
 
-you can then pull objects out of the model and use them to solve your problem
+you insert objects into the model—define a fitness function—then pull the best objects out of the model and use them to solve your problem
+
+model is a cultural evolutionary system (or a genetic algorithm with inherent organic partitioning)
 
 read more about [model](MODEL.md)
 
@@ -68,15 +65,15 @@ read more about [sense](SENSE.md)
 
 ### synchronize
 
-synchronize lets you schedule group and otherwise organize objects into sets
+synchronize lets you schedule group and otherwise organize objects into sets of various types
 
-it can be used to
+it can be used to synchronize tasks sharing resources—group people into personality types—and ..
 
 read more about [synchronize](SYNC.md)
 
 ## build and use
 
-how to build and use obj in your project
+this is how to build and use obj in your project
 
 getting the code—setting code options—compiling—linking
 
