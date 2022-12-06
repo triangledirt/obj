@@ -44,9 +44,9 @@ that builds object files and a library called libobj.a—it requires only the c 
 
 (to use obj in your project) include any of the areas you want to use
 
-    #include "[path to case directory]/class.h"
-    #include "[path to case directory]/sync.h"
-    #include "[path to case directory]/model.h"
+    #include "[path to obj directory]/class.h"
+    #include "[path to obj directory]/sync.h"
+    #include "[path to obj directory]/model.h"
 
 (then you build your project) add
 
