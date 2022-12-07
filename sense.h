@@ -4,6 +4,6 @@
 #include "obj.h"
 
 void obj_sense_observe(obj_t obj, long type);
-obj_t obj_sense_live(long type);
+obj_t obj_sense_alive(long type);
 
 #endif

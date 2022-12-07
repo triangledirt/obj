@@ -25,21 +25,22 @@ void init()
   }
 }
 
-obj_t obj_sense_live(long type)
+obj_t obj_sense_alive(long type)
 {
-  obj_t live;
+  obj_t alive;
   long i;
   long thresh;
   init();
-  obj_clear(&live);
+  obj_clear(&alive);
   thresh = observecnt / 4;
   for (i = 0; i < OBJ; i++)
     if (changes[type][i] > thresh)
-      obj_setattr(&live, i, 1);
+      obj_setattr(&alive, i, 1);
   if (observecnt >= OBSERVE) {
     once = obj_bool_false;
     init();
   }
+  return alive;
 }
 
 void obj_sense_observe(obj_t obj, long type)

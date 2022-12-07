@@ -111,17 +111,17 @@ void testsense(char *filename, long classindx, long type, obj_class_pack_f packf
   FILE *file;
   char csvobj[OBJ_CSV];
   obj_t obj;
-  obj_t live;
+  obj_t alive;
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
     obj = packfunc(csvobj, classindx, type);
     obj_sense_observe(obj, type);
+    alive = obj_sense_alive(type);
+    printf("live ");
+    obj_print(alive);
+    printf("\n");
   }
   fclose(file);
-  live = obj_sense_live(type);
-  printf("live ");
-  obj_print(obj);
-  printf("\n");
 }
 
 void testsync()
