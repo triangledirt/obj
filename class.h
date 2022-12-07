@@ -6,7 +6,6 @@
 #include "obj.h"
 
 #define OBJ_CLASS_CACHE 64
-#define OBJ_CLASS_CSV 4096
 #define OBJ_CLASS_STR (4 + 1)
 
 void obj_class_observe(obj_t obj, long type);
@@ -14,10 +13,10 @@ obj_bit_t obj_class_classify(obj_t obj, long type);
 obj_bit_t obj_class_classifyknown(obj_t obj, long type);
 
 typedef obj_t (*obj_class_pack_f)(char *, long, long);
-obj_t obj_class_packauto(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
-obj_t obj_class_packavg(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
-obj_t obj_class_packrand(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
-obj_t obj_class_packfirst(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
+obj_t obj_class_packauto(char csvobj[OBJ_CSV], long classindx, long type);
+obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindx, long type);
+obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindx, long type);
+obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindx, long type);
 
 void obj_class_resetstat(long type);
 struct obj_classstat_t *obj_class_stat(long type);

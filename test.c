@@ -18,9 +18,10 @@
 
 double fit(obj_t obj, long type, void *context);
 static void testclass();
-void testcsvobj(char csvobj[OBJ_CLASS_CSV], long classindx, long type, obj_class_pack_f packfunc);
+void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc);
 static void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
+static void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsync();
 
 double fit(obj_t obj, long type, void *context)
@@ -49,7 +50,7 @@ void testclass()
   }
 }
 
-void testcsvobj(char csvobj[OBJ_CLASS_CSV], long classindx, long type, obj_class_pack_f packfunc)
+void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc)
 {
   obj_t obj;
   char c;
@@ -71,15 +72,15 @@ void testcsvobj(char csvobj[OBJ_CLASS_CSV], long classindx, long type, obj_class
 void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
-  char csvobj[OBJ_CLASS_CSV];
+  char csvobj[OBJ_CSV];
   obj_t obj;
   obj_t fittest;
   long e;
-  obj_model_setfitfunc(fit, NULL, MUSHROOM);
+  obj_model_setfitfunc(fit, NULL, type);
   file = fopen(filename, "r");
-  while (fgets(csvobj, OBJ_CLASS_CSV, file)) {
+  while (fgets(csvobj, OBJ_CSV, file)) {
     obj = packfunc(csvobj, classindx, type);
-    obj_model_insert(obj, MUSHROOM);
+    obj_model_insert(obj, type);
   }
   fclose(file);
   for (e = 0; e < 64; e++)
@@ -94,9 +95,9 @@ void testpack(char *filename, long classindx, long type, obj_class_pack_f packfu
 {
   FILE *file;
   struct obj_classstat_t *stat;
-  char csvobj[OBJ_CLASS_CSV];
+  char csvobj[OBJ_CSV];
   file = fopen(filename, "r");
-  while (fgets(csvobj, OBJ_CLASS_CSV, file))
+  while (fgets(csvobj, OBJ_CSV, file))
     testcsvobj(csvobj, classindx, type, packfunc);
   fclose(file);
 #if OBJ_VERBOSE
@@ -105,8 +106,22 @@ void testpack(char *filename, long classindx, long type, obj_class_pack_f packfu
 #endif
 }
 
-void testsense()
+void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc)
 {
+  FILE *file;
+  char csvobj[OBJ_CSV];
+  obj_t obj;
+  obj_t live;
+  file = fopen(filename, "r");
+  while (fgets(csvobj, OBJ_CSV, file)) {
+    obj = packfunc(csvobj, classindx, type);
+    obj_sense_observe(obj, type);
+  }
+  fclose(file);
+  live = obj_sense_live(type);
+  printf("live ");
+  obj_print(obj);
+  printf("\n");
 }
 
 void testsync()
@@ -117,10 +132,10 @@ int main(int argc, char *argv[])
 {
   if (0)
     testclass();
-  if (0)
-    testsense();
+  if (1)
+    testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0)
     testsync();
-  if (1)
+  if (0)
     testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
 }

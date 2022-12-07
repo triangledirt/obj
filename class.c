@@ -54,16 +54,16 @@ static long countsub(obj_t objtype1, obj_t objtype2, long type);
 static long countxor(obj_t objtype1, obj_t objtype2, long type);
 
 typedef obj_bit_t (*pack_f)(union obj_val_t *, long, long);
-static obj_t packgeneral(char csvobj[OBJ_CLASS_CSV], long classindx, long type, pack_f packfunc);
+static obj_t packgeneral(char csvobj[OBJ_CSV], long classindx, long type, pack_f packfunc);
 static obj_bit_t packavg(union obj_val_t *val, long attr, long type);
 static obj_bit_t packavgnum(union obj_val_t *val, long attr, long type);
 static obj_bit_t packavgstr(union obj_val_t *val, long attr, long type);
 static obj_bit_t packfirst(union obj_val_t *val, long attr, long type);
 static obj_bit_t packrand(union obj_val_t *val, long attr, long type);
-static void setvaltypes(char csvobj[OBJ_CLASS_CSV], long classindx, long type);
+static void setvaltypes(char csvobj[OBJ_CSV], long classindx, long type);
 static void insertfirstval(union obj_val_t valobj[OBJ], long type);
 static void insertval(union obj_val_t valobj[OBJ], long type);
-static void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type);
+static void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type);
 static void text2val(char *text, union obj_val_t *val, long valindx, long type);
 static obj_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
@@ -135,13 +135,13 @@ long countxor(obj_t objtype1, obj_t objtype2, long type)
   return count;
 }
 
-void csv2valobj(char csvobj[OBJ_CLASS_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
+void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
 {
-  char csvobjcopy[OBJ_CLASS_CSV];
+  char csvobjcopy[OBJ_CSV];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSV - 1);
+  strncpy(csvobjcopy, csvobj, OBJ_CSV - 1);
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   text2val(tok, &valobj[valindx], valindx, type);
@@ -371,19 +371,19 @@ double obj_class_over(obj_t indicator, obj_t target, long type)
   return (double) bothcnt / 1 + eithercnt;
 }
 
-obj_t obj_class_packavg(char csvobj[OBJ_CLASS_CSV], long classindx, long type)
+obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packavg);
 }
 
-obj_t obj_class_packfirst(char csvobj[OBJ_CLASS_CSV], long classindx, long type)
+obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packfirst);
 }
 
-obj_t obj_class_packrand(char csvobj[OBJ_CLASS_CSV], long classindx, long type)
+obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindx, long type)
 {
   init();
   return packgeneral(csvobj, classindx, type, packrand);
@@ -533,7 +533,7 @@ obj_bit_t packfirst(union obj_val_t *val, long attr, long type)
   return 0 == obj_val_compare(val, &firstval[type][attr], valtype[type][attr]);
 }
 
-obj_t packgeneral(char csvobj[OBJ_CLASS_CSV], long classindx, long type, pack_f packfunc)
+obj_t packgeneral(char csvobj[OBJ_CSV], long classindx, long type, pack_f packfunc)
 {
   obj_t obj;
   union obj_val_t valobj[OBJ];
@@ -581,13 +581,13 @@ long reorderindx(long attrindx, long classindx)
   return reindx;
 }
 
-void setvaltypes(char csvobj[OBJ_CLASS_CSV], long classindx, long type)
+void setvaltypes(char csvobj[OBJ_CSV], long classindx, long type)
 {
-  char csvobjcopy[OBJ_CLASS_CSV];
+  char csvobjcopy[OBJ_CSV];
   char *tok;
   long csvindx = 0;
   long valindx;
-  strncpy(csvobjcopy, csvobj, OBJ_CLASS_CSV - 1);
+  strncpy(csvobjcopy, csvobj, OBJ_CSV - 1);
   tok = strtok(csvobjcopy, STRTOK);
   valindx = reorderindx(csvindx, classindx);
   valtype[type][valindx] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
