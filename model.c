@@ -21,9 +21,11 @@ static enum obj_meetstyle_t meetstyles[OBJ_TYPE];
 static struct obj_modelstat_t stats[OBJ_TYPE];
 static obj_bool_t once = obj_bool_false;
 static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
+static obj_t fittest[OBJ_TYPE];
 
 static double calcfitdefault(obj_t obj, long type, void *context);
 static long calcmovecoord(long coord, obj_bit_t offset);
+static obj_bool_t conquers(obj_t obj1, obj_t obj2, long type);
 static void evolve(long ticks, long type);
 static void init();
 static void initworld(long type);
@@ -35,6 +37,19 @@ static void tick(long type);
 long calcmovecoord(long coord, obj_bit_t offset)
 {
   return (offset) ? coord - 1 : coord + 1;
+}
+
+obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)
+{
+  double fit1;
+  double fit2;
+  obj_fit_f fitfunc;
+  void *context;
+  fitfunc = fitfuncs[type];
+  context = contexts[type];
+  fit1 = fitfunc(obj1, type, context);
+  fit2 = fitfunc(obj2, type, context);
+  return (fit1 > fit2) ? obj_bool_true : obj_bool_false;
 }
 
 void evolve(long ticks, long type)
@@ -51,6 +66,7 @@ void init()
     for (type = 0; type < OBJ_TYPE; type++) {
       fitfuncs[type] = obj_defaultfit;
       contexts[type] = NULL;
+      obj_randomize(&fittest[type]);
       initworld(type);
     }
     once = obj_bool_true;
@@ -81,7 +97,7 @@ void obj_model_evolvetick(long ticks, long type)
 obj_t obj_model_fittest(long type)
 {
   init();
-  return 0;
+  return fittest[type];
 }
 
 void obj_model_insert(obj_t obj, long type)
@@ -186,7 +202,9 @@ void tick(long type)
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
-    talk(obj, target, type);
-    swap(x, y, targetx, targety, type);
+    if (conquers(*obj, *target, type)) {
+      talk(obj, target, type);
+      swap(x, y, targetx, targety, type);
+    }
   }
 }

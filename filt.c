@@ -30,7 +30,7 @@ void calcfit(obj_t obj[], long objsz, long type)
   fitness[type] = s / (objsz / 2);
 }
 
-double obj_filt_fit(long type)
+double obj_filt_fitness(long type)
 {
   return fitness[type];
 }
@@ -122,9 +122,9 @@ double score(obj_t obj, long type)
   obj_bit_t onebit;
   obj_bit_t zerobit;
   obj_bit_t objbit;
-  long smash;
-  smash = obj_smash(obj, OBJ_CLEAR);
-  for (bit = 1; bit <= smash; bit++) {
+  long edge;
+  edge = obj_edge(obj, OBJ_CLEAR);
+  for (bit = 1; bit <= edge; bit++) {
     onebit = obj_getattr(one[type], bit);
     zerobit = obj_getattr(zero[type], bit);
     onetot += onebit;

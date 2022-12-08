@@ -34,7 +34,7 @@ static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
 typedef double (*fit_f)(long type);
-static fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
+static fit_f fitfunc[SCORE] = {obj_filt_fitness, obj_fold_fitness, obj_gene_fitness, obj_sum_fitness};
 
 typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
@@ -72,55 +72,55 @@ static long randomscoreindx(long exclude);
 
 long count(obj_t objtype, long type)
 {
-  long count = 0;
+  long cnt = 0;
   obj_t obj;
   long i;
   for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += obj_hastype(obj, objtype);
+    cnt += obj_hastype(obj, objtype);
   }
-  return count;
+  return cnt;
 }
 
 long countboth(obj_t objtype1, obj_t objtype2, long type)
 {
-  long count = 0;
+  long cnt = 0;
   obj_t obj;
   long i;
   for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += obj_hastype(obj, objtype1) && obj_hastype(obj, objtype2);
+    cnt += obj_hastype(obj, objtype1) && obj_hastype(obj, objtype2);
   }
-  return count;
+  return cnt;
 }
 
 long counteither(obj_t objtype1, obj_t objtype2, long type)
 {
-  long count = 0;
+  long cnt = 0;
   obj_t obj;
   long i;
   for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += obj_hastype(obj, objtype1) || obj_hastype(obj, objtype2);
+    cnt += obj_hastype(obj, objtype1) || obj_hastype(obj, objtype2);
   }
-  return count;
+  return cnt;
 }
 
 long countsub(obj_t objtype1, obj_t objtype2, long type)
 {
-  long count = 0;
+  long cnt = 0;
   obj_t obj;
   long i;
   for (i = 0; i < OBJ_CLASS_CACHE; i++) {
     obj = object[type][i];
-    count += obj_hastype(obj, objtype1) && !obj_hastype(obj, objtype2);
+    cnt += obj_hastype(obj, objtype1) && !obj_hastype(obj, objtype2);
   }
-  return count;
+  return cnt;
 }
 
 long countxor(obj_t objtype1, obj_t objtype2, long type)
 {
-  long count = 0;
+  long cnt = 0;
   obj_t obj;
   long i;
   obj_bit_t has1;
@@ -130,9 +130,9 @@ long countxor(obj_t objtype1, obj_t objtype2, long type)
     has1 = obj_hastype(obj, objtype1);
     has2 = obj_hastype(obj, objtype2);
     if (has1 ^ has2)
-      count++;
+      cnt++;
   }
-  return count;
+  return cnt;
 }
 
 void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type)

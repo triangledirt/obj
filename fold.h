@@ -6,6 +6,6 @@
 void obj_fold_learn(obj_t obj[], long objsz, long type);
 double obj_fold_score(obj_t obj, long type);
 
-double obj_fold_fit(long type);
+double obj_fold_fitness(long type);
 
 #endif

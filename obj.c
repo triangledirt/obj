@@ -13,38 +13,38 @@ void obj_clear(obj_t *obj)
 
 double obj_comparebox(obj_t obj1, obj_t obj2)
 {
-  long smash;
+  long edge;
   long i;
   long j;
   obj_bit_t o1bit;
   obj_bit_t o2bit;
   long and = 0;
-  smash = obj_smash(obj1, obj2);
-  for (i = 0; i <= smash; i++)
-    for (j = 0; j <= smash; j++) {
+  edge = obj_edge(obj1, obj2);
+  for (i = 0; i <= edge; i++)
+    for (j = 0; j <= edge; j++) {
       o1bit = obj_getattr(obj1, i);
       o2bit = obj_getattr(obj2, j);
       if (o1bit && o2bit)
 	and++;
     }
-  return and / pow(smash, 2);
+  return and / pow(edge, 2);
 }
 
 double obj_compareequal(obj_t obj1, obj_t obj2)
 {
   long bit;
-  long smash;
+  long edge;
   long correct = 0;
   obj_bit_t bit1;
   obj_bit_t bit2;
-  smash = obj_smash(obj1, obj2);
-  for (bit = 1; bit <= smash; bit++) {
+  edge = obj_edge(obj1, obj2);
+  for (bit = 1; bit <= edge; bit++) {
     bit1 = obj_getattr(obj1, bit);
     bit2 = obj_getattr(obj2, bit);
     if (bit1 == bit2)
       correct++;
   }
-  return (double) correct / (1 + smash);
+  return (double) correct / (1 + edge);
 }
 
 double obj_comparefocus(obj_t obj1, obj_t obj2)
@@ -56,19 +56,19 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
 {
   long match;
   long opposite = 0;
-  long smash;
+  long edge;
   long i;
   obj_bit_t o1bit;
   obj_bit_t o2bit;
-  smash = obj_smash(obj1, obj2);
-  for (i = 0; i <= smash; i++) {
+  edge = obj_edge(obj1, obj2);
+  for (i = 0; i <= edge; i++) {
     o1bit = obj_getattr(obj1, i);
     o2bit = obj_getattr(obj2, i);
     if (o1bit != o2bit)
       opposite++;
   }
-  match = smash - opposite;
-  return (double) (smash - labs(match - opposite)) / smash;
+  match = edge - opposite;
+  return (double) (edge - labs(match - opposite)) / edge;
 }
 
 double obj_comparetypes(obj_t obj1, obj_t obj2)
@@ -93,23 +93,38 @@ double obj_comparetypes(obj_t obj1, obj_t obj2)
 double obj_comparexor(obj_t obj1, obj_t obj2)
 {
   long bit;
-  long smash;
+  long edge;
   long correct = 0;
   obj_bit_t bit1;
   obj_bit_t bit2;
-  smash = obj_smash(obj1, obj2);
-  for (bit = 1; bit <= smash; bit++) {
+  edge = obj_edge(obj1, obj2);
+  for (bit = 1; bit <= edge; bit++) {
     bit1 = obj_getattr(obj1, bit);
     bit2 = obj_getattr(obj2, bit);
     if (bit1 ^ bit2)
       correct++;
   }
-  return (double) correct / (1 + smash);
+  return (double) correct / (1 + edge);
 }
 
 double obj_defaultfit(obj_t obj, long type, void *context)
 {
   return 0.0;
+}
+
+long obj_edge(obj_t obj1, obj_t obj2)
+{
+  long edge = OBJ - 1;
+  obj_bit_t bit1;
+  obj_bit_t bit2;
+  bit1 = obj_getattr(obj1, edge);
+  bit2 = obj_getattr(obj2, edge);
+  while ((edge > 0) && !bit1 && !bit2) {
+    edge--;
+    bit1 = obj_getattr(obj1, edge);
+    bit2 = obj_getattr(obj2, edge);
+  }
+  return edge;
 }
 
 void obj_fill(obj_t *obj)
@@ -207,19 +222,4 @@ void obj_setnum(obj_t *obj, long startbit, long length, long long num)
     place *= 2;
     bit++;
   } while (bit < length);
-}
-
-long obj_smash(obj_t obj1, obj_t obj2)
-{
-  long smash = OBJ - 1;
-  obj_bit_t bit1;
-  obj_bit_t bit2;
-  bit1 = obj_getattr(obj1, smash);
-  bit2 = obj_getattr(obj2, smash);
-  while ((smash > 0) && !bit1 && !bit2) {
-    smash--;
-    bit1 = obj_getattr(obj1, smash);
-    bit2 = obj_getattr(obj2, smash);
-  }
-  return smash;
 }

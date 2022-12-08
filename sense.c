@@ -8,7 +8,7 @@ obj_t past[OBJ_TYPE];
 long observecnt;
 obj_bool_t once = obj_bool_false;
 
-void init();
+static void init();
 
 void init()
 {
@@ -42,6 +42,10 @@ obj_t obj_sense_alive(long type)
   }
   return alive;
 }
+
+/*
+add up how many 1s in each column for that list and range those onto a 0.0–1.0 number for each column—and use that to return alive ??
+*/
 
 void obj_sense_observe(obj_t obj, long type)
 {

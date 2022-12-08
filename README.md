@@ -45,7 +45,9 @@ read more about [class](CLASS.md)
 
 ### model
 
-model lets you grow a population of objects inside a self-partitioning geography—an obj model is like a zoo where objects interact to produce new objects (following your fitness function)
+model lets you grow a population of objects inside a self-partitioning geography
+
+an obj model is like a zoo where objects interact to produce new objects (following your fitness function)
 
 you insert objects into the model—define a fitness function—then pull the best objects out of the model and use them to solve your problem
 
