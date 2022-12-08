@@ -36,7 +36,7 @@ static void tick(long type);
 
 long calcmovecoord(long coord, obj_bit_t offset)
 {
-  return (offset) ? coord - 1 : coord + 1;
+  return (offset) ? coord + 1 : coord - 1;
 }
 
 obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)
