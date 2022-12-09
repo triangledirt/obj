@@ -117,6 +117,9 @@ void testsense(char *filename, long classindx, long type, obj_class_pack_f packf
     obj = packfunc(csvobj, classindx, type);
     obj_sense_observe(obj, type);
     alive = obj_sense_alive(type);
+    printf("obj   ");
+    obj_print(obj);
+    printf("\n");
     printf("alive ");
     obj_print(alive);
     printf("\n");
@@ -135,7 +138,7 @@ int main(int argc, char *argv[])
   if (0)
     testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (1)
-    testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+    testsense("data/mushroom2.csv", 0, MUSHROOM2, obj_class_packavg);
   if (0)
     testsync();
 }
