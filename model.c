@@ -126,13 +126,16 @@ obj_t obj_model_randomabove(double fit, long type)
   obj_fit_f fitf;
   void *ctx;
   obj_t obj;
+  long maxtries = OBJ_MODEL_DIM;
+  long tries = 0;
   init();
   fitf = fitfuncs[type];
   ctx = contexts[type];
   do {
     obj = obj_model_random(type);
     objfit = fitf(obj, type, ctx);
-  } while (objfit <= fit);
+    tries++;
+  } while ((objfit <= fit) && (tries < maxtries));
   return obj;
 }
 
