@@ -4,6 +4,7 @@
 #include "sense.h"
 
 #define CACHE OBJ
+#define THRESH 0.5
 
 obj_t cache[OBJ_TYPE][CACHE];
 enum obj_bool_t once = obj_bool_false;
@@ -50,8 +51,8 @@ obj_t obj_sense_alive(long type)
   for (i = 1; i < CACHE; i++) {
     attrobj = buildattrobj(i, type);
     focus = obj_comparefocus(classobj, attrobj);
-    printf("%f\n", focus);
-    if (focus > 0.5)
+    /*  printf("%f\n", focus);  */
+    if (focus > THRESH)
       obj_setattr(&alive, i, 1);
   }
   return alive;

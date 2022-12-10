@@ -69,7 +69,13 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
       opposite++;
   }
   match = edge - opposite;
-#ifdef OBJ_XVERBOSE
+#if OBJ_XVERBOSE
+  printf("obj1=");
+  obj_print(obj1);
+  printf("\n");
+  printf("obj2=");
+  obj_print(obj2);
+  printf("\n");
   printf("edge=%lu match=%lu opposite=%lu\n", edge, match, opposite);
 #endif
   if (0 == edge) {
