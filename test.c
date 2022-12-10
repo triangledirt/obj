@@ -20,6 +20,7 @@ double fit(obj_t obj, long type, void *context);
 static void testclass();
 void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc);
 static void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc);
+static void testobj();
 static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsync();
@@ -91,6 +92,25 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   printf("\n");
 }
 
+void testobj()
+{
+  obj_t obj1;
+  obj_t obj2;
+  obj_t obj3;
+  obj_t obj4;
+  char str1[OBJ] = "0000000000000000000000000000000000000000000000000000000000000000";
+  char str2[OBJ] = "1111111111111111111111111111111111111111111111111111111111111111";
+  char str3[OBJ] = "0000000000000000000000000000000011111111111111111111111111111111";
+  char str4[OBJ] = "0101010101010101010101010101010111111111111111111111111111111111";
+  double oblivion;
+  obj_setfromstr(&obj1, str1);
+  obj_setfromstr(&obj2, str2);
+  obj_setfromstr(&obj3, str3);
+  obj_setfromstr(&obj4, str4);
+  oblivion = obj_compareoblivion(obj1, obj2);
+  printf("oblivion = %f\n", oblivion);
+}
+
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -137,8 +157,10 @@ int main(int argc, char *argv[])
     testclass();
   if (0)
     testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+    if (0)
+      testobj();
   if (1)
-    testsense("data/mushroom2.csv", 0, MUSHROOM2, obj_class_packavg);
+    testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0)
     testsync();
 }

@@ -20,12 +20,12 @@ double obj_comparebox(obj_t obj1, obj_t obj2)
   obj_bit_t o2bit;
   long and = 0;
   edge = obj_edge(obj1, obj2);
-  for (i = 0; i <= edge; i++)
-    for (j = 0; j <= edge; j++) {
+  for (i = 1; i <= edge; i++)
+    for (j = 1; j <= edge; j++) {
       o1bit = obj_getattr(obj1, i);
       o2bit = obj_getattr(obj2, j);
       if (o1bit && o2bit)
-	and++;
+        and++;
     }
   return and / pow(edge, 2);
 }
@@ -60,15 +60,24 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
   long i;
   obj_bit_t o1bit;
   obj_bit_t o2bit;
+  double oblivion;
   edge = obj_edge(obj1, obj2);
-  for (i = 0; i <= edge; i++) {
+  for (i = 1; i <= edge; i++) {
     o1bit = obj_getattr(obj1, i);
     o2bit = obj_getattr(obj2, i);
     if (o1bit != o2bit)
       opposite++;
   }
   match = edge - opposite;
-  return (double) (edge - labs(match - opposite)) / edge;
+#ifdef OBJ_XVERBOSE
+  printf("edge=%lu match=%lu opposite=%lu\n", edge, match, opposite);
+#endif
+  if (0 == edge) {
+    oblivion = 1;
+  } else {
+    oblivion = (double) (edge - labs(match - opposite)) / edge;
+  }
+  return oblivion;
 }
 
 double obj_comparetypes(obj_t obj1, obj_t obj2)

@@ -43,14 +43,15 @@ obj_t obj_sense_alive(long type)
   obj_t classobj;
   obj_t attrobj;
   long i;
-  double oblivion;
+  double focus;
   init();
   classobj = buildattrobj(0, type);
   obj_clear(&alive);
-  for (i = 1; i < OBJ; i++) {
+  for (i = 1; i < CACHE; i++) {
     attrobj = buildattrobj(i, type);
-    oblivion = obj_compareoblivion(classobj, attrobj);
-    if (oblivion > 0.5)
+    focus = obj_comparefocus(classobj, attrobj);
+    printf("%f\n", focus);
+    if (focus > 0.5)
       obj_setattr(&alive, i, 1);
   }
   return alive;
