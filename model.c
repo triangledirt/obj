@@ -24,7 +24,7 @@ static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 static obj_t fittest[OBJ_TYPE];
 
 static double calcfitdefault(obj_t obj, long type, void *context);
-static long calcmovecoord(long coord, obj_bit_t offset);
+static long calcmovecoord(long coord, long offset);
 static obj_bool_t conquers(obj_t obj1, obj_t obj2, long type);
 static void evolve(long ticks, long type);
 static void init();
@@ -34,9 +34,9 @@ static void swap(long x1, long y1, long x2, long y2, long type);
 static void talk(obj_t *obj1, obj_t *obj2, long type);
 static void tick(long type);
 
-long calcmovecoord(long coord, obj_bit_t offset)
+long calcmovecoord(long coord, long offset)
 {
-  return (offset) ? coord + 1 : coord - 1;
+  return obj_indx_wrap(coord + offset, OBJ_MODEL_DIM);
 }
 
 obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)

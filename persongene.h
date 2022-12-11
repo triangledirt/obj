@@ -9,6 +9,6 @@ struct obj_persongene_t {
   obj_bit_t racist;
 };
 
-void obj_persongene_parse(struct obj_persongene_t *persongene, long startbit, obj_t obj);
+void obj_persongene_parse(struct obj_persongene_t *persongene, obj_t obj, long startbit);
 
 #endif

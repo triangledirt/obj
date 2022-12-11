@@ -8,6 +8,6 @@ struct obj_meetgene_t {
   long length;
 };
 
-void obj_meetgene_parse(struct obj_meetgene_t *meetgene, long startbit, obj_t obj);
+void obj_meetgene_parse(struct obj_meetgene_t *meetgene, obj_t obj, long startbit);
 
 #endif

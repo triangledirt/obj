@@ -7,6 +7,6 @@ struct obj_displaygene_t {
   char face;
 };
 
-void obj_displaygene_parse(struct obj_displaygene_t *displaygene, long startbit, obj_t obj);
+void obj_displaygene_parse(struct obj_displaygene_t *displaygene, obj_t obj, long startbit);
 
 #endif
