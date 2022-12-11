@@ -45,11 +45,17 @@ obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)
   double fit2;
   obj_fit_f fitfunc;
   void *context;
+  obj_bool_t conquers;
   fitfunc = fitfuncs[type];
-  context = contexts[type];
-  fit1 = fitfunc(obj1, type, context);
-  fit2 = fitfunc(obj2, type, context);
-  return (fit1 > fit2) ? obj_bool_true : obj_bool_false;
+  if (fitfunc) {
+    context = contexts[type];
+    fit1 = fitfunc(obj1, type, context);
+    fit2 = fitfunc(obj2, type, context);
+    conquers = (fit1 > fit2) ? obj_bool_true : obj_bool_false;
+  } else {
+    conquers = obj_bool_true;
+  }
+  return conquers;
 }
 
 void evolve(long ticks, long type)
@@ -64,7 +70,7 @@ void init()
   long type;
   if (!once) {
     for (type = 0; type < OBJ_TYPE; type++) {
-      fitfuncs[type] = obj_defaultfit;
+      fitfuncs[type] = NULL;
       contexts[type] = NULL;
       obj_randomize(&fittest[type]);
       initworld(type);

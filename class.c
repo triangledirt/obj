@@ -31,7 +31,7 @@ static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
 typedef double (*fit_f)(long type);
-static fit_f fitfunc[SCORE] = {obj_filt_fitness, obj_fold_fitness, obj_gene_fitness, obj_sum_fitness};
+static fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
 
 typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};

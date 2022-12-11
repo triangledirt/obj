@@ -44,17 +44,17 @@ void calcfit(pop_t pop, long o, obj_t obj[], long objsz, long type)
   }
 }
 
+double obj_gene_fit(long type)
+{
+  return fitness[type];
+}
+
 void forcecalc(pop_t pop, obj_t obj[], long objsz, long type)
 {
   long o;
   for (o = 0; o < objsz; o++)
     if (fits[type][o] < 0)
       calcfit(pop, o, obj, objsz, type);
-}
-
-double obj_gene_fitness(long type)
-{
-  return fitness[type];
 }
 
 void obj_gene_learn(obj_t obj[], long objsz, long type)

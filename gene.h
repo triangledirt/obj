@@ -6,6 +6,6 @@
 void obj_gene_learn(obj_t obj[], long objsz, long type);
 double obj_gene_score(obj_t obj, long type);
 
-double obj_gene_fitness(long type);
+double obj_gene_fit(long type);
 
 #endif

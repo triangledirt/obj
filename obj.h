@@ -13,7 +13,7 @@ typedef long long obj_t;
 #define OBJ_TYPE OBJ
 
 typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
-double obj_defaultfit(obj_t obj, long type, void *context);
+double obj_fit(obj_t obj, long type, void *context);
 
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);

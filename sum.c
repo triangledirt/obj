@@ -23,7 +23,7 @@ void init()
   }
 }
 
-double obj_sum_fitness(long type)
+double obj_sum_fit(long type)
 {
   return fitness[type];
 }

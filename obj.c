@@ -122,11 +122,6 @@ double obj_comparexor(obj_t obj1, obj_t obj2)
   return (double) correct / (1 + edge);
 }
 
-double obj_defaultfit(obj_t obj, long type, void *context)
-{
-  return 0.0;
-}
-
 long obj_edge(obj_t obj1, obj_t obj2)
 {
   long edge = OBJ - 1;
@@ -147,6 +142,11 @@ void obj_fill(obj_t *obj)
   long bit;
   for (bit = 0; bit < OBJ; bit++)
     obj_setattr(obj, bit, 1);
+}
+
+double obj_fit(obj_t obj, long type, void *context)
+{
+  return 0.0;
 }
 
 long long obj_getnum(obj_t obj, long startbit, long length)
