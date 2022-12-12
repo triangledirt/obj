@@ -4,6 +4,7 @@
 #include "bit.h"
 
 struct obj_modelstat_t {
+  long ticks;
 };
 
 void obj_modelstat_reset(struct obj_modelstat_t *stat);

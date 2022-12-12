@@ -77,6 +77,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   obj_t obj;
   obj_t fittest;
   long e;
+  struct obj_modelstat_t *stat;
   obj_model_setfitfunc(fit, NULL, type);
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
@@ -86,10 +87,14 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   fclose(file);
   for (e = 0; e < 64; e++)
     obj_model_evolve(type);
+#if OBJ_VERBOSE
+  stat = obj_model_stat(type);
+  obj_modelstat_print(stat, type);
   fittest = obj_model_fittest(type);
   printf("fittest ");
   obj_print(obj);
   printf("\n");
+#endif
 }
 
 void testobj()

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 #include "displaygene.h"
 #include "indx.h"
 #include "meetgene.h"
@@ -69,11 +70,13 @@ void init()
 {
   long type;
   if (!once) {
+    srandom(time(NULL));
     for (type = 0; type < OBJ_TYPE; type++) {
       fitfuncs[type] = NULL;
       contexts[type] = NULL;
       obj_randomize(&fittest[type]);
       initworld(type);
+      obj_modelstat_reset(&stats[type]);
     }
     once = obj_bool_true;
   }
@@ -216,4 +219,5 @@ void tick(long type)
       swap(x, y, targetx, targety, type);
     }
   }
+  stats[type].ticks++;
 }

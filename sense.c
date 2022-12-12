@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "bit.h"
 #include "sense.h"
 
@@ -31,6 +32,7 @@ void init()
   long type;
   long i;
   if (!once) {
+    srandom(time(NULL));
     for (type = 0; type < OBJ_TYPE; type++)
       for (i = 0; i < CACHE; i++)
         obj_randomize(&cache[type][i]);
