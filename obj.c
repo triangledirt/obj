@@ -144,11 +144,6 @@ void obj_fill(obj_t *obj)
     obj_setattr(obj, bit, 1);
 }
 
-double obj_fit(obj_t obj, long type, void *context)
-{
-  return 0.0;
-}
-
 long long obj_getnum(obj_t obj, long startbit, long length)
 {
   long place = 1;

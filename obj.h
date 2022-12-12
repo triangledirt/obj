@@ -12,9 +12,6 @@ typedef long long obj_t;
 #define OBJ_CSV 4096
 #define OBJ_TYPE OBJ
 
-typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
-double obj_fit(obj_t obj, long type, void *context);
-
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);
 void obj_randomize(obj_t *obj);
@@ -42,6 +39,8 @@ void obj_rotate(obj_t *obj, long inc);
 
 void obj_setnum(obj_t *obj, long startbit, long length, long long num);
 long long obj_getnum(obj_t obj, long startbit, long length);
+
+typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
 long obj_edge(obj_t obj1, obj_t obj2);
 

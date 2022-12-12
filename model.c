@@ -179,6 +179,7 @@ void swap(long x1, long y1, long x2, long y2, long type)
   temp = world[type][x1][y1];
   world[type][x1][y1] = world[type][x2][y2];
   world[type][x2][y2] = temp;
+  stats[type].swaps++;
 }
 
 void talk(obj_t *obj1, obj_t *obj2, long type)
@@ -193,6 +194,7 @@ void talk(obj_t *obj1, obj_t *obj2, long type)
     bit = obj_getattr(*obj1, j);
     obj_setattr(obj2, j, bit);
   }
+  stats[type].talks++;
 }
 
 void tick(long type)
