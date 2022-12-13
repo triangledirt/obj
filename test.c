@@ -78,7 +78,6 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   obj_t fittest;
   long e;
   struct obj_modelstat_t *stat;
-  /*  obj_model_setfitfunc(fit, NULL, type);  */
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
     obj = packfunc(csvobj, classindx, type);

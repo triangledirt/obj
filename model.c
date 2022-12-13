@@ -23,11 +23,15 @@ static struct obj_modelstat_t stats[OBJ_TYPE];
 static obj_bool_t once = obj_bool_false;
 static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 static obj_t fittest[OBJ_TYPE];
+static double fittestfit[OBJ_TYPE];
+static double fit[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 
-static double calcfitdefault(obj_t obj, long type, void *context);
+static void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
 static long calcmovecoord(long coord, long offset);
-static obj_bool_t conquers(obj_t obj1, obj_t obj2, long type);
+static obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type);
 static void evolve(long ticks, long type);
+static void forcecalc(long type, obj_fit_f fitfunc, void *context);
+static double getfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
 static void init();
 static void initworld(long type);
 static void move(long x, long y, long type);
@@ -35,12 +39,23 @@ static void swap(long x1, long y1, long x2, long y2, long type);
 static void talk(obj_t *obj1, obj_t *obj2, long type);
 static void tick(long type);
 
+void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context)
+{
+  double fitness;
+  fitness = fitfunc(obj, type, context);
+  fit[type][x][y] = fitness;
+  if (fitness > fittestfit[type]) {
+    fittest[type] = obj;
+    fittestfit[type] = fitness;
+  }
+}
+
 long calcmovecoord(long coord, long offset)
 {
   return obj_indx_wrap(coord + offset, OBJ_MODEL_DIM);
 }
 
-obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)
+obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type)
 {
   double fit1;
   double fit2;
@@ -50,8 +65,8 @@ obj_bool_t conquers(obj_t obj1, obj_t obj2, long type)
   fitfunc = fitfuncs[type];
   if (fitfunc) {
     context = contexts[type];
-    fit1 = fitfunc(obj1, type, context);
-    fit2 = fitfunc(obj2, type, context);
+    fit1 = getfit(obj1, x1, y1, type, fitfunc, context);
+    fit2 = getfit(obj2, x2, y2, type, fitfunc, context);
     conquers = (fit1 > fit2) ? obj_bool_true : obj_bool_false;
   } else {
     conquers = obj_bool_true;
@@ -66,6 +81,28 @@ void evolve(long ticks, long type)
     tick(type);
 }
 
+void forcecalc(long type, obj_fit_f fitfunc, void *context)
+{
+  long x;
+  long y;
+  obj_t obj;
+  for (x = 0; x < OBJ_MODEL_DIM; x++) {
+    for (y = 0; y < OBJ_MODEL_DIM; y++) {
+      if (fit[type][x][y] < 0) {
+        obj = world[type][x][y];
+        calcfit(obj, x, y, type, fitfunc, context);
+      }
+    }
+  }
+}
+
+double getfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context)
+{
+  if (fit[type][x][y] < 0)
+    calcfit(obj, x, y, type, fitfunc, context);
+  return fit[type][x][y];
+}
+
 void init()
 {
   long type;
@@ -75,6 +112,7 @@ void init()
       fitfuncs[type] = NULL;
       contexts[type] = NULL;
       obj_randomize(&fittest[type]);
+      fittestfit[type] = -1;
       initworld(type);
       obj_modelstat_reset(&stats[type]);
     }
@@ -87,8 +125,10 @@ void initworld(long type)
   long x;
   long y;
   for (x = 0; x < OBJ_MODEL_DIM; x++)
-    for (y = 0; y < OBJ_MODEL_DIM; y++)
+    for (y = 0; y < OBJ_MODEL_DIM; y++) {
       obj_randomize(&world[type][x][y]);
+      fit[type][x][y] = -1;
+    }
 }
 
 void obj_model_evolve(long type)
@@ -215,8 +255,8 @@ void tick(long type)
     obj_movegene_parse(&movegene, MOVE_GENE, *obj);
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
-    target = &world[type][targetx][targety];
-    if (conquers(*obj, *target, type)) {
+    if (conquers(*obj, x, y, *target, targetx, targety, type)) {
+      target = &world[type][targetx][targety];
       talk(obj, target, type);
       swap(x, y, targetx, targety, type);
     }

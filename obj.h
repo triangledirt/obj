@@ -22,6 +22,8 @@ void obj_setfromstr(obj_t *obj, char str[OBJ]);
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_getclass(obj) (obj & (long long) 1)
 
+typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
+
 double obj_comparebox(obj_t obj1, obj_t obj2);
 double obj_compareequal(obj_t obj1, obj_t obj2);
 double obj_comparefocus(obj_t obj1, obj_t obj2);
@@ -39,8 +41,6 @@ void obj_rotate(obj_t *obj, long inc);
 
 void obj_setnum(obj_t *obj, long startbit, long length, long long num);
 long long obj_getnum(obj_t obj, long startbit, long length);
-
-typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
 long obj_edge(obj_t obj1, obj_t obj2);
 

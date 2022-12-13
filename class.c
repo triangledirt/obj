@@ -5,7 +5,6 @@
 #include <time.h>
 #include "class.h"
 #include "coin.h"
-#include "core.h"
 #include "die.h"
 #include "filt.h"
 #include "fold.h"
@@ -30,8 +29,8 @@ static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
-typedef double (*fit_f)(long type);
-static fit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
+typedef double (*getfit_f)(long type);  /*  move this elsewhere ??  */
+static getfit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
 
 typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
@@ -245,19 +244,19 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
   long scorefindx;
   long altfitfindx;
   score_f scoref;
-  fit_f fitf;
-  fit_f altfitf;
+  getfit_f getfitf;
+  getfit_f altgetfitf;
   char *scorefname;
   char c;
   init();
   obj_obscureclass(&obj);
   scorefindx = favscoreindx[type];
   if ((scorefuncoverride < 0) && obj_die_toss(OBJ_CLASS_CACHE / 2)) {
-    fitf = fitfunc[scorefindx];
-    fit = fitf(type);
+    getfitf = fitfunc[scorefindx];
+    fit = getfitf(type);
     altfitfindx = randomscoreindx(scorefindx);
-    altfitf = fitfunc[altfitfindx];
-    altfit = altfitf(type);
+    altgetfitf = fitfunc[altfitfindx];
+    altfit = altgetfitf(type);
     if ((altfit - fit) > 0.2) {
 #if OBJ_VERBOSE && OBJ_XVERBOSE
       printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorename[scorefindx], fit, scorename[altfitfindx], altfit);
