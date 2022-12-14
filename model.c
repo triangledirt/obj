@@ -9,12 +9,11 @@
 #include "movegene.h"
 #include "persongene.h"
 
-#define TICKS OBJ_MODEL_DIM
-
 #define DISPLAY_GENE 0
 #define MEET_GENE 8
 #define MOVE_GENE 32
 #define PERSON_GENE 40
+#define TICKS OBJ_MODEL_DIM
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
 static void *contexts[OBJ_TYPE];
@@ -143,12 +142,15 @@ void obj_model_evolvetick(long ticks, long type)
   evolve(ticks, type);
 }
 
-obj_t obj_model_fittest(long type)
+struct obj_fit_t obj_model_fittest(long type)
 {
+  struct obj_fit_t fit;
   init();
-  return fittest[type];
+  fit.obj = fittest[type];
+  fit.fit = fittestfit[type];
+  return fit;
 }
-
+          
 void obj_model_insert(obj_t obj, long type)
 {
   long x;
@@ -255,8 +257,8 @@ void tick(long type)
     obj_movegene_parse(&movegene, MOVE_GENE, *obj);
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
+    target = &world[type][targetx][targety];
     if (conquers(*obj, x, y, *target, targetx, targety, type)) {
-      target = &world[type][targetx][targety];
       talk(obj, target, type);
       swap(x, y, targetx, targety, type);
     }

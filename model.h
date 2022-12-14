@@ -1,6 +1,7 @@
 #ifndef obj_model_h
 #define obj_model_h
 
+#include "fit.h"
 #include "meetstyle.h"
 #include "modelstat.h"
 #include "obj.h"
@@ -15,7 +16,7 @@ void obj_model_insert(obj_t obj, long type);
 void obj_model_evolve(long type);
 void obj_model_evolvetick(long ticks, long type);
 
-obj_t obj_model_fittest(long type);
+struct obj_fit_t obj_model_fittest(long type);
 obj_t obj_model_random(long type);
 obj_t obj_model_randomabove(double fit, long type);
 

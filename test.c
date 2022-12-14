@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "class.h"
+#include "fit.h"
 #include "model.h"
 #include "sense.h"
 #include "sync.h"
@@ -75,7 +76,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   FILE *file;
   char csvobj[OBJ_CSV];
   obj_t obj;
-  obj_t fittest;
+  struct obj_fit_t fittest;
   long e;
   struct obj_modelstat_t *stat;
   file = fopen(filename, "r");
@@ -91,8 +92,9 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   obj_modelstat_print(stat, type);
   fittest = obj_model_fittest(type);
   printf("fittest ");
-  obj_print(obj);
+  obj_print(fittest.obj);
   printf("\n");
+  printf("fittest fit %f\n", fittest.fit);
 #endif
 }
 
@@ -157,14 +159,9 @@ void testsync()
 
 int main(int argc, char *argv[])
 {
-  if (0)
-    testclass();
-  if (1)
-    testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
-    if (0)
-      testobj();
-  if (0)
-    testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
-  if (0)
-    testsync();
+  if (0) testclass();
+  if (1) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (0) testobj();
+  if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (0) testsync();
 }
