@@ -150,7 +150,7 @@ struct obj_fit_t obj_model_fittest(long type)
   fit.fit = fittestfit[type];
   return fit;
 }
-          
+
 void obj_model_insert(obj_t obj, long type)
 {
   long x;
