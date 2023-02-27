@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "displaygene.h"
@@ -134,12 +135,14 @@ void obj_model_evolve(long type)
 {
   init();
   evolve(TICKS, type);
+  obj_model_print(type, 10, 6);
 }
 
 void obj_model_evolvetick(long ticks, long type)
 {
   init();
   evolve(ticks, type);
+  obj_model_print(type, 10, 6);
 }
 
 struct obj_fit_t obj_model_fittest(long type)
@@ -151,6 +154,13 @@ struct obj_fit_t obj_model_fittest(long type)
   return fit;
 }
 
+obj_bit_t obj_model_getclass(long x, long y, long type)
+{
+  obj_t obj;
+  obj = world[type][x][y];
+  return obj_getclass(obj);
+}
+
 void obj_model_insert(obj_t obj, long type)
 {
   long x;
@@ -159,6 +169,23 @@ void obj_model_insert(obj_t obj, long type)
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
   world[type][x][y] = obj;
+}
+
+void obj_model_print(long type, long width, long height)
+{
+  long x;
+  long y;
+  obj_t obj;
+  obj_bit_t class;
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
+      obj = world[type][x][y];
+      class = obj_getclass(obj);
+      printf("%lld", class);
+    }
+    printf("\n");
+  }
+  printf("\n");
 }
 
 obj_t obj_model_random(long type)

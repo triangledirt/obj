@@ -23,4 +23,7 @@ obj_t obj_model_randomabove(double fit, long type);
 void obj_model_resetstat(long type);
 struct obj_modelstat_t *obj_model_stat(long type);
 
+void obj_model_print(long type, long width, long height);
+obj_bit_t obj_model_getclass(long x, long y, long type);
+
 #endif
