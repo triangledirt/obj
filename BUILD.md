@@ -34,7 +34,7 @@ change COMPILER to be whatever your compiler is—etc
 
 ## build
 
-now build—(from the case directory) execute
+now build—(from the obj directory) execute
 
     ./make
 

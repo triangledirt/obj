@@ -17,7 +17,7 @@
 
 ## about
 
-obj is a library of c functions used to (classify—syncronize—model) (and do other things to) generalized binary data objects
+obj is a library of c functions used to (classify—synchronize—model) (and do other things to) generalized binary data objects
 
 its a local slim real-time system using no disk i/o—no network connections—no threading—no dynamic memory—the only dependency is the c standard library
 
