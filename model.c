@@ -86,14 +86,12 @@ void forcecalc(long type, obj_fit_f fitfunc, void *context)
   long x;
   long y;
   obj_t obj;
-  for (x = 0; x < OBJ_MODEL_DIM; x++) {
-    for (y = 0; y < OBJ_MODEL_DIM; y++) {
+  for (x = 0; x < OBJ_MODEL_DIM; x++)
+    for (y = 0; y < OBJ_MODEL_DIM; y++)
       if (fit[type][x][y] < 0) {
         obj = world[type][x][y];
         calcfit(obj, x, y, type, fitfunc, context);
       }
-    }
-  }
 }
 
 double getfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context)
