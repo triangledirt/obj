@@ -31,7 +31,7 @@ and get it similarly
     class = obj_getattr(obj, 0);
     class = obj_getclass(obj);
 
-you dont have to set any particular bit—you dont have to set the class when you dont know it—you dont have to use all 64 bits—if you have an unknown—ignore it—or set it with a random bit—dont worry about cleaning up your data—case likes it messy—if youre feeling daring (instead of initializing an obj_t with obj_clear()) do this
+you dont have to set any particular bit—you dont have to set the class when you dont know it—you dont have to use all 64 bits—if you have an unknown—ignore it—or set it with a random bit—dont worry about cleaning up your data—obj likes it messy—if youre feeling daring (instead of initializing an obj_t with obj_clear()) do this
 
     obj_randomize(&obj);
 
