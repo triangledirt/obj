@@ -29,7 +29,7 @@ static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static obj_bool_t firstpack[OBJ_TYPE];
 
-typedef double (*getfit_f)(long type);  /*  move this elsewhere ??  */
+typedef double (*getfit_f)(long type);
 static getfit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
 
 typedef double (*score_f)(obj_t obj, long type);
