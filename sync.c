@@ -50,7 +50,7 @@ obj_t obj_sync_next(long set, long type)
   obj_t obj;
   init();
   next = setnext[type][set];
-  if (next < OBJ_SYNC_SET) {
+  if (next < setcnt[type][next]) {
     obj = syncset[type][set][next];
     setnext[type][set]++;
   } else {
