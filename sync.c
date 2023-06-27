@@ -17,7 +17,7 @@ void init()
   long i;
   long j;
   obj_t obj;
-  if (once) {
+  if (!once) {
     for (i = 0; i < OBJ_TYPE; i++) {
       valid[i] = obj_bool_true;
       syncstyle[i] = obj_syncstyle_resource;
