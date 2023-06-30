@@ -28,7 +28,11 @@ static void testsync();
 
 double fit(obj_t obj, long type, void *context)
 {
-  return 0.0;
+  obj_t objzero;
+  static char str[OBJ] = "0000000000000000000000000000000000000000000000000000000000000000";
+  obj_setfromstr(&objzero, str);
+  printf("%f\n", obj_compareoblivion(obj, objzero));
+  return obj_compareoblivion(obj, objzero);
 }
 
 void testclass()
@@ -79,6 +83,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   struct obj_fit_t fittest;
   long e;
   struct obj_modelstat_t *stat;
+  obj_model_setfitfunc(fit, NULL, type);
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
     obj = packfunc(csvobj, classindx, type);
@@ -159,8 +164,8 @@ void testsync()
 
 int main(int argc, char *argv[])
 {
-  if (0) testclass();
-  if (1) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (1) testclass();
+  if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();

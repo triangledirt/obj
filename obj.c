@@ -86,6 +86,30 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
   return oblivion;
 }
 
+double obj_comparesquare(obj_t obj1, obj_t obj2)
+{
+  long i;
+  long j;
+  long bit;
+  long realbits = 0;
+  long val = 0;
+  long place = 1;
+  long maxval;
+  long maxbits = 8;
+  maxval = pow(2, maxbits);  /**/
+  do {
+    bit = random() % OBJ;
+    i = obj_getattr(obj1, bit);
+    j = obj_getattr(obj2, bit);
+    if (i == j) {
+      realbits++;
+      val = val + place;
+      place = place * 2;
+    }
+  } while ((i == j) && (realbits < maxbits));
+  return (double) val / maxval;
+}
+
 double obj_comparetypes(obj_t obj1, obj_t obj2)
 {
   long bit;

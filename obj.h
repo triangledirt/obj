@@ -28,9 +28,10 @@ double obj_comparebox(obj_t obj1, obj_t obj2);
 double obj_compareequal(obj_t obj1, obj_t obj2);
 double obj_comparefocus(obj_t obj1, obj_t obj2);
 double obj_compareoblivion(obj_t obj1, obj_t obj2);
+double obj_comparesquare(obj_t obj1, obj_t obj2);
 double obj_comparetypes(obj_t obj1, obj_t obj2);
 double obj_comparexor(obj_t obj1, obj_t obj2);
-#define obj_compare(obj1, obj2) obj_comparetypes(obj1, obj2)
+#define obj_compare(obj1, obj2) obj_comparesquare(obj1, obj2)
 
 obj_bool_t obj_hastype(obj_t obj, obj_t type);
 void obj_print(obj_t obj);
