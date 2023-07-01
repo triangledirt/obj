@@ -7,7 +7,7 @@
 
 static double fitness[OBJ_TYPE];
 static obj_t ideal[OBJ_TYPE];
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t once = obj_bool_false;
 
 static void init();
 

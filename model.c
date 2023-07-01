@@ -20,7 +20,7 @@ static obj_fit_f fitfuncs[OBJ_TYPE];
 static void *contexts[OBJ_TYPE];
 static enum obj_meetstyle_t meetstyles[OBJ_TYPE];
 static struct obj_modelstat_t stats[OBJ_TYPE];
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t once = obj_bool_false;
 static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 static obj_t fittest[OBJ_TYPE];
 static double fittestfit[OBJ_TYPE];
@@ -28,7 +28,7 @@ static double fit[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 
 static void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
 static long calcmovecoord(long coord, long offset);
-static obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type);
+static enum obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type);
 static void evolve(long ticks, long type);
 static void forcecalc(long type, obj_fit_f fitfunc, void *context);
 static double getfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
@@ -55,13 +55,13 @@ long calcmovecoord(long coord, long offset)
   return obj_indx_wrap(coord + offset, OBJ_MODEL_DIM);
 }
 
-obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type)
+enum obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type)
 {
   double fit1;
   double fit2;
   obj_fit_f fitfunc;
   void *context;
-  obj_bool_t conquers;
+  enum obj_bool_t conquers;
   fitfunc = fitfuncs[type];
   if (fitfunc) {
     context = contexts[type];

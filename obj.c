@@ -180,9 +180,9 @@ long long obj_getnum(obj_t obj, long startbit, long length)
   return num;
 }
 
-obj_bool_t obj_hastype(obj_t obj, obj_t type)
+enum obj_bool_t obj_hastype(obj_t obj, obj_t type)
 {
-  obj_bool_t has = obj_bool_true;
+  enum obj_bool_t has = obj_bool_true;
   long i;
   for (i = 0; i < OBJ; i++)
     if (obj_getattr(type, i))

@@ -169,4 +169,5 @@ int main(int argc, char *argv[])
   if (0) testobj();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
+  return 0;
 }

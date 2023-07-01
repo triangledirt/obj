@@ -5,7 +5,7 @@
 #include "filt.h"
 #include "obj.h"
 
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t once = obj_bool_false;
 static obj_t one[OBJ_TYPE];
 static obj_t onesv[OBJ_TYPE];
 static double fitness[OBJ_TYPE];

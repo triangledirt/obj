@@ -4,8 +4,8 @@
 
 static obj_t object[OBJ_TYPE][OBJ_SYNC_CACHE];
 static enum obj_syncstyle_t syncstyle[OBJ_TYPE];
-static obj_bool_t valid[OBJ_TYPE];
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t valid[OBJ_TYPE];
+static enum obj_bool_t once = obj_bool_false;
 static obj_t syncset[OBJ_TYPE][OBJ_SYNC_SET][OBJ_SYNC_CACHE];
 static long setcnt[OBJ_TYPE][OBJ_SYNC_SET];
 static long setnext[OBJ_TYPE][OBJ_SYNC_SET];

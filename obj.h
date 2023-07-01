@@ -33,7 +33,7 @@ double obj_comparetypes(obj_t obj1, obj_t obj2);
 double obj_comparexor(obj_t obj1, obj_t obj2);
 #define obj_compare(obj1, obj2) obj_comparesquare(obj1, obj2)
 
-obj_bool_t obj_hastype(obj_t obj, obj_t type);
+enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
 void obj_print(obj_t obj);
 
 void obj_obscureclass(obj_t *obj);

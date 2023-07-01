@@ -17,7 +17,7 @@ static double fitness[OBJ_TYPE];
 static obj_t fittest[OBJ_TYPE];
 static double fits[OBJ_TYPE][POP];
 static obj_t ideal[OBJ_TYPE];
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t once = obj_bool_false;
 
 static void calcfit(pop_t pop, long o, obj_t obj[], long objsz, long type);
 static void forcecalc(pop_t pop, obj_t obj[], long objsz, long type);

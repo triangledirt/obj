@@ -20,14 +20,14 @@
 #define STRTOK ",;\n"
 
 static obj_t object[OBJ_TYPE][OBJ_CLASS_CACHE];
-static obj_bool_t once = obj_bool_false;
+static enum obj_bool_t once = obj_bool_false;
 static struct obj_classstat_t stat[OBJ_TYPE];
 static struct obj_xdouble_t scorepast[OBJ_TYPE][SCORE];
 
 static union obj_val_t value[OBJ_TYPE][PACKCACHE][OBJ];
 static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
-static obj_bool_t firstpack[OBJ_TYPE];
+static enum obj_bool_t firstpack[OBJ_TYPE];
 
 typedef double (*getfit_f)(long type);
 static getfit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
@@ -61,7 +61,7 @@ static void insertfirstval(union obj_val_t valobj[OBJ], long type);
 static void insertval(union obj_val_t valobj[OBJ], long type);
 static void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type);
 static void text2val(char *text, union obj_val_t *val, long valindx, long type);
-static obj_bool_t isnum(char *str);
+static enum obj_bool_t isnum(char *str);
 static long reorderindx(long attrindx, long classindx);
 
 static long randomscoreindx(long exclude);
@@ -195,12 +195,12 @@ void insertval(union obj_val_t valobj[OBJ], long type)
     obj_val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
 }
 
-obj_bool_t isnum(char *str)
+enum obj_bool_t isnum(char *str)
 {
   long len;
   long i;
   char c;
-  obj_bool_t is = obj_bool_true;
+  enum obj_bool_t is = obj_bool_true;
   len = strlen(str);
   for (i = 0; i < len; i++) {
     c = *(str + i);
