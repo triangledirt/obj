@@ -179,7 +179,7 @@ void obj_model_print(long type, long width, long height)
     for (x = 0; x < width; x++) {
       obj = world[type][x][y];
       class = obj_getclass(obj);
-      printf("%lld", class);
+      printf("%c", obj_bit_char(class));
     }
     printf("\n");
   }
