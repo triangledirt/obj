@@ -94,9 +94,9 @@ double obj_comparesquare(obj_t obj1, obj_t obj2)
   long realbits = 0;
   long val = 0;
   long place = 1;
-  long maxval;
   long maxbits = 8;
-  maxval = pow(2, maxbits);  /**/
+  long maxval;
+  maxval = pow(2, maxbits);
   do {
     bit = random() % OBJ;
     i = obj_getattr(obj1, bit);
