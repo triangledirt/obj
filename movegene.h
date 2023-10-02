@@ -9,6 +9,6 @@ struct obj_movegene_t {
   long yoffset;
 };
 
-void obj_movegene_parse(struct obj_movegene_t *movegene, obj_t obj, long startbit);
+void obj_movegene_parse(struct obj_movegene_t *movegene, obj_t obj, long start);
 
 #endif

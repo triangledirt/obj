@@ -40,8 +40,8 @@ void obj_obscureclass(obj_t *obj);
 void obj_mutate(obj_t *obj);
 void obj_rotate(obj_t *obj, long inc);
 
-void obj_setnum(obj_t *obj, long startbit, long length, long long num);
-long long obj_getnum(obj_t obj, long startbit, long length);
+void obj_setnum(obj_t *obj, long start, long length, long long num);
+long long obj_getnum(obj_t obj, long start, long length);
 
 long obj_edge(obj_t obj1, obj_t obj2);
 

@@ -1,6 +1,6 @@
 #include "displaygene.h"
 
-void obj_displaygene_parse(struct obj_displaygene_t *displaygene, obj_t obj, long startbit)
+void obj_displaygene_parse(struct obj_displaygene_t *displaygene, obj_t obj, long start)
 {
-  displaygene->face = obj_getnum(obj, startbit, 8);
+  displaygene->face = obj_getnum(obj, start, 8);
 }

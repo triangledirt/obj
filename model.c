@@ -256,10 +256,15 @@ void talk(obj_t *obj1, obj_t *obj2, long type)
   long j;
   obj_bit_t bit;
   obj_meetgene_parse(&meetgene, MEET_GENE, *obj1);
-  for (i = meetgene.startbit; i < meetgene.length; i++) {
+  for (i = meetgene.send.start; i < meetgene.send.length; i++) {
     j = obj_indx_wrap(i, OBJ);
     bit = obj_getattr(*obj1, j);
     obj_setattr(obj2, j, bit);
+  }
+  for (i = meetgene.receive.start; i < meetgene.receive.length; i++) {
+    j = obj_indx_wrap(i, OBJ);
+    bit = obj_getattr(*obj2, j);
+    obj_setattr(obj1, j, bit);
   }
   stats[type].talks++;
 }
