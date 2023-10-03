@@ -4,7 +4,7 @@
 #include "bool.h"
 
 #define OBJ_VERBOSE 1
-#define OBJ_XVERBOSE 0
+#define OBJ_XVERBOSE 1
 
 #define OBJ 64
 typedef long long obj_t;
