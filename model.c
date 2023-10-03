@@ -36,7 +36,7 @@ static void init();
 static void initworld(long type);
 static void move(long x, long y, long type);
 static void swap(long x1, long y1, long x2, long y2, long type);
-static void talk(obj_t *obj1, obj_t *obj2, long type);
+static void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type);
 static void tick(long type);
 
 void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context)
@@ -249,7 +249,7 @@ void swap(long x1, long y1, long x2, long y2, long type)
   stats[type].swaps++;
 }
 
-void talk(obj_t *obj1, obj_t *obj2, long type)
+void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type)
 {
   struct obj_meetgene_t meetgene;
   long i;
@@ -261,11 +261,12 @@ void talk(obj_t *obj1, obj_t *obj2, long type)
     bit = obj_getattr(*obj1, j);
     obj_setattr(obj2, j, bit);
   }
-  for (i = meetgene.receive.start; i < meetgene.receive.length; i++) {
-    j = obj_indx_wrap(i, OBJ);
-    bit = obj_getattr(*obj2, j);
-    obj_setattr(obj1, j, bit);
-  }
+  if (!narcissist)
+    for (i = meetgene.receive.start; i < meetgene.receive.length; i++) {
+      j = obj_indx_wrap(i, OBJ);
+      bit = obj_getattr(*obj2, j);
+      obj_setattr(obj1, j, bit);
+    }
   stats[type].talks++;
 }
 
@@ -289,7 +290,7 @@ void tick(long type)
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
     if (conquers(*obj, x, y, *target, targetx, targety, type)) {
-      talk(obj, target, type);
+      talk(obj, target, persongene.narcissist, type);
       swap(x, y, targetx, targety, type);
     }
   }

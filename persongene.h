@@ -6,6 +6,7 @@
 
 struct obj_persongene_t {
   obj_bit_t extrovert;
+  obj_bit_t narcissist;
   obj_bit_t racist;
 };
 
