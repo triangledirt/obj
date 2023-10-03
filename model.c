@@ -294,7 +294,8 @@ void tick(long type)
     if ((!persongene.racist) || (persongene.color == targetpersongene.color))
       if (conquers(*obj, x, y, *target, targetx, targety, type)) {
 	talk(obj, target, persongene.narcissist, type);
-	swap(x, y, targetx, targety, type);
+	if (!persongene.narcissist)
+	  swap(x, y, targetx, targety, type);
       }
   }
   stats[type].ticks++;
