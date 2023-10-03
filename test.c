@@ -114,12 +114,15 @@ void testobj()
   char str3[OBJ] = "0000000000000000000000000000000011111111111111111111111111111111";
   char str4[OBJ] = "0101010101010101010101010101010111111111111111111111111111111111";
   double oblivion;
+  long num;
   obj_setfromstr(&obj1, str1);
   obj_setfromstr(&obj2, str2);
   obj_setfromstr(&obj3, str3);
   obj_setfromstr(&obj4, str4);
   oblivion = obj_compareoblivion(obj1, obj2);
   printf("oblivion = %f\n", oblivion);
+  num = obj_getnum(obj4, 0, 4);
+  printf("num = %ld\n", num);
 }
 
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)

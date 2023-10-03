@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "displaygene.h"
 #include "indx.h"
 #include "model.h"
 #include "modelstat.h"
 #include "movegene.h"
 #include "persongene.h"
+#include "showgene.h"
 #include "talkgene.h"
 
 #define DISPLAY_GENE 0
 #define MEET_GENE 8
 #define MOVE_GENE 32
 #define PERSON_GENE 40
+#define SHOW_GENE 48
 #define TICKS OBJ_MODEL_DIM
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
@@ -172,12 +173,12 @@ void obj_model_print(long width, long height, long type)
   long x;
   long y;
   obj_t obj;
-  obj_bit_t class;
+  struct obj_showgene_t showgene;
   for (y = 0; y < height; y++) {
     for (x = 0; x < width; x++) {
       obj = world[type][x][y];
-      class = obj_getclass(obj);
-      printf("%c", obj_bit_char(class));
+      obj_showgene_parse(&showgene, obj, SHOW_GENE);
+      printf("%c", showgene.face);
     }
     printf("\n");
   }

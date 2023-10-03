@@ -172,11 +172,12 @@ long long obj_getnum(obj_t obj, long start, long length)
 {
   long place = 1;
   long bit;
+  long endbit = start + length;
   long wrapbit;
   long long num = 0;
-  for (bit = start; bit < length; bit++) {
+  for (bit = start; bit < endbit; bit++) {
     wrapbit = obj_indx_wrap(bit, OBJ);
-    num += place * obj_getattr(obj, wrapbit);
+    num += (place * obj_getattr(obj, wrapbit));
     place *= 2;
   }
   return num;
