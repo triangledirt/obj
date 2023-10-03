@@ -69,15 +69,6 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
       opposite++;
   }
   match = edge - opposite;
-#if OBJ_XVERBOSE
-  printf("obj1=");
-  obj_print(obj1);
-  printf("\n");
-  printf("obj2=");
-  obj_print(obj2);
-  printf("\n");
-  printf("edge=%lu match=%lu opposite=%lu\n", edge, match, opposite);
-#endif
   if (0 == edge) {
     oblivion = 1;
   } else {
@@ -213,8 +204,13 @@ void obj_obscureclass(obj_t *obj)
 void obj_print(obj_t obj)
 {
   long i;
-  for (i = 0; i < OBJ; i++)
-    printf("%lld", obj_getattr(obj, i));
+  obj_bit_t bit;
+  char c;
+  for (i = 0; i < OBJ; i++) {
+    bit = obj_getattr(obj, i);
+    c = obj_bit_char(bit);
+    printf("%c", c);
+  }
 }
 
 void obj_randomize(obj_t *obj)

@@ -31,7 +31,6 @@ double fit(obj_t obj, long type, void *context)
   obj_t objzero;
   static char str[OBJ] = "0000000000000000000000000000000000000000000000000000000000000000";
   obj_setfromstr(&objzero, str);
-  printf("%f\n", obj_compareoblivion(obj, objzero));
   return obj_compareoblivion(obj, objzero);
 }
 

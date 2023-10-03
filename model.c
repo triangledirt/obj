@@ -178,7 +178,7 @@ void obj_model_print(long width, long height, long type)
     for (x = 0; x < width; x++) {
       obj = world[type][x][y];
       obj_showgene_parse(&showgene, obj, SHOW_GENE);
-      printf("%c", showgene.face);
+      printf("%c", (showgene.face % 26) + 97);
     }
     printf("\n");
   }
