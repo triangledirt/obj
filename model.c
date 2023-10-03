@@ -133,14 +133,14 @@ void obj_model_evolve(long type)
 {
   init();
   evolve(TICKS, type);
-  obj_model_print(type, 10, 6);
+  obj_model_print(10, 6, type);
 }
 
-void obj_model_evolvetick(long ticks, long type)
+void obj_model_evolveticks(long ticks, long type)
 {
   init();
   evolve(ticks, type);
-  obj_model_print(type, 10, 6);
+  obj_model_print(10, 6, type);
 }
 
 struct obj_fit_t obj_model_fittest(long type)
@@ -169,7 +169,7 @@ void obj_model_insert(obj_t obj, long type)
   world[type][x][y] = obj;
 }
 
-void obj_model_print(long type, long width, long height)
+void obj_model_print(long width, long height, long type)
 {
   long x;
   long y;
