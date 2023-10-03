@@ -280,6 +280,7 @@ void tick(long type)
   obj_t *target;
   struct obj_movegene_t movegene;
   struct obj_persongene_t persongene;
+  struct obj_persongene_t targetpersongene;
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
   obj = &world[type][x][y];
@@ -289,10 +290,12 @@ void tick(long type)
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
-    if (conquers(*obj, x, y, *target, targetx, targety, type)) {
-      talk(obj, target, persongene.narcissist, type);
-      swap(x, y, targetx, targety, type);
-    }
+    obj_persongene_parse(&targetpersongene, PERSON_GENE, *target);
+    if ((!persongene.racist) || (persongene.color == targetpersongene.color))
+      if (conquers(*obj, x, y, *target, targetx, targety, type)) {
+	talk(obj, target, persongene.narcissist, type);
+	swap(x, y, targetx, targety, type);
+      }
   }
   stats[type].ticks++;
 }
