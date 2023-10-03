@@ -172,9 +172,11 @@ long long obj_getnum(obj_t obj, long start, long length)
 {
   long place = 1;
   long bit;
+  long wrapbit;
   long long num = 0;
   for (bit = start; bit < length; bit++) {
-    num += place * obj_getattr(obj, bit);
+    wrapbit = obj_indx_wrap(bit, OBJ);
+    num += place * obj_getattr(obj, wrapbit);
     place *= 2;
   }
   return num;
@@ -247,13 +249,16 @@ void obj_setnum(obj_t *obj, long start, long length, long long num)
 {
   long place = 2;
   long bit = start;
+  long wrapbit;
+  long endbit = start + length;
   obj_bit_t val;
   long long rem = num;
   do {
     val = rem % place;
-    obj_setattr(obj, bit, val);
+    wrapbit = obj_indx_wrap(bit, OBJ);
+    obj_setattr(obj, wrapbit, val);
     rem -= val;
     place *= 2;
     bit++;
-  } while (bit < length);
+  } while (bit < endbit);
 }
