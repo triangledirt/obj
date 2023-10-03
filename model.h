@@ -2,7 +2,6 @@
 #define obj_model_h
 
 #include "fit.h"
-#include "meetstyle.h"
 #include "modelstat.h"
 #include "obj.h"
 
@@ -10,7 +9,6 @@
 #define OBJ_MODEL_TYPE OBJ
 
 void obj_model_setfitfunc(obj_fit_f fitfunc, void *context, long type);
-void obj_model_setmeetstyle(enum obj_meetstyle_t meetstyle, long type);
 
 void obj_model_insert(obj_t obj, long type);
 void obj_model_evolve(long type);

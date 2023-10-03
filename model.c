@@ -3,12 +3,11 @@
 #include <time.h>
 #include "displaygene.h"
 #include "indx.h"
-#include "meetgene.h"
-#include "meetstyle.h"
 #include "model.h"
 #include "modelstat.h"
 #include "movegene.h"
 #include "persongene.h"
+#include "talkgene.h"
 
 #define DISPLAY_GENE 0
 #define MEET_GENE 8
@@ -18,7 +17,6 @@
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
 static void *contexts[OBJ_TYPE];
-static enum obj_meetstyle_t meetstyles[OBJ_TYPE];
 static struct obj_modelstat_t stats[OBJ_TYPE];
 static enum obj_bool_t once = obj_bool_false;
 static obj_t world[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
@@ -222,12 +220,6 @@ void obj_model_setfitfunc(obj_fit_f fitfunc, void *context, long type)
   contexts[type] = context;
 }
 
-void obj_model_setmeetstyle(enum obj_meetstyle_t meetstyle, long type)
-{
-  init();
-  meetstyles[type] = meetstyle;
-}
-
 struct obj_modelstat_t *obj_model_stat(long type)
 {
   init();
@@ -251,18 +243,18 @@ void swap(long x1, long y1, long x2, long y2, long type)
 
 void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type)
 {
-  struct obj_meetgene_t meetgene;
+  struct obj_talkgene_t talkgene;
   long i;
   long j;
   obj_bit_t bit;
-  obj_meetgene_parse(&meetgene, MEET_GENE, *obj1);
-  for (i = meetgene.send.start; i < meetgene.send.length; i++) {
+  obj_talkgene_parse(&talkgene, MEET_GENE, *obj1);
+  for (i = talkgene.send.start; i < talkgene.send.length; i++) {
     j = obj_indx_wrap(i, OBJ);
     bit = obj_getattr(*obj1, j);
     obj_setattr(obj2, j, bit);
   }
   if (!narcissist)
-    for (i = meetgene.receive.start; i < meetgene.receive.length; i++) {
+    for (i = talkgene.receive.start; i < talkgene.receive.length; i++) {
       j = obj_indx_wrap(i, OBJ);
       bit = obj_getattr(*obj2, j);
       obj_setattr(obj1, j, bit);
