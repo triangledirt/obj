@@ -4,16 +4,16 @@
 
 static struct timeval start;
 static struct timeval stop;
-static long total;
+static long inittime;
 
-void obj_timer_start(long totalus)
+void obj_timer_start(long time)
 {
-  total = totalus;
+  inittime = time;
   gettimeofday(&start, NULL);
 }
 
 long obj_timer_stop()
 {
   gettimeofday(&stop, NULL);
-  return total + (stop.tv_usec - start.tv_usec);
+  return inittime + (stop.tv_usec - start.tv_usec);
 }
