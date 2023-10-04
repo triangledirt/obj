@@ -5,7 +5,7 @@
 #include "model.h"
 #include "modelstat.h"
 #include "movegene.h"
-#include "persongene.h"
+#include "selfgene.h"
 #include "showgene.h"
 #include "talkgene.h"
 
@@ -271,22 +271,22 @@ void tick(long type)
   obj_t *obj;
   obj_t *target;
   struct obj_movegene_t movegene;
-  struct obj_persongene_t persongene;
-  struct obj_persongene_t targetpersongene;
+  struct obj_selfgene_t selfgene;
+  struct obj_selfgene_t targetselfgene;
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
   obj = &world[type][x][y];
-  obj_persongene_parse(&persongene, PERSON_GENE, *obj);
-  if (persongene.extrovert) {
+  obj_selfgene_parse(&selfgene, PERSON_GENE, *obj);
+  if (selfgene.extrovert) {
     obj_movegene_parse(&movegene, MOVE_GENE, *obj);
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
-    obj_persongene_parse(&targetpersongene, PERSON_GENE, *target);
-    if ((!persongene.racist) || (persongene.color == targetpersongene.color))
+    obj_selfgene_parse(&targetselfgene, PERSON_GENE, *target);
+    if ((!selfgene.racist) || (selfgene.color == targetselfgene.color))
       if (conquers(*obj, x, y, *target, targetx, targety, type)) {
-	talk(obj, target, persongene.narcissist, type);
-	if (!persongene.narcissist)
+	talk(obj, target, selfgene.narcissist, type);
+	if (!selfgene.narcissist)
 	  swap(x, y, targetx, targety, type);
       }
   }
