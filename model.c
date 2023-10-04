@@ -9,11 +9,10 @@
 #include "showgene.h"
 #include "talkgene.h"
 
-#define DISPLAY_GENE 0
 #define MEET_GENE 8
-#define MOVE_GENE 32
-#define PERSON_GENE 40
-#define SHOW_GENE 48
+#define MOVE_GENE 16
+#define PERSON_GENE 20
+#define SHOW_GENE 0
 #define TICKS OBJ_MODEL_DIM
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
