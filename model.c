@@ -27,7 +27,6 @@ static double fit[OBJ_TYPE][OBJ_MODEL_DIM][OBJ_MODEL_DIM];
 static void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
 static long calcmovecoord(long coord, long offset);
 static enum obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type);
-static void evolve(long ticks, long type);
 static void forcecalc(long type, obj_fit_f fitfunc, void *context);
 static double getfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *context);
 static void init();
@@ -70,13 +69,6 @@ enum obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long
     conquers = obj_bool_true;
   }
   return conquers;
-}
-
-void evolve(long ticks, long type)
-{
-  long i;
-  for (i = 0; i < ticks; i++)
-    tick(type);
 }
 
 void forcecalc(long type, obj_fit_f fitfunc, void *context)
@@ -129,15 +121,10 @@ void initworld(long type)
 
 void obj_model_evolve(long type)
 {
+  long i;
   init();
-  evolve(TICKS, type);
-  obj_model_print(10, 6, type);
-}
-
-void obj_model_evolveticks(long ticks, long type)
-{
-  init();
-  evolve(ticks, type);
+  for (i = 0; i < TICKS; i++)
+    tick(type);
   obj_model_print(10, 6, type);
 }
 

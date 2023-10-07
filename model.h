@@ -12,7 +12,6 @@ void obj_model_setfitfunc(obj_fit_f fitfunc, void *context, long type);
 
 void obj_model_insert(obj_t obj, long type);
 void obj_model_evolve(long type);
-void obj_model_evolveticks(long ticks, long type);
 
 struct obj_fit_t obj_model_fittest(long type);
 obj_t obj_model_random(long type);
