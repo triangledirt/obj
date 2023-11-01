@@ -1,7 +1,7 @@
 #include "cell.h"
 #include "indx.h"
 
-obj_t obj_cell_evolve(obj_t obj, obj_op_t op, long ticks)
+obj_t obj_cell_evolve(obj_t obj, obj_binop_t binop, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -15,7 +15,7 @@ obj_t obj_cell_evolve(obj_t obj, obj_op_t op, long ticks)
     for (i = 0; i < OBJ; i++) {
       in1 = obj_getattr(current, i);
       in2 = obj_getattr(current, obj_indx_wrap(i + 1, OBJ));
-      out = obj_op_calc(op, in1, in2);
+      out = obj_binop_calc(binop, in1, in2);
       obj_setattr(&next, i, out);
     }
     current = next;

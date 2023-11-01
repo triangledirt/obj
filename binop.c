@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "op.h"
+#include "binop.h"
 
 static obj_bit_t value[16][2][2] = {
   { { 0, 0 }, { 0, 0 } },
@@ -20,12 +20,12 @@ static obj_bit_t value[16][2][2] = {
   { { 1, 1 }, { 1, 1 } }
 };
 
-obj_bit_t obj_op_calc(obj_op_t op, obj_bit_t bit1, obj_bit_t bit2)
+obj_bit_t obj_binop_calc(obj_binop_t binop, obj_bit_t bit1, obj_bit_t bit2)
 {
-  return value[op][bit1][bit2];
+  return value[binop][bit1][bit2];
 }
 
-void obj_op_randomize(obj_op_t *op)
+void obj_binop_randomize(obj_binop_t *binop)
 {
-  *op = random() % 16;
+  *binop = random() % 16;
 }
