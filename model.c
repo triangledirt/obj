@@ -9,10 +9,10 @@
 #include "showgene.h"
 #include "talkgene.h"
 
-#define MEET_GENE 8
-#define MOVE_GENE 16
-#define PERSON_GENE 20
-#define SHOW_GENE 0
+#define MOVE_GENE 0
+#define SELF_GENE 8
+#define SHOW_GENE 16
+#define TALK_GENE 24
 #define TICKS OBJ_MODEL_DIM
 
 static obj_fit_f fitfuncs[OBJ_TYPE];
@@ -234,7 +234,7 @@ void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type)
   long i;
   long j;
   obj_bit_t bit;
-  obj_talkgene_parse(&talkgene, MEET_GENE, *obj1);
+  obj_talkgene_parse(&talkgene, TALK_GENE, *obj1);
   for (i = talkgene.send.start; i < talkgene.send.length; i++) {
     j = obj_indx_wrap(i, OBJ);
     bit = obj_getattr(*obj1, j);
@@ -263,13 +263,13 @@ void tick(long type)
   x = random() % OBJ_MODEL_DIM;
   y = random() % OBJ_MODEL_DIM;
   obj = &world[type][x][y];
-  obj_selfgene_parse(&selfgene, PERSON_GENE, *obj);
+  obj_selfgene_parse(&selfgene, SELF_GENE, *obj);
   if (selfgene.extrovert) {
     obj_movegene_parse(&movegene, MOVE_GENE, *obj);
     targetx = calcmovecoord(x, movegene.xoffset);
     targety = calcmovecoord(y, movegene.yoffset);
     target = &world[type][targetx][targety];
-    obj_selfgene_parse(&targetselfgene, PERSON_GENE, *target);
+    obj_selfgene_parse(&targetselfgene, SELF_GENE, *target);
     if ((!selfgene.racist) || (selfgene.color == targetselfgene.color))
       if (conquers(*obj, x, y, *target, targetx, targety, type)) {
 	talk(obj, target, selfgene.narcissist, type);

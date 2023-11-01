@@ -53,7 +53,6 @@ obj_t obj_sense_alive(long type)
   for (i = 1; i < CACHE; i++) {
     attrobj = buildattrobj(i, type);
     focus = obj_comparefocus(classobj, attrobj);
-    /*  printf("%f\n", focus);  */
     if (focus > THRESH)
       obj_setattr(&alive, i, 1);
   }

@@ -33,6 +33,12 @@ read more about [obj_t](OBJ.md)
 
 obj presents interfaces in these areas
 
+### cell
+
+cell lets you do cellular automata functions on obj_ts
+
+read more about [cell](CELL.md)
+
 ### class
 
 class lets you classify binary objects

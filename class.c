@@ -607,6 +607,6 @@ void text2val(char *text, union obj_val_t *val, long valindx, long type)
   if (obj_valtype_num == valtype[type][valindx]) {
     val->num = strtod(text, 0);
   } else {
-    strncpy(val->str, text,OBJ_CLASS_STR - 1);
+    strncpy(val->str, text, OBJ_CLASS_STR - 1);
   }
 }
