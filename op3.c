@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "cellop.h"
+#include "op3.h"
 
 static obj_bit_t value[256][2][2][2] = {
   { { { 0, 0 }, { 0, 0 } }, { { 0, 0 }, { 0, 0 } }, },
@@ -260,12 +260,12 @@ static obj_bit_t value[256][2][2][2] = {
   { { { 1, 1 }, { 1, 1 } }, { { 1, 1 }, { 1, 1 } }, }
 };
 
-obj_bit_t obj_cellop_calc(obj_cellop_t cellop, obj_bit_t bit1, obj_bit_t bit2, obj_bit_t bit3)
+obj_bit_t obj_op3_calc(obj_op3_t op3, obj_bit_t bit1, obj_bit_t bit2, obj_bit_t bit3)
 {
-  return value[cellop][bit1][bit2][bit3];
+  return value[op3][bit1][bit2][bit3];
 }
 
-void obj_cellop_randomize(obj_cellop_t *cellop)
+void obj_op3_randomize(obj_op3_t *op3)
 {
-  *cellop = random() % 256;
+  *op3 = random() % 256;
 }
