@@ -281,7 +281,12 @@ void obj_print(obj_t obj)
 
 void obj_randomize(obj_t *obj)
 {
-  *obj = random();
+  long i;
+  obj_bit_t bit;
+  for (i = 0; i < OBJ; i++) {
+    obj_bit_randomize(&bit);
+    obj_setattr(obj, i, bit);
+  }
 }
 
 void obj_rotate(obj_t *obj, long inc)

@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "class.h"
 #include "fit.h"
+#include "op1.h"
+#include "op2.h"
+#include "op3.h"
 #include "model.h"
 #include "sense.h"
 #include "sync.h"
@@ -22,6 +25,7 @@ static void testclass();
 void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc);
 static void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testobj();
+static void testop();
 static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsync();
@@ -124,6 +128,21 @@ void testobj()
   printf("num = %ld\n", num);
 }
 
+void testop()
+{
+  obj_t obj;
+  long tick;
+  obj_op1_t op1 = 2;
+  obj_randomize(&obj);
+  obj_print(obj);
+  printf("\n");
+  for (tick = 0; tick < 8; tick++) {
+    obj_op1(&obj, op1, 1);
+    obj_print(obj);
+    printf("\n");
+  }
+}
+
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -167,8 +186,9 @@ void testsync()
 int main(int argc, char *argv[])
 {
   if (0) testclass();
-  if (1) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
+  if (1) testop();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;
