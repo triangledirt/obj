@@ -133,11 +133,15 @@ void testop()
   obj_t obj;
   long tick;
   obj_op1_t op1 = 2;
+  obj_op2_t op2 = 1;
+  obj_op3_t op3 = 43;
   obj_randomize(&obj);
   obj_print(obj);
   printf("\n");
   for (tick = 0; tick < 8; tick++) {
-    obj_op1(&obj, op1, 1);
+    /*  obj_op1(&obj, op1, 1);  */
+    /*  obj_op2(&obj, op2, 1);  */
+    obj_op3(&obj, op3, 1);
     obj_print(obj);
     printf("\n");
   }
