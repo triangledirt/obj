@@ -330,3 +330,9 @@ void obj_setnum(obj_t *obj, long start, long length, long long num)
     bit++;
   } while (bit < endbit);
 }
+
+void obj_singlize(obj_t *obj)
+{
+  obj_clear(obj);
+  obj_setattr(obj, OBJ / 2, 1);
+}

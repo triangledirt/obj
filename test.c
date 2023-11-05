@@ -134,10 +134,10 @@ void testop()
   long tick;
   obj_op1_t op1 = 2;
   obj_op2_t op2 = 1;
-  obj_op3_t op3 = 43;
-  obj_randomize(&obj);
+  obj_op3_t op3 = 110;
+  obj_singlize(&obj);
   obj_print(obj);
-  printf("\n");
+ printf("\n");
   for (tick = 0; tick < 8; tick++) {
     /*  obj_op1(&obj, op1, 1);  */
     /*  obj_op2(&obj, op2, 1);  */
