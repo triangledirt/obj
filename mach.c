@@ -1,7 +1,7 @@
 #include "indx.h"
 #include "mach.h"
 
-obj_t obj_mach_evolve(obj_t obj, obj_op3_t op3, long ticks)
+obj_t obj_mach_go(obj_t obj, obj_op3_t op3, long ticks)
 {
   long tick;
   obj_bit_t in1;

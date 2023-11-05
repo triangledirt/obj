@@ -90,7 +90,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   }
   fclose(file);
   for (e = 0; e < 64; e++)
-    obj_model_evolve(type);
+    obj_model_go(type);
 #if OBJ_VERBOSE
   stat = obj_model_stat(type);
   obj_modelstat_print(stat, type);

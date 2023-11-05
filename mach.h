@@ -7,6 +7,6 @@
 #define OBJ_MACH_TICKS OBJ
 
 
-obj_t obj_mach_evolve(obj_t obj, obj_op3_t op3, long ticks);
+obj_t obj_mach_go(obj_t obj, obj_op3_t op3, long ticks);
 
 #endif

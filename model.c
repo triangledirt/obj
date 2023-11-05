@@ -119,7 +119,7 @@ void initworld(long type)
     }
 }
 
-void obj_model_evolve(long type)
+void obj_model_go(long type)
 {
   long i;
   init();
