@@ -137,11 +137,11 @@ struct obj_fit_t obj_model_fittest(long type)
   return fit;
 }
 
-obj_bit_t obj_model_getclass(long x, long y, long type)
+obj_bit_t obj_model_class(long x, long y, long type)
 {
   obj_t obj;
   obj = world[type][x][y];
-  return obj_getclass(obj);
+  return obj_class(obj);
 }
 
 void obj_model_insert(obj_t obj, long type)
@@ -237,13 +237,13 @@ void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type)
   obj_talkgene_parse(&talkgene, TALK_GENE, *obj1);
   for (i = talkgene.send.start; i < talkgene.send.length; i++) {
     j = obj_indx_wrap(i, OBJ);
-    bit = obj_getattr(*obj1, j);
+    bit = obj_attr(*obj1, j);
     obj_setattr(obj2, j, bit);
   }
   if (!narcissist)
     for (i = talkgene.receive.start; i < talkgene.receive.length; i++) {
       j = obj_indx_wrap(i, OBJ);
-      bit = obj_getattr(*obj2, j);
+      bit = obj_attr(*obj2, j);
       obj_setattr(obj1, j, bit);
     }
   stats[type].talks++;

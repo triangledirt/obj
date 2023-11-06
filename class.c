@@ -282,7 +282,7 @@ obj_bit_t obj_class_classifyknown(obj_t obj, long type)
   obj_bit_t guessclass;
   obj_bit_t actualclass;
   guessclass = obj_class_classify(obj, type);
-  actualclass = obj_getclass(obj);
+  actualclass = obj_class(obj);
   obj_classstat_note(&stat[type], guessclass, actualclass);
   return guessclass;
 }

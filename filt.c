@@ -125,11 +125,11 @@ double score(obj_t obj, long type)
   long edge;
   edge = obj_edge(obj, OBJ_CLEAR);
   for (bit = 1; bit <= edge; bit++) {
-    onebit = obj_getattr(one[type], bit);
-    zerobit = obj_getattr(zero[type], bit);
+    onebit = obj_attr(one[type], bit);
+    zerobit = obj_attr(zero[type], bit);
     onetot += onebit;
     zerotot += zerobit;
-    objbit = obj_getattr(obj, bit);
+    objbit = obj_attr(obj, bit);
     if (onebit && objbit)
       onematch++;
     if (zerobit && !objbit)

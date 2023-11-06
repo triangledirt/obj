@@ -24,11 +24,13 @@ void obj_setfromstr(obj_t *obj, char str[OBJ]);
 void obj_singlize(obj_t *obj);
 
 #define obj_setattr(obj, indx, val) if (val) { *obj |= ((long long) 1 << indx); } else { *obj &= ~((long long) 1 << indx); }
-#define obj_getattr(obj, indx) ((obj >> indx) & (long long) 1)
+#define obj_attr(obj, indx) ((obj >> indx) & (long long) 1)
+
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
-#define obj_getclass(obj) (obj & (long long) 1)
+#define obj_class(obj) (obj & (long long) 1)
+
 #define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << SINGLE); } else { *obj &= ~((long long) 1 << SINGLE); }
-#define obj_getsingle(obj) ((obj >> SINGLE) & (long long) 1)
+#define obj_single(obj) ((obj >> SINGLE) & (long long) 1)
 
 typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
@@ -56,7 +58,7 @@ void obj_mutate(obj_t *obj);
 void obj_rotate(obj_t *obj, long inc);
 
 void obj_setnum(obj_t *obj, long start, long length, long long num);
-long long obj_getnum(obj_t obj, long start, long length);
+long long obj_num(obj_t obj, long start, long length);
 
 long obj_edge(obj_t obj1, obj_t obj2);
 

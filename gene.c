@@ -75,11 +75,11 @@ void obj_gene_learn(obj_t obj[], long objsz, long type)
     parent2 = getparent(pop, obj, objsz, type);
     crossover = random() % OBJ;
     for (bit = 0; bit < crossover; bit++) {
-      val = obj_getattr(parent1, bit);
+      val = obj_attr(parent1, bit);
       obj_setattr(&child, bit, val);
     }
     for (bit = crossover; bit < OBJ; bit++) {
-      val = obj_getattr(parent2, bit);
+      val = obj_attr(parent2, bit);
       obj_setattr(&child, bit, val);
     }
     obj_mutate(&child);

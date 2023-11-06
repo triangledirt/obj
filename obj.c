@@ -22,8 +22,8 @@ double obj_comparebox(obj_t obj1, obj_t obj2)
   edge = obj_edge(obj1, obj2);
   for (i = 1; i <= edge; i++)
     for (j = 1; j <= edge; j++) {
-      o1bit = obj_getattr(obj1, i);
-      o2bit = obj_getattr(obj2, j);
+      o1bit = obj_attr(obj1, i);
+      o2bit = obj_attr(obj2, j);
       if (o1bit && o2bit)
         and++;
     }
@@ -39,8 +39,8 @@ double obj_compareequal(obj_t obj1, obj_t obj2)
   obj_bit_t bit2;
   edge = obj_edge(obj1, obj2);
   for (bit = 1; bit <= edge; bit++) {
-    bit1 = obj_getattr(obj1, bit);
-    bit2 = obj_getattr(obj2, bit);
+    bit1 = obj_attr(obj1, bit);
+    bit2 = obj_attr(obj2, bit);
     if (bit1 == bit2)
       correct++;
   }
@@ -63,8 +63,8 @@ double obj_compareoblivion(obj_t obj1, obj_t obj2)
   double oblivion;
   edge = obj_edge(obj1, obj2);
   for (i = 1; i <= edge; i++) {
-    o1bit = obj_getattr(obj1, i);
-    o2bit = obj_getattr(obj2, i);
+    o1bit = obj_attr(obj1, i);
+    o2bit = obj_attr(obj2, i);
     if (o1bit != o2bit)
       opposite++;
   }
@@ -90,8 +90,8 @@ double obj_comparesquare(obj_t obj1, obj_t obj2)
   maxval = pow(2, maxbits);
   do {
     bit = random() % OBJ;
-    i = obj_getattr(obj1, bit);
-    j = obj_getattr(obj2, bit);
+    i = obj_attr(obj1, bit);
+    j = obj_attr(obj2, bit);
     if (i == j) {
       realbits++;
       val = val + place;
@@ -109,8 +109,8 @@ double obj_comparetypes(obj_t obj1, obj_t obj2)
   obj_bit_t bit1;
   obj_bit_t bit2;
   for (bit = 1; bit < OBJ; bit++) {
-    bit1 = obj_getattr(obj1, bit);
-    bit2 = obj_getattr(obj2, bit);
+    bit1 = obj_attr(obj1, bit);
+    bit2 = obj_attr(obj2, bit);
     if ((1 == bit1) || (1 == bit2)) {
       total++;
       if ((1 == bit1) && (1 == bit2))
@@ -129,8 +129,8 @@ double obj_comparexor(obj_t obj1, obj_t obj2)
   obj_bit_t bit2;
   edge = obj_edge(obj1, obj2);
   for (bit = 1; bit <= edge; bit++) {
-    bit1 = obj_getattr(obj1, bit);
-    bit2 = obj_getattr(obj2, bit);
+    bit1 = obj_attr(obj1, bit);
+    bit2 = obj_attr(obj2, bit);
     if (bit1 ^ bit2)
       correct++;
   }
@@ -142,12 +142,12 @@ long obj_edge(obj_t obj1, obj_t obj2)
   long edge = OBJ - 1;
   obj_bit_t bit1;
   obj_bit_t bit2;
-  bit1 = obj_getattr(obj1, edge);
-  bit2 = obj_getattr(obj2, edge);
+  bit1 = obj_attr(obj1, edge);
+  bit2 = obj_attr(obj2, edge);
   while ((edge > 0) && !bit1 && !bit2) {
     edge--;
-    bit1 = obj_getattr(obj1, edge);
-    bit2 = obj_getattr(obj2, edge);
+    bit1 = obj_attr(obj1, edge);
+    bit2 = obj_attr(obj2, edge);
   }
   return edge;
 }
@@ -159,28 +159,13 @@ void obj_fill(obj_t *obj)
     obj_setattr(obj, bit, 1);
 }
 
-long long obj_getnum(obj_t obj, long start, long length)
-{
-  long place = 1;
-  long bit;
-  long endbit = start + length;
-  long wrapbit;
-  long long num = 0;
-  for (bit = start; bit < endbit; bit++) {
-    wrapbit = obj_indx_wrap(bit, OBJ);
-    num += (place * obj_getattr(obj, wrapbit));
-    place *= 2;
-  }
-  return num;
-}
-
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type)
 {
   enum obj_bool_t has = obj_bool_true;
   long i;
   for (i = 0; i < OBJ; i++)
-    if (obj_getattr(type, i))
-      if (!obj_getattr(obj, i)) {
+    if (obj_attr(type, i))
+      if (!obj_attr(obj, i)) {
         has = obj_bool_false;
         break;
       }
@@ -194,6 +179,21 @@ void obj_mutate(obj_t *obj)
   i = random() % OBJ;
   obj_bit_randomize(&val);
   obj_setattr(obj, i, val);
+}
+
+long long obj_num(obj_t obj, long start, long length)
+{
+  long place = 1;
+  long bit;
+  long endbit = start + length;
+  long wrapbit;
+  long long num = 0;
+  for (bit = start; bit < endbit; bit++) {
+    wrapbit = obj_indx_wrap(bit, OBJ);
+    num += (place * obj_attr(obj, wrapbit));
+    place *= 2;
+  }
+  return num;
 }
 
 void obj_obscureclass(obj_t *obj)
@@ -217,7 +217,7 @@ void obj_morphticks1(obj_t *obj, obj_game1_t game1, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_getattr(current, i);
+      in1 = obj_attr(current, i);
       out = obj_game1_play(game1, in1);
       obj_setattr(&next, i, out);
     }
@@ -243,8 +243,8 @@ void obj_morphticks2(obj_t *obj, obj_game2_t game2, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_getattr(current, obj_indx_wrap(i - 1, OBJ));
-      in2 = obj_getattr(current, i);
+      in1 = obj_attr(current, obj_indx_wrap(i - 1, OBJ));
+      in2 = obj_attr(current, i);
       out = obj_game2_play(game2, in1, in2);
       obj_setattr(&next, i, out);
     }
@@ -271,9 +271,9 @@ void obj_morphticks3(obj_t *obj, obj_game3_t game3, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_getattr(current, obj_indx_wrap(i - 1, OBJ));
-      in2 = obj_getattr(current, i);
-      in3 = obj_getattr(current, obj_indx_wrap(i + 1, OBJ));
+      in1 = obj_attr(current, obj_indx_wrap(i - 1, OBJ));
+      in2 = obj_attr(current, i);
+      in3 = obj_attr(current, obj_indx_wrap(i + 1, OBJ));
       out = obj_game3_play(game3, in1, in2, in3);
       obj_setattr(&next, i, out);
     }
@@ -288,7 +288,7 @@ void obj_print(obj_t obj)
   obj_bit_t bit;
   char c;
   for (i = 0; i < OBJ; i++) {
-    bit = obj_getattr(obj, i);
+    bit = obj_attr(obj, i);
     c = obj_bit_char(bit);
     printf("%c", c);
   }
@@ -311,7 +311,7 @@ void obj_rotate(obj_t *obj, long inc)
   long newi;
   obj_bit_t bit;
   for (i = 0; i < OBJ; i++) {
-    bit = obj_getattr(*obj, i);
+    bit = obj_attr(*obj, i);
     newi = obj_indx_wrap(i + inc, OBJ);
     obj_setattr(&obj2, newi, bit);
   }

@@ -41,9 +41,9 @@ void obj_sum_learn(obj_t obj[], long objsz, long type)
   for (i = 0; i < objsz; i++) {
     if (obj_coin_toss())
       continue;
-    if (obj_getclass(obj[i]))
+    if (obj_class(obj[i]))
       for (bit = 1; bit < OBJ; bit++)
-        onecount[bit] += obj_getattr(obj[i], bit);
+        onecount[bit] += obj_attr(obj[i], bit);
   }
   for (bit = 1; bit < OBJ; bit++)
     if (onecount[bit] > thresh) {

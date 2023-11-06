@@ -3,7 +3,7 @@
 void obj_movegene_parse(struct obj_movegene_t *movegene, obj_t obj, long start)
 {
   long posindx;
-  posindx = obj_getnum(obj, start, 3);
+  posindx = obj_num(obj, start, 3);
   switch (posindx) {
   case 0:
     movegene->xoffset = 0;

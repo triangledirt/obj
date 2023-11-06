@@ -21,7 +21,7 @@ obj_t buildattrobj(long indx, long type)
   obj_bit_t bit;
   for (i = 0; i < CACHE; i++) {
     obj = cache[type][i];
-    bit = obj_getattr(obj, indx);
+    bit = obj_attr(obj, indx);
     obj_setattr(&attrobj, i, bit);
   }
   return attrobj;

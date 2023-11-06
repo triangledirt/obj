@@ -68,7 +68,7 @@ void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_
   obj = packfunc(csvobj, classindx, type);
   obj_class_observe(obj, type);
   guessclass = obj_class_classifyknown(obj, type);
-  actualclass = obj_getclass(obj);
+  actualclass = obj_class(obj);
 #if OBJ_VERBOSE
   c = (guessclass == actualclass) ? '+' : '-';
   printf("type%02ld obsrv ", type);
@@ -124,27 +124,30 @@ void testobj()
   obj_setfromstr(&obj4, str4);
   oblivion = obj_compareoblivion(obj1, obj2);
   printf("oblivion = %f\n", oblivion);
-  num = obj_getnum(obj4, 0, 4);
+  num = obj_num(obj4, 0, 4);
   printf("num = %ld\n", num);
 }
 
 void testgame()
 {
   obj_t obj;
+  obj_bit_t bit;
   long tick;
   obj_game1_t game1 = 2;
-  obj_game2_t game2 = 1;
+  obj_game2_t game2 = 0;
   obj_game3_t game3 = 110;
   obj_singlize(&obj);
   obj_print(obj);
   printf("\n");
   for (tick = 0; tick < 8; tick++) {
-    /*  obj_morph1(&obj, game1);  */
-    /*  obj_morph2(&obj, game2);  */
-    obj_morph3(&obj, game3);
+    if (0) obj_morph1(&obj, game1);
+    if (0) obj_morph2(&obj, game2);
+    if (1) obj_morph3(&obj, game3);
     obj_print(obj);
     printf("\n");
   }
+  bit = obj_single(obj);
+  printf("%c\n", obj_bit_char(bit));
 }
 
 void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
