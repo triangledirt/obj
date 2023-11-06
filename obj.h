@@ -32,6 +32,9 @@ void obj_singlize(obj_t *obj);
 #define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << OBJ_SINGLE); } else { *obj &= ~((long long) 1 << OBJ_SINGLE); }
 #define obj_single(obj) ((obj >> OBJ_SINGLE) & (long long) 1)
 
+long obj_count0s(obj_t obj);
+long obj_count1s(obj_t obj);
+
 typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
 double obj_comparebox(obj_t obj1, obj_t obj2);

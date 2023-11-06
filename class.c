@@ -9,14 +9,15 @@
 #include "filt.h"
 #include "fold.h"
 #include "gene.h"
+#include "morph.h"
 #include "sum.h"
 #include "timer.h"
 #include "val.h"
 #include "valtype.h"
 #include "xdouble.h"
 
-#define PACKCACHE (OBJ_CLASS_CACHE / 2)
-#define SCORE 4
+#define PACK_CACHE (OBJ_CLASS_CACHE / 2)
+#define SCORE 5
 #define STRTOK ",;\n"
 
 static obj_t object[OBJ_TYPE][OBJ_CLASS_CACHE];
@@ -24,17 +25,17 @@ static enum obj_bool_t once = obj_bool_false;
 static struct obj_classstat_t stat[OBJ_TYPE];
 static struct obj_xdouble_t scorepast[OBJ_TYPE][SCORE];
 
-static union obj_val_t value[OBJ_TYPE][PACKCACHE][OBJ];
+static union obj_val_t value[OBJ_TYPE][PACK_CACHE][OBJ];
 static union obj_val_t firstval[OBJ_TYPE][OBJ];
 static enum obj_valtype_t valtype[OBJ_TYPE][OBJ];
 static enum obj_bool_t firstpack[OBJ_TYPE];
 
 typedef double (*getfit_f)(long type);
-static getfit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_sum_fit};
+static getfit_f fitfunc[SCORE] = {obj_filt_fit, obj_fold_fit, obj_gene_fit, obj_morph_fit, obj_sum_fit};
 
 typedef double (*score_f)(obj_t obj, long type);
-static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
-static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
+static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_morph_score, obj_sum_score};
+static char *scorename[SCORE] = {"filt", "fold", "gene", "morph", "sum"};
 
 static long favscoreindex[OBJ_TYPE];
 static long scorefuncoverride = -1;
@@ -190,7 +191,7 @@ void insertval(union obj_val_t valobj[OBJ], long type)
 {
   long obj;
   long attr;
-  obj = random() % PACKCACHE;
+  obj = random() % PACK_CACHE;
   for (attr = 0; attr < OBJ; attr++)
     obj_val_copy(&valobj[attr], &value[type][obj][attr], valtype[type][attr]);
 }
@@ -217,13 +218,15 @@ void learn(long type)
   long filttime;
   long foldtime;
   long genetime;
+  long morphtime;
   long sumtime;
   filttime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_filt_learn);
   foldtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_fold_learn);
   genetime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_gene_learn);
+  morphtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_morph_learn);
   sumtime = learngeneral(object[type], OBJ_CLASS_CACHE, type, obj_sum_learn);
 #if OBJ_VERBOSE && OBJ_XVERBOSE
-  printf("type%02ld times     filt=%ld fold=%ld gene=%ld sum=%ld\n", type, filttime, foldtime, genetime, sumtime);
+  printf("type%02ld times     filt=%ld fold=%ld gene=%ld morph=%ld sum=%ld\n", type, filttime, foldtime, genetime, morphtime, sumtime);
 #endif
 }
 
@@ -486,15 +489,15 @@ obj_bit_t packavgnum(union obj_val_t *val, long attr, long type)
   long i;
   if (0.0 == val->num)
     return 0;
-  for (i = 0; i < PACKCACHE; i++)
+  for (i = 0; i < PACK_CACHE; i++)
     tot += value[type][i][attr].num;
-  avg = tot / PACKCACHE;
+  avg = tot / PACK_CACHE;
   return val->num > avg;
 }
 
 obj_bit_t packavgstr(union obj_val_t *val, long attr, long type)
 {
-  long samplesz = PACKCACHE / 8;
+  long samplesz = PACK_CACHE / 8;
   long sampleobj[samplesz];
   long samplecnt[samplesz];
   long i;
@@ -505,10 +508,10 @@ obj_bit_t packavgstr(union obj_val_t *val, long attr, long type)
   if (0 == strlen(val->str))
     return 0;
   for (i = 0; i < samplesz; i++) {
-    sampleobj[i] = random() % PACKCACHE;
+    sampleobj[i] = random() % PACK_CACHE;
     samplecnt[i] = 0;
   }
-  for (i = 0; i < PACKCACHE; i++)
+  for (i = 0; i < PACK_CACHE; i++)
     for (j = 0; j < samplesz; j++) {
       k = sampleobj[j];
       if (0 == strncmp(value[type][i][attr].str, value[type][k][attr].str, OBJ_CLASS_STR - 1)) {
@@ -553,7 +556,7 @@ obj_t packgeneral(char csvobj[OBJ_CSV], long classindex, long type, pack_f packf
 obj_bit_t packrand(union obj_val_t *val, long attr, long type)
 {
   long i;
-  i = random() % PACKCACHE;
+  i = random() % PACK_CACHE;
   return 0 == obj_val_compare(val, &value[type][i][attr], valtype[type][attr]);
 }
 

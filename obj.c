@@ -137,6 +137,26 @@ double obj_comparexor(obj_t obj1, obj_t obj2)
   return (double) correct / (1 + edge);
 }
 
+long obj_count0s(obj_t obj)
+{
+  long i;
+  long count = 0;
+  for (i = 0; i < OBJ; i++)
+    if (!obj_attr(obj, i))
+      count++;
+  return count;
+}
+
+long obj_count1s(obj_t obj)
+{
+  long i;
+  long count = 0;
+  for (i = 0; i < OBJ; i++)
+    if (obj_attr(obj, i))
+      count++;
+  return count;
+}
+
 long obj_edge(obj_t obj1, obj_t obj2)
 {
   long edge = OBJ - 1;
