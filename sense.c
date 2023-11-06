@@ -10,10 +10,10 @@
 obj_t cache[OBJ_TYPE][CACHE];
 enum obj_bool_t once = obj_bool_false;
 
-static obj_t buildattrobj(long indx, long type);
+static obj_t buildattrobj(long index, long type);
 static void init();
 
-obj_t buildattrobj(long indx, long type)
+obj_t buildattrobj(long index, long type)
 {
   long i;
   obj_t attrobj;
@@ -21,7 +21,7 @@ obj_t buildattrobj(long indx, long type)
   obj_bit_t bit;
   for (i = 0; i < CACHE; i++) {
     obj = cache[type][i];
-    bit = obj_attr(obj, indx);
+    bit = obj_attr(obj, index);
     obj_setattr(&attrobj, i, bit);
   }
   return attrobj;

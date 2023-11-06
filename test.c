@@ -22,12 +22,12 @@
 
 double fit(obj_t obj, long type, void *context);
 static void testclass();
-void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc);
+void testcsvobj(char csvobj[OBJ_CSV], long classindex, long type, obj_class_pack_f packfunc);
 static void testgame();
-static void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc);
+static void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testobj();
-static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
-static void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc);
+static void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc);
+static void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testsync();
 
 double fit(obj_t obj, long type, void *context)
@@ -59,13 +59,13 @@ void testclass()
   }
 }
 
-void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc)
+void testcsvobj(char csvobj[OBJ_CSV], long classindex, long type, obj_class_pack_f packfunc)
 {
   obj_t obj;
   char c;
   obj_bit_t guessclass;
   obj_bit_t actualclass;
-  obj = packfunc(csvobj, classindx, type);
+  obj = packfunc(csvobj, classindex, type);
   obj_class_observe(obj, type);
   guessclass = obj_class_classifyknown(obj, type);
   actualclass = obj_class(obj);
@@ -78,7 +78,7 @@ void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_
 #endif
 }
 
-void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc)
+void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
   char csvobj[OBJ_CSV];
@@ -89,7 +89,7 @@ void testmodel(char *filename, long classindx, long type, obj_class_pack_f packf
   obj_model_setfitfunc(fit, NULL, type);
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
-    obj = packfunc(csvobj, classindx, type);
+    obj = packfunc(csvobj, classindex, type);
     obj_model_insert(obj, type);
   }
   fclose(file);
@@ -150,14 +150,14 @@ void testgame()
   printf("%c\n", obj_bit_char(bit));
 }
 
-void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc)
+void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
   struct obj_classstat_t *stat;
   char csvobj[OBJ_CSV];
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file))
-    testcsvobj(csvobj, classindx, type, packfunc);
+    testcsvobj(csvobj, classindex, type, packfunc);
   fclose(file);
 #if OBJ_VERBOSE
   stat = obj_class_stat(type);
@@ -165,7 +165,7 @@ void testpack(char *filename, long classindx, long type, obj_class_pack_f packfu
 #endif
 }
 
-void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc)
+void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
   char csvobj[OBJ_CSV];
@@ -173,7 +173,7 @@ void testsense(char *filename, long classindx, long type, obj_class_pack_f packf
   obj_t alive;
   file = fopen(filename, "r");
   while (fgets(csvobj, OBJ_CSV, file)) {
-    obj = packfunc(csvobj, classindx, type);
+    obj = packfunc(csvobj, classindex, type);
     obj_sense_observe(obj, type);
     alive = obj_sense_alive(type);
     printf("obj   ");

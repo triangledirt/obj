@@ -36,7 +36,7 @@ typedef double (*score_f)(obj_t obj, long type);
 static score_f scorefunc[SCORE] = {obj_filt_score, obj_fold_score, obj_gene_score, obj_sum_score};
 static char *scorename[SCORE] = {"filt", "fold", "gene", "sum"};
 
-static long favscoreindx[OBJ_TYPE];
+static long favscoreindex[OBJ_TYPE];
 static long scorefuncoverride = -1;
 
 typedef void (*learn_f)(obj_t[], long, long);
@@ -50,21 +50,21 @@ static long countsub(obj_t objtype1, obj_t objtype2, long type);
 static long countxor(obj_t objtype1, obj_t objtype2, long type);
 
 typedef obj_bit_t (*pack_f)(union obj_val_t *, long, long);
-static obj_t packgeneral(char csvobj[OBJ_CSV], long classindx, long type, pack_f packfunc);
+static obj_t packgeneral(char csvobj[OBJ_CSV], long classindex, long type, pack_f packfunc);
 static obj_bit_t packavg(union obj_val_t *val, long attr, long type);
 static obj_bit_t packavgnum(union obj_val_t *val, long attr, long type);
 static obj_bit_t packavgstr(union obj_val_t *val, long attr, long type);
 static obj_bit_t packfirst(union obj_val_t *val, long attr, long type);
 static obj_bit_t packrand(union obj_val_t *val, long attr, long type);
-static void setvaltypes(char csvobj[OBJ_CSV], long classindx, long type);
+static void setvaltypes(char csvobj[OBJ_CSV], long classindex, long type);
 static void insertfirstval(union obj_val_t valobj[OBJ], long type);
 static void insertval(union obj_val_t valobj[OBJ], long type);
-static void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type);
-static void text2val(char *text, union obj_val_t *val, long valindx, long type);
+static void csv2valobj(char csvobj[OBJ_CSV], long classindex, union obj_val_t valobj[OBJ], long type);
+static void text2val(char *text, union obj_val_t *val, long valindex, long type);
 static enum obj_bool_t isnum(char *str);
-static long reorderindx(long attrindx, long classindx);
+static long reorderindex(long attrindex, long classindex);
 
-static long randomscoreindx(long exclude);
+static long randomscoreindex(long exclude);
 
 long count(obj_t objtype, long type)
 {
@@ -131,28 +131,28 @@ long countxor(obj_t objtype1, obj_t objtype2, long type)
   return cnt;
 }
 
-void csv2valobj(char csvobj[OBJ_CSV], long classindx, union obj_val_t valobj[OBJ], long type)
+void csv2valobj(char csvobj[OBJ_CSV], long classindex, union obj_val_t valobj[OBJ], long type)
 {
   char csvobjcopy[OBJ_CSV];
   char *tok;
-  long csvindx = 0;
-  long valindx;
+  long csvindex = 0;
+  long valindex;
   strncpy(csvobjcopy, csvobj, OBJ_CSV - 1);
   tok = strtok(csvobjcopy, STRTOK);
-  valindx = reorderindx(csvindx, classindx);
-  text2val(tok, &valobj[valindx], valindx, type);
-  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
-    csvindx++;
-    valindx = reorderindx(csvindx, classindx);
-    text2val(tok, &valobj[valindx], valindx, type);
+  valindex = reorderindex(csvindex, classindex);
+  text2val(tok, &valobj[valindex], valindex, type);
+  while ((tok = strtok(NULL, STRTOK)) && (csvindex < (OBJ - 1))) {
+    csvindex++;
+    valindex = reorderindex(csvindex, classindex);
+    text2val(tok, &valobj[valindex], valindex, type);
   }
-  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
-    obj_val_init(&valobj[valindx], valtype[type][valindx]);
+  for (valindex = csvindex + 1; valindex < OBJ; valindex++)
+    obj_val_init(&valobj[valindex], valtype[type][valindex]);
 #if 0 && OBJ_VERBOSE && OBJ_XVERBOSE
   printf("type%02ld   csv     %s", type, csvobj);
   printf("type%02ld   val     ", type);
-  for (valindx = 0; valindx < OBJ; valindx++) {
-    val_print(&valobj[valindx], valtype[type][valindx]);
+  for (valindex = 0; valindex < OBJ; valindex++) {
+    val_print(&valobj[valindex], valtype[type][valindex]);
     printf(",");
   }
   printf("\n");
@@ -172,7 +172,7 @@ void init()
       for (score = 0; score < SCORE; score++)
         obj_xdouble_init(&scorepast[type][score]);
       obj_classstat_reset(&stat[type]);
-      favscoreindx[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
+      favscoreindex[type] = (scorefuncoverride < 0) ? random() % SCORE : scorefuncoverride;
       firstpack[type] = obj_bool_true;
     }
     once = obj_bool_true;
@@ -241,8 +241,8 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
   double thresh;
   double fit;
   double altfit;
-  long scorefindx;
-  long altfitfindx;
+  long scorefindex;
+  long altfitfindex;
   score_f scoref;
   getfit_f getfitf;
   getfit_f altgetfitf;
@@ -250,29 +250,29 @@ obj_bit_t obj_class_classify(obj_t obj, long type)
   char c;
   init();
   obj_obscureclass(&obj);
-  scorefindx = favscoreindx[type];
+  scorefindex = favscoreindex[type];
   if ((scorefuncoverride < 0) && obj_die_toss(OBJ_CLASS_CACHE / 2)) {
-    getfitf = fitfunc[scorefindx];
+    getfitf = fitfunc[scorefindex];
     fit = getfitf(type);
-    altfitfindx = randomscoreindx(scorefindx);
-    altgetfitf = fitfunc[altfitfindx];
+    altfitfindex = randomscoreindex(scorefindex);
+    altgetfitf = fitfunc[altfitfindex];
     altfit = altgetfitf(type);
     if ((altfit - fit) > 0.2) {
 #if OBJ_VERBOSE && OBJ_XVERBOSE
-      printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorename[scorefindx], fit, scorename[altfitfindx], altfit);
+      printf("type%02ld class     switching algo from %s %0.3f >> %s %0.3f\n", type, scorename[scorefindex], fit, scorename[altfitfindex], altfit);
 #endif
-      favscoreindx[type] = altfitfindx;
-      scorefindx = altfitfindx;
+      favscoreindex[type] = altfitfindex;
+      scorefindex = altfitfindex;
     }
   }
-  scoref = scorefunc[scorefindx];
+  scoref = scorefunc[scorefindex];
   score = scoref(obj, type);
-  thresh = obj_xdouble_avg(&scorepast[type][scorefindx]);
-  obj_xdouble_note(&scorepast[type][scorefindx], score);
+  thresh = obj_xdouble_avg(&scorepast[type][scorefindex]);
+  obj_xdouble_note(&scorepast[type][scorefindex], score);
   class = (score > thresh) ? 1 : 0;
 #if OBJ_VERBOSE && OBJ_XVERBOSE
   c = obj_bit_char(class);
-  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorename[scorefindx], score, thresh);
+  printf("type%02ld class     class=%c scorefunc=%s score=%0.3f thresh=%0.3f\n", type, c, scorename[scorefindex], score, thresh);
 #endif
   return class;
 }
@@ -367,22 +367,22 @@ double obj_class_over(obj_t indicator, obj_t target, long type)
   return (double) bothcnt / 1 + eithercnt;
 }
 
-obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindx, long type)
+obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindex, long type)
 {
   init();
-  return packgeneral(csvobj, classindx, type, packavg);
+  return packgeneral(csvobj, classindex, type, packavg);
 }
 
-obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindx, long type)
+obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindex, long type)
 {
   init();
-  return packgeneral(csvobj, classindx, type, packfirst);
+  return packgeneral(csvobj, classindex, type, packfirst);
 }
 
-obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindx, long type)
+obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindex, long type)
 {
   init();
-  return packgeneral(csvobj, classindx, type, packrand);
+  return packgeneral(csvobj, classindex, type, packrand);
 }
 
 void obj_class_resetstat(long type)
@@ -501,7 +501,7 @@ obj_bit_t packavgstr(union obj_val_t *val, long attr, long type)
   long j;
   long k;
   long max = 0;
-  long maxindx = 0;
+  long maxindex = 0;
   if (0 == strlen(val->str))
     return 0;
   for (i = 0; i < samplesz; i++) {
@@ -519,9 +519,9 @@ obj_bit_t packavgstr(union obj_val_t *val, long attr, long type)
   for (j = 0; j < samplesz; j++)
     if (samplecnt[j] > max) {
       max = samplecnt[j];
-      maxindx = sampleobj[j];
+      maxindex = sampleobj[j];
     }
-  return 0 == strncmp(val->str, value[type][maxindx][attr].str, OBJ_CLASS_STR - 1);
+  return 0 == strncmp(val->str, value[type][maxindex][attr].str, OBJ_CLASS_STR - 1);
 }
 
 obj_bit_t packfirst(union obj_val_t *val, long attr, long type)
@@ -529,15 +529,15 @@ obj_bit_t packfirst(union obj_val_t *val, long attr, long type)
   return 0 == obj_val_compare(val, &firstval[type][attr], valtype[type][attr]);
 }
 
-obj_t packgeneral(char csvobj[OBJ_CSV], long classindx, long type, pack_f packfunc)
+obj_t packgeneral(char csvobj[OBJ_CSV], long classindex, long type, pack_f packfunc)
 {
   obj_t obj;
   union obj_val_t valobj[OBJ];
   long attr;
   obj_bit_t bit;
   if (firstpack[type])
-    setvaltypes(csvobj, classindx, type);
-  csv2valobj(csvobj, classindx, valobj, type);
+    setvaltypes(csvobj, classindex, type);
+  csv2valobj(csvobj, classindex, valobj, type);
   if (firstpack[type]) {
     insertfirstval(valobj, type);
     firstpack[type] = obj_bool_false;
@@ -557,7 +557,7 @@ obj_bit_t packrand(union obj_val_t *val, long attr, long type)
   return 0 == obj_val_compare(val, &value[type][i][attr], valtype[type][attr]);
 }
 
-long randomscoreindx(long exclude)
+long randomscoreindex(long exclude)
 {
   long r;
   do {
@@ -566,45 +566,45 @@ long randomscoreindx(long exclude)
   return r;
 }
 
-long reorderindx(long attrindx, long classindx)
+long reorderindex(long attrindex, long classindex)
 {
-  long reindx;
-  if (attrindx == classindx) {
-    reindx = 0;
+  long reindex;
+  if (attrindex == classindex) {
+    reindex = 0;
   } else {
-    reindx = (0 == attrindx) ? classindx : attrindx;
+    reindex = (0 == attrindex) ? classindex : attrindex;
   }
-  return reindx;
+  return reindex;
 }
 
-void setvaltypes(char csvobj[OBJ_CSV], long classindx, long type)
+void setvaltypes(char csvobj[OBJ_CSV], long classindex, long type)
 {
   char csvobjcopy[OBJ_CSV];
   char *tok;
-  long csvindx = 0;
-  long valindx;
+  long csvindex = 0;
+  long valindex;
   strncpy(csvobjcopy, csvobj, OBJ_CSV - 1);
   tok = strtok(csvobjcopy, STRTOK);
-  valindx = reorderindx(csvindx, classindx);
-  valtype[type][valindx] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
-  while ((tok = strtok(NULL, STRTOK)) && (csvindx < (OBJ - 1))) {
-    csvindx++;
-    valindx = reorderindx(csvindx, classindx);
-    valtype[type][valindx] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
+  valindex = reorderindex(csvindex, classindex);
+  valtype[type][valindex] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
+  while ((tok = strtok(NULL, STRTOK)) && (csvindex < (OBJ - 1))) {
+    csvindex++;
+    valindex = reorderindex(csvindex, classindex);
+    valtype[type][valindex] = isnum(tok) ? obj_valtype_num : obj_valtype_str;
   }
-  for (valindx = csvindx + 1; valindx < OBJ; valindx++)
-    valtype[type][valindx] = obj_valtype_str;
+  for (valindex = csvindex + 1; valindex < OBJ; valindex++)
+    valtype[type][valindex] = obj_valtype_str;
 #if OBJ_VERBOSE && OBJ_XVERBOSE
   printf("type%02ld types     ", type);
-  for (valindx = 0; valindx < OBJ; valindx++)
-    printf("%s,", obj_valtype_name(valtype[type][valindx]));
+  for (valindex = 0; valindex < OBJ; valindex++)
+    printf("%s,", obj_valtype_name(valtype[type][valindex]));
   printf("\n");
 #endif
 }
 
-void text2val(char *text, union obj_val_t *val, long valindx, long type)
+void text2val(char *text, union obj_val_t *val, long valindex, long type)
 {
-  if (obj_valtype_num == valtype[type][valindx]) {
+  if (obj_valtype_num == valtype[type][valindex]) {
     val->num = strtod(text, 0);
   } else {
     strncpy(val->str, text, OBJ_CLASS_STR - 1);

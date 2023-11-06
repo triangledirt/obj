@@ -5,7 +5,7 @@
 #include "class.h"
 #include "coin.h"
 #include "fold.h"
-#include "indx.h"
+#include "index.h"
 #include "obj.h"
 
 #define POP 128
@@ -68,7 +68,7 @@ void obj_fold_learn(obj_t obj[], long objsz, long type)
     len = random() % 3;
     dir = obj_coin_toss() ? 1 : -1;
     for (i = start; labs(start - i) <= len; i += dir)
-      obj_setattr(&pop[o], obj_indx_wrap(i, OBJ), val);
+      obj_setattr(&pop[o], obj_index_wrap(i, OBJ), val);
     fits[type][o] = -1;
   }
   forcecalc(pop, obj, objsz, type);

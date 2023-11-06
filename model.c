@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "indx.h"
+#include "index.h"
 #include "model.h"
 #include "modelstat.h"
 #include "movegene.h"
@@ -49,7 +49,7 @@ void calcfit(obj_t obj, long x, long y, long type, obj_fit_f fitfunc, void *cont
 
 long calcmovecoord(long coord, long offset)
 {
-  return obj_indx_wrap(coord + offset, OBJ_MODEL_DIM);
+  return obj_index_wrap(coord + offset, OBJ_MODEL_DIM);
 }
 
 enum obj_bool_t conquers(obj_t obj1, long x1, long y1, obj_t obj2, long x2, long y2, long type)
@@ -236,13 +236,13 @@ void talk(obj_t *obj1, obj_t *obj2, obj_bit_t narcissist, long type)
   obj_bit_t bit;
   obj_talkgene_parse(&talkgene, TALK_GENE, *obj1);
   for (i = talkgene.send.start; i < talkgene.send.length; i++) {
-    j = obj_indx_wrap(i, OBJ);
+    j = obj_index_wrap(i, OBJ);
     bit = obj_attr(*obj1, j);
     obj_setattr(obj2, j, bit);
   }
   if (!narcissist)
     for (i = talkgene.receive.start; i < talkgene.receive.length; i++) {
-      j = obj_indx_wrap(i, OBJ);
+      j = obj_index_wrap(i, OBJ);
       bit = obj_attr(*obj2, j);
       obj_setattr(obj1, j, bit);
     }

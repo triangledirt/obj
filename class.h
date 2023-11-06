@@ -13,10 +13,10 @@ obj_bit_t obj_class_classify(obj_t obj, long type);
 obj_bit_t obj_class_classifyknown(obj_t obj, long type);
 
 typedef obj_t (*obj_class_pack_f)(char *, long, long);
-obj_t obj_class_packauto(char csvobj[OBJ_CSV], long classindx, long type);
-obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindx, long type);
-obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindx, long type);
-obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindx, long type);
+obj_t obj_class_packauto(char csvobj[OBJ_CSV], long classindex, long type);
+obj_t obj_class_packavg(char csvobj[OBJ_CSV], long classindex, long type);
+obj_t obj_class_packrand(char csvobj[OBJ_CSV], long classindex, long type);
+obj_t obj_class_packfirst(char csvobj[OBJ_CSV], long classindex, long type);
 
 void obj_class_resetstat(long type);
 struct obj_classstat_t *obj_class_stat(long type);

@@ -23,8 +23,8 @@ void obj_randomize(obj_t *obj);
 void obj_setfromstr(obj_t *obj, char str[OBJ]);
 void obj_singlize(obj_t *obj);
 
-#define obj_setattr(obj, indx, val) if (val) { *obj |= ((long long) 1 << indx); } else { *obj &= ~((long long) 1 << indx); }
-#define obj_attr(obj, indx) ((obj >> indx) & (long long) 1)
+#define obj_setattr(obj, index, val) if (val) { *obj |= ((long long) 1 << index); } else { *obj &= ~((long long) 1 << index); }
+#define obj_attr(obj, index) ((obj >> index) & (long long) 1)
 
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_class(obj) (obj & (long long) 1)

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "bit.h"
 #include "bool.h"
-#include "indx.h"
+#include "index.h"
 #include "obj.h"
 
 void obj_clear(obj_t *obj)
@@ -189,7 +189,7 @@ long long obj_num(obj_t obj, long start, long length)
   long wrapbit;
   long long num = 0;
   for (bit = start; bit < endbit; bit++) {
-    wrapbit = obj_indx_wrap(bit, OBJ);
+    wrapbit = obj_index_wrap(bit, OBJ);
     num += (place * obj_attr(obj, wrapbit));
     place *= 2;
   }
@@ -243,7 +243,7 @@ void obj_morphticks2(obj_t *obj, obj_game2_t game2, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_attr(current, obj_indx_wrap(i - 1, OBJ));
+      in1 = obj_attr(current, obj_index_wrap(i - 1, OBJ));
       in2 = obj_attr(current, i);
       out = obj_game2_play(game2, in1, in2);
       obj_setattr(&next, i, out);
@@ -271,9 +271,9 @@ void obj_morphticks3(obj_t *obj, obj_game3_t game3, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_attr(current, obj_indx_wrap(i - 1, OBJ));
+      in1 = obj_attr(current, obj_index_wrap(i - 1, OBJ));
       in2 = obj_attr(current, i);
-      in3 = obj_attr(current, obj_indx_wrap(i + 1, OBJ));
+      in3 = obj_attr(current, obj_index_wrap(i + 1, OBJ));
       out = obj_game3_play(game3, in1, in2, in3);
       obj_setattr(&next, i, out);
     }
@@ -312,7 +312,7 @@ void obj_rotate(obj_t *obj, long inc)
   obj_bit_t bit;
   for (i = 0; i < OBJ; i++) {
     bit = obj_attr(*obj, i);
-    newi = obj_indx_wrap(i + inc, OBJ);
+    newi = obj_index_wrap(i + inc, OBJ);
     obj_setattr(&obj2, newi, bit);
   }
   *obj = obj2;
@@ -338,7 +338,7 @@ void obj_setnum(obj_t *obj, long start, long length, long long num)
   long long rem = num;
   do {
     val = rem % place;
-    wrapbit = obj_indx_wrap(bit, OBJ);
+    wrapbit = obj_index_wrap(bit, OBJ);
     obj_setattr(obj, wrapbit, val);
     rem -= val;
     place *= 2;
