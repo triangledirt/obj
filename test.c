@@ -139,9 +139,9 @@ void testgame()
   obj_print(obj);
   printf("\n");
   for (tick = 0; tick < 8; tick++) {
-    /*  obj_morph1(&obj, game1, 1);  */
-    /*  obj_morph2(&obj, game2, 1);  */
-    obj_morph3(&obj, game3, 1);
+    /*  obj_morph1(&obj, game1);  */
+    /*  obj_morph2(&obj, game2);  */
+    obj_morph3(&obj, game3);
     obj_print(obj);
     printf("\n");
   }
