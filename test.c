@@ -137,7 +137,7 @@ void testgame()
   obj_game3_t game3 = 110;
   obj_singlize(&obj);
   obj_print(obj);
- printf("\n");
+  printf("\n");
   for (tick = 0; tick < 8; tick++) {
     /*  obj_morph1(&obj, game1, 1);  */
     /*  obj_morph2(&obj, game2, 1);  */
