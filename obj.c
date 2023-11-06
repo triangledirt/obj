@@ -334,5 +334,5 @@ void obj_setnum(obj_t *obj, long start, long length, long long num)
 void obj_singlize(obj_t *obj)
 {
   obj_clear(obj);
-  obj_setattr(obj, OBJ / 2, 1);
+  obj_setattr(obj, SINGLE, 1);
 }
