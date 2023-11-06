@@ -15,7 +15,7 @@ typedef long long obj_t;
 #define OBJ_CSV 4096
 #define OBJ_TYPE OBJ
 
-#define SINGLE (OBJ / 2)
+#define OBJ_SINGLE (OBJ / 2)
 
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);
@@ -29,8 +29,8 @@ void obj_singlize(obj_t *obj);
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_class(obj) (obj & (long long) 1)
 
-#define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << SINGLE); } else { *obj &= ~((long long) 1 << SINGLE); }
-#define obj_single(obj) ((obj >> SINGLE) & (long long) 1)
+#define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << OBJ_SINGLE); } else { *obj &= ~((long long) 1 << OBJ_SINGLE); }
+#define obj_single(obj) ((obj >> OBJ_SINGLE) & (long long) 1)
 
 typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
