@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "class.h"
 #include "fit.h"
-#include "op1.h"
-#include "op2.h"
-#include "op3.h"
+#include "game1.h"
+#include "game2.h"
+#include "game3.h"
 #include "model.h"
 #include "sense.h"
 #include "sync.h"
@@ -23,9 +23,9 @@
 double fit(obj_t obj, long type, void *context);
 static void testclass();
 void testcsvobj(char csvobj[OBJ_CSV], long classindx, long type, obj_class_pack_f packfunc);
+static void testgame();
 static void testmodel(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testobj();
-static void testop();
 static void testpack(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsense(char *filename, long classindx, long type, obj_class_pack_f packfunc);
 static void testsync();
@@ -128,20 +128,20 @@ void testobj()
   printf("num = %ld\n", num);
 }
 
-void testop()
+void testgame()
 {
   obj_t obj;
   long tick;
-  obj_op1_t op1 = 2;
-  obj_op2_t op2 = 1;
-  obj_op3_t op3 = 110;
+  obj_game1_t game1 = 2;
+  obj_game2_t game2 = 1;
+  obj_game3_t game3 = 110;
   obj_singlize(&obj);
   obj_print(obj);
  printf("\n");
   for (tick = 0; tick < 8; tick++) {
-    /*  obj_op1(&obj, op1, 1);  */
-    /*  obj_op2(&obj, op2, 1);  */
-    obj_op3(&obj, op3, 1);
+    /*  obj_morph1(&obj, game1, 1);  */
+    /*  obj_morph2(&obj, game2, 1);  */
+    obj_morph3(&obj, game3, 1);
     obj_print(obj);
     printf("\n");
   }
@@ -190,9 +190,9 @@ void testsync()
 int main(int argc, char *argv[])
 {
   if (0) testclass();
+  if (1) testgame();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
-  if (1) testop();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;

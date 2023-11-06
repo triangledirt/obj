@@ -201,7 +201,7 @@ void obj_obscureclass(obj_t *obj)
   obj_setclass(obj, obj_bit_random());
 }
 
-void obj_op1(obj_t *obj, obj_op1_t op1, long ticks)
+void obj_morph1(obj_t *obj, obj_game1_t game1, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -213,7 +213,7 @@ void obj_op1(obj_t *obj, obj_op1_t op1, long ticks)
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
       in1 = obj_getattr(current, i);
-      out = obj_op1_calc(op1, in1);
+      out = obj_game1_play(game1, in1);
       obj_setattr(&next, i, out);
     }
     current = next;
@@ -221,7 +221,7 @@ void obj_op1(obj_t *obj, obj_op1_t op1, long ticks)
   *obj = current;
 }
 
-void obj_op2(obj_t *obj, obj_op2_t op2, long ticks)
+void obj_morph2(obj_t *obj, obj_game2_t game2, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -235,7 +235,7 @@ void obj_op2(obj_t *obj, obj_op2_t op2, long ticks)
     for (i = 0; i < OBJ; i++) {
       in1 = obj_getattr(current, obj_indx_wrap(i - 1, OBJ));
       in2 = obj_getattr(current, i);
-      out = obj_op2_calc(op2, in1, in2);
+      out = obj_game2_play(game2, in1, in2);
       obj_setattr(&next, i, out);
     }
     current = next;
@@ -243,7 +243,7 @@ void obj_op2(obj_t *obj, obj_op2_t op2, long ticks)
   *obj = current;
 }
 
-void obj_op3(obj_t *obj, obj_op3_t op3, long ticks)
+void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -259,7 +259,7 @@ void obj_op3(obj_t *obj, obj_op3_t op3, long ticks)
       in1 = obj_getattr(current, obj_indx_wrap(i - 1, OBJ));
       in2 = obj_getattr(current, i);
       in3 = obj_getattr(current, obj_indx_wrap(i + 1, OBJ));
-      out = obj_op3_calc(op3, in1, in2, in3);
+      out = obj_game3_play(game3, in1, in2, in3);
       obj_setattr(&next, i, out);
     }
     current = next;

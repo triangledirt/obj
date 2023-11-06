@@ -2,9 +2,9 @@
 #define obj_h
 
 #include "bool.h"
-#include "op1.h"
-#include "op2.h"
-#include "op3.h"
+#include "game1.h"
+#include "game2.h"
+#include "game3.h"
 
 #define OBJ_VERBOSE 1
 #define OBJ_XVERBOSE 1
@@ -37,9 +37,11 @@ double obj_comparetypes(obj_t obj1, obj_t obj2);
 double obj_comparexor(obj_t obj1, obj_t obj2);
 #define obj_compare(obj1, obj2) obj_comparesquare(obj1, obj2)
 
-void obj_op1(obj_t *obj, obj_op1_t op1, long ticks);
-void obj_op2(obj_t *obj, obj_op2_t op2, long ticks);
-void obj_op3(obj_t *obj, obj_op3_t op3, long ticks);
+/*  rename op >> box / dongle / bauble / gadget / maze  */
+
+void obj_morph1(obj_t *obj, obj_game1_t game1, long ticks);
+void obj_morph2(obj_t *obj, obj_game2_t game2, long ticks);
+void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks);
 
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
 void obj_print(obj_t obj);
