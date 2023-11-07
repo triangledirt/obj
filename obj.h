@@ -18,6 +18,8 @@ typedef long long obj_t;
 
 #define OBJ_SINGLE (OBJ / 2)
 
+typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
+
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);
 void obj_randomize(obj_t *obj);
@@ -26,14 +28,15 @@ void obj_singlize(obj_t *obj);
 
 #define obj_setattr(obj, index, val) if (val) { *obj |= ((long long) 1 << index); } else { *obj &= ~((long long) 1 << index); }
 #define obj_attr(obj, index) ((obj >> index) & (long long) 1)
-
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_class(obj) (obj & (long long) 1)
-
 #define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << OBJ_SINGLE); } else { *obj &= ~((long long) 1 << OBJ_SINGLE); }
 #define obj_single(obj) ((obj >> OBJ_SINGLE) & (long long) 1)
 
-typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
+long obj_edge(obj_t obj1, obj_t obj2);
+enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
+void obj_print(obj_t obj);
+struct obj_stat_t obj_stat(obj_t obj);
 
 double obj_comparebox(obj_t obj1, obj_t obj2);
 double obj_compareequal(obj_t obj1, obj_t obj2);
@@ -51,17 +54,11 @@ void obj_morph1ticks(obj_t *obj, obj_game1_t game1, long ticks);
 void obj_morph2ticks(obj_t *obj, obj_game2_t game2, long ticks);
 void obj_morph3ticks(obj_t *obj, obj_game3_t game3, long ticks);
 
-enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
-void obj_print(obj_t obj);
-struct obj_stat_t obj_stat(obj_t obj);
-
 void obj_obscureclass(obj_t *obj);
 void obj_mutate(obj_t *obj);
 void obj_rotate(obj_t *obj, long inc);
 
 void obj_setnum(obj_t *obj, long start, long length, long long num);
 long long obj_num(obj_t obj, long start, long length);
-
-long obj_edge(obj_t obj1, obj_t obj2);
 
 #endif
