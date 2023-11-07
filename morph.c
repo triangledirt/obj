@@ -13,15 +13,18 @@ double obj_morph_fit(long type)
   return 0.0;
 }
 
-void obj_morph_learn(obj_t obj[], long objsz, long type) {}
+void obj_morph_learn(obj_t obj[], long objsz, long type)
+{
+  /*  determine game gene start position based on which start pos maximizes scores  */
+}
 
 double obj_morph_score(obj_t obj, long type)
 {
   obj_t objx = obj;
   struct obj_morphgene_t morphgene;
-  long count1;
+  struct obj_stat_t stat;
   obj_morphgene_parse(&morphgene, objx, MORPH_GENE);
   obj_morph1ticks(&objx, morphgene.game, OBJ);
-  count1 = obj_count1s(objx);
-  return (double) (count1 / OBJ);
+  stat = obj_stat(objx);
+  return (double) stat.ones / OBJ;
 }

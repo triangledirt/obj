@@ -137,26 +137,6 @@ double obj_comparexor(obj_t obj1, obj_t obj2)
   return (double) correct / (1 + edge);
 }
 
-long obj_count0s(obj_t obj)
-{
-  long i;
-  long count = 0;
-  for (i = 0; i < OBJ; i++)
-    if (!obj_attr(obj, i))
-      count++;
-  return count;
-}
-
-long obj_count1s(obj_t obj)
-{
-  long i;
-  long count = 0;
-  for (i = 0; i < OBJ; i++)
-    if (obj_attr(obj, i))
-      count++;
-  return count;
-}
-
 long obj_edge(obj_t obj1, obj_t obj2)
 {
   long edge = OBJ - 1;
@@ -370,4 +350,16 @@ void obj_singlize(obj_t *obj)
 {
   obj_clear(obj);
   obj_setattr(obj, OBJ_SINGLE, 1);
+}
+
+struct obj_stat_t obj_stat(obj_t obj)
+{
+  struct obj_stat_t stat;
+  long i;
+  obj_stat_reset(&stat);
+  for (i = 0; i < OBJ; i++)
+    if (!obj_attr(obj, i))
+      stat.zeroes++;
+  stat.ones = OBJ - stat.zeroes;
+  return stat;
 }
