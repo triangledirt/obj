@@ -21,7 +21,7 @@ double obj_morph_score(obj_t obj, long type)
   struct obj_morphgene_t morphgene;
   long count1;
   obj_morphgene_parse(&morphgene, objx, MORPH_GENE);
-  obj_morphticks1(&objx, morphgene.game, OBJ);
+  obj_morph1ticks(&objx, morphgene.game, OBJ);
   count1 = obj_count1s(objx);
   return (double) (count1 / OBJ);
 }
