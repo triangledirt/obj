@@ -18,8 +18,6 @@ typedef long long obj_t;
 
 #define OBJ_SINGLE (OBJ / 2)
 
-typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
-
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);
 void obj_randomize(obj_t *obj);
@@ -60,5 +58,7 @@ void obj_rotate(obj_t *obj, long inc);
 
 void obj_setnum(obj_t *obj, long start, long length, long long num);
 long long obj_num(obj_t obj, long start, long length);
+
+typedef double (*obj_fit_f)(obj_t obj, long type, void *context);
 
 #endif
