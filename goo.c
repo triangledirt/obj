@@ -25,9 +25,10 @@ void init()
 obj_t obj_goo_cloud(obj_t obj)
 {
   long i;
+  obj_t o;
   init();
   i = random() % CLOUD;
+  o = cloud[i];
   cloud[i] = obj;
-  i = random() % CLOUD;
-  return cloud[i];
+  return o;
 }
