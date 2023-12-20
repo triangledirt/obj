@@ -14,7 +14,7 @@ void init()
   long i;
   if (!once) {
     for (i = 0; i < CLOUD; i++)
-      cloud[i] = obj_random();
+      obj_randomize(&cloud[i]);
     once = obj_bool_true;
   }
 }
