@@ -12,12 +12,9 @@ static void init();
 void init()
 {
   long i;
-  obj_t o;
   if (!once) {
-    for (i = 0; i < CLOUD; i++) {
-      obj_randomize(&o);
-      cloud[i] = o;
-    }
+    for (i = 0; i < CLOUD; i++)
+      cloud[i] = obj_random();
     once = obj_bool_true;
   }
 }

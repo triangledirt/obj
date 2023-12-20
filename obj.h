@@ -20,6 +20,7 @@ typedef long long obj_t;
 
 void obj_clear(obj_t *obj);
 void obj_fill(obj_t *obj);
+obj_t obj_random();
 void obj_randomize(obj_t *obj);
 void obj_setfromstr(obj_t *obj, char str[OBJ]);
 void obj_singlize(obj_t *obj);

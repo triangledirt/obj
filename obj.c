@@ -294,6 +294,13 @@ void obj_print(obj_t obj)
   }
 }
 
+obj_t obj_random()
+{
+  obj_t o;
+  obj_randomize(&o);
+  return o;
+}
+
 void obj_randomize(obj_t *obj)
 {
   long i;
