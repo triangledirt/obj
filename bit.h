@@ -5,6 +5,7 @@ typedef char obj_bit_t;
 
 obj_bit_t obj_bit_random();
 void obj_bit_randomize(obj_bit_t *bit);
+void obj_bit_flip(obj_bit_t *bit);
 char obj_bit_char(obj_bit_t bit);
 
 #endif

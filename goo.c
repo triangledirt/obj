@@ -2,7 +2,7 @@
 #include "bool.h"
 #include "goo.h"
 
-#define CLOUD 64
+#define CLOUD OBJ
 
 static enum obj_bool_t once = obj_bool_false;
 static obj_t cloud[CLOUD];
