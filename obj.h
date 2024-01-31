@@ -26,17 +26,16 @@ void obj_singlize(obj_t *obj);
 
 #define obj_setattr(obj, index, val) if (val) { *obj |= ((long long) 1 << index); } else { *obj &= ~((long long) 1 << index); }
 #define obj_attr(obj, index) ((obj >> index) & (long long) 1)
+void obj_flipattr(obj_t *obj, long index);
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_class(obj) (obj & (long long) 1)
 #define obj_setsingle(obj, val) if (val) { *obj |= ((long long) 1 << OBJ_SINGLE); } else { *obj &= ~((long long) 1 << OBJ_SINGLE); }
 #define obj_single(obj) ((obj >> OBJ_SINGLE) & (long long) 1)
 
-void obj_flipattr(obj_t *obj, long index);
-#define obj_randomindex() (random() % OBJ)
-
 long obj_edge(obj_t obj1, obj_t obj2);
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
 void obj_print(obj_t obj);
+#define obj_randomindex() (random() % OBJ)
 struct obj_stat_t obj_stat(obj_t obj);
 
 double obj_comparebox(obj_t obj1, obj_t obj2);
