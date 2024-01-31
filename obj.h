@@ -32,6 +32,7 @@ void obj_singlize(obj_t *obj);
 #define obj_single(obj) ((obj >> OBJ_SINGLE) & (long long) 1)
 
 void obj_flipattr(obj_t *obj, long index);
+#define obj_randomindex() (random() % OBJ)
 
 long obj_edge(obj_t obj1, obj_t obj2);
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
