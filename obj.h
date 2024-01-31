@@ -47,12 +47,9 @@ double obj_comparetypes(obj_t obj1, obj_t obj2);
 double obj_comparexor(obj_t obj1, obj_t obj2);
 #define obj_compare(obj1, obj2) obj_comparesquare(obj1, obj2)
 
-void obj_morph1(obj_t *obj, obj_game1_t game1);
-void obj_morph2(obj_t *obj, obj_game2_t game2);
-void obj_morph3(obj_t *obj, obj_game3_t game3);
-void obj_morph1ticks(obj_t *obj, obj_game1_t game1, long ticks);
-void obj_morph2ticks(obj_t *obj, obj_game2_t game2, long ticks);
-void obj_morph3ticks(obj_t *obj, obj_game3_t game3, long ticks);
+void obj_morph1(obj_t *obj, obj_game1_t game1, long ticks);
+void obj_morph2(obj_t *obj, obj_game2_t game2, long ticks);
+void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks);
 
 void obj_obscureclass(obj_t *obj);
 void obj_mutate(obj_t *obj);

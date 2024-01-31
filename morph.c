@@ -24,7 +24,7 @@ double obj_morph_score(obj_t obj, long type)
   struct obj_morphgene_t morphgene;
   struct obj_stat_t stat;
   obj_morphgene_parse(&morphgene, objx, MORPH_GENE);
-  obj_morph1ticks(&objx, morphgene.game, OBJ);
+  obj_morph1(&objx, morphgene.game, OBJ);
   stat = obj_stat(objx);
   return (double) stat.ones / OBJ;
 }

@@ -209,12 +209,7 @@ void obj_obscureclass(obj_t *obj)
   obj_setclass(obj, obj_bit_random());
 }
 
-void obj_morph1(obj_t *obj, obj_game1_t game1)
-{
-  obj_morph1ticks(obj, game1, 1);
-}
-  
-void obj_morph1ticks(obj_t *obj, obj_game1_t game1, long ticks)
+void obj_morph1(obj_t *obj, obj_game1_t game1, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -234,12 +229,7 @@ void obj_morph1ticks(obj_t *obj, obj_game1_t game1, long ticks)
   *obj = current;
 }
 
-void obj_morph2(obj_t *obj, obj_game2_t game2)
-{
-  obj_morph2ticks(obj, game2, 1);
-}
-
-void obj_morph2ticks(obj_t *obj, obj_game2_t game2, long ticks)
+void obj_morph2(obj_t *obj, obj_game2_t game2, long ticks)
 {
   long tick;
   obj_bit_t in1;
@@ -261,12 +251,7 @@ void obj_morph2ticks(obj_t *obj, obj_game2_t game2, long ticks)
   *obj = current;
 }
 
-void obj_morph3(obj_t *obj, obj_game3_t game3)
-{
-  obj_morph3ticks(obj, game3, 1);
-}
-
-void obj_morph3ticks(obj_t *obj, obj_game3_t game3, long ticks)
+void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks)
 {
   long tick;
   obj_bit_t in1;
