@@ -177,9 +177,11 @@ void obj_flipattr(obj_t *obj, long index)
 void obj_flipattrwrap(obj_t *obj, long index)
 {
   obj_bit_t val;
-  val = obj_attrwrap(*obj, index);
+  long indexwrap;
+  indexwrap = obj_index_wrap(index, OBJ);
+  val = obj_attr(*obj, indexwrap);
   obj_bit_flip(&val);
-  obj_setattrwrap(obj, index, val);
+  obj_setattr(obj, indexwrap, val);
 }
 
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type)
