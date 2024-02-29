@@ -174,6 +174,14 @@ void obj_flipattr(obj_t *obj, long index)
   obj_setattr(obj, index, val);
 }
 
+void obj_flipattrwrap(obj_t *obj, long index)
+{
+  obj_bit_t val;
+  val = obj_attrwrap(*obj, index);
+  obj_bit_flip(&val);
+  obj_setattrwrap(obj, index, val);
+}
+
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type)
 {
   enum obj_bool_t has = obj_bool_true;

@@ -29,6 +29,7 @@ void obj_setattrwrap(obj_t *obj, long index, obj_bit_t val);
 #define obj_attr(obj, index) ((obj >> index) & (long long) 1)
 obj_bit_t obj_attrwrap(obj_t obj, long index);
 void obj_flipattr(obj_t *obj, long index);
+void obj_flipattrwrap(obj_t *obj, long index);
 
 #define obj_setclass(obj, val) if (val) { *obj |= ((long long) 1); } else { *obj &= ~((long long) 1); }
 #define obj_class(obj) (obj & (long long) 1)
