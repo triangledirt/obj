@@ -6,6 +6,13 @@
 #include "index.h"
 #include "obj.h"
 
+obj_bit_t obj_attrwrap(obj_t obj, long index)
+{
+  long indexwrap;
+  indexwrap = obj_index_wrap(index, OBJ);
+  return obj_attr(obj, indexwrap);
+}
+
 void obj_clear(obj_t *obj)
 {
   *obj = 0;
@@ -194,11 +201,9 @@ long long obj_num(obj_t obj, long start, long length)
   long place = 1;
   long bit;
   long endbit = start + length;
-  long wrapbit;
   long long num = 0;
   for (bit = start; bit < endbit; bit++) {
-    wrapbit = obj_index_wrap(bit, OBJ);
-    num += (place * obj_attr(obj, wrapbit));
+    num += (place * obj_attrwrap(obj, bit));
     place *= 2;
   }
   return num;
@@ -241,7 +246,7 @@ void obj_morph2(obj_t *obj, obj_game2_t game2, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_attr(current, obj_index_wrap(i - 1, OBJ));
+      in1 = obj_attrwrap(current, i - 1);
       in2 = obj_attr(current, i);
       out = obj_game2_play(game2, in1, in2);
       obj_setattr(&next, i, out);
@@ -264,9 +269,9 @@ void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks)
   current = *obj;
   for (tick = 0; tick < ticks; tick++) {
     for (i = 0; i < OBJ; i++) {
-      in1 = obj_attr(current, obj_index_wrap(i - 1, OBJ));
+      in1 = obj_attrwrap(current, i - 1);
       in2 = obj_attr(current, i);
-      in3 = obj_attr(current, obj_index_wrap(i + 1, OBJ));
+      in3 = obj_attrwrap(current, i + 1);
       out = obj_game3_play(game3, in1, in2, in3);
       obj_setattr(&next, i, out);
     }
@@ -301,14 +306,19 @@ void obj_rotate(obj_t *obj, long inc)
 {
   obj_t obj2;
   long i;
-  long newi;
   obj_bit_t bit;
   for (i = 0; i < OBJ; i++) {
     bit = obj_attr(*obj, i);
-    newi = obj_index_wrap(i + inc, OBJ);
-    obj_setattr(&obj2, newi, bit);
+    obj_setattrwrap(&obj2, i + inc, bit);
   }
   *obj = obj2;
+}
+
+void obj_setattrwrap(obj_t *obj, long index, obj_bit_t val)
+{
+  long indexwrap;
+  indexwrap = obj_index_wrap(index, OBJ);
+  obj_setattr(obj, indexwrap, val);
 }
 
 void obj_setfromstr(obj_t *obj, char str[OBJ])
@@ -325,14 +335,12 @@ void obj_setnum(obj_t *obj, long start, long length, long long num)
 {
   long place = 2;
   long bit = start;
-  long wrapbit;
   long endbit = start + length;
   obj_bit_t val;
   long long rem = num;
   do {
     val = rem % place;
-    wrapbit = obj_index_wrap(bit, OBJ);
-    obj_setattr(obj, wrapbit, val);
+    obj_setattrwrap(obj, bit, val);
     rem -= val;
     place *= 2;
     bit++;
