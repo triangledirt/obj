@@ -33,10 +33,10 @@ void obj_mist_play()
       gamemesh = &mist[i];
       datamesh = &mist[focus[i]];
       obj_mesh_play(gamemesh, datamesh);
+      focus[i] = random() % MIST;
     }
     printf("\033c");
     print();
     usleep(1000000 / 24);
-    focus[random() % MIST] = random() % MIST;
   }
 }
