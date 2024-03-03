@@ -19,17 +19,17 @@ void obj_mesh_initlong(struct obj_meshlong_t *meshlong, struct obj_mesh_t *mesh)
   meshlong->outaddr = multiply(mesh->bit[12], mesh->bit[13], mesh->bit[14], mesh->bit[15]);
 }
 
-void obj_mesh_play(struct obj_mesh_t *mesh1, struct obj_mesh_t *mesh2)
+void obj_mesh_play(struct obj_mesh_t *gamemesh, struct obj_mesh_t *datamesh)
 {
-  struct obj_meshlong_t meshlong;
+  struct obj_meshlong_t gamelong;
   obj_bit_t in1;
   obj_bit_t in2;
   obj_bit_t out;
-  obj_mesh_initlong(&meshlong, mesh1);
-  in1 = mesh2->bit[meshlong.inaddr1];
-  in2 = mesh2->bit[meshlong.inaddr2];
-  out = obj_game2_play(meshlong.game, in1, in2);
-  mesh2->bit[meshlong.outaddr] = out;
+  obj_mesh_initlong(&gamelong, gamemesh);
+  in1 = datamesh->bit[gamelong.inaddr1];
+  in2 = datamesh->bit[gamelong.inaddr2];
+  out = obj_game2_play(gamelong.game, in1, in2);
+  datamesh->bit[gamelong.outaddr] = out;
 }
 
 void obj_mesh_print(struct obj_mesh_t *mesh)
@@ -40,10 +40,10 @@ void obj_mesh_print(struct obj_mesh_t *mesh)
   printf("\n");
 }
 
-void obj_meshlong_print(struct obj_meshlong_t *mesh)
+void obj_meshlong_print(struct obj_meshlong_t *meshlong)
 {
-  printf("game %d\n", mesh->game);
-  printf("inaddr1 %d\n", mesh->inaddr1);
-  printf("inaddr2 %d\n", mesh->inaddr2);
-  printf("outaddr %d\n", mesh->outaddr);
+  printf("game %d\n", meshlong->game);
+  printf("inaddr1 %d\n", meshlong->inaddr1);
+  printf("inaddr2 %d\n", meshlong->inaddr2);
+  printf("outaddr %d\n", meshlong->outaddr);
 }
