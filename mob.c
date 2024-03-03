@@ -5,7 +5,7 @@
 #include "index.h"
 #include "mesh.h"
 
-#define MOB 16
+#define MOB 5
 
 struct obj_mesh_t mob[MOB][MOB];
 char focus[MOB][MOB];
@@ -109,6 +109,6 @@ void obj_mob_play()
     }
     printf("\033c");
     print();
-    usleep(1000000 / 24);
+    usleep(1000000 / 240);
   }
 }

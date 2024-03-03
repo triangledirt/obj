@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "mesh.h"
 
-#define MIST 16
+#define MIST 24
 
 struct obj_mesh_t mist[MIST];
 long focus[MIST];

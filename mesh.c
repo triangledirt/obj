@@ -62,8 +62,7 @@ char obj_meshlong_face(struct obj_meshlong_t *meshlong)
 {
   char c = 97;
   c += 0;
-  c += 0;
-  c += 0;
+  ;;
   return c;
 }
 
