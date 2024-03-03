@@ -5,6 +5,18 @@
 
 #define multiply(bit0, bit1, bit2, bit3) ((bit0) + (2 * bit1) + (4 * bit2) + (8 * bit3))
 
+char obj_mesh_face(struct obj_mesh_t *mesh)
+{
+  long place;
+  long value = 1;
+  long face = 97;
+  for (place = 0; place < 4; place++) {
+    face += mesh->bit[place] * value;
+    value *= 2;
+  }
+  return face;
+}
+
 void obj_mesh_init(struct obj_mesh_t *mesh)
 {
   long i;
@@ -44,6 +56,15 @@ void obj_mesh_print(struct obj_mesh_t *mesh)
   for (i = 0; i < 16; i++)
     printf("%c ", obj_bit_char(mesh->bit[i]));
   printf("\n");
+}
+
+char obj_meshlong_face(struct obj_meshlong_t *meshlong)
+{
+  char c = 97;
+  c += 0;
+  c += 0;
+  c += 0;
+  return c;
 }
 
 void obj_meshlong_print(struct obj_meshlong_t *meshlong)

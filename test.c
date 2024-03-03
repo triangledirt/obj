@@ -4,8 +4,9 @@
 #include "game1.h"
 #include "game2.h"
 #include "game3.h"
+#include "mist.h"
+#include "mob.h"
 #include "model.h"
-#include "ring.h"
 #include "sense.h"
 #include "sync.h"
 
@@ -25,10 +26,11 @@ double fit(obj_t obj, long type, void *context);
 static void testclass();
 void testcsvobj(char csvobj[OBJ_CSV], long classindex, long type, obj_class_pack_f packfunc);
 static void testgame();
+static void testmist();
+static void testmob();
 static void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testobj();
 static void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc);
-static void testring();
 static void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testsync();
 
@@ -102,6 +104,16 @@ void testgame()
   printf("%c\n", obj_bit_char(bit));
 }
 
+void testmist()
+{
+  obj_mist_play();
+}
+
+void testmob()
+{
+  obj_mob_play();
+}
+
 void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -167,11 +179,6 @@ void testpack(char *filename, long classindex, long type, obj_class_pack_f packf
 #endif
 }
 
-void testring()
-{
-  obj_ring_play();
-}
-
 void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -201,9 +208,10 @@ int main(int argc, char *argv[])
 {
   if (0) testclass();
   if (0) testgame();
+  if (0) testmist();
+  if (1) testmob();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
-  if (1) testring();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;
