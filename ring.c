@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "mesh.h"
 
-#define RING 8
+#define RING 16
 
 struct obj_mesh_t ring[RING];
 long datap[RING];
@@ -30,7 +30,8 @@ void obj_ring_play()
   }
   meshprint();
   while (1) {
-    obj_mesh_mutate(&ring[random() % RING]);
+    /*  obj_mesh_mutate(&ring[random() % RING]);  */
+    datap[random() % RING] = random() % RING;
     for (i = 0; i < RING; i++) {
       gamemesh = &ring[i];
       datamesh = &ring[datap[i]];
