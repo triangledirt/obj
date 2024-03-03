@@ -5,7 +5,7 @@
 #include "index.h"
 #include "mesh.h"
 
-#define MOB 5
+#define MOB 8
 
 struct obj_mesh_t mob[MOB][MOB];
 char focus[MOB][MOB];
