@@ -35,7 +35,7 @@ void obj_mist_play()
       obj_mesh_play(gamemesh, datamesh);
       focus[i] = random() % MIST;
       if (0 == (random() % MIST))
-	obj_mesh_mutate(gamemesh);
+	obj_mesh_mutate(datamesh);
     }
     printf("\033c");
     print();
