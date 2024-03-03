@@ -3,7 +3,7 @@
 #include "game2.h"
 #include "mesh.h"
 
-#define multiply(bit0, bit1, bit2, bit3) ((bit0) + (2 * bit1) + (4 * bit2) + (8 * bit3))
+#define multiply(bit0, bit1, bit2, bit3) (bit0 + (2 * bit1) + (4 * bit2) + (8 * bit3))
 
 char obj_mesh_face(struct obj_mesh_t *mesh)
 {
