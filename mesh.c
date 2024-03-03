@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "game2.h"
 #include "mesh.h"
 
@@ -17,6 +18,11 @@ void obj_mesh_initlong(struct obj_meshlong_t *meshlong, struct obj_mesh_t *mesh)
   meshlong->inaddr1 = multiply(mesh->bit[4], mesh->bit[5], mesh->bit[6], mesh->bit[7]);
   meshlong->inaddr2 = multiply(mesh->bit[8], mesh->bit[9], mesh->bit[10], mesh->bit[11]);
   meshlong->outaddr = multiply(mesh->bit[12], mesh->bit[13], mesh->bit[14], mesh->bit[15]);
+}
+
+void obj_mesh_mutate(struct obj_mesh_t *mesh)
+{
+  obj_bit_randomize(&mesh->bit[random() % 16]);
 }
 
 void obj_mesh_play(struct obj_mesh_t *gamemesh, struct obj_mesh_t *datamesh)

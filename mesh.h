@@ -16,6 +16,7 @@ struct obj_meshlong_t {
 
 void obj_mesh_init(struct obj_mesh_t *mesh);
 void obj_mesh_initlong(struct obj_meshlong_t *meshlong, struct obj_mesh_t *mesh);
+void obj_mesh_mutate(struct obj_mesh_t *mesh);
 void obj_mesh_play(struct obj_mesh_t *gamemesh, struct obj_mesh_t *datamesh);
 void obj_mesh_print(struct obj_mesh_t *mesh);
 void obj_meshlong_print(struct obj_meshlong_t *meshlong);

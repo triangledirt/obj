@@ -5,6 +5,7 @@
 #include "game2.h"
 #include "game3.h"
 #include "model.h"
+#include "ring.h"
 #include "sense.h"
 #include "sync.h"
 
@@ -27,6 +28,7 @@ static void testgame();
 static void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testobj();
 static void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc);
+static void testring();
 static void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testsync();
 
@@ -76,6 +78,28 @@ void testcsvobj(char csvobj[OBJ_CSV], long classindex, long type, obj_class_pack
   obj_print(obj);
   printf("\n");
 #endif
+}
+
+void testgame()
+{
+  obj_t obj;
+  obj_bit_t bit;
+  long tick;
+  obj_game1_t game1 = 2;
+  obj_game2_t game2 = 0;
+  obj_game3_t game3 = 110;
+  obj_singlize(&obj);
+  obj_print(obj);
+  printf("\n");
+  for (tick = 0; tick < 8; tick++) {
+    if (0) obj_morph1(&obj, game1, 1);
+    if (0) obj_morph2(&obj, game2, 1);
+    if (1) obj_morph3(&obj, game3, 1);
+    obj_print(obj);
+    printf("\n");
+  }
+  bit = obj_single(obj);
+  printf("%c\n", obj_bit_char(bit));
 }
 
 void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc)
@@ -128,28 +152,6 @@ void testobj()
   printf("num = %ld\n", num);
 }
 
-void testgame()
-{
-  obj_t obj;
-  obj_bit_t bit;
-  long tick;
-  obj_game1_t game1 = 2;
-  obj_game2_t game2 = 0;
-  obj_game3_t game3 = 110;
-  obj_singlize(&obj);
-  obj_print(obj);
-  printf("\n");
-  for (tick = 0; tick < 8; tick++) {
-    if (0) obj_morph1(&obj, game1, 1);
-    if (0) obj_morph2(&obj, game2, 1);
-    if (1) obj_morph3(&obj, game3, 1);
-    obj_print(obj);
-    printf("\n");
-  }
-  bit = obj_single(obj);
-  printf("%c\n", obj_bit_char(bit));
-}
-
 void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -163,6 +165,11 @@ void testpack(char *filename, long classindex, long type, obj_class_pack_f packf
   stat = obj_class_stat(type);
   obj_classstat_print(stat, type);
 #endif
+}
+
+void testring()
+{
+  obj_ring_play();
 }
 
 void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc)
@@ -192,10 +199,11 @@ void testsync()
 
 int main(int argc, char *argv[])
 {
-  if (1) testclass();
+  if (0) testclass();
   if (0) testgame();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
+  if (1) testring();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;
