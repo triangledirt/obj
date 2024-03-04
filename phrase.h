@@ -17,6 +17,7 @@ void obj_phrase_apply(struct obj_phrase_t *phrase, struct obj_mesh_t *data);
 
 void obj_phrase_randomize(struct obj_phrase_t *phrase);
 void obj_phrase_mutate(struct obj_phrase_t *phrase);
+struct obj_phrase_t obj_phrase_cross(struct obj_phrase_t *phrase1, struct obj_phrase_t *phrase2);
 
 void obj_phrase_print(struct obj_phrase_t *phrase);
 
