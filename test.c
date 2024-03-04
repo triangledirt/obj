@@ -7,6 +7,7 @@
 #include "mist.h"
 #include "mob.h"
 #include "model.h"
+#include "phrase.h"
 #include "sense.h"
 #include "sync.h"
 
@@ -31,6 +32,7 @@ static void testmob();
 static void testmodel(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testobj();
 static void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc);
+static void testphrase();
 static void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testsync();
 
@@ -179,6 +181,30 @@ void testpack(char *filename, long classindex, long type, obj_class_pack_f packf
 #endif
 }
 
+void testphrase()
+{
+  struct obj_mesh_t mesh;
+  struct obj_phrase_t phrase;
+  struct obj_mesh_t data1;
+  struct obj_mesh_t data2;
+  long i;
+  obj_mesh_init(&data1);
+  data2 = data1;
+  obj_phrase_init(&phrase);
+  for (i = 0; i < 4; i++) {
+    obj_mesh_init(&mesh);
+    obj_mesh_print(&mesh);
+    obj_phrase_addmesh(&phrase, &mesh);
+    obj_mesh_play(&mesh, &data1);
+  }
+  printf("\n");
+  obj_phrase_print(&phrase);
+  obj_phrase_apply(&phrase, &data2);
+  printf("\n");
+  obj_mesh_print(&data1);
+  obj_mesh_print(&data2);
+}
+
 void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc)
 {
   FILE *file;
@@ -208,10 +234,11 @@ int main(int argc, char *argv[])
 {
   if (0) testclass();
   if (0) testgame();
-  if (1) testmist();
+  if (0) testmist();
   if (0) testmob();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
+  if (1) testphrase();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;
