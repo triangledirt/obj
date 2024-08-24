@@ -11,7 +11,7 @@ struct obj_mesh_t mob[MOB][MOB];
 char focus[MOB][MOB];
 
 static struct obj_mesh_t *finddatamesh(long i, long j);
-static void *i2xy(long i, long *x, long *y);
+static void i2xy(long i, long *x, long *y);
 static void print();
 
 struct obj_mesh_t *finddatamesh(long i, long j)
@@ -26,7 +26,7 @@ struct obj_mesh_t *finddatamesh(long i, long j)
   return &mob[c][d];
 }
 
-void *i2xy(long i, long *x, long *y)
+void i2xy(long i, long *x, long *y)
 {
   switch (i) {
   case 0:

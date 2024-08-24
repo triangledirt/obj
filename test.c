@@ -232,13 +232,13 @@ void testsync()
 
 int main(int argc, char *argv[])
 {
-  if (0) testclass();
+  if (1) testclass();
   if (0) testgame();
   if (0) testmist();
   if (0) testmob();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
-  if (1) testphrase();
+  if (0) testphrase();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testsync();
   return 0;
