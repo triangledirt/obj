@@ -1,161 +1,92 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "set.h"
 
 static enum obj_bool_t once = obj_bool_false;
 
-static long findinbucket(struct obj_set_t *set, long bucket, obj_t obj);
-static enum obj_bool_t forwardnextobject(struct obj_set_t *set);
 static void init(struct obj_set_t *set);
-static void packbucket(struct obj_set_t *set, long bucket, long startobject);
-static void removeindex(struct obj_set_t *set, long bucket, long object);
-static void removeobj(struct obj_set_t *set, long bucket, obj_t obj);
-
-long findinbucket(struct obj_set_t *set, long bucket, obj_t obj)
-{
-  long object;
-  obj_t xobj;
-  long foundindex = -1;
-  init(set);
-  for (object = 0; object < OBJ_SET_BUCKETSZ; object++) {
-    xobj = set->bucket[bucket][object];
-    if (xobj == obj) {
-      foundindex = object;
-      break;
-    }
-  }
-  return foundindex;
-}
-
-enum obj_bool_t forwardnextobject(struct obj_set_t *set)
-{
-  enum obj_bool_t found = obj_bool_false;
-  while (!found && (set->itbucket < OBJ_SET_BUCKET)) {
-    if (set->itobject < (OBJ_SET_BUCKETSZ - 1)) {
-      set->itobject++;
-      if (set->bucket[set->itbucket][set->itobject])
-        found = obj_bool_true;
-    } else {
-      if (set->itbucket < (OBJ_SET_BUCKET - 1)) {
-        set->itbucket++;
-        set->itobject = 0;
-      }
-    }
-  }
-  return found;
-}
 
 void init(struct obj_set_t *set)
 {
-  long bucket;
   long object;
   if (!once) {
-    for (bucket = 0; bucket < OBJ_SET_BUCKET; bucket++)
-      for (object = 0; object < OBJ_SET_BUCKETSZ; object++)
-        obj_clear(&set->bucket[bucket][object]);
+    for (object = 0; object < OBJ_SET; object++)
+      obj_clear(&set->object[object]);
+    set->size = OBJ_SET;
     once = obj_bool_true;
   }
 }
 
 void obj_set_add(struct obj_set_t *set, obj_t obj)
 {
-  long bucket;
-  long object = 0;
-  obj_t xobj;
-  enum obj_bool_t added = obj_bool_false;
+  long i;
   init(set);
-  bucket = obj % OBJ_SET_BUCKET;
-  for (object = 0; object < OBJ_SET_BUCKETSZ; object++) {
-    xobj = set->bucket[bucket][object];
-    if (0 == xobj) {
-      set->bucket[bucket][object] = obj;
-      added = obj_bool_true;
-      break;
-    } else if (obj == xobj) {
-      added = obj_bool_true;
-      break;
-    }
-  }
-  if (!added) {
-    object = random() % OBJ_SET_BUCKETSZ;
-    set->bucket[bucket][object] = obj;
-  }
+  i = obj % set->size;
+  set->object[i] = obj;
 }
 
 enum obj_bool_t obj_set_find(struct obj_set_t *set, obj_t obj)
 {
-  long bucket;
-  long object = 0;
-  obj_t xobj;
-  enum obj_bool_t found = obj_bool_false;
+  long i;
   init(set);
-  bucket = obj % OBJ_SET_BUCKET;
-  for (object = 0; object < OBJ_SET_BUCKETSZ; object++) {
-    xobj = set->bucket[bucket][object];
-    if (xobj == obj) {
-      found = obj_bool_true;
-      break;
-    }
-  }
-  return found;
+  i = obj % set->size;
+  return (set->object[i]) ? obj_bool_true : obj_bool_false;
 }
 
 void obj_set_itstart(struct obj_set_t *set)
 {
   init(set);
-  set->itbucket = 0;
-  set->itobject = 0;
   set->itremove = obj_bool_false;
+  set->it = 0;
 }
 
 obj_t obj_set_itnext(struct obj_set_t *set)
 {
   obj_t obj;
-  init(set);
   if (set->itremove) {
-    removeindex(set, set->itbucket, set->itobject);
-    obj = set->bucket[set->itbucket][set->itobject];
+    obj_clear(&set->object[set->it]);
     set->itremove = obj_bool_false;
-  } else {
-    if (forwardnextobject(set)) {
-      obj = set->bucket[set->itbucket][set->itobject];
+  }
+  obj = set->object[set->it];
+  while (!obj && (set->it < (set->size - 1))) {
+    if (set->it < (set->size - 1)) {
+      set->it++;
+      obj = set->object[set->it];
     } else {
       obj_clear(&obj);
+      break;
     }
   }
+  set->it++;
   return obj;
 }
 
 void obj_set_itremove(struct obj_set_t *set)
 {
-  init(set);
   set->itremove = obj_bool_true;
+}
+
+void obj_set_limitsize(struct obj_set_t *set, long size)
+{
+  set->size = size;
+}
+
+void obj_set_print(struct obj_set_t *set)
+{
+  obj_t obj;
+  obj_set_itstart(set);
+  while ((obj = obj_set_itnext(set))) {
+    obj_print(obj);
+    printf("\n");
+  }
 }
 
 void obj_set_remove(struct obj_set_t *set, obj_t obj)
 {
-  long bucket;
+  long i;
   init(set);
-  bucket = obj % OBJ_SET_BUCKET;
-  removeobj(set, bucket, obj);
-}
-
-void packbucket(struct obj_set_t *set, long bucket, long startobject)
-{
-  long object;
-  for (object = startobject; object < (OBJ_SET_BUCKETSZ - 1); object++)
-    set->bucket[bucket][object] = set->bucket[bucket][object + 1];
-  obj_clear(&set->bucket[bucket][OBJ_SET_BUCKETSZ - 1]);
-}
-
-void removeindex(struct obj_set_t *set, long bucket, long object)
-{
-  packbucket(set, bucket, object);
-}
-
-void removeobj(struct obj_set_t *set, long bucket, obj_t obj)
-{
-  long object;
-  object = findinbucket(set, bucket, obj);
-  if (object != -1)
-    packbucket(set, bucket, object);
+  i = obj % set->size;
+  if (obj == set->object[i]) {
+    obj_clear(&set->object[i]);
+  }
 }

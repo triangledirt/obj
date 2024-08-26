@@ -9,6 +9,7 @@
 #include "model.h"
 #include "phrase.h"
 #include "sense.h"
+#include "set.h"
 #include "sync.h"
 
 #define CENSUS 0
@@ -34,6 +35,7 @@ static void testobj();
 static void testpack(char *filename, long classindex, long type, obj_class_pack_f packfunc);
 static void testphrase();
 static void testsense(char *filename, long classindex, long type, obj_class_pack_f packfunc);
+static void testset();
 static void testsync();
 
 double fit(obj_t obj, long type, void *context)
@@ -226,6 +228,19 @@ void testsense(char *filename, long classindex, long type, obj_class_pack_f pack
   fclose(file);
 }
 
+void testset()
+{
+  struct obj_set_t set;
+  obj_set_limitsize(&set, 8);
+  obj_set_add(&set, 1);
+  obj_set_add(&set, 2);
+  obj_set_add(&set, 4);
+  obj_set_print(&set);
+  obj_set_remove(&set, 2);
+  printf("---\n");
+  obj_set_print(&set);
+}
+
 void testsync()
 {
 }
@@ -234,12 +249,13 @@ int main(int argc, char *argv[])
 {
   if (0) testclass();
   if (0) testgame();
-  if (1) testmist();
+  if (0) testmist();
   if (0) testmob();
   if (0) testmodel("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
   if (0) testobj();
   if (0) testphrase();
   if (0) testsense("data/mushroom.csv", 0, MUSHROOM, obj_class_packavg);
+  if (1) testset();
   if (0) testsync();
   return 0;
 }

@@ -3,13 +3,12 @@
 
 #include "obj.h"
 
-#define OBJ_SET_BUCKET 1024
-#define OBJ_SET_BUCKETSZ 8
+#define OBJ_SET 1024
 
 struct obj_set_t {
-  obj_t bucket[OBJ_SET_BUCKET][OBJ_SET_BUCKETSZ];
-  long itbucket;
-  long itobject;
+  obj_t object[OBJ_SET];
+  long size;
+  long it;
   enum obj_bool_t itremove;
 };
 
@@ -20,5 +19,9 @@ enum obj_bool_t obj_set_find(struct obj_set_t *set, obj_t obj);
 void obj_set_itstart(struct obj_set_t *set);
 obj_t obj_set_itnext(struct obj_set_t *set);
 void obj_set_itremove(struct obj_set_t *set);
+
+void obj_set_limitsize(struct obj_set_t *set, long size);
+
+void obj_set_print(struct obj_set_t *set);
 
 #endif
