@@ -3,8 +3,8 @@
 
 #include "obj.h"
 
-#define OBJ_SET_BUCKET 256
-#define OBJ_SET_BUCKETSZ 16
+#define OBJ_SET_BUCKET 1024
+#define OBJ_SET_BUCKETSZ 8
 
 struct obj_set_t {
   obj_t bucket[OBJ_SET_BUCKET][OBJ_SET_BUCKETSZ];
