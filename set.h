@@ -8,6 +8,9 @@
 
 struct obj_set_t {
   obj_t bucket[OBJ_SET_BUCKET][OBJ_SET_BUCKETSZ];
+  long itbucket;
+  long itobject;
+  enum obj_bool_t itremove;
 };
 
 void obj_set_add(struct obj_set_t *set, obj_t obj);

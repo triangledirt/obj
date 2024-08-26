@@ -63,17 +63,27 @@ enum obj_bool_t obj_set_find(struct obj_set_t *set, obj_t obj)
 void obj_set_itstart(struct obj_set_t *set)
 {
   init(set);
+  set->itbucket = 0;
+  set->itobject = 0;
+  set->itremove = obj_bool_false;
 }
 
 obj_t obj_set_itnext(struct obj_set_t *set)
 {
+  obj_t obj;
   init(set);
-  return 0;
+  if (set->bucket[set->itbucket][set->itobject]) {
+    obj = set->bucket[set->itbucket][set->itobject];
+  } else {
+  }
+  /* ff to next nonzero objectn */
+  return obj;
 }
 
 void obj_set_itremove(struct obj_set_t *set)
 {
   init(set);
+  set->itremove = obj_bool_true;
 }
 
 void obj_set_remove(struct obj_set_t *set, obj_t obj)
