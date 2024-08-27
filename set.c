@@ -30,7 +30,7 @@ enum obj_bool_t obj_set_find(struct obj_set_t *set, obj_t obj)
   long i;
   init(set);
   i = obj % set->size;
-  return (set->object[i]) ? obj_bool_true : obj_bool_false;
+  return (obj == set->object[i]) ? obj_bool_true : obj_bool_false;
 }
 
 void obj_set_itstart(struct obj_set_t *set)
