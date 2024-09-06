@@ -219,11 +219,6 @@ long long obj_num(obj_t obj, long start, long length)
   return num;
 }
 
-void obj_obscureclass(obj_t *obj)
-{
-  obj_setclass(obj, obj_bit_random());
-}
-
 void obj_morph1(obj_t *obj, obj_game1_t game1, long ticks)
 {
   long tick;
@@ -288,6 +283,29 @@ void obj_morph3(obj_t *obj, obj_game3_t game3, long ticks)
     current = next;
   }
   *obj = current;
+}
+
+void obj_obscureclass(obj_t *obj)
+{
+  obj_setclass(obj, obj_bit_random());
+}
+
+double obj_parttype(obj_t obj, obj_t type)
+{
+  long parts = 0;
+  double part = 0.0;
+  long i;
+  for (i = 0; i < OBJ; i++)
+    if (obj_attr(type, i))
+      parts++;
+  if (0 != parts) {
+    part = 1.0 / parts;
+    for (i = 0; i < OBJ; i++)
+      if (obj_attr(type, i))
+        if (!obj_attr(obj, i))
+          parts += part;
+  }
+  return part;
 }
 
 void obj_print(obj_t obj)

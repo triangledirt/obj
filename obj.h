@@ -43,6 +43,7 @@ long long obj_num(obj_t obj, long start, long length);
 
 long obj_edge(obj_t obj1, obj_t obj2);
 enum obj_bool_t obj_hastype(obj_t obj, obj_t type);
+double obj_parttype(obj_t obj, obj_t type);
 void obj_print(obj_t obj);
 #define obj_randomindex() (random() % OBJ)
 struct obj_stat_t obj_stat(obj_t obj);
