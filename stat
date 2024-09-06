@@ -1,3 +1,3 @@
-grep -n TODO *.md *.h *.c
+grep -n TODO *.h *.c
 LINES=`wc -l *.h *c | tail -1 | awk ' { print $1 } '`
 echo "$LINES lines"
