@@ -1,3 +1,0 @@
-# sense
-
-TODO: write

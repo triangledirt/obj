@@ -1,3 +1,0 @@
-# model
-
-TODO: write

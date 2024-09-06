@@ -1,3 +1,0 @@
-# sync
-
-TODO: write
